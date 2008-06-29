@@ -1,0 +1,112 @@
+/* -*- ObjC -*-
+
+  MacOS X implementation of the SKK input method.
+
+  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
+#include "InputModeWindowController.h"
+
+@implementation InputModeWindowController
+
++ (InputModeWindowController*)sharedController {
+    static InputModeWindowController* obj =  [[InputModeWindowController alloc] init];
+
+    return obj;
+}
+
+- (id)init {
+    if(self = [super initWithWindowNibName:@"InputModeWindow"]) {
+        NSMutableDictionary* icons = [[NSMutableDictionary alloc] initWithCapacity:0];
+
+        [icons setObject:[NSImage imageNamed:@"AquaSKK-Hirakana.png"]
+               forKey:[NSNumber numberWithInt:HirakanaInputMode]];
+
+        [icons setObject:[NSImage imageNamed:@"AquaSKK-Katakana.png"]
+               forKey:[NSNumber numberWithInt:KatakanaInputMode]];
+
+        [icons setObject:[NSImage imageNamed:@"AquaSKK-Jisx0201Kana.png"]
+               forKey:[NSNumber numberWithInt:Jisx0201KanaInputMode]];
+
+        [icons setObject:[NSImage imageNamed:@"AquaSKK-Ascii.png"]
+               forKey:[NSNumber numberWithInt:AsciiInputMode]];
+
+        [icons setObject:[NSImage imageNamed:@"AquaSKK-Jisx0208Latin.png"]
+               forKey:[NSNumber numberWithInt:Jisx0208LatinInputMode]];
+
+        modeIcons_ = [[NSDictionary alloc] initWithDictionary:icons];
+
+        [icons release];
+        
+        NSImage* icon = [modeIcons_ objectForKey:[NSNumber numberWithInt:HirakanaInputMode]];
+        NSRect rect;
+        rect.origin = NSZeroPoint;
+        rect.size = [icon size];
+
+        rootLayer_ = [CALayer layer];
+        rootLayer_.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
+        rootLayer_.opacity = 0.0;
+
+        NSView* view = [[self window] contentView];
+        [view setLayer:rootLayer_];
+        [view setWantsLayer:YES];
+        [view setFrame:rect];
+        [[self window] setFrame:rect display:NO];
+
+        animation_ = [[CABasicAnimation animationWithKeyPath:@"opacity"] retain];
+        animation_.duration = 2.0;
+        animation_.fromValue = [NSNumber numberWithFloat:1.0];
+        animation_.toValue = [NSNumber numberWithFloat:0];
+        animation_.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.5 :0.0 :0.5 :0.0];
+    }
+
+    return self;
+}
+
+- (void)dealloc {
+    [modeIcons_ release];
+    [animation_ release];
+    [super dealloc];
+}
+
+- (void)changeMode:(SKKInputMode)mode {
+    NSImage* image = [modeIcons_ objectForKey:[NSNumber numberWithInt:mode]];
+    NSBitmapImageRep* rep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]]; 
+
+    [CATransaction begin];
+    [CATransaction setValue:[NSNumber numberWithFloat:0.0]
+                   forKey:kCATransactionAnimationDuration];
+
+    rootLayer_.contents = (id)[rep CGImage];
+
+    [CATransaction commit];
+}
+
+- (void)show:(NSPoint)topleft level:(int)level {
+    [[self window] setFrameTopLeftPoint:topleft];
+    [[self window] setLevel:level];
+    [self showWindow:nil];
+
+    [rootLayer_ addAnimation:animation_ forKey:@"fadeOut"];
+}
+
+- (void)hide {
+    [[self window] orderOut:nil];
+}
+
+@end
