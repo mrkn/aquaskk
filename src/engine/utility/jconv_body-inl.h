@@ -1,9 +1,9 @@
 // -*- C++ -*-
 
 /*
- * jconv_body.inc - japanese character code conversion library.
+ * jconv_body-inl.h - japanese character code conversion library.
  *
- *   Copyright (c) 2006 Tomotaka SUWA, All rights reserved.
+ *   Copyright (c) 2006,2008 Tomotaka SUWA, All rights reserved.
  * 
  *   Redistribution and use in source and binary forms, with or without
  *   modification, are permitted provided that the following conditions

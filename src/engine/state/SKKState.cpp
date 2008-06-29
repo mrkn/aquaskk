@@ -89,7 +89,7 @@ void SKKState::ToString(const Handler handler, const Event& event, std::string& 
     }
 }
 
-#include "SKKStatePrimary.inc"
-#include "SKKStateComposing.inc"
-#include "SKKStateRecursiveRegister.inc"
-#include "SKKStateEntryRemove.inc"
+#include "SKKStatePrimary-inl.h"
+#include "SKKStateComposing-inl.h"
+#include "SKKStateRecursiveRegister-inl.h"
+#include "SKKStateEntryRemove-inl.h"

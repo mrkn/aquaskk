@@ -43,16 +43,9 @@
 		D353BD190E175501004C68A6 /* SKKInputSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC310E175500004C68A6 /* SKKInputSession.cpp */; };
 		D353BD1A0E175501004C68A6 /* skkserv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC340E175500004C68A6 /* skkserv.cpp */; };
 		D353BD1B0E175501004C68A6 /* SKKState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC390E175500004C68A6 /* SKKState.cpp */; };
-		D353BD1C0E175501004C68A6 /* SKKStateComposing.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BC3B0E175500004C68A6 /* SKKStateComposing.inc */; };
-		D353BD1D0E175501004C68A6 /* SKKStateEntryRemove.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BC3C0E175500004C68A6 /* SKKStateEntryRemove.inc */; };
-		D353BD1E0E175501004C68A6 /* SKKStatePrimary.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BC3E0E175500004C68A6 /* SKKStatePrimary.inc */; };
-		D353BD1F0E175501004C68A6 /* SKKStateRecursiveRegister.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BC3F0E175500004C68A6 /* SKKStateRecursiveRegister.inc */; };
 		D353BDC80E175502004C68A6 /* SKKRomanKanaConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BCED0E175501004C68A6 /* SKKRomanKanaConverter.cpp */; };
 		D353BDC90E175502004C68A6 /* SKKTrie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BCEF0E175501004C68A6 /* SKKTrie.cpp */; };
 		D353BDCA0E175502004C68A6 /* jconv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BCF20E175501004C68A6 /* jconv.cpp */; };
-		D353BDCB0E175502004C68A6 /* jconv_body.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BCF40E175501004C68A6 /* jconv_body.inc */; };
-		D353BDCC0E175502004C68A6 /* jconv_eucj2ucs.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BCF50E175501004C68A6 /* jconv_eucj2ucs.inc */; };
-		D353BDCD0E175502004C68A6 /* jconv_ucs2eucj.inc in Sources */ = {isa = PBXBuildFile; fileRef = D353BCF60E175501004C68A6 /* jconv_ucs2eucj.inc */; };
 		D353BDE80E175513004C68A6 /* MacCandidateWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDD00E175513004C68A6 /* MacCandidateWindow.mm */; };
 		D353BDE90E175513004C68A6 /* MacClipboard.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDD20E175513004C68A6 /* MacClipboard.mm */; };
 		D353BDEA0E175513004C68A6 /* MacFrontEnd.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDD40E175513004C68A6 /* MacFrontEnd.mm */; };
@@ -203,20 +196,13 @@
 		D353BC380E175500004C68A6 /* SKKEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKEvent.h; sourceTree = "<group>"; };
 		D353BC390E175500004C68A6 /* SKKState.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKState.cpp; sourceTree = "<group>"; };
 		D353BC3A0E175500004C68A6 /* SKKState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKState.h; sourceTree = "<group>"; };
-		D353BC3B0E175500004C68A6 /* SKKStateComposing.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = SKKStateComposing.inc; sourceTree = "<group>"; };
-		D353BC3C0E175500004C68A6 /* SKKStateEntryRemove.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = SKKStateEntryRemove.inc; sourceTree = "<group>"; };
 		D353BC3D0E175500004C68A6 /* SKKStateMachine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKStateMachine.h; sourceTree = "<group>"; };
-		D353BC3E0E175500004C68A6 /* SKKStatePrimary.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = SKKStatePrimary.inc; sourceTree = "<group>"; };
-		D353BC3F0E175500004C68A6 /* SKKStateRecursiveRegister.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = SKKStateRecursiveRegister.inc; sourceTree = "<group>"; };
 		D353BCED0E175501004C68A6 /* SKKRomanKanaConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKRomanKanaConverter.cpp; sourceTree = "<group>"; };
 		D353BCEE0E175501004C68A6 /* SKKRomanKanaConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKRomanKanaConverter.h; sourceTree = "<group>"; };
 		D353BCEF0E175501004C68A6 /* SKKTrie.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKTrie.cpp; sourceTree = "<group>"; };
 		D353BCF00E175501004C68A6 /* SKKTrie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKTrie.h; sourceTree = "<group>"; };
 		D353BCF20E175501004C68A6 /* jconv.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jconv.cpp; sourceTree = "<group>"; };
 		D353BCF30E175501004C68A6 /* jconv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jconv.h; sourceTree = "<group>"; };
-		D353BCF40E175501004C68A6 /* jconv_body.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = jconv_body.inc; sourceTree = "<group>"; };
-		D353BCF50E175501004C68A6 /* jconv_eucj2ucs.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = jconv_eucj2ucs.inc; sourceTree = "<group>"; };
-		D353BCF60E175501004C68A6 /* jconv_ucs2eucj.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = jconv_ucs2eucj.inc; sourceTree = "<group>"; };
 		D353BCF70E175501004C68A6 /* pthreadutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pthreadutil.h; sourceTree = "<group>"; };
 		D353BCF80E175501004C68A6 /* socketutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = socketutil.h; sourceTree = "<group>"; };
 		D353BCF90E175501004C68A6 /* subrange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = subrange.h; sourceTree = "<group>"; };
@@ -275,6 +261,13 @@
 		D353BE250E175578004C68A6 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = main.mm; path = ../src/preferences/main.mm; sourceTree = SOURCE_ROOT; };
 		D353BE260E175578004C68A6 /* PreferenceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PreferenceController.h; path = ../src/preferences/PreferenceController.h; sourceTree = SOURCE_ROOT; };
 		D353BE270E175578004C68A6 /* PreferenceController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PreferenceController.mm; path = ../src/preferences/PreferenceController.mm; sourceTree = SOURCE_ROOT; };
+		D353BE610E1778E7004C68A6 /* jconv_body-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "jconv_body-inl.h"; sourceTree = "<group>"; };
+		D353BE620E1778E7004C68A6 /* jconv_eucj2ucs-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "jconv_eucj2ucs-inl.h"; sourceTree = "<group>"; };
+		D353BE700E177B85004C68A6 /* jconv_ucs2eucj-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "jconv_ucs2eucj-inl.h"; sourceTree = "<group>"; };
+		D353BE750E177BAB004C68A6 /* SKKStateComposing-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateComposing-inl.h"; sourceTree = "<group>"; };
+		D353BE760E177BAB004C68A6 /* SKKStateEntryRemove-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateEntryRemove-inl.h"; sourceTree = "<group>"; };
+		D353BE770E177BAB004C68A6 /* SKKStatePrimary-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStatePrimary-inl.h"; sourceTree = "<group>"; };
+		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
 		D3FC32210DD1B09C006A3F5A /* AquaSKK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3FC32230DD1B09C006A3F5A /* AquaSKK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AquaSKK-Info.plist"; sourceTree = "<group>"; };
 		D3FC32300DD1B102006A3F5A /* AquaSKKPreferences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKKPreferences.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -489,14 +482,14 @@
 			isa = PBXGroup;
 			children = (
 				D353BC370E175500004C68A6 /* GenericStateMachine.h */,
-				D353BC380E175500004C68A6 /* SKKEvent.h */,
-				D353BC390E175500004C68A6 /* SKKState.cpp */,
-				D353BC3A0E175500004C68A6 /* SKKState.h */,
-				D353BC3B0E175500004C68A6 /* SKKStateComposing.inc */,
-				D353BC3C0E175500004C68A6 /* SKKStateEntryRemove.inc */,
 				D353BC3D0E175500004C68A6 /* SKKStateMachine.h */,
-				D353BC3E0E175500004C68A6 /* SKKStatePrimary.inc */,
-				D353BC3F0E175500004C68A6 /* SKKStateRecursiveRegister.inc */,
+				D353BC380E175500004C68A6 /* SKKEvent.h */,
+				D353BC3A0E175500004C68A6 /* SKKState.h */,
+				D353BC390E175500004C68A6 /* SKKState.cpp */,
+				D353BE770E177BAB004C68A6 /* SKKStatePrimary-inl.h */,
+				D353BE750E177BAB004C68A6 /* SKKStateComposing-inl.h */,
+				D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */,
+				D353BE760E177BAB004C68A6 /* SKKStateEntryRemove-inl.h */,
 			);
 			path = state;
 			sourceTree = "<group>";
@@ -515,11 +508,11 @@
 		D353BCF10E175501004C68A6 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				D353BCF20E175501004C68A6 /* jconv.cpp */,
 				D353BCF30E175501004C68A6 /* jconv.h */,
-				D353BCF40E175501004C68A6 /* jconv_body.inc */,
-				D353BCF50E175501004C68A6 /* jconv_eucj2ucs.inc */,
-				D353BCF60E175501004C68A6 /* jconv_ucs2eucj.inc */,
+				D353BCF20E175501004C68A6 /* jconv.cpp */,
+				D353BE620E1778E7004C68A6 /* jconv_eucj2ucs-inl.h */,
+				D353BE700E177B85004C68A6 /* jconv_ucs2eucj-inl.h */,
+				D353BE610E1778E7004C68A6 /* jconv_body-inl.h */,
 				D353BCF70E175501004C68A6 /* pthreadutil.h */,
 				D353BCF80E175501004C68A6 /* socketutil.h */,
 				D353BCF90E175501004C68A6 /* subrange.h */,
@@ -836,16 +829,9 @@
 				D353BD190E175501004C68A6 /* SKKInputSession.cpp in Sources */,
 				D353BD1A0E175501004C68A6 /* skkserv.cpp in Sources */,
 				D353BD1B0E175501004C68A6 /* SKKState.cpp in Sources */,
-				D353BD1C0E175501004C68A6 /* SKKStateComposing.inc in Sources */,
-				D353BD1D0E175501004C68A6 /* SKKStateEntryRemove.inc in Sources */,
-				D353BD1E0E175501004C68A6 /* SKKStatePrimary.inc in Sources */,
-				D353BD1F0E175501004C68A6 /* SKKStateRecursiveRegister.inc in Sources */,
 				D353BDC80E175502004C68A6 /* SKKRomanKanaConverter.cpp in Sources */,
 				D353BDC90E175502004C68A6 /* SKKTrie.cpp in Sources */,
 				D353BDCA0E175502004C68A6 /* jconv.cpp in Sources */,
-				D353BDCB0E175502004C68A6 /* jconv_body.inc in Sources */,
-				D353BDCC0E175502004C68A6 /* jconv_eucj2ucs.inc in Sources */,
-				D353BDCD0E175502004C68A6 /* jconv_ucs2eucj.inc in Sources */,
 				D353BDE80E175513004C68A6 /* MacCandidateWindow.mm in Sources */,
 				D353BDE90E175513004C68A6 /* MacClipboard.mm in Sources */,
 				D353BDEA0E175513004C68A6 /* MacFrontEnd.mm in Sources */,

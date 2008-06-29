@@ -35,9 +35,9 @@
 #include "jconv.h"
 
 namespace jconv {
-#include "jconv_ucs2eucj.inc"
-#include "jconv_eucj2ucs.inc"
-#include "jconv_body.inc"
+#include "jconv_ucs2eucj-inl.h"
+#include "jconv_eucj2ucs-inl.h"
+#include "jconv_body-inl.h"
 
     void convert_utf8_to_eucj(const std::string& from, std::string& to) {
 	std::for_each(from.begin(), from.end(), utf8_to_eucj(to));
