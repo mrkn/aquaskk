@@ -27,7 +27,7 @@ copy: all
 	sync; sync; sync
 
 test:
-	cd src/engine/tests; make test;
+	cd ../../src/engine/tests; make test;
 
 release_build:
 	$(RELEASE_BUILD) build
