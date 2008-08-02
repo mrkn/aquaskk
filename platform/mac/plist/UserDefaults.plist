@@ -10,18 +10,20 @@
         <true/>
 	<key>keyboard_layout</key>
 	<string>com.apple.keylayout.US</string>
+        <key>fix_intermediate_conversion</key>
+        <true/>
 
 	<key>max_count_of_inline_candidates</key>
 	<integer>4</integer>
 	<key>candidate_window_labels</key>
 	<string>ASDFJKL</string>
 	<key>candidate_window_font_name</key>
-	<string>LucidaGrande</string>
+	<string>Trebuchet MS</string>
 	<key>candidate_window_font_size</key>
 	<integer>18</integer>
 
 	<key>enable_skkserv</key>
-	<true/>
+	<false/>
 	<key>skkserv_localonly</key>
 	<true/>
 	<key>skkserv_port</key>
@@ -30,7 +32,7 @@
         <key>openlab_host</key>
         <string>openlab.ring.gr.jp</string>
         <key>openlab_path</key>
-        <string>skk/skk/dic</string>
+        <string>/skk/skk/dic</string>
 
         <key>user_dictionary_path</key>
         <string>~/Library/Application Support/AquaSKK/skk-jisyo.utf8</string>
