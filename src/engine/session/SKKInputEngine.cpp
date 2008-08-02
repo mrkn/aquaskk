@@ -28,7 +28,11 @@ SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
                                SKKInputSessionParameter* param,
                                SKKBaseEditor* bottom)
     : param_(param), bottom_(bottom), 
-      editor_(registrationObserver, param_->InputModeWindow(), param_->Clipboard(), bottom_.get()),
+      editor_(param_->EditorStackOption(),
+              registrationObserver,
+              param_->InputModeWindow(),
+              param_->Clipboard(),
+              bottom_.get()),
       state_(SKKState(param_->StateConfiguration(), &editor_, param_->CandidateWindow())) {
     state_.Start();
 }

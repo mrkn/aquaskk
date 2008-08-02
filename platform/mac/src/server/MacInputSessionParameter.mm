@@ -26,13 +26,16 @@
 #include "MacClipboard.h"
 #include "MacInputModeWindow.h"
 #include "MacCandidateWindow.h"
+#include "MacEditorStackOption.h"
 
 MacInputSessionParameter::MacInputSessionParameter(id client)
-    : frontend_(new MacFrontEnd(client)),
-      configuration_(new MacStateConfiguration()),
-      clipboard_(new MacClipboard()),
-      inputModeWindow_(new MacInputModeWindow(frontend_.get())),
-      candidateWindow_(new MacCandidateWindow(frontend_.get())) {}
+    : frontend_(new MacFrontEnd(client))
+    , configuration_(new MacStateConfiguration())
+    , clipboard_(new MacClipboard())
+    , inputModeWindow_(new MacInputModeWindow(frontend_.get()))
+    , candidateWindow_(new MacCandidateWindow(frontend_.get()))
+    , editorStackOption_(new MacEditorStackOption())
+{}
 
 SKKFrontEnd* MacInputSessionParameter::FrontEnd() {
     return frontend_.get();
@@ -52,4 +55,8 @@ SKKInputModeWindow* MacInputSessionParameter::InputModeWindow() {
 
 SKKCandidateWindow* MacInputSessionParameter::CandidateWindow() {
     return candidateWindow_.get();
+}
+
+SKKEditorStackOption* MacInputSessionParameter::EditorStackOption() {
+    return editorStackOption_.get();
 }

@@ -28,6 +28,7 @@ class SKKStateConfiguration;
 class SKKClipboard;
 class SKKInputModeWindow;
 class SKKCandidateWindow;
+class SKKEditorStackOption;
 
 class SKKInputSessionParameter {
 public:
@@ -38,6 +39,7 @@ public:
     virtual SKKClipboard* Clipboard() = 0;
     virtual SKKInputModeWindow* InputModeWindow() = 0;
     virtual SKKCandidateWindow* CandidateWindow() = 0;
+    virtual SKKEditorStackOption* EditorStackOption() = 0;
 };
 
 #endif

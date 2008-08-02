@@ -31,6 +31,7 @@ namespace SKKUserDefaultKeys {
     extern NSString* use_numeric_conversion;
     extern NSString* enable_extended_completion;
     extern NSString* keyboard_layout;
+    extern NSString* fix_intermediate_conversion;
     extern NSString* max_count_of_inline_candidates;
     extern NSString* candidate_window_labels;
     extern NSString* candidate_window_font_name;

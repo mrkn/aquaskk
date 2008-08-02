@@ -21,6 +21,7 @@
 */
 
 #include "SKKEditorStack.h"
+#include "SKKEditorStackOption.h"
 #include "SKKInputMode.h"
 #include "SKKClipboard.h"
 #include "SKKContextBuffer.h"
@@ -32,11 +33,13 @@
 #include "jconv.h"
 #include <cassert>
 
-SKKEditorStack::SKKEditorStack(SKKRegistrationObserver* registrationObserver,
+SKKEditorStack::SKKEditorStack(SKKEditorStackOption* option,
+                               SKKRegistrationObserver* registrationObserver,
                                SKKInputModeWindow* inputModeWindow,
                                SKKClipboard* clipboard,
                                SKKBaseEditor* bottom)
-    : registrationObserver_(registrationObserver),
+    : option_(option),
+      registrationObserver_(registrationObserver),
       inputModeSelector_(inputModeWindow),
       clipboard_(clipboard),
       modified_(false) {
@@ -114,6 +117,8 @@ void SKKEditorStack::Paste() {
 }
 
 void SKKEditorStack::Commit() {
+    Terminate();
+
     std::string queue;
 
     // Top のフィルターから Commit していき、最終的な単語を取得する
@@ -136,8 +141,17 @@ void SKKEditorStack::Reset() {
     top()->Flush();
 }
 
+void SKKEditorStack::Terminate() {
+    if(!input_.empty() && option_->FixIntermediateConversion()) {
+        Input(SKKEvent(SKK_CHAR, 0));
+        Input(SKKEvent(SKK_BACKSPACE, 0));
+    }
+
+    input_.clear();
+}
+
 void SKKEditorStack::ToggleKana() {
-    FixEntry();
+    Terminate();
     collect();
 
     std::string entry(Entry().EntryString());
@@ -166,7 +180,7 @@ void SKKEditorStack::ToggleKana() {
 }
 
 void SKKEditorStack::ToggleJisx0201Kana() {
-    FixEntry();
+    Terminate();
     collect();
 
     std::string entry(Entry().EntryString());
@@ -278,13 +292,6 @@ void SKKEditorStack::FinishRegistration() {
 void SKKEditorStack::AbortRegistration() {
     Cancel();
     registrationObserver_->SKKRegistrationUpdate(SKKRegistrationObserver::Abort);
-}
-
-void SKKEditorStack::FixEntry() {
-    if(input_.empty()) return;
-
-    Input(SKKEvent(SKK_CHAR, 0));
-    Input(SKKEvent(SKK_BACKSPACE, 0));
 }
 
 const SKKEntry SKKEditorStack::Entry() const {

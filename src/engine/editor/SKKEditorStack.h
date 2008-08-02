@@ -36,6 +36,7 @@ public:
     virtual void SKKRegistrationUpdate(Event event) = 0;
 };
 
+class SKKEditorStackOption;
 class SKKClipboard;
 class SKKFrontEnd;
 class SKKEvent;
@@ -43,6 +44,7 @@ class SKKEvent;
 class SKKEditorStack {
     typedef std::vector<SKKBaseEditor*> EditorStack;
 
+    SKKEditorStackOption* option_;
     SKKRegistrationObserver* registrationObserver_;
     SKKInputModeSelector inputModeSelector_;
     SKKClipboard* clipboard_;
@@ -65,7 +67,8 @@ class SKKEditorStack {
     void collect();
 
 public:
-    SKKEditorStack(SKKRegistrationObserver* registrationObserver,
+    SKKEditorStack(SKKEditorStackOption* option,
+                   SKKRegistrationObserver* registrationObserver,
                    SKKInputModeWindow* inputModeWindow,
                    SKKClipboard* clipboard,
                    SKKBaseEditor* bottom);
@@ -82,6 +85,9 @@ public:
     void Commit();
     void Cancel();
     void Reset();
+
+    // 入力終了
+    void Terminate();
 
     // トグル変換
     void ToggleKana();
@@ -110,8 +116,6 @@ public:
     void BeginRegistration();
     void FinishRegistration();
     void AbortRegistration();
-
-    void FixEntry();
 
     const SKKEntry Entry() const;
     const SKKCandidate Candidate() const;

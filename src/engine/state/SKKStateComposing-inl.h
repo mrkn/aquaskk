@@ -90,7 +90,7 @@ State SKKState::Edit(const Event& event) {
                 return State::Transition(&SKKState::KanaInput);
             }
 
-            editor_->FixEntry();
+            editor_->Terminate();
             candidateEditor_.Initialize(editor_->Entry());
 
             if(selector_.Execute(configuration_->MaxCountOfInlineCandidates())) {
@@ -251,7 +251,7 @@ State SKKState::OkuriInput(const Event& event) {
         }
 
         if(param.IsNextCandidate() || okuriEditor_.DidFinish()) {
-            editor_->FixEntry();
+            editor_->Terminate();
             candidateEditor_.Initialize(editor_->Entry());
 
             if(selector_.Execute(configuration_->MaxCountOfInlineCandidates())) {

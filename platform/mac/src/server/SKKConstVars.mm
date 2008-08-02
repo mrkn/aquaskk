@@ -30,6 +30,7 @@ namespace SKKUserDefaultKeys {
     DECLARE_UserDefaultsKey(use_numeric_conversion);
     DECLARE_UserDefaultsKey(enable_extended_completion);
     DECLARE_UserDefaultsKey(keyboard_layout);
+    DECLARE_UserDefaultsKey(fix_intermediate_conversion);
     DECLARE_UserDefaultsKey(max_count_of_inline_candidates);
     DECLARE_UserDefaultsKey(candidate_window_labels);
     DECLARE_UserDefaultsKey(candidate_window_font_name);
