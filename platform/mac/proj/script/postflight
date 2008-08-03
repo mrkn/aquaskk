@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+# -*- mode: ruby; coding: utf-8 -*-
+
+require 'TransitionTask'
+
+begin
+  task = TransitionTask.new()
+
+  task.execute
+end

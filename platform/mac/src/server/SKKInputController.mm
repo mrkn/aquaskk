@@ -89,7 +89,7 @@
     [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"環境設定"]
                action:@selector(showPreferences:) keyEquivalent:@""];
 
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"再初期化"]
+    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"設定ファイルの再読み込み"]
                action:@selector(reloadComponents:) keyEquivalent:@""];
 
     [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"AquaSKK ヘルプ"]

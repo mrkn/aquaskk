@@ -4,16 +4,21 @@
 
 TARGET	= AquaSKK.app
 DEST	= /Library/Input\ Methods
+WORKDIR	= /tmp/AquaSKK
 XCODE	= xcodebuild -project proj/AquaSKK.xcodeproj
 DEBUG_BUILD	= $(XCODE) -configuration Debug
 RELEASE_BUILD	= $(XCODE) -configuration Release
+PKGMAKER	= /Developer/usr/bin/packagemaker
+HDIMAGE	= hdiutil create -ov -srcfolder $(WORKDIR)
 BUILD	= proj/build/Debug
+TODAY	= `date +%Y%m%d`
 
 all:
 	$(DEBUG_BUILD) build
 
 clean:
 	$(DEBUG_BUILD) clean
+	$(RELEASE_BUILD) clean
 
 install: copy
 	@pid=`ps -A|awk '/[A]quaSKK.app/ { print $$1; }'`; \
@@ -32,8 +37,13 @@ test:
 release_build:
 	$(RELEASE_BUILD) build
 
-beta: release_build
-	cd Package; make beta; cd ..
+beta: package
+	$(HDIMAGE) /tmp/AquaSKK-$(TODAY).dmg
 
-release: release_build
-	cd Package; make release; cd ..
+release: package
+	$(HDIMAGE) /tmp/AquaSKK.dmg
+
+package: release_build
+	rm -fr $(WORKDIR)
+	mkdir $(WORKDIR)
+	cd proj; $(PKGMAKER) -d AquaSKK.pmdoc -o $(WORKDIR)/AquaSKK.pkg --target 10.5; cd ..
