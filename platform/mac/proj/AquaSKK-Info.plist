@@ -36,6 +36,8 @@
 	<string>ja</string>
 	<key>tsInputMethodCharacterRepertoireKey</key>
 	<array>
+		<string>Hira</string>
+		<string>Kana</string>
 		<string>Latn</string>
 	</array>
 	<key>tsInputMethodIconFileKey</key>

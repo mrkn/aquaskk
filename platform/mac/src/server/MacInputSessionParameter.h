@@ -32,7 +32,7 @@ class MacInputSessionParameter : public SKKInputSessionParameter {
     std::auto_ptr<SKKClipboard> clipboard_;
     std::auto_ptr<SKKInputModeWindow> inputModeWindow_;
     std::auto_ptr<SKKCandidateWindow> candidateWindow_;
-    std::auto_ptr<SKKEditorStackOption> editorStackOption_;
+    std::auto_ptr<SKKInputEngineOption> inputEngineOption_;
 
 public:
     MacInputSessionParameter(id client);
@@ -42,7 +42,7 @@ public:
     virtual SKKClipboard* Clipboard();
     virtual SKKInputModeWindow* InputModeWindow();
     virtual SKKCandidateWindow* CandidateWindow();
-    virtual SKKEditorStackOption* EditorStackOption();
+    virtual SKKInputEngineOption* InputEngineOption();
 };
 
 #endif

@@ -20,15 +20,35 @@
 
 */
 
-#ifndef SKKEditorStackOption_h
-#define SKKEditorStackOption_h
+#ifndef SKKRecursiveEditor_h
+#define SKKRecursiveEditor_h
 
-class SKKEditorStackOption {
+#include "SKKStateMachine.h"
+#include "SKKInputEngine.h"
+
+class SKKInputSessionParameter;
+
+class SKKRecursiveEditor {
+    std::auto_ptr<SKKBaseEditor> bottom_;
+    SKKInputSessionParameter* param_;
+    SKKStateMachine state_;
+    SKKInputEngine editor_;
+
+    SKKRecursiveEditor();
+    SKKRecursiveEditor(const SKKRecursiveEditor&);
+    SKKRecursiveEditor& operator=(const SKKRecursiveEditor&);
+
 public:
-    virtual ~SKKEditorStackOption() {}
+    SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
+                       SKKInputSessionParameter* param,
+                       SKKBaseEditor* bottom);
 
-    // 中間的な変換を訂正するか(n → ん)
-    virtual bool FixIntermediateConversion() = 0;
+    void Dispatch(const SKKEvent& event);
+    bool Output();
+    void Commit(const std::string& word);
+
+    const SKKEntry Entry() const;
+    const std::string Word() const;
 };
 
 #endif

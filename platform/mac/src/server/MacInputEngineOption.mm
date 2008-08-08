@@ -20,18 +20,13 @@
 
 */
 
-#ifndef MacEditorStackOption_h
-#define MacEditorStackOption_h
+#include "MacInputEngineOption.h"
+#include "SKKConstVars.h"
 
-#include "SKKEditorStackOption.h"
+MacInputEngineOption::MacInputEngineOption() {
+    defaults_ = [NSUserDefaults standardUserDefaults];
+}
 
-class MacEditorStackOption : public SKKEditorStackOption {
-    NSUserDefaults* defaults_;
-
-public:
-    MacEditorStackOption();
-
-    virtual bool FixIntermediateConversion();
-};
-
-#endif
+bool MacInputEngineOption::FixIntermediateConversion() {
+    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
+}

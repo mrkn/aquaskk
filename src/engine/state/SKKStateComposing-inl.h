@@ -30,7 +30,7 @@ State SKKState::Composing(const Event& event) {
         return State::SaveHistory();
 
     case SKK_PING:
-        editor_->ActivateInputMode();
+        editor_->HandlePing();
         return 0;
     }
 
@@ -56,7 +56,7 @@ State SKKState::Edit(const Event& event) {
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
-        editor_->PopEditor();
+        editor_->Cancel();
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_TAB:
@@ -66,32 +66,40 @@ State SKKState::Edit(const Event& event) {
         return 0;
 
     case SKK_BACKSPACE:
-        editor_->Input(param);
+        editor_->HandleBackSpace();
 
         if(!editor_->IsModified()) {
-            editor_->PopEditor();
+            editor_->Cancel();
             return State::Transition(&SKKState::KanaInput);
         }
 
         return 0;
 
     case SKK_DELETE:
+        editor_->HandleDelete();
+        return 0;
+
     case SKK_LEFT:
+        editor_->HandleCursorLeft();
+        return 0;
+
     case SKK_RIGHT:
+        editor_->HandleCursorRight();
+        return 0;
+
     case SKK_UP:
+        editor_->HandleCursorUp();
+        return 0;
+
     case SKK_DOWN:
-        editor_->Input(param);
+        editor_->HandleCursorDown();
         return 0;
 
     case SKK_CHAR:
         if(param.IsNextCandidate()) {
             if(editor_->Entry().IsEmpty()) {
-                editor_->PopEditor();
                 return State::Transition(&SKKState::KanaInput);
             }
-
-            editor_->Terminate();
-            candidateEditor_.Initialize(editor_->Entry());
 
             if(selector_.Execute(configuration_->MaxCountOfInlineCandidates())) {
                 return State::Transition(&SKKState::SelectCandidate);
@@ -112,6 +120,10 @@ State SKKState::Edit(const Event& event) {
 State SKKState::EntryInput(const Event& event) {
     // 履歴を保存するだけ
     switch(event) {
+    case ENTRY_EVENT:
+        editor_->SetStateComposing();
+        return 0;
+
     case EXIT_EVENT:
         return State::SaveHistory();
     }
@@ -145,12 +157,12 @@ State SKKState::KanaEntry(const Event& event) {
 
             // 送りあり
             if(param.IsUpperCases()) {
-                okuriEditor_.Initialize(param.code);
+                editor_->InitializeOkuri(param.code);
                 return State::Forward(&SKKState::OkuriInput);
             }
         }
 
-        if(!editor_->WillConvert(param)) {
+        if(!editor_->CanConvert(param.code)) {
             if(param.IsSwitchToAscii()) {
                 editor_->Commit();
                 return State::Transition(&SKKState::Ascii);
@@ -163,16 +175,16 @@ State SKKState::KanaEntry(const Event& event) {
 
             if(param.IsEnterJapanese()) {
                 editor_->Commit();
-                editor_->PushEditor(&composingEditor_);
                 return State::Transition(&SKKState::KanaEntry);
             }
         }
 
         if(param.IsPlain()) {
-            editor_->Input(param);
+            editor_->HandleChar(param.code);
+            return 0;
         }
 
-        return 0;
+        break;
     }
 
     return &SKKState::EntryInput;
@@ -200,10 +212,11 @@ State SKKState::AsciiEntry(const Event& event) {
         }
 
         if(param.IsPlain()) {
-            editor_->Input(param);
+            editor_->HandleChar(param.code);
+            return 0;
         }
 
-        return 0;
+        break;
     }
 
     return &SKKState::EntryInput;
@@ -217,11 +230,7 @@ State SKKState::OkuriInput(const Event& event) {
 
     switch(event) {
     case ENTRY_EVENT:
-        editor_->PushEditor(&okuriEditor_);
-        return 0;
-
-    case EXIT_EVENT:
-        editor_->PopEditor();
+        editor_->SetStateOkuri();
         return 0;
 
     case SKK_CANCEL:
@@ -233,11 +242,10 @@ State SKKState::OkuriInput(const Event& event) {
     case SKK_RIGHT:
     case SKK_UP:
     case SKK_DOWN:
-        editor_->Input(param);
         return 0;
 
     case SKK_BACKSPACE:
-        editor_->Input(param);
+        editor_->HandleBackSpace();
 
         if(!editor_->IsModified()) {
             return State::Transition(&SKKState::KanaEntry);
@@ -247,13 +255,10 @@ State SKKState::OkuriInput(const Event& event) {
 
     case SKK_CHAR:
         if(param.IsPlain()) {
-            editor_->Input(param);
+            editor_->HandleChar(param.code);
         }
 
-        if(param.IsNextCandidate() || okuriEditor_.DidFinish()) {
-            editor_->Terminate();
-            candidateEditor_.Initialize(editor_->Entry());
-
+        if(param.IsNextCandidate() || editor_->IsOkuriComplete()) {
             if(selector_.Execute(configuration_->MaxCountOfInlineCandidates())) {
                 return State::Transition(&SKKState::SelectCandidate);
             }
@@ -314,12 +319,11 @@ State SKKState::SelectCandidate(const Event& event) {
 
     switch(event) {
     case ENTRY_EVENT:
-        editor_->EnableSubEditor(&candidateEditor_);
+        editor_->SetStateSelectCandidate();
         selector_.Show();
         return 0;
 
     case EXIT_EVENT:
-        editor_->DisableSubEditor();
         selector_.Hide();
         return 0;
 

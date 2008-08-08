@@ -41,7 +41,7 @@ void SKKOkuriEditor::Initialize(char head) {
     head_ += std::tolower(head);
 }
 
-bool SKKOkuriEditor::DidFinish() const {
+bool SKKOkuriEditor::IsOkuriComplete() const {
     return !okuri_.empty() && input_.empty();
 }
 

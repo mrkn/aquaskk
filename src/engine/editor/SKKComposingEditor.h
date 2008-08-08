@@ -24,17 +24,12 @@
 #define SKKComposingEditor_h
 
 #include "SKKBaseEditor.h"
-#include "SKKCompleter.h"
 #include "SKKTextBuffer.h"
 
-class SKKComposingEditor : public SKKBaseEditor,
-                           public SKKCompleterBuddy {
+class SKKComposingEditor : public SKKBaseEditor {
     SKKTextBuffer composing_;
     std::string input_;
     bool modified_;
-
-    const std::string SKKCompleterQueryString() const;
-    void SKKCompleterUpdate(const std::string& entry);
 
 public:
     SKKComposingEditor();
@@ -47,6 +42,9 @@ public:
     virtual void Commit(std::string& queue);
     virtual void Flush();
     virtual bool IsModified() const;
+
+    const std::string QueryString() const;
+    void SetEntry(const std::string& entry);
 };
 
 #endif

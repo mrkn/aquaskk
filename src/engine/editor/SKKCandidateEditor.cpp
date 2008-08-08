@@ -58,10 +58,10 @@ void SKKCandidateEditor::Commit(std::string& queue) {
     }
 }
 
-const SKKEntry SKKCandidateEditor::SKKSelectorQueryEntry() {
+const SKKEntry SKKCandidateEditor::QueryEntry() const {
     return entry_;
 }
 
-void SKKCandidateEditor::SKKSelectorUpdate(const SKKCandidate& candidate) {
+void SKKCandidateEditor::SetCandidate(const SKKCandidate& candidate) {
     candidate_ = candidate;
 }

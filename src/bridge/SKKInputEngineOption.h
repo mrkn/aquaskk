@@ -1,4 +1,4 @@
-/* -*- ObjC -*-
+/* -*- C++ -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,13 +20,15 @@
 
 */
 
-#include "MacEditorStackOption.h"
-#include "SKKConstVars.h"
+#ifndef SKKInputEngineOption_h
+#define SKKInputEngineOption_h
 
-MacEditorStackOption::MacEditorStackOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
-}
+class SKKInputEngineOption {
+public:
+    virtual ~SKKInputEngineOption() {}
 
-bool MacEditorStackOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
+    // 中間的な変換を訂正するか(n → ん)
+    virtual bool FixIntermediateConversion() = 0;
+};
+
+#endif

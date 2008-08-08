@@ -30,8 +30,8 @@ State SKKState::Primary(const Event& event) {
     case INIT_EVENT:
 	return State::Initial(&SKKState::KanaInput);
 
-    case SKK_JMODE:
-        editor_->Commit();
+    case ENTRY_EVENT:
+        editor_->SetStatePrimary();
         return 0;
 
     case SKK_ENTER:
@@ -42,25 +42,44 @@ State SKKState::Primary(const Event& event) {
 	editor_->AbortRegistration();
 	return 0;
 
+    case SKK_JMODE:
+        editor_->Commit();
+        return 0;
+
     case SKK_PASTE:
-	editor_->Paste();
+	editor_->HandlePaste();
 	return 0;
 
     case SKK_PING:
-        editor_->ActivateInputMode();
+        editor_->HandlePing();
         return 0;
 
     case SKK_BACKSPACE:
+        editor_->HandleBackSpace();
+        return 0;
+
     case SKK_DELETE:
+        editor_->HandleDelete();
+        return 0;
+
     case SKK_LEFT:
+        editor_->HandleCursorLeft();
+        return 0;
+
     case SKK_RIGHT:
+        editor_->HandleCursorRight();
+        return 0;
+
     case SKK_UP:
+        editor_->HandleCursorUp();
+        return 0;
+
     case SKK_DOWN:
-        editor_->Input(param);
+        editor_->HandleCursorDown();
         return 0;
 
     case SKK_CHAR:
-	if(!editor_->WillConvert(param)) {
+	if(!editor_->CanConvert(param.code)) {
 	    if(param.IsSwitchToAscii()) {
 		return State::Transition(&SKKState::Ascii);
 	    }
@@ -70,28 +89,30 @@ State SKKState::Primary(const Event& event) {
 	    }
 
 	    if(param.IsEnterAbbrev()) {
-                editor_->PushEditor(&composingEditor_);
 		return State::Transition(&SKKState::AsciiEntry);
 	    }
 
 	    if(param.IsEnterJapanese()) {
-                editor_->PushEditor(&composingEditor_);
 		return State::Transition(&SKKState::KanaEntry);
 	    }
 	}
 
 	if(param.IsUpperCases()) {
-            editor_->PushEditor(&composingEditor_);
 	    return State::Forward(&SKKState::KanaEntry);
 	}
 
-	if(param.IsPlain()) {
-            editor_->Input(param);
+        // キー修飾がない場合のみローマ字かな変換を実施する
+        if(param.IsPlain()) {
+            editor_->HandleChar(param.code);
         } else {
+            // *** FIXME ***
+            // 未確定文字列がある状態で Ctrl-P などが押された場合、
+            // 次回入力時にゴミとなるのでクリアしておく
+            // この問題はもう少しスマートに解決したい...
             editor_->Reset();
         }
 
-	return 0;
+        return 0;
     }
     
     return &SKKState::TopState;
@@ -123,10 +144,6 @@ State SKKState::Hirakana(const Event& event) {
         editor_->SelectInputMode(HirakanaInputMode);
 	return 0;
 
-    case EXIT_EVENT:
-        editor_->Cancel();
-        return 0;
-
     case SKK_CHAR:
 	if(param.IsToggleKana()) {
 	    return State::Transition(&SKKState::Katakana);
@@ -150,10 +167,6 @@ State SKKState::Katakana(const Event& event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(KatakanaInputMode);
 	return 0;
-
-    case EXIT_EVENT:
-        editor_->Cancel();
-        return 0;
 
     case SKK_CHAR:
 	if(param.IsToggleKana()) {
@@ -179,10 +192,6 @@ State SKKState::Jisx0201Kana(const Event& event) {
         editor_->SelectInputMode(Jisx0201KanaInputMode);
 	return 0;
 
-    case EXIT_EVENT:
-        editor_->Cancel();
-        return 0;
-
     case SKK_CHAR:
 	if(param.IsToggleKana() || param.IsToggleJisx0201Kana()) {
 	    return State::Transition(&SKKState::Hirakana);
@@ -199,15 +208,11 @@ State SKKState::LatinInput(const Event& event) {
     const SKKEvent& param = event.Param();
 
     switch(event) {
-    case EXIT_EVENT:
-        editor_->Cancel();
-        return 0;
-
     case SKK_JMODE:
 	return State::Transition(&SKKState::Hirakana);
 
     case SKK_CHAR:
-        editor_->Input(param);
+        editor_->HandleChar(param.code);
 	return 0;
     }
 

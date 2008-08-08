@@ -23,14 +23,14 @@
 #ifndef SKKInputSession_h
 #define SKKInputSession_h
 
-#include "SKKEditorStack.h"
+#include "SKKInputEngine.h"
 
 class SKKInputSessionParameter;
-class SKKInputEngine;
+class SKKRecursiveEditor;
 class SKKEvent;
 
 class SKKInputSession : public SKKRegistrationObserver {
-    std::vector<SKKInputEngine*> stack_;
+    std::vector<SKKRecursiveEditor*> stack_;
     SKKInputSessionParameter* param_;
     SKKRegistrationObserver::Event event_;
     bool preventReentrantCall_;
@@ -39,10 +39,11 @@ class SKKInputSession : public SKKRegistrationObserver {
     SKKInputSession(const SKKInputSession&);
     SKKInputSession& operator=(const SKKInputSession&);
 
-    SKKInputEngine* top();
-    void pushEngine();
-    void popEngine();
-    void finish(bool commit);
+    SKKRecursiveEditor* top();
+    void pushEditor();
+    void popEditor();
+    void handleRegistrationEvent();
+    void commit(const std::string& word = "");
 
     virtual void SKKRegistrationUpdate(SKKRegistrationObserver::Event event);
 

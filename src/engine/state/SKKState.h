@@ -26,34 +26,26 @@
 #include "GenericStateMachine.h"
 #include "SKKInputMode.h"
 #include "SKKEvent.h"
-#include "SKKComposingEditor.h"
-#include "SKKOkuriEditor.h"
-#include "SKKCandidateEditor.h"
-#include "SKKEntryRemoveEditor.h"
 #include "SKKCompleter.h"
 #include "SKKSelector.h"
 
 using namespace statemachinecxx_sourceforge_jp;
 
-class SKKEditorStack;
+class SKKInputEngine;
 class SKKCandidateWindow;
 class SKKStateConfiguration;
 
 // 状態コンテナ
 class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
     SKKStateConfiguration* configuration_;
-    SKKEditorStack* editor_;
+    SKKInputEngine* editor_;
     SKKCandidateWindow* window_;
     SKKInputMode inputMode_;
-    SKKComposingEditor composingEditor_;
-    SKKOkuriEditor okuriEditor_;
-    SKKCandidateEditor candidateEditor_;
-    SKKEntryRemoveEditor entryRemoveEditor_;
     SKKCompleter completer_;
     SKKSelector selector_;
 
 public:
-    SKKState(SKKStateConfiguration* configuration, SKKEditorStack* editor, SKKCandidateWindow* window);
+    SKKState(SKKStateConfiguration* configuration, SKKInputEngine* editor, SKKCandidateWindow* window);
     SKKState(const SKKState& src);
 
     virtual const Handler InitialState() const { return &SKKState::Primary; }

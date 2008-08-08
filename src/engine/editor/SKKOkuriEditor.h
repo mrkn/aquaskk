@@ -37,7 +37,7 @@ public:
     SKKOkuriEditor();
 
     void Initialize(char head);
-    bool DidFinish() const;
+    bool IsOkuriComplete() const;
 
     virtual void Input(const std::string& fixed, const std::string& input);
     virtual void Input(SKKBaseEditor::Event event);

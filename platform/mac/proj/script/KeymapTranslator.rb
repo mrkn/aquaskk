@@ -40,12 +40,6 @@ class KeymapTranslator
     end
   end
 
-  def defaults(path, symbol, value)
-    p = path.sub(/\.plist$/, '')
-
-    system('defaults write #{}')
-  end
-
   def write(file, hash, comment)
     file.print <<EOF
 

@@ -22,7 +22,7 @@
 
 #include "SKKInputSession.h"
 #include "SKKInputSessionParameter.h"
-#include "SKKInputEngine.h"
+#include "SKKRecursiveEditor.h"
 #include "SKKInputModeWindow.h"
 #include "SKKCandidateWindow.h"
 #include "SKKPrimaryEditor.h"
@@ -44,14 +44,15 @@ namespace {
 }
 
 SKKInputSession::SKKInputSession(SKKInputSessionParameter* param) : param_(param) {
-    pushEngine();
+    pushEditor();
 
+    event_ = SKKRegistrationObserver::None;
     preventReentrantCall_ = false;
 }
 
 SKKInputSession::~SKKInputSession() {
     while(!stack_.empty()) {
-        popEngine();
+        popEditor();
     }
 }
 
@@ -60,57 +61,28 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
 
     ScopedFlag on(preventReentrantCall_);
 
-    event_ = SKKRegistrationObserver::None;
-    bool finished = false;
-
-    // イベント処理
     top()->Dispatch(event);
 
-    // 再帰的辞書登録
-    switch(event_) {
-    case SKKRegistrationObserver::Begin:
-	pushEngine();
-	break;
+    handleRegistrationEvent();
 
-    case SKKRegistrationObserver::Finish:
-        if(stack_.size() == 1) {
-            finished = true;
-        }
-        finish(true);
-	break;
-
-    case SKKRegistrationObserver::Abort:
-        finish(false);
-	break;
-    }
-
-    // 表示更新
-    bool result = top()->Emit();
-
-    if(finished) {
-        return false;
-    }
-
-    return result;
+    return top()->Output();
 }
 
 void SKKInputSession::Activate() {
-    // 候補ウィンドウの表示
     param_->CandidateWindow()->Activate();
     param_->InputModeWindow()->Activate();
 }
 
 void SKKInputSession::Deactivate() {
-    // 候補ウィンドウを隠す
     param_->CandidateWindow()->Deactivate();
     param_->InputModeWindow()->Deactivate();
 }
 
-SKKInputEngine* SKKInputSession::top() {
+SKKRecursiveEditor* SKKInputSession::top() {
     return stack_.back();
 }
 
-void SKKInputSession::pushEngine() {
+void SKKInputSession::pushEditor() {
     SKKBaseEditor* editor;
 
     if(stack_.empty()) {
@@ -119,26 +91,43 @@ void SKKInputSession::pushEngine() {
         editor = new SKKRegisterEditor(top()->Entry());
     }
 
-    stack_.push_back(new SKKInputEngine(this, param_, editor));
+    stack_.push_back(new SKKRecursiveEditor(this, param_, editor));
 }
 
-void SKKInputSession::popEngine() {
+void SKKInputSession::popEditor() {
     delete top();
+
     stack_.pop_back();
 }
 
-void SKKInputSession::finish(bool commit) {
+void SKKInputSession::handleRegistrationEvent() {
+    switch(event_) {
+    case SKKRegistrationObserver::Begin:
+	pushEditor();
+	break;
+
+    case SKKRegistrationObserver::Finish:
+        if(stack_.size() == 1) {
+            top()->Output();
+        } else {
+            commit(top()->Word());
+        }
+	break;
+
+    case SKKRegistrationObserver::Abort:
+        commit();
+	break;
+    }
+
+    event_ = SKKRegistrationObserver::None;
+}
+
+void SKKInputSession::commit(const std::string& word) {
     if(stack_.size() == 1) return;
 
-    std::string word(top()->Word());
+    popEditor();
 
-    popEngine();
-
-    if(commit && !word.empty()) {
-        top()->Commit(word);
-    } else {
-        top()->Cancel();
-    }
+    top()->Commit(word);
 }
 
 void SKKInputSession::SKKRegistrationUpdate(SKKRegistrationObserver::Event event) {

@@ -28,15 +28,13 @@ State SKKState::EntryRemove(const Event& event) {
 
     switch(event) {
     case ENTRY_EVENT:
-        entryRemoveEditor_.Initialize(editor_->Entry(), editor_->Candidate());
-
         inputMode_ = editor_->InputMode();
-        editor_->EnableSubEditor(&entryRemoveEditor_);
+
+        editor_->SetStateEntryRemove();
         editor_->SelectInputMode(AsciiInputMode);
 	return 0;
 
     case EXIT_EVENT:
-        editor_->DisableSubEditor();
         editor_->SelectInputMode(inputMode_);
         return 0;
 
@@ -52,15 +50,14 @@ State SKKState::EntryRemove(const Event& event) {
         return State::Transition(&SKKState::SelectCandidate);
 
     case SKK_BACKSPACE:
-        editor_->Input(param);
+        editor_->HandleBackSpace();
         return 0;
 
     case SKK_CHAR:
         if(param.IsPlain()) {
-            editor_->Input(param);
+            editor_->HandleChar(param.code);
+            return 0;
         }
-
-	break;
     }
 
     return &SKKState::TopState;

@@ -24,17 +24,12 @@
 #define SKKCandidateEditor_h
 
 #include "SKKBaseEditor.h"
-#include "SKKSelector.h"
 #include "SKKEntry.h"
 #include "SKKCandidate.h"
 
-class SKKCandidateEditor : public SKKBaseEditor,
-                           public SKKSelectorBuddy {
+class SKKCandidateEditor : public SKKBaseEditor {
     SKKEntry entry_;
     SKKCandidate candidate_;
-
-    virtual const SKKEntry SKKSelectorQueryEntry();
-    virtual void SKKSelectorUpdate(const SKKCandidate& candidate);
 
 public:
     void Initialize(const SKKEntry& entry);
@@ -42,6 +37,9 @@ public:
     virtual void Clear();
     virtual void Output(SKKContextBuffer& buffer, bool active) const;
     virtual void Commit(std::string& queue);
+
+    const SKKEntry QueryEntry() const;
+    void SetCandidate(const SKKCandidate& candidate);
 };
 
 #endif

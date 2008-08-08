@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,38 +20,18 @@
 
 */
 
-#ifndef SKKInputEngine_h
-#define SKKInputEngine_h
+#ifndef MacInputEngineOption_h
+#define MacInputEngineOption_h
 
-#include "SKKEditorStack.h"
-#include "SKKStateMachine.h"
+#include "SKKInputEngineOption.h"
 
-class SKKInputSessionParameter;
-
-class SKKInputEngine {
-    SKKInputSessionParameter* param_;
-    std::auto_ptr<SKKBaseEditor> bottom_;
-    SKKEditorStack editor_;
-    SKKStateMachine state_;
-
-    SKKInputEngine();
-    SKKInputEngine(const SKKInputEngine&);
-    SKKInputEngine& operator=(const SKKInputEngine&);
+class MacInputEngineOption : public SKKInputEngineOption {
+    NSUserDefaults* defaults_;
 
 public:
-    SKKInputEngine(SKKRegistrationObserver* registrationObserver,
-                   SKKInputSessionParameter* param,
-                   SKKBaseEditor* bottom);
+    MacInputEngineOption();
 
-    void Dispatch(const SKKEvent& event);
-
-    void Commit(const std::string& word);
-    void Cancel();
-
-    bool Emit();
-
-    const SKKEntry Entry() const;
-    const std::string Word() const;
+    virtual bool FixIntermediateConversion();
 };
 
 #endif

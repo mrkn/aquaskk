@@ -100,11 +100,11 @@ bool SKKComposingEditor::IsModified() const {
     return modified_;
 }
 
-const std::string SKKComposingEditor::SKKCompleterQueryString() const {
+const std::string SKKComposingEditor::QueryString() const {
     return composing_.LeftString();
 }
 
-void SKKComposingEditor::SKKCompleterUpdate(const std::string& entry) {
+void SKKComposingEditor::SetEntry(const std::string& entry) {
     composing_.Clear();
     composing_.Insert(entry);
 }

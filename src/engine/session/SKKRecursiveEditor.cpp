@@ -20,51 +20,53 @@
 
 */
 
-#include "SKKInputEngine.h"
+#include "SKKRecursiveEditor.h"
 #include "SKKInputSessionParameter.h"
 #include "SKKBackEnd.h"
 
-SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
-                               SKKInputSessionParameter* param,
-                               SKKBaseEditor* bottom)
-    : param_(param), bottom_(bottom), 
-      editor_(param_->EditorStackOption(),
+SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
+                                       SKKInputSessionParameter* param,
+                                       SKKBaseEditor* bottom)
+    : bottom_(bottom),
+      param_(param),
+      state_(SKKState(param_->StateConfiguration(), &editor_, param_->CandidateWindow())),
+      editor_(param_->InputEngineOption(),
               registrationObserver,
+              param_->FrontEnd(),
               param_->InputModeWindow(),
               param_->Clipboard(),
-              bottom_.get()),
-      state_(SKKState(param_->StateConfiguration(), &editor_, param_->CandidateWindow())) {
+              bottom_.get()) {
     state_.Start();
 }
 
-void SKKInputEngine::Dispatch(const SKKEvent& event) {
+void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {
     state_.Dispatch(SKKStateMachine::Event(event.id, event));
 }
 
-bool SKKInputEngine::Emit() {
+bool SKKRecursiveEditor::Output() {
     bool result = editor_.IsModified();
 
-    editor_.Output(param_->FrontEnd());
+    editor_.Output();
 
     return result;
 }
 
-void SKKInputEngine::Commit(const std::string& word) {
-    SKKBackEnd::theInstance().Register(editor_.Entry(), word);
+void SKKRecursiveEditor::Commit(const std::string& word) {
+    if(!word.empty()) {
+        SKKBackEnd::theInstance().Register(editor_.Entry(), word);
 
-    editor_.Paste(word);
+        editor_.Insert(word);
 
-    Dispatch(SKKEvent(SKK_ENTER, 0));
+        Dispatch(SKKEvent(SKK_ENTER, 0));
+    } else {
+        Dispatch(SKKEvent(SKK_CANCEL, 0));
+    }
 }
 
-void SKKInputEngine::Cancel() {
-    Dispatch(SKKEvent(SKK_CANCEL, 0));
-}
-
-const SKKEntry SKKInputEngine::Entry() const {
+const SKKEntry SKKRecursiveEditor::Entry() const {
     return editor_.Entry();
 }
 
-const std::string SKKInputEngine::Word() const {
+const std::string SKKRecursiveEditor::Word() const {
     return editor_.Word();
 }

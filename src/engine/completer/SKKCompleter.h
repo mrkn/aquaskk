@@ -31,7 +31,7 @@ struct SKKCompleterBuddy {
     virtual ~SKKCompleterBuddy() {}
 
     // 見出し語の取得
-    virtual const std::string SKKCompleterQueryString() const = 0;
+    virtual const std::string SKKCompleterQueryString() = 0;
 
     // 現在の見出し語の通知
     virtual void SKKCompleterUpdate(const std::string& entry) = 0;
