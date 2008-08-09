@@ -180,7 +180,7 @@ State SKKState::KanaEntry(const Event& event) {
         }
 
         if(param.IsPlain()) {
-            editor_->HandleChar(param.code);
+            editor_->HandleChar(param.code, param.IsDirect());
             return 0;
         }
 
@@ -212,7 +212,7 @@ State SKKState::AsciiEntry(const Event& event) {
         }
 
         if(param.IsPlain()) {
-            editor_->HandleChar(param.code);
+            editor_->HandleChar(param.code, param.IsDirect());
             return 0;
         }
 
@@ -255,7 +255,7 @@ State SKKState::OkuriInput(const Event& event) {
 
     case SKK_CHAR:
         if(param.IsPlain()) {
-            editor_->HandleChar(param.code);
+            editor_->HandleChar(param.code, param.IsDirect());
         }
 
         if(param.IsNextCandidate() || editor_->IsOkuriComplete()) {

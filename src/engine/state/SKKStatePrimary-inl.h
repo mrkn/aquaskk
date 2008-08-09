@@ -103,7 +103,7 @@ State SKKState::Primary(const Event& event) {
 
         // キー修飾がない場合のみローマ字かな変換を実施する
         if(param.IsPlain()) {
-            editor_->HandleChar(param.code);
+            editor_->HandleChar(param.code, param.IsDirect());
         } else {
             // *** FIXME ***
             // 未確定文字列がある状態で Ctrl-P などが押された場合、
@@ -212,7 +212,7 @@ State SKKState::LatinInput(const Event& event) {
 	return State::Transition(&SKKState::Hirakana);
 
     case SKK_CHAR:
-        editor_->HandleChar(param.code);
+        editor_->HandleChar(param.code, param.IsDirect());
 	return 0;
     }
 

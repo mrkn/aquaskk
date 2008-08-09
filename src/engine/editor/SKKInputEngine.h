@@ -119,7 +119,7 @@ public:
     void InitializeOkuri(char okuri);
 
     // 入力
-    void HandleChar(char code);
+    void HandleChar(char code, bool direct);
     void HandleBackSpace();
     void HandleDelete();
     void HandleCursorLeft();

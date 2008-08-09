@@ -55,7 +55,7 @@ State SKKState::EntryRemove(const Event& event) {
 
     case SKK_CHAR:
         if(param.IsPlain()) {
-            editor_->HandleChar(param.code);
+            editor_->HandleChar(param.code, param.IsDirect());
             return 0;
         }
     }

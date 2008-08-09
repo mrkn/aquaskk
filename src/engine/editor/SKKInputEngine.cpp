@@ -95,8 +95,16 @@ void SKKInputEngine::InitializeOkuri(char okuri) {
     okuriEditor_.Initialize(okuri);
 }
 
-void SKKInputEngine::HandleChar(char code) {
+void SKKInputEngine::HandleChar(char code, bool direct) {
+    if(direct) {
+        inputQueue_.SelectInputMode(AsciiInputMode);
+    }
+    
     inputQueue_.AddChar(code);
+
+    if(direct) {
+        inputQueue_.SelectInputMode(InputMode());
+    }
 }
 
 void SKKInputEngine::HandleBackSpace() {
