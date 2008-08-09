@@ -39,6 +39,13 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     NSRange cursorPos = NSMakeRange([string length] + cursorOffset, 0);
     NSRange notfound = NSMakeRange(NSNotFound, NSNotFound);
 
+    // *** FIXME ***
+    // Carbon アプリで見出し語を入力すると、なぜか文字のベースラインが下にずれる
+    // 一旦 "▽" だけ入力すると回避できるが、正解かどうかは不明
+    if(str.find("▽") != std::string::npos) {
+        [client_ setMarkedText:@"▽" selectionRange:notfound replacementRange:notfound];
+    }
+
     [string addAttribute:NSCursorAttributeName value:[NSCursor IBeamCursor] range:cursorPos];
 
     [client_ setMarkedText:string selectionRange:cursorPos replacementRange:notfound];
