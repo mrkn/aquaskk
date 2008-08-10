@@ -49,6 +49,15 @@ void SKKContextBuffer::SetCandidate(const SKKCandidate& candidate) {
     candidate_ = candidate;
 }
 
+void SKKContextBuffer::Clear() {
+    fixed_.clear();
+    composing_.clear();
+    cursor_ = 0;
+
+    SetEntry(SKKEntry());
+    SetCandidate(SKKCandidate());
+}
+
 const SKKEntry& SKKContextBuffer::Entry() const {
     return entry_;
 }

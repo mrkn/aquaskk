@@ -155,6 +155,8 @@ void SKKInputEngine::Commit() {
         (*iter)->Commit(word_);
     }
 
+    contextBuffer_.Clear();
+
     enableMainEditor();
 }
 

@@ -48,6 +48,8 @@ public:
     void SetEntry(const SKKEntry& entry);
     void SetCandidate(const SKKCandidate& candidate);
 
+    void Clear();
+
     const SKKEntry& Entry() const;
     const SKKCandidate& Candidate() const;
 
