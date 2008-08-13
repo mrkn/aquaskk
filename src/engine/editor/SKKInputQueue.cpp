@@ -69,6 +69,10 @@ bool SKKInputQueue::IsEmpty() const {
     return queue_.empty();
 }
 
+const std::string& SKKInputQueue::QueueString() const {
+    return queue_;
+}
+
 bool SKKInputQueue::CanConvert(char code) const {
     SKKRomanKanaConverter& converter = SKKRomanKanaConverter::theInstance();
     std::string tmp_queue(queue_);
@@ -127,9 +131,5 @@ void SKKInputQueue::convert(char code, std::string& fixed, bool terminate) {
 }
 
 void SKKInputQueue::notify(const std::string& fixed) {
-    if(mode_ == AsciiInputMode) {
-        observer_->SKKInputQueueUpdate(fixed);
-    } else {
-        observer_->SKKInputQueueUpdate(fixed, queue_);
-    }
+    observer_->SKKInputQueueUpdate(fixed, queue_);
 }

@@ -25,32 +25,24 @@
 
 SKKPrimaryEditor::SKKPrimaryEditor() : modified_(0) {}
 
-void SKKPrimaryEditor::Input(const std::string& fixed, const std::string& input) {
+void SKKPrimaryEditor::Input(const std::string& fixed, const std::string&) {
     fixed_ = fixed;
-    input_ = input;
 
     ++ modified_;
 }
 
 void SKKPrimaryEditor::Clear() {
     fixed_.clear();
-    input_.clear();
 
     ++ modified_;
 }
 
-void SKKPrimaryEditor::Output(SKKContextBuffer& buffer, bool active) const {
+void SKKPrimaryEditor::Output(SKKContextBuffer& buffer) const {
     buffer.Fix(commit_);
     buffer.Fix(fixed_);
-
-    if(active) {
-        buffer.Compose(input_);
-    }
 }
 
 void SKKPrimaryEditor::Commit(std::string& queue) {
-    input_.clear();
-
     commit_ += queue;
     queue.clear();
 

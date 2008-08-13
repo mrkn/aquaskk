@@ -31,20 +31,20 @@
 
 using namespace statemachinecxx_sourceforge_jp;
 
+class SKKCandidateWindow;
 class SKKStateConfiguration;
 class SKKInputEngine;
-class SKKCandidateWindow;
 
 // 状態コンテナ
 class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
+    SKKCandidateWindow* window_;
     SKKStateConfiguration* configuration_;
     SKKInputEngine* editor_;
     SKKCompleter completer_;
     SKKSelector selector_;
-    SKKCandidateWindow* window_;
 
 public:
-    SKKState(SKKStateConfiguration* configuration, SKKInputEngine* editor, SKKCandidateWindow* window);
+    SKKState(SKKCandidateWindow* window, SKKStateConfiguration* configuration, SKKInputEngine* editor);
     SKKState(const SKKState& src);
 
     virtual const Handler InitialState() const { return &SKKState::Primary; }

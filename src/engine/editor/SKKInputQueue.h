@@ -30,7 +30,6 @@ class SKKInputQueueObserver {
 public:
     virtual ~SKKInputQueueObserver() {}
 
-    virtual void SKKInputQueueUpdate(const std::string& fixed) = 0;
     virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue) = 0;
 };
 
@@ -56,6 +55,7 @@ public:
     void Clear();
 
     bool IsEmpty() const;
+    const std::string& QueueString() const;
 
     // 変換可能かどうか
     bool CanConvert(char code) const;

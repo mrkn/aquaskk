@@ -82,7 +82,6 @@ class SKKInputEngine : public SKKInputQueueObserver,
     void enableSubEditor(SKKBaseEditor* editor);
     void updateContextBuffer();
 
-    virtual void SKKInputQueueUpdate(const std::string& fixed);
     virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue);
 
     // 見出し語の取得

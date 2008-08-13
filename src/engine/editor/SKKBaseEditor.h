@@ -40,9 +40,6 @@ public:
         CursorDown
     };
 
-    // 入力処理(ASCII 専用)
-    virtual void Input(const std::string& ascii) {}
-
     // 入力処理(fixed=確定文字列, input=入力文字列)
     virtual void Input(const std::string& fixed, const std::string& input) {}
 
@@ -53,7 +50,7 @@ public:
     virtual void Clear() = 0;
 
     // 出力処理
-    virtual void Output(SKKContextBuffer& buffer, bool active) const = 0;
+    virtual void Output(SKKContextBuffer& buffer) const = 0;
 
     // 確定処理
     virtual void Commit(std::string& queue) = 0;

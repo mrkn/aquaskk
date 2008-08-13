@@ -29,7 +29,7 @@ SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObse
                                        SKKBaseEditor* bottom)
     : bottom_(bottom),
       param_(param),
-      state_(SKKState(param_->StateConfiguration(), &editor_, param_->CandidateWindow())),
+      state_(SKKState(param_->CandidateWindow(), param_->StateConfiguration(), &editor_)),
       editor_(param_->InputEngineOption(),
               registrationObserver,
               param_->FrontEnd(),

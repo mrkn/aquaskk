@@ -28,17 +28,15 @@
 
 class SKKComposingEditor : public SKKBaseEditor {
     SKKTextBuffer composing_;
-    std::string input_;
     bool modified_;
 
 public:
     SKKComposingEditor();
 
-    virtual void Input(const std::string& ascii);
     virtual void Input(const std::string& fixed, const std::string& input);
     virtual void Input(Event event);
     virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer, bool active) const;
+    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
     virtual void Flush();
     virtual bool IsModified() const;

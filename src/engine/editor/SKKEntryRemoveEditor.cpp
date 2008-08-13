@@ -33,8 +33,8 @@ void SKKEntryRemoveEditor::Initialize(const SKKEntry& entry, const SKKCandidate&
     Clear();
 }
 
-void SKKEntryRemoveEditor::Input(const std::string& ascii) {
-    input_ += ascii;
+void SKKEntryRemoveEditor::Input(const std::string& fixed, const std::string&) {
+    input_ += fixed;
 }
 
 void SKKEntryRemoveEditor::Input(Event event) {
@@ -47,7 +47,7 @@ void SKKEntryRemoveEditor::Clear() {
     input_.clear();
 }
 
-void SKKEntryRemoveEditor::Output(SKKContextBuffer& buffer, bool active) const {
+void SKKEntryRemoveEditor::Output(SKKContextBuffer& buffer) const {
     buffer.Compose(prompt_ + input_);
     buffer.SetEntry(SKKEntry(input_));
 }

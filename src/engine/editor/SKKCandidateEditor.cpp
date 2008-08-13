@@ -32,19 +32,17 @@ void SKKCandidateEditor::Clear() {
     // 何もしない
 }
 
-void SKKCandidateEditor::Output(SKKContextBuffer& buffer, bool active) const {
-    if(active && !candidate_.IsEmpty()) {
-        std::string str(candidate_.Variant());
+void SKKCandidateEditor::Output(SKKContextBuffer& buffer) const {
+    std::string str(candidate_.Variant());
 
-        if(entry_.IsOkuriAri()) {
-            str += entry_.OkuriString();
-        }
-
-        buffer.Compose("▼" + str);
-        buffer.SetCandidate(candidate_);
+    if(entry_.IsOkuriAri()) {
+        str += entry_.OkuriString();
     }
 
+    buffer.Compose("▼" + str);
+
     buffer.SetEntry(entry_);
+    buffer.SetCandidate(candidate_);
 }
 
 void SKKCandidateEditor::Commit(std::string& queue) {

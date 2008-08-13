@@ -31,7 +31,6 @@ class SKKEntry;
 class SKKRegisterEditor : public SKKBaseEditor {
     std::string prompt_;
     SKKTextBuffer word_;
-    std::string input_;
 
     SKKRegisterEditor();
     SKKRegisterEditor(const SKKRegisterEditor&);
@@ -40,11 +39,10 @@ class SKKRegisterEditor : public SKKBaseEditor {
 public:
     SKKRegisterEditor(const SKKEntry& entry);
 
-    virtual void Input(const std::string& direct);
     virtual void Input(const std::string& fixed, const std::string& input);
     virtual void Input(Event event);
     virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer, bool active) const;
+    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
 };
 

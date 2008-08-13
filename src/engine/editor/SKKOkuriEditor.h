@@ -31,7 +31,6 @@ class SKKOkuriEditor : public SKKBaseEditor {
     std::string entry_;
     std::string head_;
     std::string okuri_;
-    std::string input_;
 
 public:
     SKKOkuriEditor();
@@ -42,7 +41,7 @@ public:
     virtual void Input(const std::string& fixed, const std::string& input);
     virtual void Input(SKKBaseEditor::Event event);
     virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer, bool active) const;
+    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
     virtual void Flush();
     virtual bool IsModified() const;

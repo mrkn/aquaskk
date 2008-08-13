@@ -27,7 +27,6 @@
 
 class SKKPrimaryEditor : public SKKBaseEditor {
     std::string fixed_;
-    std::string input_;
     std::string commit_;
     int modified_;
 
@@ -36,7 +35,7 @@ public:
 
     virtual void Input(const std::string& fixed, const std::string& input);
     virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer, bool active) const;
+    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
     virtual void Flush();
     virtual bool IsModified() const;

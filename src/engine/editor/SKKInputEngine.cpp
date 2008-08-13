@@ -50,7 +50,8 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     inputModeSelector_.Select(mode);
     inputQueue_.SelectInputMode(mode);
 
-    top()->Clear();
+    // 'q' などの入力モード切り替えに使用した文字は処理済みとする
+    modified_ = true;
 }
 
 SKKInputMode SKKInputEngine::InputMode() const {
@@ -265,7 +266,7 @@ bool SKKInputEngine::CanConvert(char code) const {
 }
 
 bool SKKInputEngine::IsOkuriComplete() const {
-    return okuriEditor_.IsOkuriComplete();
+    return okuriEditor_.IsOkuriComplete() && inputQueue_.IsEmpty();
 }
 
 void SKKInputEngine::BeginRegistration() {
@@ -326,20 +327,17 @@ void SKKInputEngine::enableSubEditor(SKKBaseEditor* editor) {
 }
 
 void SKKInputEngine::updateContextBuffer() {
-    // Top のフィルターだけは active 引数を true にする
-    SKKContextBuffer tmp;
+    contextBuffer_.Clear();
+
     for(EditorStack::iterator iter = active_->begin(); iter != active_->end(); ++ iter) {
-        (*iter)->Output(tmp, *iter == top());
+        (*iter)->Output(contextBuffer_);
     }
 
-    contextBuffer_ = tmp;
+    // 非確定文字があれば挿入(ex. "ky" など)
+    contextBuffer_.Compose(inputQueue_.QueueString());
 }
 
 // ------------------------------------------------------------
-
-void SKKInputEngine::SKKInputQueueUpdate(const std::string& fixed) {
-    top()->Input(fixed);
-}
 
 void SKKInputEngine::SKKInputQueueUpdate(const std::string& fixed, const std::string& queue) {
     top()->Input(fixed, queue);

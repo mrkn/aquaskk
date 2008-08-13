@@ -35,13 +35,8 @@ SKKRegisterEditor::SKKRegisterEditor(const SKKEntry& entry) {
     prompt_ += "] ";
 }
 
-void SKKRegisterEditor::Input(const std::string& direct) {
-    word_.Insert(direct);
-}
-
-void SKKRegisterEditor::Input(const std::string& fixed, const std::string& input) {
+void SKKRegisterEditor::Input(const std::string& fixed, const std::string&) {
     word_.Insert(fixed);
-    input_ = input;
 }
 
 void SKKRegisterEditor::Input(SKKBaseEditor::Event event) {
@@ -76,21 +71,14 @@ void SKKRegisterEditor::Input(SKKBaseEditor::Event event) {
 }
 
 void SKKRegisterEditor::Clear() {
-    input_.clear();
+    // 何もしない
 }
 
-void SKKRegisterEditor::Output(SKKContextBuffer& buffer, bool active) const {
-    SKKTextBuffer tmp(word_);
-
-    if(active) {
-        tmp.Insert(input_);
-    }
-
-    buffer.Compose(prompt_ + tmp.String(), tmp.CursorPosition());
+void SKKRegisterEditor::Output(SKKContextBuffer& buffer) const {
+    buffer.Compose(prompt_ + word_.String(), word_.CursorPosition());
 }
 
 void SKKRegisterEditor::Commit(std::string& queue) {
     word_.Insert(queue);
-    input_.clear();
     queue = word_.String();
 }

@@ -36,13 +36,12 @@ void SKKOkuriEditor::Initialize(char head) {
     entry_.clear();
     head_.clear();
     okuri_.clear();
-    input_.clear();
 
     head_ += std::tolower(head);
 }
 
 bool SKKOkuriEditor::IsOkuriComplete() const {
-    return !okuri_.empty() && input_.empty();
+    return !okuri_.empty();
 }
 
 void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input) {
@@ -52,13 +51,11 @@ void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input) {
         // KesSi 対応
         if(!fixed.empty() && !input.empty()) {
             entry_ = fixed;
-            input_ = input;
             return;
         }
     }
 
     okuri_ += fixed;
-    input_ = input;
 }
 
 void SKKOkuriEditor::Input(SKKBaseEditor::Event event) {
@@ -75,14 +72,10 @@ void SKKOkuriEditor::Clear() {
     // 何もしない
 }
 
-void SKKOkuriEditor::Output(SKKContextBuffer& buffer, bool active) const {
+void SKKOkuriEditor::Output(SKKContextBuffer& buffer) const {
     std::string tmp(entry_);
 
     tmp += "*" + okuri_;
-
-    if(active) {
-        tmp += input_;
-    }
 
     buffer.Compose(tmp);
 
@@ -96,7 +89,6 @@ void SKKOkuriEditor::Commit(std::string&) {
     entry_.clear();
     head_.clear();
     okuri_.clear();
-    input_.clear();
 }
 
 void SKKOkuriEditor::Flush() {

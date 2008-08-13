@@ -26,7 +26,6 @@
 State SKKState::Composing(const Event& event) {
     switch(event) {
     case EXIT_EVENT:
-        // 履歴を保存する
         return State::SaveHistory();
 
     case SKK_PING:
@@ -58,12 +57,6 @@ State SKKState::Edit(const Event& event) {
     case SKK_CANCEL:
         editor_->Cancel();
         return State::Transition(&SKKState::KanaInput);
-
-    case SKK_TAB:
-        if(completer_.Execute()) {
-            return State::Transition(&SKKState::EntryCompletion);
-        }
-        return 0;
 
     case SKK_BACKSPACE:
         editor_->HandleBackSpace();
@@ -126,6 +119,12 @@ State SKKState::EntryInput(const Event& event) {
 
     case EXIT_EVENT:
         return State::SaveHistory();
+
+    case SKK_TAB:
+        if(completer_.Execute()) {
+            return State::Transition(&SKKState::EntryCompletion);
+        }
+        return 0;
     }
 
     return &SKKState::Edit;
@@ -278,15 +277,7 @@ State SKKState::OkuriInput(const Event& event) {
 State SKKState::EntryCompletion(const Event& event) {
     const SKKEvent& param = event.Param();
 
-    // ENTRY 以外のシステムイベントは上位状態にルーティング
-    if(event.IsSystem() && event != ENTRY_EVENT) {
-        return &SKKState::Edit;
-    }
-
     switch(event) {
-    case ENTRY_EVENT:
-        return 0;
-
     case SKK_TAB:
         completer_.Next();
         return 0;
@@ -305,10 +296,15 @@ State SKKState::EntryCompletion(const Event& event) {
         if(param.IsNextCandidate()) {
             return &SKKState::Edit;
         }
+
+    default:
+        // システムイベント以外は履歴に転送する
+        if(!event.IsSystem()) {
+            return State::DeepForward(&SKKState::EntryInput);
+        }
     }
 
-    // 補完キー以外なら履歴に転送する
-    return State::DeepForward(&SKKState::EntryInput);
+    return &SKKState::Edit;
 }
 
 // ======================================================================

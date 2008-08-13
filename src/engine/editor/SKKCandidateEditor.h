@@ -35,7 +35,7 @@ public:
     void Initialize(const SKKEntry& entry);
 
     virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer, bool active) const;
+    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
 
     const SKKEntry QueryEntry() const;

@@ -26,13 +26,8 @@
 
 SKKComposingEditor::SKKComposingEditor() : modified_(true) {}
 
-void SKKComposingEditor::Input(const std::string& ascii) {
-    composing_.Insert(ascii);
-}
-
-void SKKComposingEditor::Input(const std::string& fixed, const std::string& input) {
+void SKKComposingEditor::Input(const std::string& fixed, const std::string&) {
     composing_.Insert(fixed);
-    input_ = input;
 }
 
 void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
@@ -71,17 +66,10 @@ void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
 
 void SKKComposingEditor::Clear() {
     composing_.Clear();
-    input_.clear();
 }
 
-void SKKComposingEditor::Output(SKKContextBuffer& buffer, bool active) const {
-    SKKTextBuffer tmp(composing_);
-    
-    if(active) {
-        tmp.Insert(input_);
-    }
-
-    buffer.Compose("▽" + tmp.String(), tmp.CursorPosition());
+void SKKComposingEditor::Output(SKKContextBuffer& buffer) const {
+    buffer.Compose("▽" + composing_.String(), composing_.CursorPosition());
     buffer.SetEntry(SKKEntry(composing_.LeftString()));
 }
 
@@ -89,7 +77,6 @@ void SKKComposingEditor::Commit(std::string& queue) {
     queue = composing_.String();
 
     composing_.Clear();
-    input_.clear();
 }
 
 void SKKComposingEditor::Flush() {

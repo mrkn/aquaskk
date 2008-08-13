@@ -29,17 +29,17 @@ namespace {
     typedef SKKState::State State;
 }
 
-SKKState::SKKState(SKKStateConfiguration* configuration, SKKInputEngine* editor, SKKCandidateWindow* window)
-    : configuration_(configuration),
+SKKState::SKKState(SKKCandidateWindow* window, SKKStateConfiguration* configuration, SKKInputEngine* editor)
+    : window_(window),
+      configuration_(configuration),
       editor_(editor),
-      window_(window),
       completer_(editor_),
       selector_(editor_, window_) {}
 
 SKKState::SKKState(const SKKState& src)
-    : configuration_(src.configuration_),
+    : window_(src.window_),
+      configuration_(src.configuration_),
       editor_(src.editor_),
-      window_(src.window_),
       completer_(editor_),
       selector_(editor_, window_) {}
 
