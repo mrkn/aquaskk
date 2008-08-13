@@ -28,15 +28,8 @@ State SKKState::EntryRemove(const Event& event) {
 
     switch(event) {
     case ENTRY_EVENT:
-        inputMode_ = editor_->InputMode();
-
         editor_->SetStateEntryRemove();
-        editor_->SelectInputMode(AsciiInputMode);
 	return 0;
-
-    case EXIT_EVENT:
-        editor_->SelectInputMode(inputMode_);
-        return 0;
 
     case SKK_ENTER:
         if(editor_->Entry().EntryString() == "yes") {
@@ -55,7 +48,8 @@ State SKKState::EntryRemove(const Event& event) {
 
     case SKK_CHAR:
         if(param.IsPlain()) {
-            editor_->HandleChar(param.code, param.IsDirect());
+            // 入力文字は ASCII で受け付ける(常に非変換)
+            editor_->HandleChar(param.code, true);
             return 0;
         }
     }

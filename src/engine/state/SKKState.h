@@ -31,18 +31,17 @@
 
 using namespace statemachinecxx_sourceforge_jp;
 
+class SKKStateConfiguration;
 class SKKInputEngine;
 class SKKCandidateWindow;
-class SKKStateConfiguration;
 
 // 状態コンテナ
 class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
     SKKStateConfiguration* configuration_;
     SKKInputEngine* editor_;
-    SKKCandidateWindow* window_;
-    SKKInputMode inputMode_;
     SKKCompleter completer_;
     SKKSelector selector_;
+    SKKCandidateWindow* window_;
 
 public:
     SKKState(SKKStateConfiguration* configuration, SKKInputEngine* editor, SKKCandidateWindow* window);

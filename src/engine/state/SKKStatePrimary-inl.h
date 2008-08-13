@@ -24,8 +24,6 @@
 // level 1：直接入力
 // ======================================================================
 State SKKState::Primary(const Event& event) {
-    const SKKEvent& param = event.Param();
-
     switch(event) {
     case INIT_EVENT:
 	return State::Initial(&SKKState::KanaInput);
@@ -77,6 +75,23 @@ State SKKState::Primary(const Event& event) {
     case SKK_DOWN:
         editor_->HandleCursorDown();
         return 0;
+    }
+    
+    return &SKKState::TopState;
+}
+
+// ======================================================================
+// level 2 (sub of Primary)：かな入力
+// ======================================================================
+State SKKState::KanaInput(const Event& event) {
+    const SKKEvent& param = event.Param();
+
+    switch(event) {
+    case INIT_EVENT:
+	return State::ShallowHistory(&SKKState::Hirakana);
+
+    case EXIT_EVENT:
+	return State::SaveHistory();
 
     case SKK_CHAR:
 	if(!editor_->CanConvert(param.code)) {
@@ -113,21 +128,6 @@ State SKKState::Primary(const Event& event) {
         }
 
         return 0;
-    }
-    
-    return &SKKState::TopState;
-}
-
-// ======================================================================
-// level 2 (sub of Primary)：かな入力
-// ======================================================================
-State SKKState::KanaInput(const Event& event) {
-    switch(event) {
-    case INIT_EVENT:
-	return State::ShallowHistory(&SKKState::Hirakana);
-
-    case EXIT_EVENT:
-	return State::SaveHistory();
     }
 
     return &SKKState::Primary;
