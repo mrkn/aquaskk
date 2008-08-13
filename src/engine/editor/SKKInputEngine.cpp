@@ -356,7 +356,24 @@ void SKKInputEngine::SKKCompleterUpdate(const std::string& entry) {
 const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
     terminate();
 
-    candidateEditor_.Initialize(Entry());
+    std::string query;
+
+    // 入力モードがカタカナ/半角カナなら、見出し語をひらかなに正規化する
+    switch(InputMode()) {
+    case KatakanaInputMode:
+	jconv::katakana_to_hirakana(Entry().EntryString(), query);
+	break;
+
+    case Jisx0201KanaInputMode:
+	jconv::jisx0201_kana_to_hirakana(Entry().EntryString(), query);
+        break;
+
+    default:
+        query = Entry().EntryString();
+        break;
+    }
+
+    candidateEditor_.Initialize(query);
 
     return candidateEditor_.QueryEntry();
 }
