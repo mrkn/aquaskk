@@ -212,8 +212,10 @@ State SKKState::LatinInput(const Event& event) {
 	return State::Transition(&SKKState::Hirakana);
 
     case SKK_CHAR:
-        editor_->HandleChar(param.code, param.IsDirect());
-	return 0;
+        if(param.IsPlain()) {
+            editor_->HandleChar(param.code, param.IsDirect());
+            return 0;
+        }
     }
 
     return &SKKState::Primary;
