@@ -9,6 +9,7 @@ XCODE	= xcodebuild -project proj/AquaSKK.xcodeproj
 DEBUG_BUILD	= $(XCODE) -configuration Debug
 RELEASE_BUILD	= $(XCODE) -configuration Release
 PKGMAKER	= /Developer/usr/bin/packagemaker
+PKGOPTION	= -b -i jp.sourceforge.aquaskk.pkg -d AquaSKK.pmdoc
 HDIMAGE	= hdiutil create -ov -srcfolder $(WORKDIR)
 BUILD	= proj/build/Debug
 TODAY	= `date +%Y%m%d`
@@ -46,4 +47,4 @@ release: package
 package: release_build
 	rm -fr $(WORKDIR)
 	mkdir $(WORKDIR)
-	cd proj; $(PKGMAKER) -d AquaSKK.pmdoc -o $(WORKDIR)/AquaSKK.pkg --target 10.5; cd ..
+	cd proj; $(PKGMAKER) $(PKGOPTION) -o $(WORKDIR)/AquaSKK.pkg; cd ..

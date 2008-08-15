@@ -45,6 +45,10 @@ class TransitionTask
   end
 
   def dict_copy(src, dest)
+    if !FileTest.exist?(src) then
+      return
+    end
+
     Dir.foreach(src) { |file|
       next unless file =~ /SKK-JISYO/
 
@@ -87,11 +91,13 @@ class TransitionTask
   end
 
   def task04
-    translator = DictionarySetTranslator.new(@work_settings.dictionary_set)
+    if FileTest.exist?(@work_settings.dictionary_set) then
+      translator = DictionarySetTranslator.new(@work_settings.dictionary_set)
 
-    translator.execute()
+      translator.execute()
 
-    translator.save(@work_settings.dictionary_set)
+      translator.save(@work_settings.dictionary_set)
+    end
   end
 
   def task05
