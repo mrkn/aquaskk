@@ -46,7 +46,7 @@ public:
     }
 };
 
-SKKDictionaryKeeper::SKKDictionaryKeeper() : timer_(0) {}
+SKKDictionaryKeeper::SKKDictionaryKeeper() : loaded_(false), timer_(0) {}
 
 void SKKDictionaryKeeper::Initialize(SKKDictionaryLoader* loader, int interval, int timeout) {
     if(timer_.get()) return;
@@ -69,10 +69,9 @@ std::string SKKDictionaryKeeper::FindOkuriNasi(const std::string& query) {
 bool SKKDictionaryKeeper::FindCompletions(const std::string& entry, std::vector<std::string>& result) {
     pthread::lock scope(condition_);
 
+    if(!ready()) return false;
+
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
-    if(container.empty()) {
-        if(!condition_.wait(timeout_)) return false;
-    }
 
     typedef std::pair<SKKDictionaryEntryIterator, SKKDictionaryEntryIterator> EntryRange;
 
@@ -95,15 +94,15 @@ void SKKDictionaryKeeper::SKKDictionaryLoaderUpdate(const SKKDictionaryFile& fil
 
     file_ = file;
 
+    loaded_ = true;
+
     condition_.signal();
 }
 
 std::string SKKDictionaryKeeper::fetch(const std::string& query, SKKDictionaryEntryContainer& container) {
     pthread::lock scope(condition_);
 
-    if(container.empty()) {
-	if(!condition_.wait(timeout_)) return "";
-    }
+    if(!ready()) return "";
 
     std::string index;
     std::string result;
@@ -120,4 +119,13 @@ std::string SKKDictionaryKeeper::fetch(const std::string& query, SKKDictionaryEn
     jconv::convert_eucj_to_utf8(iter->second, result);
 
     return result;
+}
+
+bool SKKDictionaryKeeper::ready() {
+    // 辞書のロードが完了するまで待つ
+    if(!loaded_) {
+        if(!condition_.wait(timeout_)) return false;
+    }
+
+    return true;
 }

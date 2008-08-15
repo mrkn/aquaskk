@@ -33,19 +33,19 @@ class TransitionTask
   end
 
   def copy(src, dest)
-    if FileTest.exist?(src) then
+    if File.exist?(src) then
       File.copy(src, dest)
     end
   end
 
   def safe_copy(src, dest)
-    if !FileTest.exist?(dest) then
+    if !File.exist?(dest) then
       copy(src, dest)
     end
   end
 
   def dict_copy(src, dest)
-    if !FileTest.exist?(src) then
+    if !File.exist?(src) then
       return
     end
 
@@ -81,7 +81,7 @@ class TransitionTask
   end
 
   def task03
-    if FileTest.exist?(@work_settings.config) then
+    if File.exist?(@work_settings.config) then
       translator = KeymapTranslator.new(@work_settings.config, @work_defaults)
 
       translator.execute()
@@ -91,7 +91,7 @@ class TransitionTask
   end
 
   def task04
-    if FileTest.exist?(@work_settings.dictionary_set) then
+    if File.exist?(@work_settings.dictionary_set) then
       translator = DictionarySetTranslator.new(@work_settings.dictionary_set)
 
       translator.execute()
@@ -120,6 +120,11 @@ class TransitionTask
 
     private_methods.sort.each { |task|
       method(task).call if(task =~ /task/)
+    }
+
+    Dir.foreach(ConstVars::NEW_LIB_DIR) { |file|
+      File.chown(Process.uid, Process.gid, 
+                 ConstVars::NEW_LIB_DIR + '/' + file)
     }
   end
 end

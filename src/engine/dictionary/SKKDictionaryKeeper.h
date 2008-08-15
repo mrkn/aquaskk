@@ -38,6 +38,7 @@ class SKKDictionaryLoader : public pthread::task {
     SKKDictionaryLoaderObserver* observer_;
 
 protected:
+    // SKKDictionaryFile が空でも通知は行うこと
     void NotifyObserver(const SKKDictionaryFile& file) {
 	observer_->SKKDictionaryLoaderUpdate(file);
     }
@@ -54,11 +55,13 @@ class SKKDictionaryKeeper : public SKKDictionaryLoaderObserver {
     std::auto_ptr<pthread::timer> timer_;
     pthread::condition condition_;
     SKKDictionaryFile file_;
+    bool loaded_;
     int timeout_;
 
     virtual void SKKDictionaryLoaderUpdate(const SKKDictionaryFile& file);
 
     std::string fetch(const std::string& query, SKKDictionaryEntryContainer& container);
+    bool ready();
 
 public:
     SKKDictionaryKeeper();

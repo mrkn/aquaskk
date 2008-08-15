@@ -27,6 +27,7 @@
 class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
     std::string path_;
     std::time_t lastupdate_;
+    bool first_;
 
     virtual bool run() {
 	SKKDictionaryFile tmp;
@@ -34,7 +35,12 @@ class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
 	if(updated() && tmp.Load(path_)) {
 	    tmp.Sort();
 	    NotifyObserver(tmp);
-	}
+	} else {
+            if(first_) {
+                first_ = false;
+                NotifyObserver(tmp);
+            }
+        }
 
 	return true;
     }
@@ -51,7 +57,7 @@ class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
     }
 
 public:
-    SKKCommonDictionaryLoader(const std::string& location) : path_(location), lastupdate_(0) {}
+    SKKCommonDictionaryLoader(const std::string& location) : path_(location), lastupdate_(0), first_(true) {}
 };
 
 // ======================================================================
