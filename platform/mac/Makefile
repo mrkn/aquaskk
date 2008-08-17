@@ -10,6 +10,7 @@ DEBUG_BUILD	= $(XCODE) -configuration Debug
 RELEASE_BUILD	= $(XCODE) -configuration Release
 PKGMAKER	= /Developer/usr/bin/packagemaker
 PKGOPTION	= -b -i jp.sourceforge.aquaskk.pkg -d AquaSKK.pmdoc
+FREEZE	= /usr/local/bin/freeze
 HDIMAGE	= hdiutil create -ov -srcfolder $(WORKDIR)
 BUILD	= proj/build/Debug
 TODAY	= `date +%Y%m%d`
@@ -47,4 +48,10 @@ release: package
 package: release_build
 	rm -fr $(WORKDIR)
 	mkdir $(WORKDIR)
-	cd proj; $(PKGMAKER) $(PKGOPTION) -o $(WORKDIR)/AquaSKK.pkg; cd ..
+	$(FREEZE) proj/AquaSKK.packproj
+	mv AquaSKK.pkg $(WORKDIR)
+
+#package: release_build
+#	rm -fr $(WORKDIR)
+#	mkdir $(WORKDIR)
+#	cd proj; $(PKGMAKER) $(PKGOPTION) -o $(WORKDIR)/AquaSKK.pkg; cd ..

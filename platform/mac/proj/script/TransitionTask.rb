@@ -5,7 +5,8 @@ require 'RuntimeSettings'
 require 'UserDefaults'
 require 'KeymapTranslator'
 require 'DictionarySetTranslator'
-require 'ftools'
+
+require 'FileUtils'
 
 class TransitionTask
   private
@@ -34,7 +35,7 @@ class TransitionTask
 
   def copy(src, dest)
     if File.exist?(src) then
-      File.copy(src, dest)
+      FileUtils.copy(src, dest)
     end
   end
 
@@ -113,18 +114,15 @@ class TransitionTask
 
   public
 
-  def execute
-    File.rm_f(ConstVars::TEMP_DIR)
-    File.mkpath(ConstVars::TEMP_DIR)
-    File.mkpath(ConstVars::NEW_LIB_DIR)
+  def execute(user, group)
+    FileUtils.rm_rf(ConstVars::TEMP_DIR)
+    FileUtils.mkpath(ConstVars::TEMP_DIR)
+    FileUtils.mkpath(ConstVars::NEW_LIB_DIR)
 
     private_methods.sort.each { |task|
       method(task).call if(task =~ /task/)
     }
 
-    Dir.foreach(ConstVars::NEW_LIB_DIR) { |file|
-      File.chown(Process.uid, Process.gid, 
-                 ConstVars::NEW_LIB_DIR + '/' + file)
-    }
+    FileUtils.chown_R(user, group, ConstVars::NEW_LIB_DIR)
   end
 end

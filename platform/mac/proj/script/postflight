@@ -1,10 +1,16 @@
 #!/usr/bin/env ruby
 # -*- mode: ruby; coding: utf-8 -*-
 
+BEGIN {
+  $LOAD_PATH.push File.dirname($0)
+}
+
 require 'TransitionTask'
 
 begin
-  task = TransitionTask.new()
+  user = `logname`.chop
+  group = `id -g #{user}`.chop
 
-  task.execute
+  task = TransitionTask.new()
+  task.execute(user, group)
 end

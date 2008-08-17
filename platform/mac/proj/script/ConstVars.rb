@@ -5,7 +5,7 @@ module ConstVars
 
   OLD_LIB_DIR = File.expand_path("~/Library/AquaSKK")
   NEW_LIB_DIR = File.expand_path("~/Library/Application Support/AquaSKK")
-  TEMP_DIR = "/tmp/aquaskk"
+  TEMP_DIR = "/tmp/setup.aquaskk"
 
   DICTIONARY_SET = "DictionarySet.plist"
 end
