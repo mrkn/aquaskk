@@ -11,7 +11,10 @@ require 'FileUtils'
 class TransitionTask
   private
 
-  def initialize
+  def initialize(user, group)
+    @user = user
+    @group = group
+
     @tsm_settings = RuntimeSettings.new(ConstVars::OLD_LIB_DIR,
                                         "jp.sourceforge.AquaSKKServer",
                                         "skk-jisyo.utf8",
@@ -36,6 +39,7 @@ class TransitionTask
   def copy(src, dest)
     if File.exist?(src) then
       FileUtils.copy(src, dest)
+      FileUtils.chown(@user, @group, dest)
     end
   end
 
@@ -114,7 +118,7 @@ class TransitionTask
 
   public
 
-  def execute(user, group)
+  def execute
     FileUtils.rm_rf(ConstVars::TEMP_DIR)
     FileUtils.mkpath(ConstVars::TEMP_DIR)
     FileUtils.mkpath(ConstVars::NEW_LIB_DIR)
@@ -123,6 +127,6 @@ class TransitionTask
       method(task).call if(task =~ /task/)
     }
 
-    FileUtils.chown_R(user, group, ConstVars::NEW_LIB_DIR)
+    FileUtils.chown(@user, @group, ConstVars::NEW_LIB_DIR)
   end
 end

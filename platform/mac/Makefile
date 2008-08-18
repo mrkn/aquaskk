@@ -36,22 +36,20 @@ copy: all
 test:
 	cd ../../src/engine/tests; make test;
 
-release_build:
+release:
 	$(RELEASE_BUILD) build
 
-beta: package
-	$(HDIMAGE) /tmp/AquaSKK-$(TODAY).dmg
+pkg: release
+	rm -fr AquaSKK.pkg
+	$(FREEZE) proj/AquaSKK.packproj
 
-release: package
-	$(HDIMAGE) /tmp/AquaSKK.dmg
-
-package: release_build
+dmg: pkg
 	rm -fr $(WORKDIR)
 	mkdir $(WORKDIR)
-	$(FREEZE) proj/AquaSKK.packproj
 	mv AquaSKK.pkg $(WORKDIR)
+	$(HDIMAGE) /tmp/AquaSKK-$(TODAY).dmg
 
-#package: release_build
-#	rm -fr $(WORKDIR)
-#	mkdir $(WORKDIR)
-#	cd proj; $(PKGMAKER) $(PKGOPTION) -o $(WORKDIR)/AquaSKK.pkg; cd ..
+package: release
+	rm -fr $(WORKDIR)
+	mkdir $(WORKDIR)
+	cd proj; $(PKGMAKER) $(PKGOPTION) -o $(WORKDIR)/AquaSKK.pkg; cd ..

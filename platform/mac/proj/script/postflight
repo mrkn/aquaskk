@@ -11,6 +11,6 @@ begin
   user = `logname`.chop
   group = `id -g #{user}`.chop
 
-  task = TransitionTask.new()
-  task.execute(user, group)
+  task = TransitionTask.new(user, group)
+  task.execute
 end
