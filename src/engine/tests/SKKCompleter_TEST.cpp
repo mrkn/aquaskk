@@ -5,7 +5,7 @@
 class TestBuddy : public SKKCompleterBuddy {
     std::string query_;
 
-    virtual const std::string SKKCompleterQueryString() const {
+    virtual const std::string SKKCompleterQueryString() {
 	return query_;
     }
 

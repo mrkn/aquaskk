@@ -44,7 +44,7 @@ SKKState::SKKState(const SKKState& src)
       selector_(editor_, window_) {}
 
 void SKKState::ToString(const Handler handler, const Event& event, std::string& result) {
-    static char* systemEvent[] = { "PROBE", "<<ENTRY>>", "<<INIT>>", "<<EXIT>>" };
+    static const char* systemEvent[] = { "PROBE", "<<ENTRY>>", "<<INIT>>", "<<EXIT>>" };
 
     static struct {
 	Handler handler;

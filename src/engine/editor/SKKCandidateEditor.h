@@ -38,7 +38,6 @@ public:
     virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
 
-    const SKKEntry QueryEntry() const;
     void SetCandidate(const SKKCandidate& candidate);
 };
 

@@ -25,30 +25,56 @@
 SKKEntry::SKKEntry() {}
 
 SKKEntry::SKKEntry(const std::string& entry, const std::string& okuri)
-    : entry_(entry), okuri_(okuri) {}
+    : normal_entry_(entry), kana_(okuri) {
+    updateEntry();
+}
 
-void SKKEntry::SetOkuri(const std::string& head, const std::string& okuri) {
-    prompt_ = entry_ + "*" + okuri;
-    entry_ += head;
-    okuri_ = okuri;
+void SKKEntry::SetEntry(const std::string& entry) {
+    normal_entry_ = entry;
+
+    unsigned last_index = normal_entry_.size() - 1;
+
+    // 見出し語末尾の prefix を取り除く(ex. "かk" → "か")
+    if(normal_entry_.find_last_of(prefix_) == last_index) {
+        normal_entry_.erase(last_index);
+    }
+
+    updateEntry();
+}
+
+void SKKEntry::SetOkuri(const std::string& prefix, const std::string& kana) {
+    prefix_ = prefix;
+    kana_ = kana;
+
+    updateEntry();
 }
 
 const std::string& SKKEntry::EntryString() const {
-    return entry_;
+    return IsOkuriAri() ? okuri_entry_ : normal_entry_;
 }
 
 const std::string& SKKEntry::OkuriString() const {
-    return okuri_;
+    return kana_;
 }
 
-const std::string& SKKEntry::OkuriPrompt() const {
+const std::string& SKKEntry::PromptString() const {
     return prompt_;
 }
 
 bool SKKEntry::IsEmpty() const {
-    return entry_.empty();
+    return normal_entry_.empty();
 }
 
 bool SKKEntry::IsOkuriAri() const {
-    return !okuri_.empty();
+    return !kana_.empty();
+}
+
+void SKKEntry::updateEntry() {
+    okuri_entry_ = prompt_ = normal_entry_;
+    okuri_entry_ += prefix_;
+
+    if(IsOkuriAri()) {
+        prompt_ += "*";
+        prompt_ += kana_;
+    }
 }

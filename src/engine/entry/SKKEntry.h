@@ -27,19 +27,24 @@
 
 // 見出し語
 class SKKEntry {
-    std::string entry_;
-    std::string okuri_;
+    std::string normal_entry_;
+    std::string okuri_entry_;
+    std::string prefix_;
+    std::string kana_;
     std::string prompt_;
+
+    void updateEntry();
 
 public:
     SKKEntry();
     SKKEntry(const std::string& entry, const std::string& okuri = "");
 
-    void SetOkuri(const std::string& head, const std::string& okuri);
+    void SetEntry(const std::string& entry);
+    void SetOkuri(const std::string& prefix, const std::string& kana);
 
     const std::string& EntryString() const;
     const std::string& OkuriString() const;
-    const std::string& OkuriPrompt() const;
+    const std::string& PromptString() const;
 
     bool IsEmpty() const;
     bool IsOkuriAri() const;

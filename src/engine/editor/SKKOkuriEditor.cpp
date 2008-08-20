@@ -29,15 +29,15 @@
 
 SKKOkuriEditor::SKKOkuriEditor() : modified_(true) {}
 
-void SKKOkuriEditor::Initialize(char head) {
+void SKKOkuriEditor::Initialize(char prefix) {
     modified_ = true;
     first_ = true;
 
     entry_.clear();
-    head_.clear();
+    prefix_.clear();
     okuri_.clear();
 
-    head_ += std::tolower(head);
+    prefix_ += std::tolower(prefix);
 }
 
 bool SKKOkuriEditor::IsOkuriComplete() const {
@@ -73,21 +73,19 @@ void SKKOkuriEditor::Clear() {
 }
 
 void SKKOkuriEditor::Output(SKKContextBuffer& buffer) const {
-    std::string tmp(entry_);
+    buffer.Compose(entry_ + "*" + okuri_);
 
-    tmp += "*" + okuri_;
+    std::string tmp(buffer.Entry().EntryString());
 
-    buffer.Compose(tmp);
+    SKKEntry entry(tmp + entry_);
+    entry.SetOkuri(prefix_, okuri_);
 
-    // SKKEntry を更新する
-    SKKEntry entry(buffer.Entry().EntryString() + entry_);
-    entry.SetOkuri(head_, okuri_);
     buffer.SetEntry(entry);
 }
 
 void SKKOkuriEditor::Commit(std::string&) {
     entry_.clear();
-    head_.clear();
+    prefix_.clear();
     okuri_.clear();
 }
 

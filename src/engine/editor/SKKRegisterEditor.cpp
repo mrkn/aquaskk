@@ -24,15 +24,7 @@
 #include "SKKContextBuffer.h"
 
 SKKRegisterEditor::SKKRegisterEditor(const SKKEntry& entry) {
-    prompt_ = "[登録：";
-
-    if(entry.IsOkuriAri()) {
-        prompt_ += entry.OkuriPrompt();
-    } else {
-        prompt_ += entry.EntryString();
-    }
-
-    prompt_ += "] ";
+    prompt_ = "[登録：" + entry.PromptString() + "] ";
 }
 
 void SKKRegisterEditor::Input(const std::string& fixed, const std::string&) {

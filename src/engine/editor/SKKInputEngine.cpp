@@ -27,7 +27,7 @@
 #include "SKKContextBuffer.h"
 #include "SKKBackEnd.h"
 #include "jconv.h"
-#include <cassert>
+#include <iostream>
 
 SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
                                SKKRegistrationObserver* registrationObserver,
@@ -356,26 +356,25 @@ void SKKInputEngine::SKKCompleterUpdate(const std::string& entry) {
 const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
     terminate();
 
-    std::string query;
+    SKKEntry entry(Entry());
+    std::string query(entry.EntryString());
 
     // 入力モードがカタカナ/半角カナなら、見出し語をひらかなに正規化する
     switch(InputMode()) {
     case KatakanaInputMode:
-	jconv::katakana_to_hirakana(Entry().EntryString(), query);
+	jconv::katakana_to_hirakana(query, query);
 	break;
 
     case Jisx0201KanaInputMode:
-	jconv::jisx0201_kana_to_hirakana(Entry().EntryString(), query);
-        break;
-
-    default:
-        query = Entry().EntryString();
+	jconv::jisx0201_kana_to_hirakana(query, query);
         break;
     }
 
-    candidateEditor_.Initialize(query);
+    entry.SetEntry(query);
 
-    return candidateEditor_.QueryEntry();
+    candidateEditor_.Initialize(entry);
+
+    return entry;
 }
 
 void SKKInputEngine::SKKSelectorUpdate(const SKKCandidate& candidate) {

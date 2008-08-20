@@ -29,13 +29,13 @@ class SKKOkuriEditor : public SKKBaseEditor {
     bool modified_; 
     bool first_;
     std::string entry_;
-    std::string head_;
+    std::string prefix_;
     std::string okuri_;
 
 public:
     SKKOkuriEditor();
 
-    void Initialize(char head);
+    void Initialize(char prefix);
     bool IsOkuriComplete() const;
 
     virtual void Input(const std::string& fixed, const std::string& input);
