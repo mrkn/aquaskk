@@ -30,23 +30,6 @@
     return 4;
 }
 
-- (void)prepareFrame {
-    CandidateCell* cell = [self createCandidateCell];
-
-    NSRect frame;
-
-    frame.size.width = ([cell defaultSize].width + [CandidateView cellSpacing]) * [labels_ length];
-    frame.size.width += [indicator_ size].width;
-    frame.size.height = [cell defaultSize].height;
-
-    frame.size.width += [CandidateView cellSpacing] * 2;
-    frame.size.height += [CandidateView cellSpacing] * 2;
-
-    [self setFrame:frame];
-
-    [cell release];
-}
-
 - (id)initWithFrame:(NSRect)frameRect {
     if(self = [super initWithFrame:frameRect]) {
 	candidateCells_ = [[NSMutableArray alloc] initWithCapacity:0];
@@ -98,8 +81,23 @@
     cellFont_ = newFont;
 
     labels_ = newLabels;
+}
 
-    [self prepareFrame];
+- (NSSize)contentSize {
+    NSSize result;
+
+    CandidateCell* cell = [self createCandidateCell];
+
+    result.width = ([cell defaultSize].width + [CandidateView cellSpacing]) * [labels_ length];
+    result.width += [indicator_ size].width;
+    result.height = [cell defaultSize].height;
+
+    result.width += [CandidateView cellSpacing] * 2;
+    result.height += [CandidateView cellSpacing] * 2;
+
+    [cell release];
+
+    return result;
 }
 
 - (void)setCandidates:(NSArray*)candidates selectedIndex:(int)cursor {

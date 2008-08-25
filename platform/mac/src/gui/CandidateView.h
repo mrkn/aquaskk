@@ -38,6 +38,7 @@
 + (unsigned)cellSpacing;
 
 - (void)prepareWithFont:(NSFont*)font labels:(NSString*)labels;
+- (NSSize)contentSize;
 - (void)setCandidates:(NSArray*)candidates selectedIndex:(int)cursor;
 - (void)setPage:(NSRange)page;
 - (id)createCandidateCell;

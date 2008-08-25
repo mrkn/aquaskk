@@ -48,7 +48,7 @@
     labels_ = [newLabels retain];
 
     [view_ prepareWithFont:newFont labels:labels_];
-    [[self window] setContentSize:[view_ bounds].size];
+    [[self window] setContentSize:[view_ contentSize]];
 }
 
 - (void)setCandidates:(NSArray*)candidates selectedIndex:(int)cursor {
