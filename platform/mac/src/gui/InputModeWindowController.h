@@ -27,6 +27,7 @@
 #include <QuartzCore/QuartzCore.h>
 
 @interface InputModeWindowController : NSWindowController {
+    SKKInputMode inputMode_;
     NSDictionary* modeIcons_;
     CALayer* rootLayer_;
     CABasicAnimation* animation_;

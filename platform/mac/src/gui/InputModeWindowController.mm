@@ -22,6 +22,13 @@
 
 #include "InputModeWindowController.h"
 
+@interface InputModeWindowController (Local)
+- (void)prepareIcon;
+- (void)prepareLayer;
+- (void)prepareAnimation;
+- (void)updateFrame;
+@end
+
 @implementation InputModeWindowController
 
 + (InputModeWindowController*)sharedController {
@@ -32,47 +39,9 @@
 
 - (id)init {
     if(self = [super initWithWindowNibName:@"InputModeWindow"]) {
-        NSMutableDictionary* icons = [[NSMutableDictionary alloc] initWithCapacity:0];
-
-        [icons setObject:[NSImage imageNamed:@"AquaSKK-Hirakana.png"]
-               forKey:[NSNumber numberWithInt:HirakanaInputMode]];
-
-        [icons setObject:[NSImage imageNamed:@"AquaSKK-Katakana.png"]
-               forKey:[NSNumber numberWithInt:KatakanaInputMode]];
-
-        [icons setObject:[NSImage imageNamed:@"AquaSKK-Jisx0201Kana.png"]
-               forKey:[NSNumber numberWithInt:Jisx0201KanaInputMode]];
-
-        [icons setObject:[NSImage imageNamed:@"AquaSKK-Ascii.png"]
-               forKey:[NSNumber numberWithInt:AsciiInputMode]];
-
-        [icons setObject:[NSImage imageNamed:@"AquaSKK-Jisx0208Latin.png"]
-               forKey:[NSNumber numberWithInt:Jisx0208LatinInputMode]];
-
-        modeIcons_ = [[NSDictionary alloc] initWithDictionary:icons];
-
-        [icons release];
-        
-        NSImage* icon = [modeIcons_ objectForKey:[NSNumber numberWithInt:HirakanaInputMode]];
-        NSRect rect;
-        rect.origin = NSZeroPoint;
-        rect.size = [icon size];
-
-        rootLayer_ = [CALayer layer];
-        rootLayer_.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
-        rootLayer_.opacity = 0.0;
-
-        NSView* view = [[self window] contentView];
-        [view setLayer:rootLayer_];
-        [view setWantsLayer:YES];
-        [view setFrame:rect];
-        [[self window] setFrame:rect display:NO];
-
-        animation_ = [[CABasicAnimation animationWithKeyPath:@"opacity"] retain];
-        animation_.duration = 2.0;
-        animation_.fromValue = [NSNumber numberWithFloat:1.0];
-        animation_.toValue = [NSNumber numberWithFloat:0];
-        animation_.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.5 :0.0 :0.5 :0.0];
+        [self prepareIcon];
+        [self prepareLayer];
+        [self prepareAnimation];
     }
 
     return self;
@@ -81,10 +50,15 @@
 - (void)dealloc {
     [modeIcons_ release];
     [animation_ release];
+
     [super dealloc];
 }
 
 - (void)changeMode:(SKKInputMode)mode {
+    inputMode_ = mode;
+
+    [self updateFrame];
+
     NSImage* image = [modeIcons_ objectForKey:[NSNumber numberWithInt:mode]];
     NSBitmapImageRep* rep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]]; 
 
@@ -98,6 +72,8 @@
 }
 
 - (void)show:(NSPoint)topleft level:(int)level {
+    [self updateFrame];
+
     [[self window] setFrameTopLeftPoint:topleft];
     [[self window] setLevel:level];
     [self showWindow:nil];
@@ -107,6 +83,68 @@
 
 - (void)hide {
     [[self window] orderOut:nil];
+}
+
+@end
+
+@implementation InputModeWindowController (Local)
+
+- (void)prepareIcon {
+    struct {
+        int mode;
+        NSString* name;
+    } icon[] = {
+        { HirakanaInputMode,		@"AquaSKK-Hirakana.png" },
+        { KatakanaInputMode,		@"AquaSKK-Katakana.png" },
+        { Jisx0201KanaInputMode,	@"AquaSKK-Jisx0201Kana.png" },
+        { AsciiInputMode,		@"AquaSKK-Ascii.png" },
+        { Jisx0208LatinInputMode,	@"AquaSKK-Jisx0208Latin.png" },
+        { 0,				0 }
+    };
+
+    NSMutableDictionary* icons = [[NSMutableDictionary alloc] initWithCapacity:0];
+
+    for(int i = 0; icon[i].name != 0; ++ i) {
+        [icons setObject:[NSImage imageNamed:icon[i].name]
+               forKey:[NSNumber numberWithInt:icon[i].mode]];
+    }
+
+    inputMode_ = HirakanaInputMode;
+    modeIcons_ = [[NSDictionary alloc] initWithDictionary:icons];
+
+    [icons release];
+}
+        
+- (void)prepareLayer {
+    rootLayer_ = [CALayer layer];
+    rootLayer_.opacity = 0.0;
+
+    NSView* view = [[self window] contentView];
+
+    [view setLayer:rootLayer_];
+    [view setWantsLayer:YES];
+}
+
+- (void)prepareAnimation {
+    animation_ = [[CABasicAnimation animationWithKeyPath:@"opacity"] retain];
+
+    animation_.duration = 2.0;
+    animation_.fromValue = [NSNumber numberWithFloat:1.0];
+    animation_.toValue = [NSNumber numberWithFloat:0];
+    animation_.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.5 :0.0 :0.5 :0.0];
+}
+
+- (void)updateFrame {
+    NSImage* icon = [modeIcons_ objectForKey:[NSNumber numberWithInt:inputMode_]];
+
+    NSRect rect;
+    rect.origin = NSZeroPoint;
+    rect.size = [icon size];
+
+    // ppc では、背景を clearColor にした NSWindow の矩形サイズが、いつ
+    // のまにか 0*0 になってしまうことがある(QuarzDebug による調査)ため、
+    // 表示する直前にウィンドウの矩形を設定し直す
+    [[self window] setFrame:rect display:NO];
 }
 
 @end

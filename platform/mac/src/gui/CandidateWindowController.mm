@@ -44,6 +44,9 @@
 }
 
 - (void)prepareWithFont:(NSFont*)newFont labels:(NSString*)newLabels {
+    // 確実に windows をロードしておく
+    [self window];
+
     [labels_ release];
     labels_ = [newLabels retain];
 
