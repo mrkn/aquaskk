@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include "MacFrontEnd.h"
+#include "utf8util.h"
 
 MacFrontEnd::MacFrontEnd(id client) : client_(client) {}
 
@@ -42,7 +43,7 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     // *** FIXME ***
     // Carbon アプリで見出し語を入力すると、なぜか文字のベースラインが下にずれる
     // 一旦 "▽" だけ入力すると回避できるが、正解かどうかは不明
-    if(str.find("▽") != std::string::npos) {
+    if(utf8::length(str) == 2 && str.find("▽") == 0) {
         [client_ setMarkedText:@"▽" selectionRange:notfound replacementRange:notfound];
     }
 
