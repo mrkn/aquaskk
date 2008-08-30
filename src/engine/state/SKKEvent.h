@@ -64,7 +64,7 @@ enum {
     NextCandidate               = (1 << 10),
     PrevCandidate               = (1 << 11),
     RemoveTrigger               = (1 << 12),
-    Plain                       = (1 << 31)
+    InputChars			= (1 << 13)
 };
 
 // イベントパラメータ
@@ -72,12 +72,12 @@ struct SKKEvent {
     int id;                     // イベント(冗長だが仕方がない)
     unsigned char code;         // 文字そのもの
     int attribute;              // SKK_CHAR 属性
+    bool force_handled;         // 強制的に処理済みとするか
 
-    SKKEvent() : id(0), code(0), attribute(0) {}
-    SKKEvent(int e, unsigned char c, int a = None) : id(e), code(c), attribute(a) {}
+    SKKEvent() : id(0), code(0), attribute(0), force_handled(false) {}
+    SKKEvent(int e, unsigned char c, int a = None) : id(e), code(c), attribute(a), force_handled(false) {}
 
     // SKK_CHAR 属性問い合わせ
-    bool IsPlain() const                        { return attribute & Plain; }
     bool IsDirect() const                       { return attribute & Direct; }
     bool IsUpperCases() const                   { return attribute & UpperCases; }
     bool IsToggleKana() const                   { return attribute & ToggleKana; }
@@ -91,6 +91,7 @@ struct SKKEvent {
     bool IsNextCandidate() const                { return attribute & NextCandidate; }
     bool IsPrevCandidate() const                { return attribute & PrevCandidate; }
     bool IsRemoveTrigger() const                { return attribute & RemoveTrigger; }
+    bool IsInputChars() const	                { return attribute & InputChars; }
 
     const static SKKEvent& Null() {
         static SKKEvent obj(SKK_NULL, 0, 0);
@@ -99,6 +100,37 @@ struct SKKEvent {
 
     bool operator==(const SKKEvent& rhs) const {
         return (id == rhs.id && code == rhs.code && attribute == rhs.attribute);
+    }
+
+    std::string attr() const {
+        std::string result;
+
+#define TEST_attribute(attr)	if(Is ## attr()) result += "," #attr
+
+        TEST_attribute(Direct);
+        TEST_attribute(UpperCases);
+        TEST_attribute(ToggleKana);
+        TEST_attribute(ToggleJisx0201Kana);
+        TEST_attribute(SwitchToAscii);
+        TEST_attribute(SwitchToJisx0208Latin);
+        TEST_attribute(EnterJapanese);
+        TEST_attribute(EnterAbbrev);
+        TEST_attribute(NextCompletion);
+        TEST_attribute(PrevCompletion);
+        TEST_attribute(NextCandidate);
+        TEST_attribute(PrevCandidate);
+        TEST_attribute(RemoveTrigger);
+        TEST_attribute(InputChars);
+
+#undef TEST_attribute
+
+        if(result.empty()) {
+            result = "attr=none";
+        } else {
+            result = "attr=" + result.substr(1);
+        }
+
+        return result;
     }
 
     std::string dump() const {
@@ -130,8 +162,7 @@ struct SKKEvent {
             buf << "event=" << id << "(UNKNOWN), ";
         }
 
-        buf << "code=0x" << std::hex << (unsigned)code << ", "
-            << "attr=0x" << std::hex << (unsigned)attribute;
+        buf << "code=0x" << std::hex << (unsigned)code << ", " << attr();
 
         return buf.str();
     }

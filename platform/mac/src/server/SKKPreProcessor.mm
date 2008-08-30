@@ -39,10 +39,12 @@ void SKKPreProcessor::Initialize(const std::string& path) {
 }
 
 SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
+    SKKEvent result;
     int dispchar = *[[event characters] UTF8String];
     int charcode = *[[event charactersIgnoringModifiers] UTF8String];
     int keycode = [event keyCode];
     int mods = 0;
+    bool isEisuuOrKanaKey = (keycode == 0x66 || keycode == 0x68);
 
     // シフト属性が有効なのはデッドキーのみ
     if([event modifierFlags] & NSShiftKeyMask) {
@@ -65,5 +67,17 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
 	mods += SKKKeyState::META;
     }
 
-    return keymap_.Fetch(charcode, keycode, mods);
+    // 英数キー、かなキーの文字コードがスペースのため、0 にする
+    if(isEisuuOrKanaKey) {
+        charcode = 0x00;
+    }
+
+    result = keymap_.Fetch(charcode, keycode, mods);
+
+    // 英数キー、かなキーの場合は強制的に処理済みとする
+    if(isEisuuOrKanaKey) {
+        result.force_handled = true;
+    }
+
+    return result;
 }

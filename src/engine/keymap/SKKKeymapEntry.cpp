@@ -66,6 +66,7 @@ static const struct {
     { "NextCandidate", 		NextCandidate,		TYPE_ATTRIBUTE },
     { "PrevCandidate", 		PrevCandidate,		TYPE_ATTRIBUTE },
     { "RemoveTrigger", 		RemoveTrigger,		TYPE_ATTRIBUTE },
+    { "InputChars", 		InputChars,		TYPE_ATTRIBUTE },
     { 0x00, 			SKK_NULL,		-1 }
 };
 

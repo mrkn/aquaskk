@@ -32,9 +32,11 @@ void SKKPrimaryEditor::Input(const std::string& fixed, const std::string&) {
 }
 
 void SKKPrimaryEditor::Clear() {
-    fixed_.clear();
+    if(!fixed_.empty()) {
+        fixed_.clear();
 
-    ++ modified_;
+        ++ modified_;
+    }
 }
 
 void SKKPrimaryEditor::Output(SKKContextBuffer& buffer) const {

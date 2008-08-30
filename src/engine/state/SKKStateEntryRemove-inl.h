@@ -47,7 +47,7 @@ State SKKState::EntryRemove(const Event& event) {
         return 0;
 
     case SKK_CHAR:
-        if(param.IsPlain()) {
+        if(param.IsInputChars()) {
             // 入力文字は ASCII で受け付ける(常に非変換)
             editor_->HandleChar(param.code, true);
             return 0;

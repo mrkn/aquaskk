@@ -162,6 +162,10 @@ void SKKInputEngine::Commit() {
 }
 
 void SKKInputEngine::Cancel() {
+    if(!inputQueue_.IsEmpty()) {
+        modified_ = true;
+    }
+
     inputQueue_.Clear();
 
     top()->Clear();

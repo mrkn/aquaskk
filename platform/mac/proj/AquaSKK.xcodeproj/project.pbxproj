@@ -82,6 +82,7 @@
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
 		D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */; };
+		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
 		D3FC32430DD1B297006A3F5A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3FC32420DD1B297006A3F5A /* Preferences.xib */; };
 		D3FC33930DD1B52D006A3F5A /* InputMethodKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC33920DD1B52D006A3F5A /* InputMethodKit.framework */; };
 		D3FC33970DD1B53A006A3F5A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC33960DD1B53A006A3F5A /* QuartzCore.framework */; };
@@ -275,6 +276,7 @@
 		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
 		D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputQueue.cpp; sourceTree = "<group>"; };
 		D398F2CB0E45FA940007F4B9 /* SKKInputQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputQueue.h; sourceTree = "<group>"; };
+		D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		D3FC32210DD1B09C006A3F5A /* AquaSKK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3FC32230DD1B09C006A3F5A /* AquaSKK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AquaSKK-Info.plist"; sourceTree = "<group>"; };
 		D3FC32300DD1B102006A3F5A /* AquaSKKPreferences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKKPreferences.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -648,6 +650,7 @@
 				D353BE140E175552004C68A6 /* icons */,
 				D353BE0F0E175540004C68A6 /* config */,
 				D353BE0A0E17552F004C68A6 /* plist */,
+				D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */,
 				D31381540DD1D89C0002FF9C /* CandidateWindow.xib */,
 				D31381560DD1D8BE0002FF9C /* InputModeWindow.xib */,
 				D322B8D00DDC8174002C33F9 /* AquaSKK.xib */,
@@ -790,6 +793,7 @@
 				D353BE1F0E175552004C68A6 /* AquaSKK-Jisx0201Kana.png in Resources */,
 				D353BE200E175552004C68A6 /* AquaSKK-Jisx0208Latin.png in Resources */,
 				D353BE210E175552004C68A6 /* AquaSKK-Katakana.png in Resources */,
+				D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

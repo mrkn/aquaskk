@@ -81,10 +81,6 @@ SKKEvent SKKKeymap::Fetch(int charcode, int keycode, int mods) {
 	if(iter != attributes_.end()) {
             event.attribute = iter->second;
         }
-
-        if(mods == 0) {
-            event.attribute |= Plain;
-        }
     }
 
     return event;

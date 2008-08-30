@@ -75,6 +75,14 @@ State SKKState::Primary(const Event& event) {
     case SKK_DOWN:
         editor_->HandleCursorDown();
         return 0;
+
+    case SKK_CHAR:
+        // *** FIXME ***
+        // 未確定文字列がある状態で Ctrl-P などが押された場合、
+        // 次回入力時にゴミとなるのでクリアしておく
+        // この問題はもう少しスマートに解決したい...
+        editor_->Reset();
+        return 0;
     }
     
     return &SKKState::TopState;
@@ -117,17 +125,10 @@ State SKKState::KanaInput(const Event& event) {
 	}
 
         // キー修飾がない場合のみローマ字かな変換を実施する
-        if(param.IsPlain()) {
+        if(param.IsInputChars()) {
             editor_->HandleChar(param.code, param.IsDirect());
-        } else {
-            // *** FIXME ***
-            // 未確定文字列がある状態で Ctrl-P などが押された場合、
-            // 次回入力時にゴミとなるのでクリアしておく
-            // この問題はもう少しスマートに解決したい...
-            editor_->Reset();
+            return 0;
         }
-
-        return 0;
     }
 
     return &SKKState::Primary;
@@ -212,7 +213,7 @@ State SKKState::LatinInput(const Event& event) {
 	return State::Transition(&SKKState::Hirakana);
 
     case SKK_CHAR:
-        if(param.IsPlain()) {
+        if(param.IsInputChars()) {
             editor_->HandleChar(param.code, param.IsDirect());
             return 0;
         }

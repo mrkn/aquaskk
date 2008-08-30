@@ -54,7 +54,7 @@
 
     BOOL result = session_->HandleEvent(param);
 
-    return result;
+    return result || param.force_handled;
 }
 
 - (void)commitComposition:(id)sender {

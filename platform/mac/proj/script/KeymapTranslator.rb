@@ -23,6 +23,7 @@ class KeymapTranslator
       'Direct'         => [ 'group::keycode::0x41,0x43,0x45,0x4b,0x4e,0x51-0x59,0x5b,0x5c,0x5f' ],
       'PrevCompletion' => [ ',' ],
       'NextCompletion' => [ '.' ],
+      'InputChars'     => [ 'group::!-~||hex::0x20' ],
     }
   end
 
