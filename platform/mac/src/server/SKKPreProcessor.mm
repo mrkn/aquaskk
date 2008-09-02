@@ -46,6 +46,10 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
     int mods = 0;
     bool isEisuuOrKanaKey = (keycode == 0x66 || keycode == 0x68);
 
+#ifdef SKK_DEBUG
+    NSLog(@"%@", [event description]);
+#endif
+
     // シフト属性が有効なのはデッドキーのみ
     if([event modifierFlags] & NSShiftKeyMask) {
 	if(std::isgraph(dispchar)) { // 空白類を除いた英数字記号

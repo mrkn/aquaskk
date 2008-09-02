@@ -23,8 +23,13 @@
 #ifndef SKKStateMachine_h
 #define SKKStateMachine_h
 
-#include <iostream>
 #include "SKKState.h"
+
+#ifndef	SKK_DEBUG
+typedef GenericStateMachine<SKKState> SKKStateMachine;
+#else
+
+#include <iostream>
 
 template <typename Handler, typename Event>
 struct DebugInspector {
@@ -41,5 +46,6 @@ public:
 };
 
 typedef GenericStateMachine<SKKState, DebugInspector> SKKStateMachine;
+#endif
 
 #endif

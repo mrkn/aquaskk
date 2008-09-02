@@ -141,8 +141,6 @@ void SKKInputEngine::HandlePaste() {
 }
 
 void SKKInputEngine::HandlePing() {
-    modified_ = true;
-
     inputModeSelector_.Activate();
 }
 
