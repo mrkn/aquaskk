@@ -26,6 +26,7 @@
 #include "CandidateCell.h"
 #include "SKKConstVars.h"
 #include "SKKFrontEnd.h"
+#include "utf8util.h"
 
 MacCandidateWindow::MacCandidateWindow(SKKFrontEnd* frontend) : active_(false), frontend_(frontend) {
     controller_ = [CandidateWindowController sharedController];
@@ -43,15 +44,24 @@ void MacCandidateWindow::Setup(SKKCandidateIterator begin, SKKCandidateIterator 
     std::vector<int> cell_width;
 
     CandidateCell* cell = [controller_ createCandidateCell];
+    int width;
 
     // 全ての cell の幅を求める
     while(begin != end) {
         std::string candidate(begin->Variant());
-        NSString* string = [NSString stringWithUTF8String:candidate.c_str()];
 
-        [cell setString:string withLabel:'A'];
+        // UTF-8 で二文字以下ならデフォルトサイズを使う(最適化)
+        if(utf8::length(candidate) < 3) {
+            width = [cell defaultSize].width;
+        } else {
+            NSString* string = [NSString stringWithUTF8String:candidate.c_str()];
 
-        cell_width.push_back([cell size].width + [CandidateView cellSpacing]);
+            [cell setString:string withLabel:'A'];
+
+            width = [cell size].width;
+        }
+
+        cell_width.push_back(width + [CandidateView cellSpacing]);
 
         ++ begin;
     }

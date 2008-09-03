@@ -135,16 +135,17 @@
 }
 
 - (void)updateFrame {
+    NSRect rect = [[self window] frame];
     NSImage* icon = [modeIcons_ objectForKey:[NSNumber numberWithInt:inputMode_]];
-
-    NSRect rect;
-    rect.origin = NSZeroPoint;
-    rect.size = [icon size];
-
+    
     // ppc では、背景を clearColor にした NSWindow の矩形サイズが、いつ
     // のまにか 0*0 になってしまうことがある(QuarzDebug による調査)ため、
     // 表示する直前にウィンドウの矩形を設定し直す
-    [[self window] setFrame:rect display:NO];
+    if(!NSEqualSizes(rect.size, [icon size])) {
+        rect.size = [icon size];
+
+        [[self window] setFrame:rect display:NO];
+    }
 }
 
 @end
