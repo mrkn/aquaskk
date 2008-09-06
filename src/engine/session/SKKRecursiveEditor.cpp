@@ -53,7 +53,7 @@ bool SKKRecursiveEditor::Output() {
 
 void SKKRecursiveEditor::Commit(const std::string& word) {
     if(!word.empty()) {
-        SKKBackEnd::theInstance().Register(editor_.Entry(), SKKCandidate::Encode(word));
+        SKKBackEnd::theInstance().Register(editor_.Entry(), SKKCandidate(word, false));
 
         editor_.Insert(word);
 

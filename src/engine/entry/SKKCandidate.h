@@ -45,8 +45,12 @@ class SKKCandidate {
 public:
     SKKCandidate() {}
 
-    SKKCandidate(const std::string& candidate) {
-	parse(candidate);
+    SKKCandidate(const std::string& candidate, bool auto_parse = true) {
+	if(auto_parse) {
+            parse(candidate);
+        } else {
+            word_ = candidate;
+        }
     }
 
     bool IsEmpty() const {

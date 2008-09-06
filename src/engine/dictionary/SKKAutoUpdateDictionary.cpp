@@ -38,6 +38,7 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 
     virtual bool run() {
 	if(first_) {
+            first_ = false;
 	    notify();
 	}
 
@@ -132,11 +133,6 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 	if(tmp.Load(path_)) {
 	    tmp.Sort();
 	    NotifyObserver(tmp);
-	} else {
-            if(first_) {
-                first_ = false;
-                NotifyObserver(tmp);
-            }
         }
     }
 

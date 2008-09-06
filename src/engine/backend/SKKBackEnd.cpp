@@ -135,7 +135,7 @@ void SKKBackEnd::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
             key = converter.NormalizedKey();
         }
 
-	userdict_->RemoveOkuriNasi(key, candidate.ToString());
+	userdict_->RemoveOkuriNasi(key, SKKCandidate::Encode(candidate.ToString()));
     }
 }
 
