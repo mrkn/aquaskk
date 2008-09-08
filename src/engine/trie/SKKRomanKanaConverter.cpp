@@ -29,7 +29,7 @@
 // ======================================================================
 // ユーティリティ
 // ======================================================================
-void unescape_string(std::string& str) {
+static void unescape_string(std::string& str) {
     static struct {
 	std::string from;
 	const char* to;
@@ -39,12 +39,20 @@ void unescape_string(std::string& str) {
 	{ "&sharp;", "#" },
 	{ "",      0x00 },
     };
-	    
+
     for(int i = 0; escape[i].to != 0x00; ++ i) {
 	std::string& target = escape[i].from;
-	for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target)) {
+	for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
 	    str.replace(pos, target.length(), escape[i].to);
 	}
+    }
+}
+
+static void escape_string(std::string& str) {
+    const std::string target(" ");
+
+    for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
+        str.replace(pos, target.length(), "&space;");
     }
 }
 
@@ -67,17 +75,16 @@ void SKKRomanKanaConverter::Initialize(const std::string& path) {
 	return;
     }
 
-    // 初期化しておく
     root_.Clear();
 
     while(std::getline(ifs, str)) {
 	if(str.empty() || str[0] == '#') continue;
 
-	// EUC-JP → UTF-8 変換
 	std::string utf8;
 	jconv::convert_eucj_to_utf8(str, utf8);
 
-	// 全ての ',' を空白に置換して分解する
+	// 全ての ',' を空白に置換して分解する(事前に空白をエスケープする)
+        escape_string(utf8);
 	std::replace(utf8.begin(), utf8.end(), ',', ' ');
 	std::istringstream buf(utf8);
 

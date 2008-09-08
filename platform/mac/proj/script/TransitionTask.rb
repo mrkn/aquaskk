@@ -6,7 +6,7 @@ require 'UserDefaults'
 require 'KeymapTranslator'
 require 'DictionarySetTranslator'
 
-require 'FileUtils'
+require 'fileutils'
 
 class TransitionTask
   private

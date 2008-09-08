@@ -27,6 +27,7 @@
 - (void)prepareLayer;
 - (void)prepareAnimation;
 - (void)updateFrame;
+- (void)setImage:(id)image;
 @end
 
 @implementation InputModeWindowController
@@ -62,13 +63,7 @@
     NSImage* image = [modeIcons_ objectForKey:[NSNumber numberWithInt:mode]];
     NSBitmapImageRep* rep = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]]; 
 
-    [CATransaction begin];
-    [CATransaction setValue:[NSNumber numberWithFloat:0.0]
-                   forKey:kCATransactionAnimationDuration];
-
-    rootLayer_.contents = (id)[rep CGImage];
-
-    [CATransaction commit];
+    [self setImage:(id)[rep CGImage]];
 }
 
 - (void)show:(NSPoint)topleft level:(int)level {
@@ -142,10 +137,25 @@
     // のまにか 0*0 になってしまうことがある(QuarzDebug による調査)ため、
     // 表示する直前にウィンドウの矩形を設定し直す
     if(!NSEqualSizes(rect.size, [icon size])) {
+        // 画像サイズに応じて原点をオフセットする
+        rect.origin.y += rect.size.height - [icon size].height;
         rect.size = [icon size];
 
-        [[self window] setFrame:rect display:NO];
+        // 矩形設定時の画像ちらつきを防ぐ
+        [self setImage:0];
+
+        [[self window] setFrame:rect display:YES];
     }
+}
+
+- (void)setImage:(id)image {
+    [CATransaction begin];
+    [CATransaction setValue:[NSNumber numberWithFloat:0.0]
+                   forKey:kCATransactionAnimationDuration];
+
+    rootLayer_.contents = image;
+
+    [CATransaction commit];
 }
 
 @end

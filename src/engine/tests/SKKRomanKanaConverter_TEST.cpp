@@ -72,4 +72,7 @@ int main() {
 
     result = conv.Execute(HirakanaInputMode, "/", out, next);
     assert(next == "" && out == "/");
+
+    result = conv.Execute(HirakanaInputMode, "z ", out, next);
+    assert(next == "" && out == "　");
 }
