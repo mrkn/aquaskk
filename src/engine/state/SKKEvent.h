@@ -42,6 +42,11 @@ enum {
     SKK_DOWN,                   // ↓
     SKK_CHAR,                   // その他全てのキー入力
     SKK_PING,                   // CTRL-L(内部状態問い合わせ)
+    SKK_ASCII_MODE,             // ASCII モード
+    SKK_HIRAKANA_MODE,          // ひらかなモード
+    SKK_KATAKANA_MODE,          // カタカナモード
+    SKK_JISX0201KANA_MODE,      // 半角カナモード
+    SKK_JISX0208LATIN_MODE,     // 全角英数モード
     SKK_YES,                    // 仮想イベント
     SKK_NO,                     // 仮想イベント
     SKK_ON,                     // 仮想イベント
@@ -149,6 +154,11 @@ struct SKKEvent {
             "SKK_DOWN",
             "SKK_CHAR",
             "SKK_PING",
+            "SKK_ASCII_MODE",
+            "SKK_HIRAKANA_MODE",
+            "SKK_KATAKANA_MODE",
+            "SKK_JISX0201KANA_MODE",
+            "SKK_JISX0208LATIN_MODE",
             "SKK_YES",
             "SKK_NO",
             "SKK_ON",

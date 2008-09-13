@@ -25,6 +25,7 @@
 
 #import <InputMethodKit/InputMethodKit.h>
 #include "SKKServerProxy.h"
+#include "SKKInputMode.h"
 
 class SKKInputSessionParameter;
 class SKKInputSession;
@@ -34,6 +35,8 @@ class SKKInputSession;
     SKKServerProxy* proxy_;
     SKKInputSessionParameter* param_;
     SKKInputSession* session_;
+    SKKInputMode initialInputMode_;
+    BOOL initialized_;
 }
 @end
 

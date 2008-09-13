@@ -35,6 +35,7 @@
 
 + (InputModeWindowController*)sharedController;
 - (void)changeMode:(SKKInputMode)mode;
+- (SKKInputMode)currentInputMode;
 - (void)show:(NSPoint)topleft level:(int)level;
 - (void)hide;
 

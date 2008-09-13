@@ -25,18 +25,30 @@
 #include "SKKPreProcessor.h"
 #include "SKKConstVars.h"
 #include "MacInputSessionParameter.h"
+#include "InputModeWindowController.h"
+
+@interface SKKInputController (Local)
+
+- (void)initializeKeyboardLayout;
+- (void)setInputModeIfNeeded;
+
+@end
 
 @implementation SKKInputController
 
 - (id)initWithServer:(id)server delegate:(id)delegate client:(id)client {
     self = [super initWithServer:server delegate:delegate client:client];
     if(self) {
+        // 直前のセッションの入力モードを保存しておく
+        initialInputMode_ = [[InputModeWindowController sharedController] currentInputMode];
+        initialized_ = NO;
+
         client_ = client;
         proxy_ = [[SKKServerProxy alloc] init];
         param_ = new MacInputSessionParameter(client_);
 	session_ = new SKKInputSession(param_);
     }
-    
+
     return self;
 }
 
@@ -65,16 +77,10 @@
     session_->HandleEvent(event);
 }
 
-- (void)initializeKeyboardLayout {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString* keyboardLayout = [defaults stringForKey:SKKUserDefaultKeys::keyboard_layout];
-    [client_ overrideKeyboardWithKeyboardNamed:keyboardLayout];
-}
-
 // IMKStateSetting
 - (void)activateServer:(id)sender {
     [self initializeKeyboardLayout];
+    [self setInputModeIfNeeded];
 
     session_->Activate();
 }
@@ -136,6 +142,58 @@
 
 - (void)webFAQ:(id)sender {
     [self openURL:@"http://sourceforge.jp/projects/aquaskk/wiki/FAQ"];
+}
+
+@end
+
+@implementation SKKInputController (Local)
+
+- (void)initializeKeyboardLayout {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    
+    NSString* keyboardLayout = [defaults stringForKey:SKKUserDefaultKeys::keyboard_layout];
+    [client_ overrideKeyboardWithKeyboardNamed:keyboardLayout];
+}
+
+- (void)setInputModeIfNeeded {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    if([defaults boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
+        SKKEvent event;
+        SKKInputMode currentInputMode;
+
+        // 起動時は直前のセッションの入力モードを復元する
+        if(!initialized_) {
+            currentInputMode = initialInputMode_;
+            initialized_ = YES;
+        } else {
+            currentInputMode = [[InputModeWindowController sharedController] currentInputMode];
+        }
+
+        switch(currentInputMode) {
+        case AsciiInputMode:
+            event.id = SKK_ASCII_MODE;
+            break;
+
+        case HirakanaInputMode:
+            event.id = SKK_HIRAKANA_MODE;
+            break;
+
+        case KatakanaInputMode:
+            event.id = SKK_KATAKANA_MODE;
+            break;
+
+        case Jisx0201KanaInputMode:
+            event.id = SKK_JISX0201KANA_MODE;
+            break;
+
+        case Jisx0208LatinInputMode:
+            event.id = SKK_JISX0208LATIN_MODE;
+            break;
+        }
+
+        session_->HandleEvent(event);
+    }
 }
 
 @end

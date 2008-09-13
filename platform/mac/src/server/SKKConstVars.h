@@ -30,6 +30,7 @@ namespace SKKUserDefaultKeys {
     extern NSString* suppress_newline_on_commit;
     extern NSString* use_numeric_conversion;
     extern NSString* enable_extended_completion;
+    extern NSString* use_unified_input_mode;
     extern NSString* keyboard_layout;
     extern NSString* fix_intermediate_conversion;
     extern NSString* max_count_of_inline_candidates;

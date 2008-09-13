@@ -66,6 +66,10 @@
     [self setImage:(id)[rep CGImage]];
 }
 
+- (SKKInputMode)currentInputMode {
+    return inputMode_;
+}
+
 - (void)show:(NSPoint)topleft level:(int)level {
     [self updateFrame];
 

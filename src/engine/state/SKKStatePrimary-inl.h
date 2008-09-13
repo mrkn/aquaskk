@@ -76,6 +76,21 @@ State SKKState::Primary(const Event& event) {
         editor_->HandleCursorDown();
         return 0;
 
+    case SKK_ASCII_MODE:
+        return State::Transition(&SKKState::Ascii);
+
+    case SKK_HIRAKANA_MODE:
+        return State::Transition(&SKKState::Hirakana);
+
+    case SKK_KATAKANA_MODE:
+        return State::Transition(&SKKState::Katakana);
+
+    case SKK_JISX0201KANA_MODE:
+        return State::Transition(&SKKState::Jisx0201Kana);
+
+    case SKK_JISX0208LATIN_MODE:
+        return State::Transition(&SKKState::Jisx0208Latin);
+
     case SKK_CHAR:
         // *** FIXME ***
         // 未確定文字列がある状態で Ctrl-P などが押された場合、
@@ -145,6 +160,9 @@ State SKKState::Hirakana(const Event& event) {
         editor_->SelectInputMode(HirakanaInputMode);
 	return 0;
 
+    case SKK_HIRAKANA_MODE:
+        return 0;
+
     case SKK_CHAR:
 	if(param.IsToggleKana()) {
 	    return State::Transition(&SKKState::Katakana);
@@ -169,6 +187,9 @@ State SKKState::Katakana(const Event& event) {
         editor_->SelectInputMode(KatakanaInputMode);
 	return 0;
 
+    case SKK_KATAKANA_MODE:
+        return 0;
+
     case SKK_CHAR:
 	if(param.IsToggleKana()) {
 	    return State::Transition(&SKKState::Hirakana);
@@ -192,6 +213,9 @@ State SKKState::Jisx0201Kana(const Event& event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(Jisx0201KanaInputMode);
 	return 0;
+
+    case SKK_JISX0201KANA_MODE:
+        return 0;
 
     case SKK_CHAR:
 	if(param.IsToggleKana() || param.IsToggleJisx0201Kana()) {
@@ -230,6 +254,9 @@ State SKKState::Ascii(const Event& event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(AsciiInputMode);
 	return 0;
+
+    case SKK_ASCII_MODE:
+        return 0;
     }
 
     return &SKKState::LatinInput;
@@ -243,6 +270,9 @@ State SKKState::Jisx0208Latin(const Event& event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(Jisx0208LatinInputMode);
 	return 0;
+
+    case SKK_JISX0208LATIN_MODE:
+        return 0;
     }
 
     return &SKKState::LatinInput;
