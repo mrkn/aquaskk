@@ -26,6 +26,7 @@
 - (void)prepareIcon;
 - (void)prepareLayer;
 - (void)prepareAnimation;
+- (void)prepareWindow;
 - (void)updateFrame;
 - (void)setImage:(id)image;
 @end
@@ -43,6 +44,7 @@
         [self prepareIcon];
         [self prepareLayer];
         [self prepareAnimation];
+        [self prepareWindow];
     }
 
     return self;
@@ -131,6 +133,14 @@
     animation_.fromValue = [NSNumber numberWithFloat:1.0];
     animation_.toValue = [NSNumber numberWithFloat:0];
     animation_.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.5 :0.0 :0.5 :0.0];
+}
+
+- (void)prepareWindow {
+    NSWindow* window = [self window];
+
+    [window setBackgroundColor:[NSColor clearColor]];
+    [window setOpaque:NO];
+    [window setIgnoresMouseEvents:YES];
 }
 
 - (void)updateFrame {

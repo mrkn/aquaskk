@@ -30,6 +30,7 @@ namespace SKKUserDefaultKeys {
     DECLARE_UserDefaultsKey(use_numeric_conversion);
     DECLARE_UserDefaultsKey(enable_extended_completion);
     DECLARE_UserDefaultsKey(use_unified_input_mode);
+    DECLARE_UserDefaultsKey(show_input_mode_cursor);
     DECLARE_UserDefaultsKey(keyboard_layout);
     DECLARE_UserDefaultsKey(fix_intermediate_conversion);
     DECLARE_UserDefaultsKey(max_count_of_inline_candidates);

@@ -12,6 +12,8 @@
 	<string>com.apple.keylayout.US</string>
         <key>fix_intermediate_conversion</key>
         <true/>
+        <key>show_input_mode_cursor</key>
+        <false/>
 
 	<key>max_count_of_inline_candidates</key>
 	<integer>4</integer>

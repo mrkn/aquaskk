@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2007-2008 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -103,6 +103,16 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 	return length;
     }
 
+    int file_size(const std::string& path) const {
+        struct stat st;
+
+        if(stat(path.c_str(), &st) == 0) {
+            return st.st_size;
+        }
+
+        return 0;
+    }
+
     bool download(net::socket::tcpstream& http, int length) {
 	if(!length) return false;
 
@@ -113,10 +123,27 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 	    ofs << line << std::endl;
 	}
 
-	struct stat st;
-	if(stat(tmp_path_.c_str(), &st) < 0 || st.st_size != length) {
-	    return false;
-	}
+
+        // ダウンロードに失敗したか？
+        int new_size = file_size(tmp_path_);
+        if(new_size != length) {
+            std::cerr << "SKKAutoUpdateDictionaryLoader::download(): size conflict: expected="
+                      << length << ", actual=" << new_size << std::endl;
+            return false;
+        }
+
+
+        // 既存の辞書と比較して小さすぎないか？
+        int old_size = file_size(path_);
+        if(old_size != 0) {
+            const int safety_margin = 32 * 1024; // 32KB
+
+            if(new_size + safety_margin < old_size) {
+                std::cerr << "SKKAutoUpdateDictionaryLoader::download(): too small: size="
+                          << new_size << std::endl;
+                return false;
+            }
+        }
 
 	if(rename(tmp_path_.c_str(), path_.c_str()) != 0) {
 	    std::cerr << "SKKAutoUpdateDictionaryLoader::download(): rename failed: errno="

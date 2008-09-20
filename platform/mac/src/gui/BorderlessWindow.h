@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,12 +20,10 @@
 
 */
 
-#ifndef CandidateWindow_h
-#define CandidateWindow_h
+#ifndef BorderlessWindow_h
+#define BorderlessWindow_h
 
-#include <Cocoa/Cocoa.h>
-
-@interface CandidateWindow : NSWindow
+@interface BorderlessWindow : NSWindow
 @end
 
 #endif

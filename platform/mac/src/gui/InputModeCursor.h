@@ -20,24 +20,21 @@
 
 */
 
-#include "InputModeWindow.h"
+#ifndef InputModeCursor_h
+#define InputModeCursor_h
 
-@implementation InputModeWindow
+#include "SKKInputMode.h"
 
-- (id)initWithContentRect:(NSRect)contentRect
-                styleMask:(NSUInteger)windowStyle
-                  backing:(NSBackingStoreType)bufferingType
-                    defer:(BOOL)deferCreation {
-    self = [super initWithContentRect:contentRect
-                  styleMask:NSBorderlessWindowMask
-                  backing:bufferingType
-                  defer:deferCreation];
-
-    [self setBackgroundColor:[NSColor clearColor]];
-    [self setOpaque:NO];
-    [self setIgnoresMouseEvents:YES];
-
-    return self;
+@interface InputModeCursor : NSWindowController {
+    BOOL active_;
 }
 
++ (InputModeCursor*)sharedCursor;
+- (void)changeMode:(SKKInputMode)mode;
+- (void)show:(NSPoint)topleft level:(int)level;
+- (void)hide;
+
 @end
+
+#endif
+

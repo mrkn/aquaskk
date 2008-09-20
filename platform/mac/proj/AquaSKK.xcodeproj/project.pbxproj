@@ -62,9 +62,7 @@
 		D353BE030E175523004C68A6 /* CandidateCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDF60E175523004C68A6 /* CandidateCell.mm */; };
 		D353BE040E175523004C68A6 /* CandidatePageIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDF80E175523004C68A6 /* CandidatePageIndicator.mm */; };
 		D353BE050E175523004C68A6 /* CandidateView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDFA0E175523004C68A6 /* CandidateView.mm */; };
-		D353BE060E175523004C68A6 /* CandidateWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDFC0E175523004C68A6 /* CandidateWindow.mm */; };
 		D353BE070E175523004C68A6 /* CandidateWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDFE0E175523004C68A6 /* CandidateWindowController.mm */; };
-		D353BE080E175523004C68A6 /* InputModeWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BE000E175523004C68A6 /* InputModeWindow.mm */; };
 		D353BE090E175523004C68A6 /* InputModeWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BE020E175523004C68A6 /* InputModeWindowController.mm */; };
 		D353BE0D0E17552F004C68A6 /* DictionarySet.plist in Resources */ = {isa = PBXBuildFile; fileRef = D353BE0B0E17552F004C68A6 /* DictionarySet.plist */; };
 		D353BE0E0E17552F004C68A6 /* UserDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = D353BE0C0E17552F004C68A6 /* UserDefaults.plist */; };
@@ -81,6 +79,9 @@
 		D353BE2A0E175578004C68A6 /* PreferenceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BE270E175578004C68A6 /* PreferenceController.mm */; };
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
+		D371DD9F0E8284A100C10EE5 /* InputModeCursor.xib in Resources */ = {isa = PBXBuildFile; fileRef = D371DD9E0E8284A100C10EE5 /* InputModeCursor.xib */; };
+		D371DDA80E82866E00C10EE5 /* InputModeCursor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D371DDA70E82866E00C10EE5 /* InputModeCursor.mm */; };
+		D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D37BC8810E8527E100B19592 /* BorderlessWindow.mm */; };
 		D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */; };
 		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
 		D3FC32430DD1B297006A3F5A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3FC32420DD1B297006A3F5A /* Preferences.xib */; };
@@ -244,12 +245,8 @@
 		D353BDF80E175523004C68A6 /* CandidatePageIndicator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidatePageIndicator.mm; sourceTree = "<group>"; };
 		D353BDF90E175523004C68A6 /* CandidateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CandidateView.h; sourceTree = "<group>"; };
 		D353BDFA0E175523004C68A6 /* CandidateView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidateView.mm; sourceTree = "<group>"; };
-		D353BDFB0E175523004C68A6 /* CandidateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CandidateWindow.h; sourceTree = "<group>"; };
-		D353BDFC0E175523004C68A6 /* CandidateWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidateWindow.mm; sourceTree = "<group>"; };
 		D353BDFD0E175523004C68A6 /* CandidateWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CandidateWindowController.h; sourceTree = "<group>"; };
 		D353BDFE0E175523004C68A6 /* CandidateWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidateWindowController.mm; sourceTree = "<group>"; };
-		D353BDFF0E175523004C68A6 /* InputModeWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputModeWindow.h; sourceTree = "<group>"; };
-		D353BE000E175523004C68A6 /* InputModeWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InputModeWindow.mm; sourceTree = "<group>"; };
 		D353BE010E175523004C68A6 /* InputModeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputModeWindowController.h; sourceTree = "<group>"; };
 		D353BE020E175523004C68A6 /* InputModeWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InputModeWindowController.mm; sourceTree = "<group>"; };
 		D353BE0B0E17552F004C68A6 /* DictionarySet.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DictionarySet.plist; sourceTree = "<group>"; };
@@ -274,6 +271,11 @@
 		D353BE760E177BAB004C68A6 /* SKKStateEntryRemove-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateEntryRemove-inl.h"; sourceTree = "<group>"; };
 		D353BE770E177BAB004C68A6 /* SKKStatePrimary-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStatePrimary-inl.h"; sourceTree = "<group>"; };
 		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
+		D371DD9E0E8284A100C10EE5 /* InputModeCursor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputModeCursor.xib; sourceTree = "<group>"; };
+		D371DDA60E82866E00C10EE5 /* InputModeCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputModeCursor.h; sourceTree = "<group>"; };
+		D371DDA70E82866E00C10EE5 /* InputModeCursor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InputModeCursor.mm; sourceTree = "<group>"; };
+		D37BC8800E8527E100B19592 /* BorderlessWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BorderlessWindow.h; sourceTree = "<group>"; };
+		D37BC8810E8527E100B19592 /* BorderlessWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BorderlessWindow.mm; sourceTree = "<group>"; };
 		D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputQueue.cpp; sourceTree = "<group>"; };
 		D398F2CB0E45FA940007F4B9 /* SKKInputQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputQueue.h; sourceTree = "<group>"; };
 		D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -571,20 +573,20 @@
 		D353BDF40E175523004C68A6 /* gui */ = {
 			isa = PBXGroup;
 			children = (
+				D37BC8800E8527E100B19592 /* BorderlessWindow.h */,
+				D37BC8810E8527E100B19592 /* BorderlessWindow.mm */,
 				D353BDF50E175523004C68A6 /* CandidateCell.h */,
 				D353BDF60E175523004C68A6 /* CandidateCell.mm */,
 				D353BDF70E175523004C68A6 /* CandidatePageIndicator.h */,
 				D353BDF80E175523004C68A6 /* CandidatePageIndicator.mm */,
 				D353BDF90E175523004C68A6 /* CandidateView.h */,
 				D353BDFA0E175523004C68A6 /* CandidateView.mm */,
-				D353BDFB0E175523004C68A6 /* CandidateWindow.h */,
-				D353BDFC0E175523004C68A6 /* CandidateWindow.mm */,
 				D353BDFD0E175523004C68A6 /* CandidateWindowController.h */,
 				D353BDFE0E175523004C68A6 /* CandidateWindowController.mm */,
-				D353BDFF0E175523004C68A6 /* InputModeWindow.h */,
-				D353BE000E175523004C68A6 /* InputModeWindow.mm */,
 				D353BE010E175523004C68A6 /* InputModeWindowController.h */,
 				D353BE020E175523004C68A6 /* InputModeWindowController.mm */,
+				D371DDA60E82866E00C10EE5 /* InputModeCursor.h */,
+				D371DDA70E82866E00C10EE5 /* InputModeCursor.mm */,
 			);
 			name = gui;
 			path = ../src/gui;
@@ -651,9 +653,10 @@
 				D353BE0F0E175540004C68A6 /* config */,
 				D353BE0A0E17552F004C68A6 /* plist */,
 				D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */,
+				D322B8D00DDC8174002C33F9 /* AquaSKK.xib */,
 				D31381540DD1D89C0002FF9C /* CandidateWindow.xib */,
 				D31381560DD1D8BE0002FF9C /* InputModeWindow.xib */,
-				D322B8D00DDC8174002C33F9 /* AquaSKK.xib */,
+				D371DD9E0E8284A100C10EE5 /* InputModeCursor.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -794,6 +797,7 @@
 				D353BE200E175552004C68A6 /* AquaSKK-Jisx0208Latin.png in Resources */,
 				D353BE210E175552004C68A6 /* AquaSKK-Katakana.png in Resources */,
 				D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */,
+				D371DD9F0E8284A100C10EE5 /* InputModeCursor.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,14 +865,14 @@
 				D353BE030E175523004C68A6 /* CandidateCell.mm in Sources */,
 				D353BE040E175523004C68A6 /* CandidatePageIndicator.mm in Sources */,
 				D353BE050E175523004C68A6 /* CandidateView.mm in Sources */,
-				D353BE060E175523004C68A6 /* CandidateWindow.mm in Sources */,
 				D353BE070E175523004C68A6 /* CandidateWindowController.mm in Sources */,
-				D353BE080E175523004C68A6 /* InputModeWindow.mm in Sources */,
 				D353BE090E175523004C68A6 /* InputModeWindowController.mm in Sources */,
 				D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */,
 				D30996690E4C80EA00B2F24E /* SKKRecursiveEditor.cpp in Sources */,
 				D309967B0E4C83B800B2F24E /* SKKInputEngine.cpp in Sources */,
 				D330565C0E4C87580019D8B5 /* MacInputEngineOption.mm in Sources */,
+				D371DDA80E82866E00C10EE5 /* InputModeCursor.mm in Sources */,
+				D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

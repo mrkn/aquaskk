@@ -26,11 +26,14 @@
 #include "SKKConstVars.h"
 #include "MacInputSessionParameter.h"
 #include "InputModeWindowController.h"
+#include "InputModeCursor.h"
+#include "SKKFrontEnd.h"
 
 @interface SKKInputController (Local)
 
 - (void)initializeKeyboardLayout;
 - (void)setInputModeIfNeeded;
+- (void)updateCursorPosition;
 
 @end
 
@@ -62,9 +65,15 @@
 
 // IMKServerInput
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
 
     BOOL result = session_->HandleEvent(param);
+
+    if([defaults boolForKey:SKKUserDefaultKeys::show_input_mode_cursor] == YES) {
+        [self performSelector:@selector(updateCursorPosition) object:nil afterDelay:0.005];
+    }
 
     return result || param.force_handled;
 }
@@ -87,8 +96,11 @@
 
 - (void)deactivateServer:(id)sender {
     session_->Deactivate();
+
+    [[InputModeCursor sharedCursor] hide];
 }
 
+// IMKInputController
 - (NSMenu*)menu {
     NSMenu* inputMenu = [[[NSMenu alloc] initWithTitle:@"AquaSKK"] autorelease];
 
@@ -117,7 +129,10 @@
 
 // handling menu items
 - (void)showPreferences:(id)sender {
-    [[NSWorkspace sharedWorkspace] launchApplication:@"AquaSKKPreferences"];
+    NSString* path = [NSString stringWithFormat:@"%@/AquaSKKPreferences.app",
+                               [[NSBundle mainBundle] sharedSupportPath]];
+
+    [[NSWorkspace sharedWorkspace] launchApplication:path];
 }
 
 - (void)reloadComponents:(id)sender {
@@ -194,6 +209,15 @@
 
         session_->HandleEvent(event);
     }
+}
+
+- (void)updateCursorPosition {
+    std::pair<int, int> pos = param_->FrontEnd()->WindowPosition();
+    int level = param_->FrontEnd()->WindowLevel();
+    SKKInputMode currentInputMode = [[InputModeWindowController sharedController] currentInputMode];
+
+    [[InputModeCursor sharedCursor] changeMode:currentInputMode];
+    [[InputModeCursor sharedCursor] show:NSMakePoint(pos.first, pos.second) level:level];
 }
 
 @end

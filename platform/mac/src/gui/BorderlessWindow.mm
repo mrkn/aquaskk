@@ -20,10 +20,18 @@
 
 */
 
-#ifndef InputModeWindow_h
-#define InputModeWindow_h
+#include "BorderlessWindow.h"
 
-@interface InputModeWindow : NSWindow {}
+@implementation BorderlessWindow
+
+- (id)initWithContentRect:(NSRect)contentRect
+                styleMask:(NSUInteger)windowStyle
+                  backing:(NSBackingStoreType)bufferingType
+                    defer:(BOOL)deferCreation {
+    return [super initWithContentRect:contentRect
+                  styleMask:NSBorderlessWindowMask
+                  backing:bufferingType
+                  defer:deferCreation];
+}
+
 @end
-
-#endif
