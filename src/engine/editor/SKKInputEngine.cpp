@@ -178,10 +178,15 @@ void SKKInputEngine::Insert(const std::string& str) {
     Output();
 }
 
-void SKKInputEngine::Reset() {
+void SKKInputEngine::Reset(bool absolutely) {
     Cancel();
 
     top()->Flush();
+
+    // 完全にリセットする場合は、IsModified() を偽にする
+    if(absolutely) {
+        modified_ = false;
+    }
 }
 
 void SKKInputEngine::ToggleKana() {
@@ -245,9 +250,17 @@ void SKKInputEngine::ToggleJisx0201Kana() {
 }
 
 void SKKInputEngine::Output() {
-    updateContextBuffer();
+    // 内部バッファが更新されている時だけ出力する
+    if(IsModified()) {
+        updateContextBuffer();
+        contextBuffer_.Output(frontend_);
 
-    contextBuffer_.Output(frontend_);
+        // 直接入力モードのカーソル移動等では内部バッファが変更されず、
+        // empty 状態が保たれる
+        //
+        // こういったケースを弾かないと、クライアント側で文字列選択状態
+        // だった場合に empty 内部バッファで選択文字列が消されてしまう
+    }
 
     // 全てのフィルターを Flush する
     for(EditorStack::iterator iter = active_->begin(); iter != active_->end(); ++ iter) {

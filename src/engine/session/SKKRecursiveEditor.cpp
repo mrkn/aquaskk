@@ -27,16 +27,27 @@
 SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                                        SKKInputSessionParameter* param,
                                        SKKBaseEditor* bottom)
-    : bottom_(bottom),
-      param_(param),
-      state_(SKKState(param_->CandidateWindow(), param_->StateConfiguration(), &editor_)),
-      editor_(param_->InputEngineOption(),
+    : bottom_(bottom)
+    , param_(param)
+    , editor_(param_->InputEngineOption(),
               registrationObserver,
               param_->FrontEnd(),
               param_->InputModeWindow(),
               param_->Clipboard(),
-              bottom_.get()) {
+              bottom_.get())
+    , state_(SKKState(param_->CandidateWindow(),
+                      param_->StateConfiguration(),
+                      &editor_)) {
     state_.Start();
+
+    // *** FIXME ***
+    // 初期遷移により入力モードが初期化され、editor_ の内部変更フラグが
+    // 立つので、これをクリアする
+    //
+    // 理由：次のイベントが必ず「処理済み」になってしまうのを防ぐため
+    //
+    // ※本来はこのような知識は不要(設計にゆがみがある証拠)
+    editor_.Reset(true);
 }
 
 void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {

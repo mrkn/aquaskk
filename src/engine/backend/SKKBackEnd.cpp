@@ -87,11 +87,41 @@ bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& resu
     return !result.empty();
 }
 
+// 数値変換用ファンクタ
+class NumericConversionFunctor {
+    SKKNumericConverter* converter_;
+
+public:
+    NumericConversionFunctor(SKKNumericConverter* converter) : converter_(converter) {}
+
+    SKKCandidate& operator()(SKKCandidate& candidate) const {
+        converter_->Apply(candidate);
+        return candidate;
+    }
+};
+
 bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
     if(entry.IsOkuriAri()) {
 	return findOkuriAri(entry, result);
     } else {
-	return findOkuriNasi(entry, result);
+        SKKCandidateSuite tmp;
+        SKKNumericConverter converter;
+
+	findOkuriNasi(entry, result);
+
+        if(useNumericConversion_ && converter.Setup(entry.EntryString())) {
+            findOkuriNasi(converter.NormalizedKey(), tmp);
+
+            SKKCandidateContainer& container = tmp.Candidates();
+
+            std::transform(container.begin(), container.end(), container.begin(),
+                           NumericConversionFunctor(&converter));
+        }
+
+        // 数値変換の結果に関わらず、重複した候補を除外する
+        mergeCandidates(converter.OriginalKey(), result, tmp);
+
+        return !result.IsEmpty();
     }
 }
 
@@ -181,12 +211,7 @@ bool SKKBackEnd::findOkuriAri(const SKKEntry& entry, SKKCandidateSuite& result) 
 
 bool SKKBackEnd::findOkuriNasi(const SKKEntry& entry, SKKCandidateSuite& result) {
     SKKCandidateSuite tmp;
-    SKKNumericConverter converter;
     std::string key(entry.EntryString());
-
-    if(useNumericConversion_ && converter.Setup(key)) {
-        key = converter.NormalizedKey();
-    }
 
     result.Clear();
 
@@ -203,23 +228,44 @@ bool SKKBackEnd::findOkuriNasi(const SKKEntry& entry, SKKCandidateSuite& result)
 	result.Add(tmp);
     }
 
-    // 数値変換
-    if(useNumericConversion_) {
-        SKKCandidateContainer& src = result.Candidates();
-        SKKCandidateContainer dest;
-        std::set<std::string> check;
+    return !result.IsEmpty();
+}
 
-        for(SKKCandidateIterator iter = src.begin(); iter != src.end(); ++ iter) {
-            converter.Apply(*iter);
+typedef std::set<std::string> StringSet;
 
-            if(check.find(iter->Variant()) == check.end()) {
-                check.insert(iter->Variant());
-                dest.push_back(*iter);
-            }
+// マージ用述語
+class ExistIn {
+    StringSet* check_;
+
+public:
+    ExistIn(StringSet* check) : check_(check) {}
+
+    bool operator()(const SKKCandidate& candidate) const {
+        std::string word(candidate.Variant());
+            
+        if(check_->find(word) == check_->end()) {
+            check_->insert(word);
+            return false;       // 存在しない
         }
 
-        src = dest;
+        return true;            // 存在する
     }
+};
 
-    return !result.IsEmpty();
+void SKKBackEnd::mergeCandidates(const std::string& key, SKKCandidateSuite& result1, SKKCandidateSuite& result2) {
+    StringSet candidates;
+    SKKCandidateSuite result;
+    SKKCandidateContainer* in;
+    SKKCandidateContainer& out = result.Candidates();
+
+    // 数値変換で使用した見出し語も重複チェックに使う
+    candidates.insert(key);
+
+    in = &result1.Candidates();
+    std::remove_copy_if(in->begin(), in->end(), std::back_inserter(out), ExistIn(&candidates));
+
+    in = &result2.Candidates();
+    std::remove_copy_if(in->begin(), in->end(), std::back_inserter(out), ExistIn(&candidates));
+
+    result1 = result;
 }

@@ -47,6 +47,7 @@ class SKKBackEnd {
 
     bool findOkuriAri(const SKKEntry& entry, SKKCandidateSuite& result);
     bool findOkuriNasi(const SKKEntry& entry, SKKCandidateSuite& result);
+    void mergeCandidates(const std::string& key, SKKCandidateSuite& result1, SKKCandidateSuite& result2);
 
 public:
     static SKKBackEnd& theInstance();

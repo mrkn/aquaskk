@@ -131,7 +131,7 @@ public:
     void Commit();
     void Cancel();
     void Insert(const std::string& str);
-    void Reset();
+    void Reset(bool absolutely = false);
 
     // トグル変換
     void ToggleKana();

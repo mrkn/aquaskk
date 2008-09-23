@@ -31,8 +31,8 @@ class SKKInputSessionParameter;
 class SKKRecursiveEditor {
     std::auto_ptr<SKKBaseEditor> bottom_;
     SKKInputSessionParameter* param_;
-    SKKStateMachine state_;
     SKKInputEngine editor_;
+    SKKStateMachine state_;
 
     SKKRecursiveEditor();
     SKKRecursiveEditor(const SKKRecursiveEditor&);
