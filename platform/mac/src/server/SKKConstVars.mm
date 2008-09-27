@@ -23,29 +23,43 @@
 #include "SKKConstVars.h"
 #include "ObjCUtil.h"
 
+#define DECLARE_NSStringKey(key) NSString* key = @ #key
+
 namespace SKKUserDefaultKeys {
-#define DECLARE_UserDefaultsKey(key) NSString* key = @ #key
+    DECLARE_NSStringKey(suppress_newline_on_commit);
+    DECLARE_NSStringKey(use_numeric_conversion);
+    DECLARE_NSStringKey(enable_extended_completion);
+    DECLARE_NSStringKey(use_unified_input_mode);
 
-    DECLARE_UserDefaultsKey(suppress_newline_on_commit);
-    DECLARE_UserDefaultsKey(use_numeric_conversion);
-    DECLARE_UserDefaultsKey(enable_extended_completion);
-    DECLARE_UserDefaultsKey(use_unified_input_mode);
-    DECLARE_UserDefaultsKey(show_input_mode_cursor);
-    DECLARE_UserDefaultsKey(keyboard_layout);
-    DECLARE_UserDefaultsKey(fix_intermediate_conversion);
-    DECLARE_UserDefaultsKey(max_count_of_inline_candidates);
-    DECLARE_UserDefaultsKey(candidate_window_labels);
-    DECLARE_UserDefaultsKey(candidate_window_font_name);
-    DECLARE_UserDefaultsKey(candidate_window_font_size);
-    DECLARE_UserDefaultsKey(enable_skkserv);
-    DECLARE_UserDefaultsKey(skkserv_localonly);
-    DECLARE_UserDefaultsKey(skkserv_port);
-    DECLARE_UserDefaultsKey(openlab_host);
-    DECLARE_UserDefaultsKey(openlab_path);
-    DECLARE_UserDefaultsKey(user_dictionary_path);
+    DECLARE_NSStringKey(keyboard_layout);
 
-#undef DECLARE_UserDefaultsKey
+    DECLARE_NSStringKey(max_count_of_inline_candidates);
+    DECLARE_NSStringKey(candidate_window_font_name);
+    DECLARE_NSStringKey(candidate_window_font_size);
+    DECLARE_NSStringKey(candidate_window_labels);
+
+    DECLARE_NSStringKey(user_dictionary_path);
+
+    DECLARE_NSStringKey(show_input_mode_cursor);
+
+    DECLARE_NSStringKey(enable_skkserv);
+    DECLARE_NSStringKey(skkserv_localonly);
+    DECLARE_NSStringKey(skkserv_port);
+
+    DECLARE_NSStringKey(enable_private_mode);
+
+    DECLARE_NSStringKey(fix_intermediate_conversion);
+    DECLARE_NSStringKey(openlab_host);
+    DECLARE_NSStringKey(openlab_path);
 }
+
+namespace SKKDictionarySetKeys {
+    DECLARE_NSStringKey(active);
+    DECLARE_NSStringKey(type);
+    DECLARE_NSStringKey(location);
+}
+
+#undef DECLARE_NSStringKey
 
 namespace SKKFilePaths {
     static NSString* pathForApplicationSupport() {

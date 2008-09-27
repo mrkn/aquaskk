@@ -28,9 +28,11 @@
 #include "SKKNumericConverter.h"
 
 SKKBackEnd::SKKBackEnd()
-    : userdict_(new SKKUserDictionary()),
-      useNumericConversion_(false),
-      enableExtendedCompletion_(false) {}
+    : userdict_(new SKKUserDictionary())
+    , useNumericConversion_(false)
+    , enableExtendedCompletion_(false)
+    , enablePrivateMode_(false)
+{}
 
 SKKBackEnd& SKKBackEnd::theInstance() {
     static SKKBackEnd obj;
@@ -126,6 +128,8 @@ bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
 }
 
 void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) {
+    if(enablePrivateMode_) return;
+
     if(entry.EntryString().empty() ||
        (entry.IsOkuriAri() && (entry.OkuriString().empty() || candidate.IsEmpty()))) {
 	std::cerr << "SKKBackEnd: Invalid registration received" << std::endl;
@@ -176,6 +180,12 @@ void SKKBackEnd::UseNumericConversion(bool flag) {
 void SKKBackEnd::EnableExtendedCompletion(bool flag) {
     enableExtendedCompletion_ = flag;
 }
+
+void SKKBackEnd::EnablePrivateMode(bool flag) {
+    enablePrivateMode_ = flag;
+}
+
+// ----------------------------------------------------------------------
 
 bool SKKBackEnd::findOkuriAri(const SKKEntry& entry, SKKCandidateSuite& result) {
     SKKCandidateSuite normal;

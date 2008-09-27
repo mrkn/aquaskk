@@ -85,6 +85,9 @@ static void terminate(int) {
     flag = [defaults boolForKey:SKKUserDefaultKeys::enable_extended_completion] == YES;
     SKKBackEnd::theInstance().EnableExtendedCompletion(flag);
 
+    flag = [defaults boolForKey:SKKUserDefaultKeys::enable_private_mode] == YES;
+    SKKBackEnd::theInstance().EnablePrivateMode(flag);
+
     NSLog(@"UserDefaults has been reloaded");
 }
 
@@ -100,11 +103,11 @@ static void terminate(int) {
     NSEnumerator* enumerator = [array objectEnumerator];
     
     while(NSDictionary* entry = [enumerator nextObject]) {
-        NSNumber* active = [entry valueForKey:@"active"];
+        NSNumber* active = [entry valueForKey:SKKDictionarySetKeys::active];
 
         if([active boolValue] == YES) {
-            NSNumber* type = [entry valueForKey:@"type"];
-            NSString* location = [entry valueForKey:@"location"];
+            NSNumber* type = [entry valueForKey:SKKDictionarySetKeys::type];
+            NSString* location = [entry valueForKey:SKKDictionarySetKeys::location];
 
             location = [location stringByExpandingTildeInPath];
 

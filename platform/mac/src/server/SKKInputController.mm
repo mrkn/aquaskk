@@ -28,12 +28,15 @@
 #include "InputModeWindowController.h"
 #include "InputModeCursor.h"
 #include "SKKFrontEnd.h"
+#include "SKKBackEnd.h"
 
 @interface SKKInputController (Local)
 
 - (void)initializeKeyboardLayout;
 - (void)setInputModeIfNeeded;
 - (void)updateCursorPosition;
+- (BOOL)privateMode;
+- (void)setPrivateMode:(BOOL)flag;
 
 @end
 
@@ -102,27 +105,49 @@
 
 // IMKInputController
 - (NSMenu*)menu {
+    enum MenuTypes { Normal, Selector, PrivateMode };
+    struct {
+        MenuTypes type;
+        const char* title;
+        SEL selector;
+    } items[] = {
+        { Normal,	"環境設定",			@selector(showPreferences:) },
+        { PrivateMode,	"プライベートモード",		@selector(togglePrivateMode:) },
+        { Normal,	"設定ファイルの再読み込み",	@selector(reloadComponents:) },
+        { Normal,	"AquaSKK ヘルプ",		@selector(showHelp:) },
+        { Selector,	"__selector__",			0 },
+        { Normal,	"Web::プロジェクトホーム",	@selector(webHome:) },
+        { Normal,	"Web::便利な機能、Tips",	@selector(webTips:) },
+        { Normal,	"Web::FAQ",			@selector(webFAQ:) },
+        { Normal,	0,				0 }
+    };
+
     NSMenu* inputMenu = [[[NSMenu alloc] initWithTitle:@"AquaSKK"] autorelease];
 
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"環境設定"]
-               action:@selector(showPreferences:) keyEquivalent:@""];
+    for(int i = 0; items[i].title != 0; ++ i) {
+        NSMenuItem* item;
+        const char* title = items[i].title;
+        SEL selector = items[i].selector;
 
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"設定ファイルの再読み込み"]
-               action:@selector(reloadComponents:) keyEquivalent:@""];
+        switch(items[i].type) {
+        case Normal:
+        case PrivateMode:
+            item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithUTF8String:title]
+                                       action:selector keyEquivalent:@""];
+            [item autorelease];
 
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"AquaSKK ヘルプ"]
-               action:@selector(showHelp:) keyEquivalent:@""];
+            if(items[i].type == PrivateMode) {
+                [item setState:[self privateMode] ? NSOnState : NSOffState];
+            }
+            break;
 
-    [inputMenu addItem:[NSMenuItem separatorItem]];
+        case Selector:
+            item = [NSMenuItem separatorItem];
+            break;
+        }
 
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"Web::プロジェクトホーム"]
-               action:@selector(webHome:) keyEquivalent:@""];
-
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"Web::便利な機能、Tips"]
-               action:@selector(webTips:) keyEquivalent:@""];
-
-    [inputMenu addItemWithTitle:[NSString stringWithUTF8String:"Web::FAQ"]
-               action:@selector(webFAQ:) keyEquivalent:@""];
+        [inputMenu addItem:item];
+    }
 
     return inputMenu;
 }
@@ -133,6 +158,12 @@
                                [[NSBundle mainBundle] sharedSupportPath]];
 
     [[NSWorkspace sharedWorkspace] launchApplication:path];
+}
+
+- (void)togglePrivateMode:(id)sender {
+    [self setPrivateMode:![self privateMode]];
+
+    SKKBackEnd::theInstance().EnablePrivateMode([self privateMode]);
 }
 
 - (void)reloadComponents:(id)sender {
@@ -218,6 +249,18 @@
 
     [[InputModeCursor sharedCursor] changeMode:currentInputMode];
     [[InputModeCursor sharedCursor] show:NSMakePoint(pos.first, pos.second) level:level];
+}
+
+- (BOOL)privateMode {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    return [defaults boolForKey:SKKUserDefaultKeys::enable_private_mode];
+}
+
+- (void)setPrivateMode:(BOOL)flag {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    [defaults setBool:flag forKey:SKKUserDefaultKeys::enable_private_mode];
 }
 
 @end

@@ -17,30 +17,32 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
 */
 
-#ifndef PreferenceController_h
-#define PreferenceController_h
+#include "PathFormatter.h"
 
-#include <Cocoa/Cocoa.h>
+@implementation PathFormatter
 
-@interface PreferenceController : NSObject {
-    IBOutlet NSWindow* prefWindow_;
-    IBOutlet NSPopUpButton* layoutPopUp_;
-    IBOutlet NSButton* fontButton_;
-    IBOutlet NSObjectController* objController_;
-    IBOutlet NSArrayController* arrayController_;
-
-    NSMutableDictionary* preferences_;
-    NSMutableArray* dictionarySet_;
-    NSMutableArray* layoutNames_;
-    NSFont* candidateWindowFont_;
+- (NSString*)stringForObjectValue:(id)object {
+    if(![object isKindOfClass:[NSString class]]) {
+        return nil;
+    }
+    
+    return [object stringByAbbreviatingWithTildeInPath];
 }
 
-- (IBAction)showFontPanel:(id)sender;
-- (IBAction)browseLocation:(id)sender;
+- (BOOL)getObjectValue:(id*)objptr
+             forString:(NSString*)string
+      errorDescription:(NSString**)error {
+    *objptr = [NSString stringWithString:string];
+
+    return YES;
+}
+
+- (NSAttributedString*)attributedStringForObjectValue:(id)object
+                                withDefaultAttributes:(NSDictionary*)attributes {
+    return [[NSAttributedString alloc] initWithString:[self stringForObjectValue:object]
+                                       attributes:attributes];
+}
 
 @end
-
-#endif

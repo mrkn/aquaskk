@@ -31,19 +31,34 @@ namespace SKKUserDefaultKeys {
     extern NSString* use_numeric_conversion;
     extern NSString* enable_extended_completion;
     extern NSString* use_unified_input_mode;
-    extern NSString* show_input_mode_cursor;
+
     extern NSString* keyboard_layout;
-    extern NSString* fix_intermediate_conversion;
+
     extern NSString* max_count_of_inline_candidates;
-    extern NSString* candidate_window_labels;
     extern NSString* candidate_window_font_name;
     extern NSString* candidate_window_font_size;
+    extern NSString* candidate_window_labels;
+
+    extern NSString* user_dictionary_path;
+
+    extern NSString* show_input_mode_cursor;
+
     extern NSString* enable_skkserv;
     extern NSString* skkserv_localonly;
     extern NSString* skkserv_port;
+
+    extern NSString* enable_private_mode;
+
+    extern NSString* fix_intermediate_conversion;
     extern NSString* openlab_host;
     extern NSString* openlab_path;
-    extern NSString* user_dictionary_path;
+};
+
+// DictionarySet 用のキー
+namespace SKKDictionarySetKeys {
+    extern NSString* active;
+    extern NSString* type;
+    extern NSString* location;
 };
 
 // 重要なパス

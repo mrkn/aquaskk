@@ -20,14 +20,10 @@
 */
 
 #include "DictionarySet.h"
+#include "SKKConstVars.h"
 
 // ドラッグ & ドロップ用
 static NSString* DictionaryRowsType = @"DictionaryRowsType";
-
-// 辞書テーブル用
-static NSString* DictActiveKey = @"active";
-static NSString* DictTypeKey = @"type";
-static NSString* DictLocationKey = @"location";
 
 @implementation DictionarySet
 
@@ -80,9 +76,9 @@ static NSString* DictLocationKey = @"location";
 
     // 新規のエントリを初期化する
     if(obj) {
-	[obj setValue:[NSNumber numberWithBool:YES] forKey:DictActiveKey];
-	[obj setValue:[NSNumber numberWithInt:0] forKey:DictTypeKey];
-	[obj setValue:@"" forKey:DictLocationKey];
+	[obj setValue:[NSNumber numberWithBool:YES] forKey:SKKDictionarySetKeys::active];
+	[obj setValue:[NSNumber numberWithInt:0] forKey:SKKDictionarySetKeys::type];
+	[obj setValue:@"" forKey:SKKDictionarySetKeys::location];
     }
 
     return obj;
@@ -91,7 +87,10 @@ static NSString* DictLocationKey = @"location";
 - (IBAction)browseLocation:(id)sender {
     NSOpenPanel* panel = [NSOpenPanel openPanel];
 
-    [panel beginSheetForDirectory:nil file:nil types:nil modalForWindow:prefView modalDelegate:self
+    NSString* path = [[self selection] valueForKey:SKKDictionarySetKeys::location];
+    NSString* dir = [path stringByDeletingLastPathComponent];
+
+    [panel beginSheetForDirectory:dir file:nil types:nil modalForWindow:prefView modalDelegate:self
 	   didEndSelector:@selector(browsePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
 }
 
@@ -100,7 +99,7 @@ static NSString* DictLocationKey = @"location";
 	return;
     }
 
-    [[self selection] setValue:[openPanel filename] forKey:DictLocationKey];
+    [[self selection] setValue:[openPanel filename] forKey:SKKDictionarySetKeys::location];
 }
 
 - (BOOL)tableView:(NSTableView*)tv writeRowsWithIndexes:(NSIndexSet*)rowIndexes toPasteboard:(NSPasteboard*)pboard {

@@ -37,10 +37,11 @@ class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
 	    NotifyObserver(tmp);
 	} else {
             if(first_) {
-                first_ = false;
                 NotifyObserver(tmp);
             }
         }
+
+        first_ = false;
 
 	return true;
     }

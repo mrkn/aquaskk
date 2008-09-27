@@ -83,6 +83,7 @@
 		D371DDA80E82866E00C10EE5 /* InputModeCursor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D371DDA70E82866E00C10EE5 /* InputModeCursor.mm */; };
 		D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D37BC8810E8527E100B19592 /* BorderlessWindow.mm */; };
 		D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */; };
+		D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */; };
 		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
 		D3FC32430DD1B297006A3F5A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3FC32420DD1B297006A3F5A /* Preferences.xib */; };
 		D3FC33930DD1B52D006A3F5A /* InputMethodKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC33920DD1B52D006A3F5A /* InputMethodKit.framework */; };
@@ -278,6 +279,8 @@
 		D37BC8810E8527E100B19592 /* BorderlessWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BorderlessWindow.mm; sourceTree = "<group>"; };
 		D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputQueue.cpp; sourceTree = "<group>"; };
 		D398F2CB0E45FA940007F4B9 /* SKKInputQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputQueue.h; sourceTree = "<group>"; };
+		D39ACE790E8E4B2F00A33FF4 /* PathFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PathFormatter.h; path = ../src/preferences/PathFormatter.h; sourceTree = SOURCE_ROOT; };
+		D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PathFormatter.mm; path = ../src/preferences/PathFormatter.mm; sourceTree = SOURCE_ROOT; };
 		D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		D3FC32210DD1B09C006A3F5A /* AquaSKK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3FC32230DD1B09C006A3F5A /* AquaSKK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AquaSKK-Info.plist"; sourceTree = "<group>"; };
@@ -716,6 +719,8 @@
 				D353BE270E175578004C68A6 /* PreferenceController.mm */,
 				D353BE230E175578004C68A6 /* DictionarySet.h */,
 				D353BE240E175578004C68A6 /* DictionarySet.mm */,
+				D39ACE790E8E4B2F00A33FF4 /* PathFormatter.h */,
+				D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -885,6 +890,7 @@
 				D353BE2A0E175578004C68A6 /* PreferenceController.mm in Sources */,
 				D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */,
 				D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */,
+				D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,21 +8,26 @@
 	<true/>
         <key>enable_extended_completion</key>
         <true/>
+        <key>use_unified_input_mode</key>
+        <false/>
+
 	<key>keyboard_layout</key>
 	<string>com.apple.keylayout.US</string>
-        <key>fix_intermediate_conversion</key>
-        <true/>
-        <key>show_input_mode_cursor</key>
-        <false/>
 
 	<key>max_count_of_inline_candidates</key>
 	<integer>4</integer>
-	<key>candidate_window_labels</key>
-	<string>ASDFJKL</string>
 	<key>candidate_window_font_name</key>
 	<string>Trebuchet MS</string>
 	<key>candidate_window_font_size</key>
 	<integer>18</integer>
+	<key>candidate_window_labels</key>
+	<string>ASDFJKL</string>
+
+        <key>user_dictionary_path</key>
+        <string>~/Library/Application Support/AquaSKK/skk-jisyo.utf8</string>
+
+        <key>show_input_mode_cursor</key>
+        <false/>
 
 	<key>enable_skkserv</key>
 	<false/>
@@ -31,12 +36,14 @@
 	<key>skkserv_port</key>
 	<integer>1178</integer>
 
+        <key>enable_private_mode</key>
+        <false/>
+
+        <key>fix_intermediate_conversion</key>
+        <true/>
         <key>openlab_host</key>
         <string>openlab.ring.gr.jp</string>
         <key>openlab_path</key>
         <string>/skk/skk/dic</string>
-
-        <key>user_dictionary_path</key>
-        <string>~/Library/Application Support/AquaSKK/skk-jisyo.utf8</string>
 </dict>
 </plist>

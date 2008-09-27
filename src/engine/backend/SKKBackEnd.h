@@ -40,6 +40,7 @@ class SKKBackEnd {
     SKKDictionaryCache cache_;
     bool useNumericConversion_;
     bool enableExtendedCompletion_;
+    bool enablePrivateMode_;
 
     SKKBackEnd();
     SKKBackEnd(const SKKBackEnd&);
@@ -71,6 +72,9 @@ public:
 
     // オプション：拡張補完
     void EnableExtendedCompletion(bool flag);
+
+    // オプション：プライベートモード
+    void EnablePrivateMode(bool flag);
 };
 
 #endif

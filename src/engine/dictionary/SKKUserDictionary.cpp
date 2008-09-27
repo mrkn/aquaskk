@@ -63,7 +63,13 @@ SKKUserDictionary::~SKKUserDictionary() {
 }
 
 void SKKUserDictionary::Initialize(const std::string& path) {
-    if(!path_.empty()) return;
+    if(!path_.empty()) {
+        if(path_ == path) {
+            return;
+        }
+
+        save(true);
+    }
 
     path_ = path;
     idle_count_ = 0;

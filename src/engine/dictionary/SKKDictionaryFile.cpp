@@ -29,6 +29,9 @@ static std::string OKURI_ARI_MARK = ";; okuri-ari entries.";
 static std::string OKURI_NASI_MARK = ";; okuri-nasi entries.";
 
 bool SKKDictionaryFile::Load(const std::string& path) {
+    okuriAri_.clear();
+    okuriNasi_.clear();
+
     if(!exist(path)) return false;
 
     std::ifstream ifs(path.c_str());

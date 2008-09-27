@@ -31,6 +31,8 @@
 - (void)setupKeyboardLayout;
 - (void)updatePopUpButton;
 - (void)updateFontButton;
+- (void)saveChanges;
+- (void)reloadServer;
 @end
 
 @implementation PreferenceController
@@ -76,15 +78,9 @@
 }
 
 - (void)applicationWillTerminate:(NSNotification*)aNotification {
-    [preferences_ writeToFile:SKKFilePaths::UserDefaults atomically:YES];
-    [dictionarySet_ writeToFile:SKKFilePaths::DictionarySet atomically:YES];
+    [self saveChanges];
 
-    SKKServerProxy* proxy = [[SKKServerProxy alloc] init];
-
-    [proxy reloadUserDefaults];
-    [proxy reloadDictionarySet];
-
-    [proxy release];
+    [self reloadServer];
 }
 
 - (void)changeFont:(id)sender {
@@ -114,6 +110,24 @@
     if(selectedLayout) {
         [preferences_ setObject:selectedLayout forKey:SKKUserDefaultKeys::keyboard_layout];
     }
+}
+
+- (IBAction)browseLocation:(id)sender {
+    NSOpenPanel* panel = [NSOpenPanel openPanel];
+
+    NSString* path = [preferences_ valueForKey:SKKUserDefaultKeys::user_dictionary_path];
+    NSString* dir = [path stringByDeletingLastPathComponent];
+
+    [panel beginSheetForDirectory:dir file:nil types:nil modalForWindow:prefWindow_ modalDelegate:self
+	   didEndSelector:@selector(browsePanelDidEnd:returnCode:contextInfo:) contextInfo:nil];
+}
+
+- (void)browsePanelDidEnd:(NSOpenPanel*)openPanel returnCode:(int)returnCode contextInfo:(void*)contextInfo {
+    if(returnCode != NSOKButton) {
+	return;
+    }
+
+    [preferences_ setObject:[openPanel filename] forKey:SKKUserDefaultKeys::user_dictionary_path];
 }
 
 @end
@@ -199,6 +213,20 @@ static int compareInputSource(id obj1, id obj2, void *context) {
     [fontButton_ setTitle:[NSString stringWithFormat:@"%@ - %2.1f",
                                     [candidateWindowFont_ displayName],
                                     [candidateWindowFont_ pointSize]]];
+}
+
+- (void)saveChanges {
+    [preferences_ writeToFile:SKKFilePaths::UserDefaults atomically:YES];
+    [dictionarySet_ writeToFile:SKKFilePaths::DictionarySet atomically:YES];
+}
+
+- (void)reloadServer {
+    SKKServerProxy* proxy = [[SKKServerProxy alloc] init];
+
+    [proxy reloadUserDefaults];
+    [proxy reloadDictionarySet];
+
+    [proxy release];
 }
 
 @end
