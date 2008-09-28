@@ -55,14 +55,12 @@ State SKKState::Edit(const Event& event) {
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
-        editor_->Cancel();
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_BACKSPACE:
         editor_->HandleBackSpace();
 
         if(!editor_->IsModified()) {
-            editor_->Cancel();
             return State::Transition(&SKKState::KanaInput);
         }
 

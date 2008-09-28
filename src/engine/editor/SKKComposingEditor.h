@@ -30,6 +30,8 @@ class SKKComposingEditor : public SKKBaseEditor {
     SKKTextBuffer composing_;
     bool modified_;
 
+    void setModified();
+
 public:
     SKKComposingEditor();
 

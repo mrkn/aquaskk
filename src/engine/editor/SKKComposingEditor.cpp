@@ -24,13 +24,19 @@
 #include "SKKContextBuffer.h"
 #include "jconv.h"
 
-SKKComposingEditor::SKKComposingEditor() : modified_(true) {}
+SKKComposingEditor::SKKComposingEditor() {
+    setModified();
+}
 
 void SKKComposingEditor::Input(const std::string& fixed, const std::string&) {
+    setModified();
+
     composing_.Insert(fixed);
 }
 
 void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
+    setModified();
+
     switch(event) {
     case BackSpace:
         if(composing_.IsEmpty()) {
@@ -65,6 +71,8 @@ void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
 }
 
 void SKKComposingEditor::Clear() {
+    setModified();
+
     composing_.Clear();
 }
 
@@ -76,11 +84,11 @@ void SKKComposingEditor::Output(SKKContextBuffer& buffer) const {
 void SKKComposingEditor::Commit(std::string& queue) {
     queue = composing_.String();
 
-    composing_.Clear();
+    Clear();
 }
 
 void SKKComposingEditor::Flush() {
-    modified_ = true;
+    setModified();
 }
 
 bool SKKComposingEditor::IsModified() const {
@@ -92,6 +100,11 @@ const std::string SKKComposingEditor::QueryString() const {
 }
 
 void SKKComposingEditor::SetEntry(const std::string& entry) {
-    composing_.Clear();
+    Clear();
+
     composing_.Insert(entry);
+}
+
+void SKKComposingEditor::setModified() {
+    modified_ = true;
 }

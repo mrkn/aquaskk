@@ -54,10 +54,6 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     modified_ = true;
 }
 
-SKKInputMode SKKInputEngine::InputMode() const {
-    return inputModeSelector_;
-}
-
 void SKKInputEngine::SetStatePrimary() {
     enableMainEditor();
 
@@ -87,7 +83,7 @@ void SKKInputEngine::SetStateSelectCandidate() {
 }
 
 void SKKInputEngine::SetStateEntryRemove() {
-    entryRemoveEditor_.Initialize(Entry(), Candidate());
+    entryRemoveEditor_.Initialize(Entry(), contextBuffer_.Candidate());
 
     enableSubEditor(&entryRemoveEditor_);
 }
@@ -104,7 +100,7 @@ void SKKInputEngine::HandleChar(char code, bool direct) {
     inputQueue_.AddChar(code);
 
     if(direct) {
-        inputQueue_.SelectInputMode(InputMode());
+        inputQueue_.SelectInputMode(inputMode());
     }
 }
 
@@ -159,16 +155,6 @@ void SKKInputEngine::Commit() {
     enableMainEditor();
 }
 
-void SKKInputEngine::Cancel() {
-    if(!inputQueue_.IsEmpty()) {
-        modified_ = true;
-    }
-
-    inputQueue_.Clear();
-
-    top()->Clear();
-}
-
 void SKKInputEngine::Insert(const std::string& str) {
     enableMainEditor();
 
@@ -179,7 +165,7 @@ void SKKInputEngine::Insert(const std::string& str) {
 }
 
 void SKKInputEngine::Reset(bool absolutely) {
-    Cancel();
+    cancel();
 
     top()->Flush();
 
@@ -195,7 +181,7 @@ void SKKInputEngine::ToggleKana() {
     std::string entry(Entry().EntryString());
     std::string result;
 
-    switch(InputMode()) {
+    switch(inputMode()) {
     case HirakanaInputMode:
 	jconv::hirakana_to_katakana(entry, result);
 	break;
@@ -223,7 +209,7 @@ void SKKInputEngine::ToggleJisx0201Kana() {
     std::string entry(Entry().EntryString());
     std::string result;
 
-    switch(InputMode()) {
+    switch(inputMode()) {
     case HirakanaInputMode:
 	jconv::hirakana_to_jisx0201_kana(entry, result);
 	break;
@@ -295,17 +281,13 @@ void SKKInputEngine::FinishRegistration() {
 }
 
 void SKKInputEngine::AbortRegistration() {
-    Cancel();
+    cancel();
 
     registrationObserver_->SKKRegistrationUpdate(SKKRegistrationObserver::Abort);
 }
 
 const SKKEntry SKKInputEngine::Entry() const {
     return contextBuffer_.Entry();
-}
-
-const SKKCandidate SKKInputEngine::Candidate() const {
-    return contextBuffer_.Candidate();
 }
 
 const std::string SKKInputEngine::Word() const {
@@ -316,6 +298,10 @@ SKKBaseEditor* SKKInputEngine::top() const {
     return active_->back();
 }
 
+SKKInputMode SKKInputEngine::inputMode() const {
+    return inputModeSelector_;
+}
+
 void SKKInputEngine::terminate() {
     if(option_->FixIntermediateConversion()) {
         inputQueue_.Terminate();
@@ -324,6 +310,16 @@ void SKKInputEngine::terminate() {
     }
 
     updateContextBuffer();
+}
+
+void SKKInputEngine::cancel() {
+    if(!inputQueue_.IsEmpty()) {
+        modified_ = true;
+    }
+
+    inputQueue_.Clear();
+
+    top()->Clear();
 }
 
 void SKKInputEngine::enableMainEditor() {
@@ -375,7 +371,7 @@ const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
     std::string query(entry.EntryString());
 
     // 入力モードがカタカナ/半角カナなら、見出し語をひらかなに正規化する
-    switch(InputMode()) {
+    switch(inputMode()) {
     case KatakanaInputMode:
 	jconv::katakana_to_hirakana(query, query);
 	break;

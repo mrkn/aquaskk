@@ -77,7 +77,9 @@ class SKKInputEngine : public SKKInputQueueObserver,
     SKKInputEngine& operator=(const SKKInputEngine&);
 
     SKKBaseEditor* top() const;
+    SKKInputMode inputMode() const;
     void terminate();
+    void cancel();
     void enableMainEditor();
     void enableSubEditor(SKKBaseEditor* editor);
     void updateContextBuffer();
@@ -106,7 +108,6 @@ public:
 
     // 入力モード
     void SelectInputMode(SKKInputMode mode);
-    SKKInputMode InputMode() const;
 
     // 状態変更
     void SetStatePrimary();
@@ -129,7 +130,6 @@ public:
     void HandlePing();
 
     void Commit();
-    void Cancel();
     void Insert(const std::string& str);
     void Reset(bool absolutely = false);
 
@@ -155,7 +155,6 @@ public:
     void AbortRegistration();
 
     const SKKEntry Entry() const;
-    const SKKCandidate Candidate() const;
     const std::string Word() const;
 };
 
