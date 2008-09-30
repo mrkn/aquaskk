@@ -76,6 +76,9 @@ void SKKInputEngine::SetStateOkuri() {
 
     active_->push_back(&composingEditor_);
     active_->push_back(&okuriEditor_);
+
+    // 次回 HandleChar で初期化が必要
+    needsInitializeOkuri_ = true;
 }
 
 void SKKInputEngine::SetStateSelectCandidate() {
@@ -88,11 +91,13 @@ void SKKInputEngine::SetStateEntryRemove() {
     enableSubEditor(&entryRemoveEditor_);
 }
 
-void SKKInputEngine::InitializeOkuri(char okuri) {
-    okuriEditor_.Initialize(okuri);
-}
-
 void SKKInputEngine::HandleChar(char code, bool direct) {
+    if(needsInitializeOkuri_) {
+        needsInitializeOkuri_ = false;
+
+        okuriEditor_.Initialize(code);
+    }
+
     if(direct) {
         inputQueue_.SelectInputMode(AsciiInputMode);
     }
@@ -248,10 +253,8 @@ void SKKInputEngine::Output() {
         // だった場合に empty 内部バッファで選択文字列が消されてしまう
     }
 
-    // 全てのフィルターを Flush する
-    for(EditorStack::iterator iter = active_->begin(); iter != active_->end(); ++ iter) {
-        (*iter)->Flush();
-    }
+    // 全てのエディターを Flush する
+    std::for_each(active_->begin(), active_->end(), std::mem_fun(&SKKBaseEditor::Flush));
 
     inputModeSelector_.Notify();
 
@@ -294,6 +297,8 @@ const std::string SKKInputEngine::Word() const {
     return word_;
 }
 
+// ------------------------------------------------------------
+
 SKKBaseEditor* SKKInputEngine::top() const {
     return active_->back();
 }
@@ -327,6 +332,8 @@ void SKKInputEngine::enableMainEditor() {
 
     active_->clear();
     active_->push_back(bottom_);
+
+    needsInitializeOkuri_ = false;
 }
 
 void SKKInputEngine::enableSubEditor(SKKBaseEditor* editor) {

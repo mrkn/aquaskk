@@ -62,6 +62,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     EditorStack mainStack_;
     EditorStack subStack_;
     EditorStack* active_;
+    bool needsInitializeOkuri_;
 
     SKKInputQueue inputQueue_;
     SKKContextBuffer contextBuffer_;
@@ -115,8 +116,6 @@ public:
     void SetStateOkuri();
     void SetStateSelectCandidate();
     void SetStateEntryRemove();
-
-    void InitializeOkuri(char okuri);
 
     // 入力
     void HandleChar(char code, bool direct);

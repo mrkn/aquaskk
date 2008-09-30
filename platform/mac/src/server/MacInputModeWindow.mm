@@ -24,11 +24,61 @@
 #include "SKKFrontEnd.h"
 #include "InputModeWindowController.h"
 #include <iostream>
+#include <vector>
+
+// MacInputModeWindow::Activate() から呼ばれるユーティリティ群
+namespace {
+    // 左下原点を左上原点に変換する
+    CGPoint FlipPoint(int x, int y) {
+        NSRect screen = [[NSScreen mainScreen] frame];
+
+        return CGPointMake(x, NSHeight(screen) - y);
+    }
+
+    int ActiveProcessID() {
+        NSDictionary* info = [[NSWorkspace sharedWorkspace] activeApplication];
+        NSNumber* pid = [info objectForKey:@"NSApplicationProcessIdentifier"];
+
+        return [pid intValue];
+    }
+
+    typedef std::vector<CGRect> CGRectContainer;
+
+    // プロセス ID に関連したウィンドウ矩形群の取得
+    CGRectContainer CreateWindowBoundsListOf(int pid) {
+        CGRectContainer result;
+        NSArray* array = (NSArray*)CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly,
+                                                              kCGNullWindowID);
+        NSEnumerator* enumerator = [array objectEnumerator];
+
+        while(NSDictionary* window = [enumerator nextObject]) {
+            // 引数のプロセス ID でフィルタ
+            NSNumber* owner = [window objectForKey:(NSString*)kCGWindowOwnerPID];
+            if([owner intValue] != pid) continue;
+
+            // デスクトップ全面を覆う Finder のウィンドウは除外
+            NSNumber* level = [window objectForKey:(NSString*)kCGWindowLayer];
+            if([level intValue] == kCGMinimumWindowLevel) continue;
+
+            CGRect rect;
+            NSDictionary* bounds = [window objectForKey:(NSString*)kCGWindowBounds];
+            if(CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)bounds, &rect)) {
+                result.push_back(rect);
+            }
+        }
+
+        [array release];
+
+        return result;
+    }
+}
+
+// ============================================================
 
 MacInputModeWindow::MacInputModeWindow(SKKFrontEnd* frontend)
-  : active_(false),
-    frontend_(frontend),
-    mode_(HirakanaInputMode) {
+  : active_(false)
+  , frontend_(frontend)
+  , mode_(HirakanaInputMode) {
     controller_ = [InputModeWindowController sharedController];
     [controller_ changeMode:mode_];
 }
@@ -49,10 +99,18 @@ void MacInputModeWindow::Activate() {
     active_ = true;
 
     std::pair<int, int> position = frontend_->WindowPosition();
-    int level = frontend_->WindowLevel();
+
+    CGPoint cursor = FlipPoint(position.first, position.second);
+    CGRectContainer list = CreateWindowBoundsListOf(ActiveProcessID());
+
+    // カーソル位置がウィンドウ矩形に含まれていなければ無視する
+    int count = std::count_if(list.begin(), list.end(),
+                              std::bind2nd(std::ptr_fun(CGRectContainsPoint), cursor));
+    if(!count) return;
 
     [controller_ changeMode:mode_];
-    [controller_ show:NSMakePoint(position.first, position.second) level:level];
+    [controller_ show:NSMakePoint(position.first, position.second)
+                 level:frontend_->WindowLevel()];
 }
 
 void MacInputModeWindow::Deactivate() {

@@ -154,7 +154,6 @@ State SKKState::KanaEntry(const Event& event) {
 
             // 送りあり
             if(param.IsUpperCases()) {
-                editor_->InitializeOkuri(param.code);
                 return State::Forward(&SKKState::OkuriInput);
             }
         }
