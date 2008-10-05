@@ -68,6 +68,18 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
     return top()->Output();
 }
 
+void SKKInputSession::Clear() {
+    if(preventReentrantCall_) return;
+
+    ScopedFlag on(preventReentrantCall_);
+
+    while(!stack_.empty()) {
+        popEditor();
+    }
+
+    pushEditor();
+}
+
 void SKKInputSession::Activate() {
     param_->CandidateWindow()->Activate();
     param_->InputModeWindow()->Activate();

@@ -29,12 +29,15 @@
 
 class SKKInputSessionParameter;
 class SKKInputSession;
+class SKKFrontEnd;
 
 @interface SKKInputController : IMKInputController {
     id client_;
+    NSUserDefaults* defaults_;
     SKKServerProxy* proxy_;
     SKKInputSessionParameter* param_;
     SKKInputSession* session_;
+    SKKFrontEnd* frontend_;
     SKKInputMode initialInputMode_;
     BOOL initialized_;
 }

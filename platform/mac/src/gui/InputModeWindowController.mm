@@ -23,7 +23,6 @@
 #include "InputModeWindowController.h"
 
 @interface InputModeWindowController (Local)
-- (void)prepareIcon;
 - (void)prepareLayer;
 - (void)prepareAnimation;
 - (void)prepareWindow;
@@ -41,7 +40,9 @@
 
 - (id)init {
     if(self = [super initWithWindowNibName:@"InputModeWindow"]) {
-        [self prepareIcon];
+        inputMode_ = HirakanaInputMode;
+        modeIcons_ = 0;
+
         [self prepareLayer];
         [self prepareAnimation];
         [self prepareWindow];
@@ -55,6 +56,16 @@
     [animation_ release];
 
     [super dealloc];
+}
+
+- (void)setModeIcons:(NSDictionary*)icons {
+    [icons retain];
+
+    if(modeIcons_) {
+        [modeIcons_ release];
+    }
+
+    modeIcons_ = icons;
 }
 
 - (void)changeMode:(SKKInputMode)mode {
@@ -89,32 +100,6 @@
 @end
 
 @implementation InputModeWindowController (Local)
-
-- (void)prepareIcon {
-    struct {
-        int mode;
-        NSString* name;
-    } icon[] = {
-        { HirakanaInputMode,		@"AquaSKK-Hirakana.png" },
-        { KatakanaInputMode,		@"AquaSKK-Katakana.png" },
-        { Jisx0201KanaInputMode,	@"AquaSKK-Jisx0201Kana.png" },
-        { AsciiInputMode,		@"AquaSKK-Ascii.png" },
-        { Jisx0208LatinInputMode,	@"AquaSKK-Jisx0208Latin.png" },
-        { 0,				0 }
-    };
-
-    NSMutableDictionary* icons = [[NSMutableDictionary alloc] initWithCapacity:0];
-
-    for(int i = 0; icon[i].name != 0; ++ i) {
-        [icons setObject:[NSImage imageNamed:icon[i].name]
-               forKey:[NSNumber numberWithInt:icon[i].mode]];
-    }
-
-    inputMode_ = HirakanaInputMode;
-    modeIcons_ = [[NSDictionary alloc] initWithDictionary:icons];
-
-    [icons release];
-}
         
 - (void)prepareLayer {
     rootLayer_ = [CALayer layer];
@@ -145,15 +130,23 @@
 
 - (void)updateFrame {
     NSRect rect = [[self window] frame];
+    NSSize iconSize = rect.size;
     NSImage* icon = [modeIcons_ objectForKey:[NSNumber numberWithInt:inputMode_]];
-    
+    NSArray* reps = [icon representations];
+
+    if([reps count]) {
+        // NSImage の - (NSSize)size ではなく、ピクセルサイズを取得する
+        NSImageRep* image = [reps objectAtIndex:0];
+        iconSize = NSMakeSize(image.pixelsWide, image.pixelsHigh);
+    }
+
     // ppc では、背景を clearColor にした NSWindow の矩形サイズが、いつ
     // のまにか 0*0 になってしまうことがある(QuarzDebug による調査)ため、
     // 表示する直前にウィンドウの矩形を設定し直す
-    if(!NSEqualSizes(rect.size, [icon size])) {
+    if(!NSEqualSizes(rect.size, iconSize)) {
         // 画像サイズに応じて原点をオフセットする
-        rect.origin.y += rect.size.height - [icon size].height;
-        rect.size = [icon size];
+        rect.origin.y += rect.size.height - iconSize.height;
+        rect.size = iconSize;
 
         // 矩形設定時の画像ちらつきを防ぐ
         [self setImage:0];

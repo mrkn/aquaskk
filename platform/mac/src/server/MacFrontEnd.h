@@ -33,7 +33,8 @@ public:
     MacFrontEnd(id client);
 
     virtual void InsertString(const std::string& str);
-    virtual void ComposeString(const std::string& str, int cursorOffset);
+    virtual void ComposeString(const std::string& str, int cursorOffset = 0);
+    virtual void Clear();
     virtual std::pair<int, int> WindowPosition() const;
     virtual int WindowLevel() const;
 };

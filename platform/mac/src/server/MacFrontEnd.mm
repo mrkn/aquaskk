@@ -54,6 +54,10 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     [string release];
 }
 
+void MacFrontEnd::Clear() {
+    ComposeString("");
+}
+
 std::pair<int, int> MacFrontEnd::WindowPosition() const {
     NSRect rect;
 

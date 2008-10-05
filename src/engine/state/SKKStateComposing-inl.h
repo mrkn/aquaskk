@@ -276,11 +276,8 @@ State SKKState::EntryCompletion(const Event& event) {
 
     switch(event) {
     case SKK_TAB:
-        completer_.Next();
-        return 0;
-
     case SKK_CHAR:
-        if(param.IsNextCompletion()) {
+        if(event == SKK_TAB || param.IsNextCompletion()) {
             completer_.Next();
             return 0;
         }
@@ -350,8 +347,9 @@ State SKKState::SelectCandidate(const Event& event) {
         selector_.CursorDown();
         return 0;
 
+    case SKK_BACKSPACE:
     case SKK_CHAR:
-        if(param.IsPrevCandidate()) {
+        if(event == SKK_BACKSPACE || param.IsPrevCandidate()) {
             if(!selector_.Prev()) {
                 return State::DeepHistory(&SKKState::EntryInput);
             }

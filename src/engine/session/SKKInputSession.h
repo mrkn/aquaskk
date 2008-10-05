@@ -52,6 +52,7 @@ public:
     ~SKKInputSession();
 
     bool HandleEvent(const SKKEvent& event);
+    void Clear();
     void Activate();
     void Deactivate();
 };

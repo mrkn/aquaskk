@@ -26,6 +26,7 @@
 #include "SKKBackEnd.h"
 #include "SKKConstVars.h"
 #include "skkserv.h"
+#include "InputModeWindowController.h"
 
 #include <InputMethodKit/InputMethodKit.h>
 #include <signal.h>
@@ -41,6 +42,8 @@ static void terminate(int) {
 - (void)prepareUserDefaults;
 - (void)prepareDictionary;
 - (void)prepareInputMethodKit;
+
+- (void)initializeInputModeIcons;
 
 - (BOOL)fileExistsAtPath:(NSString*)path;
 - (void)createDirectory:(NSString*)path;
@@ -145,6 +148,8 @@ static void terminate(int) {
     tmp = [self pathForResource:@"kana-rule.conf"];
     SKKRomanKanaConverter::theInstance().Initialize([tmp UTF8String]);
 
+    [self initializeInputModeIcons];
+
     NSLog(@"Components has been reloaded");
 }
 
@@ -204,6 +209,33 @@ static void terminate(int) {
     NSString* identifier = [[NSBundle mainBundle] bundleIdentifier];
 
     [[IMKServer alloc] initWithName:connection bundleIdentifier:identifier];
+}
+
+- (void)initializeInputModeIcons {
+    const struct {
+        int mode;
+        NSString* name;
+    } icon[] = {
+        { HirakanaInputMode,		@"AquaSKK-Hirakana.png" },
+        { KatakanaInputMode,		@"AquaSKK-Katakana.png" },
+        { Jisx0201KanaInputMode,	@"AquaSKK-Jisx0201Kana.png" },
+        { AsciiInputMode,		@"AquaSKK-Ascii.png" },
+        { Jisx0208LatinInputMode,	@"AquaSKK-Jisx0208Latin.png" },
+        { 0,				0 }
+    };
+
+    NSMutableDictionary* icons = [[NSMutableDictionary alloc] initWithCapacity:0];
+
+    for(int i = 0; icon[i].name != 0; ++ i) {
+        NSString* path = [self pathForResource:icon[i].name];
+        NSImage* image = [[NSImage alloc] initWithContentsOfFile:path];
+        [icons setObject:image forKey:[NSNumber numberWithInt:icon[i].mode]];
+        [image release];
+    }
+
+    [[InputModeWindowController sharedController] setModeIcons:icons];
+
+    [icons release];
 }
 
 - (BOOL)fileExistsAtPath:(NSString*)path {

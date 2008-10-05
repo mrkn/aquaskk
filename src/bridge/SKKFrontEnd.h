@@ -36,6 +36,9 @@ public:
     // 未確定文字入力(カーソル位置は末尾からのオフセット)
     virtual void ComposeString(const std::string& str, int cursorOffset = 0) = 0;
 
+    // 入力状態をクリアーする
+    virtual void Clear() = 0;
+
     // ウィンドウ表示位置
     virtual std::pair<int, int> WindowPosition() const = 0;
 

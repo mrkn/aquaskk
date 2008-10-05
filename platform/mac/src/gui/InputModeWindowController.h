@@ -34,6 +34,7 @@
 }
 
 + (InputModeWindowController*)sharedController;
+- (void)setModeIcons:(NSDictionary*)icons;
 - (void)changeMode:(SKKInputMode)mode;
 - (SKKInputMode)currentInputMode;
 - (void)show:(NSPoint)topleft level:(int)level;

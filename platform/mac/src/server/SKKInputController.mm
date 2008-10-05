@@ -34,9 +34,10 @@
 
 - (void)initializeKeyboardLayout;
 - (void)setInputModeIfNeeded;
-- (void)updateCursorPosition;
+- (void)updateModeCursor:(id)sender;
 - (BOOL)privateMode;
 - (void)setPrivateMode:(BOOL)flag;
+- (SKKInputMode)currentInputMode;
 
 @end
 
@@ -46,13 +47,15 @@
     self = [super initWithServer:server delegate:delegate client:client];
     if(self) {
         // 直前のセッションの入力モードを保存しておく
-        initialInputMode_ = [[InputModeWindowController sharedController] currentInputMode];
+        initialInputMode_ = [self currentInputMode];
         initialized_ = NO;
 
         client_ = client;
+        defaults_ = [NSUserDefaults standardUserDefaults];
         proxy_ = [[SKKServerProxy alloc] init];
         param_ = new MacInputSessionParameter(client_);
 	session_ = new SKKInputSession(param_);
+        frontend_ = param_->FrontEnd();
     }
 
     return self;
@@ -68,25 +71,22 @@
 
 // IMKServerInput
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
 
     BOOL result = session_->HandleEvent(param);
 
-    if([defaults boolForKey:SKKUserDefaultKeys::show_input_mode_cursor] == YES) {
-        [self performSelector:@selector(updateCursorPosition) object:nil afterDelay:0.005];
-    }
+    [self updateModeCursor:nil];
 
     return result || param.force_handled;
 }
 
 - (void)commitComposition:(id)sender {
-    SKKEvent event;
+#ifdef SKK_DEBUG
+    NSLog(@"commitComposition from %@", sender);
+#endif
 
-    event.id = SKK_JMODE;
-
-    session_->HandleEvent(event);
+    session_->Clear();
+    frontend_->Clear();
 }
 
 // IMKStateSetting
@@ -195,16 +195,12 @@
 @implementation SKKInputController (Local)
 
 - (void)initializeKeyboardLayout {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSString* keyboardLayout = [defaults stringForKey:SKKUserDefaultKeys::keyboard_layout];
+    NSString* keyboardLayout = [defaults_ stringForKey:SKKUserDefaultKeys::keyboard_layout];
     [client_ overrideKeyboardWithKeyboardNamed:keyboardLayout];
 }
 
 - (void)setInputModeIfNeeded {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
-    if([defaults boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
+    if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
         SKKEvent event;
         SKKInputMode currentInputMode;
 
@@ -213,7 +209,7 @@
             currentInputMode = initialInputMode_;
             initialized_ = YES;
         } else {
-            currentInputMode = [[InputModeWindowController sharedController] currentInputMode];
+            currentInputMode = [self currentInputMode];
         }
 
         switch(currentInputMode) {
@@ -242,25 +238,32 @@
     }
 }
 
-- (void)updateCursorPosition {
-    std::pair<int, int> pos = param_->FrontEnd()->WindowPosition();
-    int level = param_->FrontEnd()->WindowLevel();
-    SKKInputMode currentInputMode = [[InputModeWindowController sharedController] currentInputMode];
+- (void)updateModeCursor:(id)sender {
+    if([defaults_ boolForKey:SKKUserDefaultKeys::show_input_mode_cursor] != YES) return;
 
-    [[InputModeCursor sharedCursor] changeMode:currentInputMode];
-    [[InputModeCursor sharedCursor] show:NSMakePoint(pos.first, pos.second) level:level];
+    if(!sender) {
+        [self performSelector:@selector(updateModeCursor:) withObject:self afterDelay:0.005];
+        return;
+    }
+
+    std::pair<int, int> pos = frontend_->WindowPosition();
+    int level = frontend_->WindowLevel();
+    InputModeCursor* cursor = [InputModeCursor sharedCursor];
+
+    [cursor changeMode:[self currentInputMode]];
+    [cursor show:NSMakePoint(pos.first, pos.second) level:level];
 }
 
 - (BOOL)privateMode {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
-    return [defaults boolForKey:SKKUserDefaultKeys::enable_private_mode];
+    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_private_mode];
 }
 
 - (void)setPrivateMode:(BOOL)flag {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults_ setBool:flag forKey:SKKUserDefaultKeys::enable_private_mode];
+}
 
-    [defaults setBool:flag forKey:SKKUserDefaultKeys::enable_private_mode];
+- (SKKInputMode)currentInputMode {
+    return [[InputModeWindowController sharedController] currentInputMode];
 }
 
 @end

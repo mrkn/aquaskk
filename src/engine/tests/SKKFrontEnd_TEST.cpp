@@ -11,9 +11,13 @@ public:
 	insert_ = str;
     }
 
-    virtual void ComposeString(const std::string& str, int cursorOffset) {
+    virtual void ComposeString(const std::string& str, int cursorOffset = 0) {
 	compose_ = str;
 	cursor_ = cursorOffset;
+    }
+
+    virtual void Clear() {
+        ComposeString("");
     }
 
     virtual std::pair<int, int> WindowPosition() const {

@@ -51,7 +51,7 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
 #endif
 
     // シフト属性が有効なのはデッドキーのみ
-    if([event modifierFlags] & NSShiftKeyMask) {
+    if([event modifierFlags] & (NSAlphaShiftKeyMask | NSShiftKeyMask)) {
 	if(std::isgraph(dispchar)) { // 空白類を除いた英数字記号
 	    charcode = dispchar;
 	} else {
