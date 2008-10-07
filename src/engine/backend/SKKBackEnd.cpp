@@ -31,7 +31,6 @@ SKKBackEnd::SKKBackEnd()
     : userdict_(new SKKUserDictionary())
     , useNumericConversion_(false)
     , enableExtendedCompletion_(false)
-    , enablePrivateMode_(false)
 {}
 
 SKKBackEnd& SKKBackEnd::theInstance() {
@@ -128,8 +127,6 @@ bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
 }
 
 void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) {
-    if(enablePrivateMode_) return;
-
     if(entry.EntryString().empty() ||
        (entry.IsOkuriAri() && (entry.OkuriString().empty() || candidate.IsEmpty()))) {
 	std::cerr << "SKKBackEnd: Invalid registration received" << std::endl;
@@ -182,7 +179,7 @@ void SKKBackEnd::EnableExtendedCompletion(bool flag) {
 }
 
 void SKKBackEnd::EnablePrivateMode(bool flag) {
-    enablePrivateMode_ = flag;
+    userdict_->SetPrivateMode(flag);
 }
 
 // ----------------------------------------------------------------------

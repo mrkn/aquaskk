@@ -57,6 +57,8 @@ void update(const std::string& index, const T& obj, SKKDictionaryEntryContainer&
     container.push_front(SKKDictionaryEntry(index, suite.ToString()));
 }
 
+SKKUserDictionary::SKKUserDictionary() : privateMode_(false) {}
+
 SKKUserDictionary::~SKKUserDictionary() {
     // 強制保存
     if(!path_.empty()) save(true);
@@ -125,6 +127,18 @@ void SKKUserDictionary::RemoveOkuriNasi(const std::string& index, const std::str
     save();
 }
 
+void SKKUserDictionary::SetPrivateMode(bool flag) {
+    if(privateMode_ != flag) {
+        if(flag) {
+            save(true);
+        } else {
+            file_.Load(path_);
+        }
+
+        privateMode_ = flag;
+    }
+}
+
 // ======================================================================
 // private method
 // ======================================================================
@@ -159,6 +173,8 @@ void SKKUserDictionary::remove(const std::string& index, const std::string& kanj
 }
 
 void SKKUserDictionary::save(bool force) {
+    if(privateMode_) return;
+
     if(!force && ++ idle_count_ < MAX_IDLE_COUNT && std::time(0) - lastupdate_ < MAX_SAVE_INTERVAL) {
 	return;
     }

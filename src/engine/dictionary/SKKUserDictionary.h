@@ -33,12 +33,15 @@ class SKKUserDictionary: public SKKBaseDictionary {
     int idle_count_;
     std::time_t lastupdate_;
     SKKDictionaryFile file_;
+    bool privateMode_;
 
     std::string fetch(const std::string& query, SKKDictionaryEntryContainer& container);
     void remove(const std::string& index, const std::string& kanji, SKKDictionaryEntryContainer& container);
     void save(bool force = false);
 
 public:
+    SKKUserDictionary();
+
     virtual ~SKKUserDictionary();
 
     virtual void Initialize(const std::string& path);
@@ -53,6 +56,8 @@ public:
 
     void RemoveOkuriAri(const std::string& query, const std::string& candidate);
     void RemoveOkuriNasi(const std::string& query, const std::string& candidate);
+
+    void SetPrivateMode(bool flag);
 };
 
 #endif
