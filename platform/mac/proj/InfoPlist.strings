@@ -1,2 +1,3 @@
 CFBundleName = "AquaSKK";
-com.apple.inputmethod.Japanese = "AquaSKK";
+com.apple.inputmethod.Japanese = "AquaSKK - かな";
+com.apple.inputmethod.Roman = "AquaSKK - 英数";
