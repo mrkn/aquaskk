@@ -44,6 +44,8 @@ public:
 
     virtual std::string FindOkuriAri(const std::string& entry);
     virtual std::string FindOkuriNasi(const std::string& entry);
+    virtual std::string FindEntry(const std::string& candidate);
+
     virtual bool FindCompletions(const std::string& entry, std::vector<std::string>& result);
 };
 

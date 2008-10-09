@@ -355,6 +355,9 @@ namespace jconv {
     void convert_utf8_to_eucj(const std::string& from, std::string& to);
     void convert_eucj_to_utf8(const std::string& from, std::string& to);
 
+    std::string utf8_from_eucj(const std::string& eucj);
+    std::string eucj_from_utf8(const std::string& utf8);
+
     // translator(UTF-8 only)
     void hirakana_to_katakana(const std::string& from, std::string& to);
     void hirakana_to_jisx0201_kana(const std::string& from, std::string& to);

@@ -38,6 +38,7 @@ public:
 
     virtual std::string FindOkuriAri(const std::string& query);
     virtual std::string FindOkuriNasi(const std::string& query);
+    virtual std::string FindEntry(const std::string& query);
 
     virtual bool FindCompletions(const std::string& entry, std::vector<std::string>& result);
 };

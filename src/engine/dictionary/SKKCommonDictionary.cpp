@@ -23,43 +23,46 @@
 #include "SKKCommonDictionary.h"
 #include <sys/stat.h>
 
-// 非同期辞書ロードクラス
-class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
-    std::string path_;
-    std::time_t lastupdate_;
-    bool first_;
+namespace {
+    // 非同期辞書ロードクラス
+    class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
+        std::string path_;
+        std::time_t lastupdate_;
+        bool first_;
 
-    virtual bool run() {
-	SKKDictionaryFile tmp;
+        virtual bool run() {
+            SKKDictionaryFile tmp;
 
-	if(updated() && tmp.Load(path_)) {
-	    tmp.Sort();
-	    NotifyObserver(tmp);
-	} else {
-            if(first_) {
+            if(updated() && tmp.Load(path_)) {
+                tmp.Sort();
                 NotifyObserver(tmp);
+            } else {
+                if(first_) {
+                    NotifyObserver(tmp);
+                }
             }
+
+            first_ = false;
+
+            return true;
         }
 
-        first_ = false;
+        bool updated() {
+            struct stat st;
 
-	return true;
-    }
+            if(stat(path_.c_str(), &st) == 0 && lastupdate_ < st.st_mtime) {
+                lastupdate_ = st.st_mtime;
+                return true;
+            }
 
-    bool updated() {
-	struct stat st;
+            return false;
+        }
 
-	if(stat(path_.c_str(), &st) == 0 && lastupdate_ < st.st_mtime) {
-	    lastupdate_ = st.st_mtime;
-	    return true;
-	}
-
-	return false;
-    }
-
-public:
-    SKKCommonDictionaryLoader(const std::string& location) : path_(location), lastupdate_(0), first_(true) {}
-};
+    public:
+        SKKCommonDictionaryLoader(const std::string& location)
+            : path_(location), lastupdate_(0), first_(true) {}
+    };
+}
 
 // ======================================================================
 
@@ -78,6 +81,10 @@ std::string SKKCommonDictionary::FindOkuriAri(const std::string& query) {
 
 std::string SKKCommonDictionary::FindOkuriNasi(const std::string& query) {
     return keeper_.FindOkuriNasi(query);
+}
+
+std::string SKKCommonDictionary::FindEntry(const std::string& candidate) {
+    return keeper_.FindEntry(candidate);
 }
 
 bool SKKCommonDictionary::FindCompletions(const std::string& entry, std::vector<std::string>& result) {

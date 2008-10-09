@@ -22,4 +22,7 @@ int main() {
     stat(path2, &st2);
 
     assert(st1.st_size == st2.st_size);
+
+    assert(dict1.FindEntry("逆") == "ぎゃく");
+    assert(dict2.FindEntry("逆") == "ぎゃく");
 }

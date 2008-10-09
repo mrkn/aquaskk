@@ -24,6 +24,8 @@
 // level 1：直接入力
 // ======================================================================
 State SKKState::Primary(const Event& event) {
+    const SKKEvent& param = event.Param();
+
     switch(event) {
     case INIT_EVENT:
 	return State::Initial(&SKKState::KanaInput);
@@ -37,6 +39,15 @@ State SKKState::Primary(const Event& event) {
 	return 0;
 
     case SKK_CANCEL:
+        // Undo 可能なら見出し語入力に遷移する
+        switch(editor_->Undo(param.selected_text)) {
+        case SKKInputEngine::UndoKanaEntry:
+            return State::Transition(&SKKState::KanaEntry);
+
+        case SKKInputEngine::UndoAsciiEntry:
+            return State::Transition(&SKKState::AsciiEntry);
+        }
+
 	editor_->AbortRegistration();
 	return 0;
 

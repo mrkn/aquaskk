@@ -26,35 +26,49 @@
 #include "SKKUserDictionary.h"
 #include "SKKCandidateSuite.h"
 
-static const int MAX_IDLE_COUNT = 20;
-static const int MAX_SAVE_INTERVAL = 60 * 5;
+namespace {
+    static const int MAX_IDLE_COUNT = 20;
+    static const int MAX_SAVE_INTERVAL = 60 * 5;
 
-// SKKDictionaryEntry と文字列を比較するファンクタ
-class CompareUserDictionaryEntry: public std::unary_function<SKKDictionaryEntry, bool> {
-    const std::string str_;
+    // SKKDictionaryEntry と文字列を比較するファンクタ
+    class CompareUserDictionaryEntry: public std::unary_function<SKKDictionaryEntry, bool> {
+        const std::string str_;
 
-public:
-    CompareUserDictionaryEntry(const std::string& str) : str_(str) {}
+    public:
+        CompareUserDictionaryEntry(const std::string& str) : str_(str) {}
 
-    bool operator()(const SKKDictionaryEntry& entry) const {
-	return entry.first == str_;
+        bool operator()(const SKKDictionaryEntry& entry) const {
+            return entry.first == str_;
+        }
+    };
+
+    // 逆引き用ファンクタ(SKKDictionaryKeeper と重複)
+    class NotInclude {
+        std::string candidate_;
+
+    public:
+        NotInclude(const std::string& candidate) : candidate_(candidate) {}
+
+        bool operator()(const SKKDictionaryEntry& entry) const {
+            return entry.second.find(candidate_) == std::string::npos;
+        }
+    };
+
+    template <typename T>
+    void update(const std::string& index, const T& obj, SKKDictionaryEntryContainer& container) {
+        SKKCandidateSuite suite;
+        SKKDictionaryEntryIterator iter = std::find_if(container.begin(), container.end(),
+                                                       CompareUserDictionaryEntry(index));
+
+        if(iter != container.end()) {
+            suite.Parse(iter->second);
+            container.erase(iter);
+        }
+
+        suite.Update(obj);
+
+        container.push_front(SKKDictionaryEntry(index, suite.ToString()));
     }
-};
-
-template <typename T>
-void update(const std::string& index, const T& obj, SKKDictionaryEntryContainer& container) {
-    SKKCandidateSuite suite;
-    SKKDictionaryEntryIterator iter = std::find_if(container.begin(), container.end(),
-						   CompareUserDictionaryEntry(index));
-
-    if(iter != container.end()) {
-	suite.Parse(iter->second);
-	container.erase(iter);
-    }
-
-    suite.Update(obj);
-
-    container.push_front(SKKDictionaryEntry(index, suite.ToString()));
 }
 
 SKKUserDictionary::SKKUserDictionary() : privateMode_(false) {}
@@ -88,6 +102,26 @@ std::string SKKUserDictionary::FindOkuriAri(const std::string& query) {
 
 std::string SKKUserDictionary::FindOkuriNasi(const std::string& query) {
     return fetch(query, file_.OkuriNasi());
+}
+
+std::string SKKUserDictionary::FindEntry(const std::string& candidate) {
+    SKKDictionaryEntryContainer& container = file_.OkuriNasi();
+    SKKDictionaryEntryContainer entries;
+    SKKCandidateParser parser;
+
+    std::remove_copy_if(container.begin(), container.end(),
+                        std::back_inserter(entries), NotInclude("/" + candidate));
+
+    for(unsigned i = 0; i < entries.size(); ++ i) {
+        parser.Parse(entries[i].second);
+        const SKKCandidateContainer& suite = parser.Candidates();
+
+        if(std::find(suite.begin(), suite.end(), candidate) != suite.end()) {
+            return entries[i].first;
+        }
+    }
+
+    return "";
 }
 
 bool SKKUserDictionary::FindCompletions(const std::string& query, std::vector<std::string>& result) {

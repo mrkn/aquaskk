@@ -21,32 +21,48 @@
 */
 
 #include "SKKDictionaryKeeper.h"
+#include "SKKCandidateParser.h"
 #include "jconv.h"
 
-class CompareFunctor {
-    int length_;
+namespace {
+    // 見出し語補完用比較ファンクタ
+    class CompareFunctor {
+        int length_;
 
-    bool compare(const std::string& lhs, const std::string& rhs) const {
-	return 0 < rhs.compare(0, length_, lhs, 0, length_);
-    }
+        bool compare(const std::string& lhs, const std::string& rhs) const {
+            return 0 < rhs.compare(0, length_, lhs, 0, length_);
+        }
 
-public:
-    CompareFunctor(int length) : length_(length) {}
+    public:
+        CompareFunctor(int length) : length_(length) {}
 
-    bool operator()(const SKKDictionaryEntry& lhs, const SKKDictionaryEntry& rhs) const {
-	return compare(lhs.first, rhs.first);
-    }
+        bool operator()(const SKKDictionaryEntry& lhs, const SKKDictionaryEntry& rhs) const {
+            return compare(lhs.first, rhs.first);
+        }
 
-    bool operator()(const SKKDictionaryEntry& lhs, const std::string& rhs) const {
-	return compare(lhs.first, rhs);
-    }
+        bool operator()(const SKKDictionaryEntry& lhs, const std::string& rhs) const {
+            return compare(lhs.first, rhs);
+        }
 
-    bool operator()(const std::string& lhs, const SKKDictionaryEntry& rhs) const {
-	return compare(lhs, rhs.first);
-    }
-};
+        bool operator()(const std::string& lhs, const SKKDictionaryEntry& rhs) const {
+            return compare(lhs, rhs.first);
+        }
+    };
 
-SKKDictionaryKeeper::SKKDictionaryKeeper() : loaded_(false), timer_(0) {}
+    // 逆引き用ファンクタ
+    class NotInclude {
+        std::string candidate_;
+
+    public:
+        NotInclude(const std::string& candidate) : candidate_(candidate) {}
+
+        bool operator()(const SKKDictionaryEntry& entry) const {
+            return entry.second.find(candidate_) == std::string::npos;
+        }
+    };
+}
+
+SKKDictionaryKeeper::SKKDictionaryKeeper() : timer_(0), loaded_(false) {}
 
 void SKKDictionaryKeeper::Initialize(SKKDictionaryLoader* loader, int interval, int timeout) {
     if(timer_.get()) return;
@@ -66,6 +82,30 @@ std::string SKKDictionaryKeeper::FindOkuriNasi(const std::string& query) {
     return fetch(query, file_.OkuriNasi());
 }
 
+std::string SKKDictionaryKeeper::FindEntry(const std::string& candidate) {
+    pthread::lock scope(condition_);
+
+    if(!ready()) return "";
+
+    SKKDictionaryEntryContainer& container = file_.OkuriNasi();
+    SKKDictionaryEntryContainer entries;
+    SKKCandidateParser parser;
+
+    std::remove_copy_if(container.begin(), container.end(),
+                        std::back_inserter(entries), NotInclude("/" + jconv::eucj_from_utf8(candidate)));
+
+    for(unsigned i = 0; i < entries.size(); ++ i) {
+        parser.Parse(jconv::utf8_from_eucj(entries[i].second));
+        const SKKCandidateContainer& suite = parser.Candidates();
+
+        if(std::find(suite.begin(), suite.end(), candidate) != suite.end()) {
+            return jconv::utf8_from_eucj(entries[i].first);
+        }
+    }
+
+    return "";
+}
+
 bool SKKDictionaryKeeper::FindCompletions(const std::string& entry, std::vector<std::string>& result) {
     pthread::lock scope(condition_);
 
@@ -75,19 +115,18 @@ bool SKKDictionaryKeeper::FindCompletions(const std::string& entry, std::vector<
 
     typedef std::pair<SKKDictionaryEntryIterator, SKKDictionaryEntryIterator> EntryRange;
 
-    std::string index;
-    jconv::convert_utf8_to_eucj(entry, index);
+    std::string index = jconv::eucj_from_utf8(entry);
 
     EntryRange range = std::equal_range(container.begin(), container.end(), index, CompareFunctor(index.size()));
 
     for(SKKDictionaryEntryIterator iter = range.first; iter != range.second; ++ iter) {
-        std::string tmp;
-        jconv::convert_eucj_to_utf8(iter->first, tmp);
-        result.push_back(tmp);
+        result.push_back(jconv::utf8_from_eucj(iter->first));
     }
 
     return range.first != range.second;
 }
+
+// ------------------------------------------------------------
 
 void SKKDictionaryKeeper::SKKDictionaryLoaderUpdate(const SKKDictionaryFile& file) {
     pthread::lock scope(condition_);
@@ -104,21 +143,16 @@ std::string SKKDictionaryKeeper::fetch(const std::string& query, SKKDictionaryEn
 
     if(!ready()) return "";
 
-    std::string index;
-    std::string result;
-
-    jconv::convert_utf8_to_eucj(query, index);
+    std::string index = jconv::eucj_from_utf8(query);
 
     if(!std::binary_search(container.begin(), container.end(), index, SKKDictionaryEntryCompare())) {
-	return result;
+	return "";
     }
 
     SKKDictionaryEntryIterator iter = std::lower_bound(container.begin(), container.end(),
 						       index, SKKDictionaryEntryCompare());
 
-    jconv::convert_eucj_to_utf8(iter->second, result);
-
-    return result;
+    return jconv::utf8_from_eucj(iter->second);
 }
 
 bool SKKDictionaryKeeper::ready() {

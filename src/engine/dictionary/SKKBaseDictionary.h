@@ -57,6 +57,14 @@ public:
     //
     virtual std::string FindOkuriNasi(const std::string& entry) = 0;
 
+    // 逆引き
+    //
+    // 例)
+    //
+    // if(dict->FindEntry("漢字") == "かんじ") ...
+    //
+    virtual std::string FindEntry(const std::string& candidate) { return ""; }
+
     // 見出し語の補完
     virtual bool FindCompletions(const std::string& entry, std::vector<std::string>& result) { return false; }
 };

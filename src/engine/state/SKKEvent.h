@@ -78,6 +78,7 @@ struct SKKEvent {
     unsigned char code;         // 文字そのもの
     int attribute;              // SKK_CHAR 属性
     bool force_handled;         // 強制的に処理済みとするか
+    std::string selected_text;  // 選択中の文字列
 
     SKKEvent() : id(0), code(0), attribute(0), force_handled(false) {}
     SKKEvent(int e, unsigned char c, int a = None) : id(e), code(c), attribute(a), force_handled(false) {}

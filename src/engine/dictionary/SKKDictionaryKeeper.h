@@ -68,8 +68,14 @@ public:
 
     void Initialize(SKKDictionaryLoader* loader, int interval, int timeout);
 
+    // 通常の検索
     std::string FindOkuriAri(const std::string& query);
     std::string FindOkuriNasi(const std::string& query);
+
+    // 逆引き
+    std::string FindEntry(const std::string& candidate);
+
+    // 見出し語補完
     bool FindCompletions(const std::string& entry, std::vector<std::string>& result);
 };
 

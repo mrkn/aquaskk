@@ -34,6 +34,7 @@
 
 - (void)initializeKeyboardLayout;
 - (void)setInputModeIfNeeded;
+- (const char*)selectedString;
 - (void)updateModeCursor:(id)sender;
 - (BOOL)privateMode;
 - (void)setPrivateMode:(BOOL)flag;
@@ -72,6 +73,8 @@
 // IMKServerInput
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
+
+    param.selected_text = [self selectedString];
 
     BOOL result = session_->HandleEvent(param);
 
@@ -171,7 +174,9 @@
 }
 
 - (void)showHelp:(id)sender {
-    NSLog(@"showHelp");
+    NSHelpManager* manager = [NSHelpManager sharedHelpManager];
+
+    [manager openHelpAnchor:@"mail" inBook:nil];
 }
 
 - (void)openURL:(NSString*)url {
@@ -236,6 +241,17 @@
 
         session_->HandleEvent(event);
     }
+}
+
+- (const char*)selectedString {
+    NSRange range = [client_ selectedRange];
+    NSAttributedString* text = [client_ attributedSubstringFromRange:range];
+
+    if(text) {
+        return [[text string] UTF8String];
+    }
+
+    return "";
 }
 
 - (void)updateModeCursor:(id)sender {

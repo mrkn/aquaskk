@@ -67,6 +67,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     SKKInputQueue inputQueue_;
     SKKContextBuffer contextBuffer_;
     std::string word_;
+    std::string undo_;
 
     SKKComposingEditor composingEditor_;
     SKKOkuriEditor okuriEditor_;
@@ -135,6 +136,10 @@ public:
     // トグル変換
     void ToggleKana();
     void ToggleJisx0201Kana();
+
+    // 再変換
+    enum UndoResult { UndoFailed, UndoKanaEntry, UndoAsciiEntry };
+    UndoResult Undo(const std::string& candidate);
 
     // 出力
     void Output();

@@ -201,6 +201,10 @@ std::string SKKAutoUpdateDictionary::FindOkuriNasi(const std::string& query) {
     return keeper_.FindOkuriNasi(query);
 }
 
+std::string SKKAutoUpdateDictionary::FindEntry(const std::string& candidate) {
+    return keeper_.FindEntry(candidate);
+}
+
 bool SKKAutoUpdateDictionary::FindCompletions(const std::string& entry, std::vector<std::string>& result) {
     return keeper_.FindCompletions(entry, result);
 }

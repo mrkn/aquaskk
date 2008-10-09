@@ -35,6 +35,9 @@ int main() {
     assert(backend.Find(SKKEntry("あr", "り"), suite) && suite.ToString() == "/有/[り/有/]/");
     assert(backend.Find(SKKEntry("かなめ"), suite) && suite.ToString() == "/要/");
 
+    // 逆引き
+    assert(backend.ReverseLookup("漢字") == "かんじ");
+
     // 削除
     backend.Remove(SKKEntry("あr", "り"), SKKCandidate("有"));
     backend.Remove(SKKEntry("かなめ"), SKKCandidate("要"));

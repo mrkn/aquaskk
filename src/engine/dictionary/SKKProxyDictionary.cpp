@@ -41,34 +41,26 @@ void SKKProxyDictionary::Initialize(const std::string& location) {
     server_ = net::socket::endpoint(host, port);
 }
 
-std::string SKKProxyDictionary::FindOkuriAri(const std::string& str) {
-    std::string key;
+std::string SKKProxyDictionary::FindOkuriAri(const std::string& key) {
     std::string response;
-    std::string result;
-
-    jconv::convert_utf8_to_eucj(str, key);
 
     // ヒットした？
-    if(search(key, response)) {
-	jconv::convert_eucj_to_utf8(response, result);
+    if(search(jconv::eucj_from_utf8(key), response)) {
+	return jconv::utf8_from_eucj(response);
     }
 
-    return result;
+    return "";
 }
 
-std::string SKKProxyDictionary::FindOkuriNasi(const std::string& str) {
-    std::string key;
+std::string SKKProxyDictionary::FindOkuriNasi(const std::string& key) {
     std::string response;
-    std::string result;
-
-    jconv::convert_utf8_to_eucj(str, key);
 
     // ヒットした？
-    if(search(key, response)) {
-	jconv::convert_eucj_to_utf8(response, result);
+    if(search(jconv::eucj_from_utf8(key), response)) {
+	return jconv::utf8_from_eucj(response);
     }
 
-    return result;
+    return "";
 }
 
 bool SKKProxyDictionary::search(const std::string& str, std::string& response) {

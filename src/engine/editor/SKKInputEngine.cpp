@@ -28,6 +28,7 @@
 #include "SKKBackEnd.h"
 #include "jconv.h"
 #include <iostream>
+#include <cctype>
 
 SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
                                SKKRegistrationObserver* registrationObserver,
@@ -64,6 +65,12 @@ void SKKInputEngine::SetStateComposing() {
     // 直接入力モードから遷移してきた時だけ初期化する
     if(top() == bottom_) {
         composingEditor_.Clear();
+    }
+
+    // Undo が有効なら、見出し語をセットしておく
+    if(!undo_.empty()) {
+        composingEditor_.SetEntry(undo_);
+        undo_.clear();
     }
 
     enableMainEditor();
@@ -240,6 +247,25 @@ void SKKInputEngine::ToggleJisx0201Kana() {
     Insert(result);
 }
 
+SKKInputEngine::UndoResult SKKInputEngine::Undo(const std::string& candidate) {
+    if(candidate.empty()) return UndoFailed;
+
+    // 逆引き
+    undo_ = SKKBackEnd::theInstance().ReverseLookup(candidate);
+
+    if(undo_.empty()) {
+        return UndoFailed;
+    }
+
+    // 表示不可能な文字が含まれるか？
+    if(std::find_if(undo_.begin(), undo_.end(),
+                    std::not1(std::ptr_fun(isprint))) != undo_.end()) {
+        return UndoKanaEntry;
+    }
+
+    return UndoAsciiEntry;
+}
+
 void SKKInputEngine::Output() {
     // 内部バッファが更新されている時だけ出力する
     if(IsModified()) {
@@ -380,11 +406,11 @@ const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
     // 入力モードがカタカナ/半角カナなら、見出し語をひらかなに正規化する
     switch(inputMode()) {
     case KatakanaInputMode:
-	jconv::katakana_to_hirakana(query, query);
-	break;
+        jconv::katakana_to_hirakana(query, query);
+        break;
 
     case Jisx0201KanaInputMode:
-	jconv::jisx0201_kana_to_hirakana(query, query);
+        jconv::jisx0201_kana_to_hirakana(query, query);
         break;
     }
 

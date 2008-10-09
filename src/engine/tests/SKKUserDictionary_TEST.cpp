@@ -39,4 +39,6 @@ int main() {
 
     assert(dict.FindOkuriAri("おくりあr") == "/送り有/");
     assert(dict.FindOkuriNasi("かんじ") == "/漢字/");
+
+    assert(dict.FindEntry("漢字") == "かんじ");
 }

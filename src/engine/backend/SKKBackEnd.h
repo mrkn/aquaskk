@@ -60,6 +60,9 @@ public:
     // 検索
     bool Find(const SKKEntry& entry, SKKCandidateSuite& result);
 
+    // 逆引き
+    std::string ReverseLookup(const std::string& candidate);
+
     // 登録
     void Register(const SKKEntry& entry, const SKKCandidate& candidate);
 

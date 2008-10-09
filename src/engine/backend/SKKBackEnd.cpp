@@ -126,6 +126,18 @@ bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
     }
 }
 
+std::string SKKBackEnd::ReverseLookup(const std::string& candidate) {
+    for(unsigned i = 0; i < dicts_.size(); ++ i) {
+        std::string entry(dicts_[i]->FindEntry(candidate));
+
+        if(!entry.empty()) {
+            return entry;
+        }
+    }
+
+    return "";
+}
+
 void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) {
     if(entry.EntryString().empty() ||
        (entry.IsOkuriAri() && (entry.OkuriString().empty() || candidate.IsEmpty()))) {

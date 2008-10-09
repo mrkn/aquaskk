@@ -47,6 +47,22 @@ namespace jconv {
 	std::for_each(from.begin(), from.end(), eucj_to_utf8(to));
     }
 
+    std::string utf8_from_eucj(const std::string& eucj) {
+        std::string utf8;
+
+        convert_eucj_to_utf8(eucj, utf8);
+
+        return utf8;
+    }
+
+    std::string eucj_from_utf8(const std::string& utf8) {
+        std::string eucj;
+
+        convert_utf8_to_eucj(utf8, eucj);
+
+        return eucj;
+    }
+
     struct kana {
 	const char* hirakana;
 	const char* katakana;
