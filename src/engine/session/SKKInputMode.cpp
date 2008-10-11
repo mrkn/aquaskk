@@ -21,10 +21,11 @@
 */
 
 #include "SKKInputMode.h"
-#include "SKKInputModeWindow.h"
+#include "SKKInputModeListener.h"
 #include <algorithm>
+#include <functional>
 
-SKKInputModeSelector::SKKInputModeSelector(SKKInputModeWindow* window) : window_(window) {
+SKKInputModeSelector::SKKInputModeSelector() {
     Select(HirakanaInputMode);
 }
 
@@ -32,12 +33,23 @@ void SKKInputModeSelector::Select(SKKInputMode mode) {
     mode_ = mode;
 }
 
+void SKKInputModeSelector::AddListener(SKKInputModeListener* listener) {
+    listeners_.push_back(listener);
+}
+
 void SKKInputModeSelector::Notify() {
-    window_->SelectInputMode(mode_);
+    std::for_each(listeners_.begin(), listeners_.end(),
+                  std::bind2nd(std::mem_fun(&SKKInputModeListener::SelectInputMode), mode_));
 }
 
 void SKKInputModeSelector::Activate() {
-    window_->Show();
+    std::for_each(listeners_.begin(), listeners_.end(),
+                  std::mem_fun(&SKKInputModeListener::Activate));
+}
+
+void SKKInputModeSelector::Deactivate() {
+    std::for_each(listeners_.begin(), listeners_.end(),
+                  std::mem_fun(&SKKInputModeListener::Deactivate));
 }
 
 SKKInputModeSelector::operator SKKInputMode() const {

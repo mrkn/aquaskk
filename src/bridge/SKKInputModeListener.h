@@ -20,25 +20,18 @@
 
 */
 
-#ifndef SKKInputSessionParameter_h
-#define SKKInputSessionParameter_h
+#ifndef SKKInputModeListener_h
+#define SKKInputModeListener_h
 
-class SKKFrontEnd;
-class SKKStateConfiguration;
-class SKKClipboard;
-class SKKCandidateWindow;
-class SKKInputEngineOption;
+#include "SKKInputMode.h"
 
-class SKKInputSessionParameter {
+class SKKInputModeListener {
 public:
-    virtual ~SKKInputSessionParameter() {}
+    virtual ~SKKInputModeListener() {}
 
-    virtual SKKFrontEnd* FrontEnd() = 0;
-    virtual SKKStateConfiguration* StateConfiguration() = 0;
-    virtual SKKClipboard* Clipboard() = 0;
-    virtual SKKCandidateWindow* CandidateWindow() = 0;
-    virtual SKKInputEngineOption* InputEngineOption() = 0;
+    virtual void SelectInputMode(SKKInputMode mode) = 0;
+    virtual void Activate() = 0;
+    virtual void Deactivate() = 0;
 };
 
 #endif
-

@@ -22,17 +22,20 @@
 
 #include "SKKRecursiveEditor.h"
 #include "SKKInputSessionParameter.h"
+#include "SKKCandidateWindow.h"
 #include "SKKBackEnd.h"
 
 SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                                        SKKInputSessionParameter* param,
+                                       SKKInputModeSelector* inputModeSelector,
                                        SKKBaseEditor* bottom)
     : bottom_(bottom)
     , param_(param)
+    , inputModeSelector_(*inputModeSelector)
     , editor_(param_->InputEngineOption(),
               registrationObserver,
               param_->FrontEnd(),
-              param_->InputModeWindow(),
+              &inputModeSelector_,
               param_->Clipboard(),
               bottom_.get())
     , state_(SKKState(param_->CandidateWindow(),
@@ -72,6 +75,16 @@ void SKKRecursiveEditor::Commit(const std::string& word) {
     } else {
         Dispatch(SKKEvent(SKK_CANCEL, 0));
     }
+}
+
+void SKKRecursiveEditor::Activate() {
+    inputModeSelector_.Activate();
+    param_->CandidateWindow()->Activate();
+}
+
+void SKKRecursiveEditor::Deactivate() {
+    inputModeSelector_.Deactivate();
+    param_->CandidateWindow()->Deactivate();
 }
 
 const SKKEntry SKKRecursiveEditor::Entry() const {

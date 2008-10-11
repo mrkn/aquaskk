@@ -23,8 +23,6 @@
 #include "SKKInputSession.h"
 #include "SKKInputSessionParameter.h"
 #include "SKKRecursiveEditor.h"
-#include "SKKInputModeWindow.h"
-#include "SKKCandidateWindow.h"
 #include "SKKPrimaryEditor.h"
 #include "SKKRegisterEditor.h"
 
@@ -43,7 +41,9 @@ namespace {
     };
 }
 
-SKKInputSession::SKKInputSession(SKKInputSessionParameter* param) : param_(param) {
+SKKInputSession::SKKInputSession(SKKInputSessionParameter* param, SKKInputModeSelector* master)
+    : param_(param)
+    , master_(master) {
     pushEditor();
 
     event_ = SKKRegistrationObserver::None;
@@ -81,13 +81,11 @@ void SKKInputSession::Clear() {
 }
 
 void SKKInputSession::Activate() {
-    param_->CandidateWindow()->Activate();
-    param_->InputModeWindow()->Activate();
+    top()->Activate();
 }
 
 void SKKInputSession::Deactivate() {
-    param_->CandidateWindow()->Deactivate();
-    param_->InputModeWindow()->Deactivate();
+    top()->Deactivate();
 }
 
 SKKRecursiveEditor* SKKInputSession::top() {
@@ -103,7 +101,7 @@ void SKKInputSession::pushEditor() {
         editor = new SKKRegisterEditor(top()->Entry());
     }
 
-    stack_.push_back(new SKKRecursiveEditor(this, param_, editor));
+    stack_.push_back(new SKKRecursiveEditor(this, param_, master_.get(), editor));
 }
 
 void SKKInputSession::popEditor() {

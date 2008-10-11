@@ -32,6 +32,7 @@ class SKKEvent;
 class SKKInputSession : public SKKRegistrationObserver {
     std::vector<SKKRecursiveEditor*> stack_;
     SKKInputSessionParameter* param_;
+    std::auto_ptr<SKKInputModeSelector> master_;
     SKKRegistrationObserver::Event event_;
     bool preventReentrantCall_;
 
@@ -48,11 +49,12 @@ class SKKInputSession : public SKKRegistrationObserver {
     virtual void SKKRegistrationUpdate(SKKRegistrationObserver::Event event);
 
 public:
-    SKKInputSession(SKKInputSessionParameter* param);
+    SKKInputSession(SKKInputSessionParameter* param, SKKInputModeSelector* master);
     ~SKKInputSession();
 
     bool HandleEvent(const SKKEvent& event);
     void Clear();
+
     void Activate();
     void Deactivate();
 };

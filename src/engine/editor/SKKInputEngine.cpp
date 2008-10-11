@@ -33,14 +33,14 @@
 SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
                                SKKRegistrationObserver* registrationObserver,
                                SKKFrontEnd* frontend,
-                               SKKInputModeWindow* inputModeWindow,
+                               SKKInputModeSelector* inputModeSelector,
                                SKKClipboard* clipboard,
                                SKKBaseEditor* bottom)
     : frontend_(frontend),
       bottom_(bottom),
       option_(option),
       registrationObserver_(registrationObserver),
-      inputModeSelector_(inputModeWindow),
+      inputModeSelector_(inputModeSelector),
       clipboard_(clipboard),
       modified_(false),
       inputQueue_(this) {
@@ -48,7 +48,7 @@ SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
 }
 
 void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
-    inputModeSelector_.Select(mode);
+    inputModeSelector_->Select(mode);
     inputQueue_.SelectInputMode(mode);
 
     // 'q' などの入力モード切り替えに使用した文字は処理済みとする
@@ -149,7 +149,7 @@ void SKKInputEngine::HandlePaste() {
 }
 
 void SKKInputEngine::HandlePing() {
-    inputModeSelector_.Activate();
+    inputModeSelector_->Activate();
 }
 
 void SKKInputEngine::Commit() {
@@ -282,7 +282,7 @@ void SKKInputEngine::Output() {
     // 全てのエディターを Flush する
     std::for_each(active_->begin(), active_->end(), std::mem_fun(&SKKBaseEditor::Flush));
 
-    inputModeSelector_.Notify();
+    inputModeSelector_->Notify();
 
     modified_ = false;
 }
@@ -330,7 +330,7 @@ SKKBaseEditor* SKKInputEngine::top() const {
 }
 
 SKKInputMode SKKInputEngine::inputMode() const {
-    return inputModeSelector_;
+    return *inputModeSelector_;
 }
 
 void SKKInputEngine::terminate() {

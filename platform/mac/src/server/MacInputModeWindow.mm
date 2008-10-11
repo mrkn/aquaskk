@@ -91,10 +91,6 @@ void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
     }
 }
 
-void MacInputModeWindow::Show() {
-    Activate();
-}
-
 void MacInputModeWindow::Activate() {
     active_ = true;
 

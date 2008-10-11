@@ -56,7 +56,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     SKKBaseEditor* bottom_;
     SKKInputEngineOption* option_;
     SKKRegistrationObserver* registrationObserver_;
-    SKKInputModeSelector inputModeSelector_;
+    SKKInputModeSelector* inputModeSelector_;
     SKKClipboard* clipboard_;
     bool modified_;
     EditorStack mainStack_;
@@ -104,7 +104,7 @@ public:
     SKKInputEngine(SKKInputEngineOption* option,
                    SKKRegistrationObserver* registrationObserver,
                    SKKFrontEnd* frontend,
-                   SKKInputModeWindow* inputModeWindow,
+                   SKKInputModeSelector* inputModeSelector,
                    SKKClipboard* clipboard,
                    SKKBaseEditor* bottom);
 

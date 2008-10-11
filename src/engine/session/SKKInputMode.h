@@ -23,28 +23,33 @@
 #ifndef SKKInputMode_h
 #define SKKInputMode_h
 
-#include <list>
+#include <vector>
 
 enum SKKInputMode {
     HirakanaInputMode,
     KatakanaInputMode,
     Jisx0201KanaInputMode,
     AsciiInputMode,
-    Jisx0208LatinInputMode
+    Jisx0208LatinInputMode,
+    InvalidInputMode
 };
 
-class SKKInputModeWindow;
+class SKKInputModeListener;
 
 class SKKInputModeSelector {
-    SKKInputModeWindow* window_;
+    std::vector<SKKInputModeListener*> listeners_;
     SKKInputMode mode_;
 
 public:
-    SKKInputModeSelector(SKKInputModeWindow* window);
+    SKKInputModeSelector();
+
+    void AddListener(SKKInputModeListener* listener);
 
     void Select(SKKInputMode mode);
     void Notify();
+
     void Activate();
+    void Deactivate();
 
     operator SKKInputMode() const;
 };

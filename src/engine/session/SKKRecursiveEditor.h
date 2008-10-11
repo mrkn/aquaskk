@@ -31,6 +31,7 @@ class SKKInputSessionParameter;
 class SKKRecursiveEditor {
     std::auto_ptr<SKKBaseEditor> bottom_;
     SKKInputSessionParameter* param_;
+    SKKInputModeSelector inputModeSelector_;
     SKKInputEngine editor_;
     SKKStateMachine state_;
 
@@ -41,11 +42,15 @@ class SKKRecursiveEditor {
 public:
     SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                        SKKInputSessionParameter* param,
+                       SKKInputModeSelector* selector,
                        SKKBaseEditor* bottom);
 
     void Dispatch(const SKKEvent& event);
     bool Output();
     void Commit(const std::string& word);
+
+    void Activate();
+    void Deactivate();
 
     const SKKEntry Entry() const;
     const std::string Word() const;

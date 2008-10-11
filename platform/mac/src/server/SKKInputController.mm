@@ -25,6 +25,8 @@
 #include "SKKPreProcessor.h"
 #include "SKKConstVars.h"
 #include "MacInputSessionParameter.h"
+#include "MacInputModeMenu.h"
+#include "MacInputModeWindow.h"
 #include "InputModeWindowController.h"
 #include "InputModeCursor.h"
 #include "SKKFrontEnd.h"
@@ -33,7 +35,6 @@
 @interface SKKInputController (Local)
 
 - (void)initializeKeyboardLayout;
-- (void)setInputModeIfNeeded;
 - (const char*)selectedString;
 - (void)updateModeCursor:(id)sender;
 - (BOOL)privateMode;
@@ -47,16 +48,22 @@
 - (id)initWithServer:(id)server delegate:(id)delegate client:(id)client {
     self = [super initWithServer:server delegate:delegate client:client];
     if(self) {
-        // 直前のセッションの入力モードを保存しておく
-        initialInputMode_ = [self currentInputMode];
-        initialized_ = NO;
-
         client_ = client;
         defaults_ = [NSUserDefaults standardUserDefaults];
         proxy_ = [[SKKServerProxy alloc] init];
+        menu_ = [[SKKInputMenu alloc] initWithClient:client];
         param_ = new MacInputSessionParameter(client_);
-	session_ = new SKKInputSession(param_);
         frontend_ = param_->FrontEnd();
+
+        SKKInputModeSelector* master = new SKKInputModeSelector();
+
+        modeMenu_ = new MacInputModeMenu(menu_);
+        modeWindow_ = new MacInputModeWindow(frontend_);
+
+        master->AddListener(modeMenu_);
+        master->AddListener(modeWindow_);
+
+        session_ = new SKKInputSession(param_, master);
     }
 
     return self;
@@ -65,7 +72,10 @@
 - (void)dealloc {
     delete session_;
     delete param_;
+    delete modeWindow_;
+    delete modeMenu_;
 
+    [menu_ release];
     [proxy_ release];
     [super dealloc];
 }
@@ -84,18 +94,15 @@
 }
 
 - (void)commitComposition:(id)sender {
-#ifdef SKK_DEBUG
-    NSLog(@"commitComposition from %@", sender);
-#endif
-
     session_->Clear();
     frontend_->Clear();
 }
 
 // IMKStateSetting
 - (void)activateServer:(id)sender {
+    activated_ = YES;
+
     [self initializeKeyboardLayout];
-    [self setInputModeIfNeeded];
 
     session_->Activate();
 }
@@ -104,6 +111,27 @@
     session_->Deactivate();
 
     [[InputModeCursor sharedCursor] hide];
+}
+
+- (void)setValue:(id)value forTag:(long)tag client:(id)sender {
+    // 入力モードを統一する場合は、Leopard デフォルトの挙動に従い、入力
+    // メニューのモードで内部の入力モードを更新する
+    if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
+        SKKEvent param;
+
+        // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
+        param.id = [menu_ eventId:value];
+        session_->HandleEvent(param);
+
+        return;
+    }
+
+    // 個別の入力モードを保持するなら、アクティブ化直後だけ、入力メニュー
+    // を内部の入力モードで更新する
+    if(activated_) {
+        [menu_ updateMenu:[self currentInputMode]];
+        activated_ = NO;
+    }
 }
 
 // IMKInputController
@@ -202,45 +230,6 @@
 - (void)initializeKeyboardLayout {
     NSString* keyboardLayout = [defaults_ stringForKey:SKKUserDefaultKeys::keyboard_layout];
     [client_ overrideKeyboardWithKeyboardNamed:keyboardLayout];
-}
-
-- (void)setInputModeIfNeeded {
-    if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
-        SKKEvent event;
-        SKKInputMode currentInputMode;
-
-        // 起動時は直前のセッションの入力モードを復元する
-        if(!initialized_) {
-            currentInputMode = initialInputMode_;
-            initialized_ = YES;
-        } else {
-            currentInputMode = [self currentInputMode];
-        }
-
-        switch(currentInputMode) {
-        case AsciiInputMode:
-            event.id = SKK_ASCII_MODE;
-            break;
-
-        case HirakanaInputMode:
-            event.id = SKK_HIRAKANA_MODE;
-            break;
-
-        case KatakanaInputMode:
-            event.id = SKK_KATAKANA_MODE;
-            break;
-
-        case Jisx0201KanaInputMode:
-            event.id = SKK_JISX0201KANA_MODE;
-            break;
-
-        case Jisx0208LatinInputMode:
-            event.id = SKK_JISX0208LATIN_MODE;
-            break;
-        }
-
-        session_->HandleEvent(event);
-    }
 }
 
 - (const char*)selectedString {

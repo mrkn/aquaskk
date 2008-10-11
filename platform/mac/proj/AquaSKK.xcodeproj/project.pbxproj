@@ -11,7 +11,13 @@
 		D309967B0E4C83B800B2F24E /* SKKInputEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D30996790E4C83B800B2F24E /* SKKInputEngine.cpp */; };
 		D31381550DD1D89C0002FF9C /* CandidateWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = D31381540DD1D89C0002FF9C /* CandidateWindow.xib */; };
 		D31381570DD1D8BE0002FF9C /* InputModeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = D31381560DD1D8BE0002FF9C /* InputModeWindow.xib */; };
+		D31C99D00E9E4A3D00CBE4D1 /* Mini-Ascii.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CB0E9E4A3D00CBE4D1 /* Mini-Ascii.tiff */; };
+		D31C99D10E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CC0E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff */; };
+		D31C99D20E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CD0E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff */; };
+		D31C99D30E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CE0E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff */; };
+		D31C99D40E9E4A3D00CBE4D1 /* Mini-Katakana.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CF0E9E4A3D00CBE4D1 /* Mini-Katakana.tiff */; };
 		D322B8D10DDC8174002C33F9 /* AquaSKK.xib in Resources */ = {isa = PBXBuildFile; fileRef = D322B8D00DDC8174002C33F9 /* AquaSKK.xib */; };
+		D32F15C70EA0817700CADBD7 /* MacInputModeMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = D32F15C60EA0817700CADBD7 /* MacInputModeMenu.mm */; };
 		D330565C0E4C87580019D8B5 /* MacInputEngineOption.mm in Sources */ = {isa = PBXBuildFile; fileRef = D330565B0E4C87580019D8B5 /* MacInputEngineOption.mm */; };
 		D353BCFB0E175501004C68A6 /* SKKBackEnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBE50E175500004C68A6 /* SKKBackEnd.cpp */; };
 		D353BCFC0E175501004C68A6 /* SKKDictionaryCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBE70E175500004C68A6 /* SKKDictionaryCache.cpp */; };
@@ -85,11 +91,13 @@
 		D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */; };
 		D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */; };
 		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
+		D3F467B90E9E5FAC000A8C6A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC339A0DD1B550006A3F5A /* Carbon.framework */; };
 		D3FC32430DD1B297006A3F5A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3FC32420DD1B297006A3F5A /* Preferences.xib */; };
 		D3FC33930DD1B52D006A3F5A /* InputMethodKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC33920DD1B52D006A3F5A /* InputMethodKit.framework */; };
 		D3FC33970DD1B53A006A3F5A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC33960DD1B53A006A3F5A /* QuartzCore.framework */; };
 		D3FC339B0DD1B550006A3F5A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC339A0DD1B550006A3F5A /* Carbon.framework */; };
 		D3FC33B30DD1D454006A3F5A /* AquaSKKPreferences.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = D3FC32300DD1B102006A3F5A /* AquaSKKPreferences.app */; };
+		D3FE45FE0E9FA98E009B64E7 /* SKKInputMenu.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3FE45FD0E9FA98E009B64E7 /* SKKInputMenu.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -116,20 +124,27 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D302E2F70EA068EF00E3321E /* SKKInputModeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputModeListener.h; sourceTree = "<group>"; };
 		D30996670E4C80EA00B2F24E /* SKKRecursiveEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKRecursiveEditor.cpp; sourceTree = "<group>"; };
 		D30996680E4C80EA00B2F24E /* SKKRecursiveEditor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKRecursiveEditor.h; sourceTree = "<group>"; };
 		D30996790E4C83B800B2F24E /* SKKInputEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputEngine.cpp; sourceTree = "<group>"; };
 		D309967A0E4C83B800B2F24E /* SKKInputEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputEngine.h; sourceTree = "<group>"; };
 		D31381540DD1D89C0002FF9C /* CandidateWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CandidateWindow.xib; sourceTree = "<group>"; };
 		D31381560DD1D8BE0002FF9C /* InputModeWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputModeWindow.xib; sourceTree = "<group>"; };
+		D31C99CB0E9E4A3D00CBE4D1 /* Mini-Ascii.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Ascii.tiff"; sourceTree = "<group>"; };
+		D31C99CC0E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Hirakana.tiff"; sourceTree = "<group>"; };
+		D31C99CD0E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Jisx0201Kana.tiff"; sourceTree = "<group>"; };
+		D31C99CE0E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Jisx0208Latin.tiff"; sourceTree = "<group>"; };
+		D31C99CF0E9E4A3D00CBE4D1 /* Mini-Katakana.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Katakana.tiff"; sourceTree = "<group>"; };
 		D322B8D00DDC8174002C33F9 /* AquaSKK.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AquaSKK.xib; sourceTree = "<group>"; };
+		D32F15C50EA0817700CADBD7 /* MacInputModeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacInputModeMenu.h; sourceTree = "<group>"; };
+		D32F15C60EA0817700CADBD7 /* MacInputModeMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacInputModeMenu.mm; sourceTree = "<group>"; };
 		D33056590E4C87480019D8B5 /* SKKInputEngineOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputEngineOption.h; sourceTree = "<group>"; };
 		D330565A0E4C87580019D8B5 /* MacInputEngineOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacInputEngineOption.h; sourceTree = "<group>"; };
 		D330565B0E4C87580019D8B5 /* MacInputEngineOption.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacInputEngineOption.mm; sourceTree = "<group>"; };
 		D353BBDD0E1754E3004C68A6 /* SKKCandidateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKCandidateWindow.h; sourceTree = "<group>"; };
 		D353BBDE0E1754E3004C68A6 /* SKKClipboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKClipboard.h; sourceTree = "<group>"; };
 		D353BBDF0E1754E3004C68A6 /* SKKFrontEnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKFrontEnd.h; sourceTree = "<group>"; };
-		D353BBE00E1754E3004C68A6 /* SKKInputModeWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputModeWindow.h; sourceTree = "<group>"; };
 		D353BBE10E1754E3004C68A6 /* SKKInputSessionParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputSessionParameter.h; sourceTree = "<group>"; };
 		D353BBE20E1754E3004C68A6 /* SKKStateConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKStateConfiguration.h; sourceTree = "<group>"; };
 		D353BBE50E175500004C68A6 /* SKKBackEnd.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKBackEnd.cpp; sourceTree = "<group>"; };
@@ -290,6 +305,8 @@
 		D3FC33920DD1B52D006A3F5A /* InputMethodKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = InputMethodKit.framework; path = SDKs/MacOSX10.5.sdk/System/Library/Frameworks/InputMethodKit.framework; sourceTree = DEVELOPER_DIR; };
 		D3FC33960DD1B53A006A3F5A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = SDKs/MacOSX10.5.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		D3FC339A0DD1B550006A3F5A /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = SDKs/MacOSX10.5.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
+		D3FE45FC0E9FA98E009B64E7 /* SKKInputMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputMenu.h; sourceTree = "<group>"; };
+		D3FE45FD0E9FA98E009B64E7 /* SKKInputMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SKKInputMenu.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,6 +316,7 @@
 			files = (
 				D3FC33930DD1B52D006A3F5A /* InputMethodKit.framework in Frameworks */,
 				D3FC33970DD1B53A006A3F5A /* QuartzCore.framework in Frameworks */,
+				D3F467B90E9E5FAC000A8C6A /* Carbon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +348,7 @@
 				D353BBDF0E1754E3004C68A6 /* SKKFrontEnd.h */,
 				D353BBE20E1754E3004C68A6 /* SKKStateConfiguration.h */,
 				D353BBDE0E1754E3004C68A6 /* SKKClipboard.h */,
-				D353BBE00E1754E3004C68A6 /* SKKInputModeWindow.h */,
+				D302E2F70EA068EF00E3321E /* SKKInputModeListener.h */,
 				D353BBDD0E1754E3004C68A6 /* SKKCandidateWindow.h */,
 				D33056590E4C87480019D8B5 /* SKKInputEngineOption.h */,
 			);
@@ -547,6 +565,8 @@
 				D353BDD20E175513004C68A6 /* MacClipboard.mm */,
 				D353BDD30E175513004C68A6 /* MacFrontEnd.h */,
 				D353BDD40E175513004C68A6 /* MacFrontEnd.mm */,
+				D32F15C50EA0817700CADBD7 /* MacInputModeMenu.h */,
+				D32F15C60EA0817700CADBD7 /* MacInputModeMenu.mm */,
 				D353BDD50E175513004C68A6 /* MacInputModeWindow.h */,
 				D353BDD60E175513004C68A6 /* MacInputModeWindow.mm */,
 				D353BDD70E175513004C68A6 /* MacInputSessionParameter.h */,
@@ -560,6 +580,8 @@
 				D353BDDD0E175513004C68A6 /* SKKConstVars.mm */,
 				D353BDDE0E175513004C68A6 /* SKKInputController.h */,
 				D353BDDF0E175513004C68A6 /* SKKInputController.mm */,
+				D3FE45FC0E9FA98E009B64E7 /* SKKInputMenu.h */,
+				D3FE45FD0E9FA98E009B64E7 /* SKKInputMenu.mm */,
 				D353BDE00E175513004C68A6 /* SKKPreProcessor.h */,
 				D353BDE10E175513004C68A6 /* SKKPreProcessor.mm */,
 				D353BDE20E175513004C68A6 /* SKKServer.h */,
@@ -618,6 +640,11 @@
 		D353BE140E175552004C68A6 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				D31C99CB0E9E4A3D00CBE4D1 /* Mini-Ascii.tiff */,
+				D31C99CC0E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff */,
+				D31C99CD0E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff */,
+				D31C99CE0E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff */,
+				D31C99CF0E9E4A3D00CBE4D1 /* Mini-Katakana.tiff */,
 				D353BE170E175552004C68A6 /* AquaSKK-InputMethod.tif */,
 				D353BE150E175552004C68A6 /* AquaSKK-Ascii.png */,
 				D353BE160E175552004C68A6 /* AquaSKK-Hirakana.png */,
@@ -803,6 +830,11 @@
 				D353BE210E175552004C68A6 /* AquaSKK-Katakana.png in Resources */,
 				D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */,
 				D371DD9F0E8284A100C10EE5 /* InputModeCursor.xib in Resources */,
+				D31C99D00E9E4A3D00CBE4D1 /* Mini-Ascii.tiff in Resources */,
+				D31C99D10E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff in Resources */,
+				D31C99D20E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff in Resources */,
+				D31C99D30E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff in Resources */,
+				D31C99D40E9E4A3D00CBE4D1 /* Mini-Katakana.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -878,6 +910,8 @@
 				D330565C0E4C87580019D8B5 /* MacInputEngineOption.mm in Sources */,
 				D371DDA80E82866E00C10EE5 /* InputModeCursor.mm in Sources */,
 				D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */,
+				D3FE45FE0E9FA98E009B64E7 /* SKKInputMenu.mm in Sources */,
+				D32F15C70EA0817700CADBD7 /* MacInputModeMenu.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

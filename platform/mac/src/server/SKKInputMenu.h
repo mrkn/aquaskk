@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,24 +20,21 @@
 
 */
 
-#ifndef SKKInputModeWindow_h
-#define SKKInputModeWindow_h
+#ifndef SKKInputMenu_h
+#define SKKInputMenu_h
 
 #include "SKKInputMode.h"
+#include <InputMethodKit/InputMethodKit.h>
 
-class SKKInputModeWindow {
-public:
-    virtual ~SKKInputModeWindow() {}
+@interface SKKInputMenu : NSObject {
+    id client_;
+}
 
-    // 入力モード変更
-    virtual void SelectInputMode(SKKInputMode mode) = 0;
+- (id)initWithClient:(id)client;
+- (void)updateMenu:(SKKInputMode)mode;
+- (int)eventId:(NSString*)identifier;
+- (NSString*)modeIdentifier:(SKKInputMode)mode;
 
-    // 表示
-    virtual void Show() = 0;
-
-    // セッション制御
-    virtual void Activate() = 0;
-    virtual void Deactivate() = 0;
-};
+@end    
 
 #endif

@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,25 +20,15 @@
 
 */
 
-#ifndef SKKInputSessionParameter_h
-#define SKKInputSessionParameter_h
+#include "MacInputModeMenu.h"
+#include "SKKInputMenu.h"
 
-class SKKFrontEnd;
-class SKKStateConfiguration;
-class SKKClipboard;
-class SKKCandidateWindow;
-class SKKInputEngineOption;
+MacInputModeMenu::MacInputModeMenu(SKKInputMenu* menu) : menu_(menu) {}
 
-class SKKInputSessionParameter {
-public:
-    virtual ~SKKInputSessionParameter() {}
+void MacInputModeMenu::SelectInputMode(SKKInputMode mode) {
+    [menu_ updateMenu:mode];
+}
 
-    virtual SKKFrontEnd* FrontEnd() = 0;
-    virtual SKKStateConfiguration* StateConfiguration() = 0;
-    virtual SKKClipboard* Clipboard() = 0;
-    virtual SKKCandidateWindow* CandidateWindow() = 0;
-    virtual SKKInputEngineOption* InputEngineOption() = 0;
-};
+void MacInputModeMenu::Activate() {}
 
-#endif
-
+void MacInputModeMenu::Deactivate() {}

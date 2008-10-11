@@ -23,13 +23,13 @@
 #ifndef MacInputModeWindow_h
 #define MacInputModeWindow_h
 
-#include "SKKInputModeWindow.h"
+#include "SKKInputModeListener.h"
 
 class SKKFrontEnd;
 
 @class InputModeWindowController;
 
-class MacInputModeWindow : public SKKInputModeWindow {
+class MacInputModeWindow : public SKKInputModeListener {
     bool active_;
     SKKFrontEnd* frontend_;
     SKKInputMode mode_;
@@ -40,7 +40,6 @@ public:
     MacInputModeWindow(SKKFrontEnd* frontend);
 
     virtual void SelectInputMode(SKKInputMode mode);
-    virtual void Show();
     virtual void Activate();
     virtual void Deactivate();
 };

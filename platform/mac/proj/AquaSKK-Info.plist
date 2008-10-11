@@ -45,17 +45,91 @@
 				<key>TISIntendedLanguage</key>
 				<string>ja</string>
 				<key>tsInputModeDefaultStateKey</key>
-				<true/>
+				<false/>
 				<key>tsInputModeIsVisibleKey</key>
 				<true/>
 				<key>tsInputModeJISKeyboardShortcutKey</key>
 				<integer>1</integer>
 				<key>tsInputModeMenuIconFileKey</key>
 				<string>AquaSKK-InputMethod.tif</string>
-				<key>tsInputModeAlternateMenuIconFileKey</key>
-				<string>AquaSKK-InputMethod.tif</string>
 				<key>tsInputModePrimaryInScriptKey</key>
 				<true/>
+				<key>tsInputModeScriptKey</key>
+				<string>smJapanese</string>
+			</dict>
+			<key>com.apple.inputmethod.Japanese.Hiragana</key>
+			<dict>
+				<key>TISInputSourceID</key>
+				<string>jp.sourceforge.inputmethod.aquaskk</string>
+				<key>TISIntendedLanguage</key>
+				<string>ja</string>
+				<key>tsInputModeDefaultStateKey</key>
+				<true/>
+				<key>tsInputModeIsVisibleKey</key>
+				<true/>
+				<key>tsInputModeJISKeyboardShortcutKey</key>
+				<integer>1</integer>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>Mini-Hirakana.tiff</string>
+				<key>tsInputModePrimaryInScriptKey</key>
+				<true/>
+				<key>tsInputModeScriptKey</key>
+				<string>smJapanese</string>
+			</dict>
+			<key>com.apple.inputmethod.Japanese.Katakana</key>
+			<dict>
+				<key>TISInputSourceID</key>
+				<string>jp.sourceforge.inputmethod.aquaskk</string>
+				<key>TISIntendedLanguage</key>
+				<string>ja</string>
+				<key>tsInputModeDefaultStateKey</key>
+				<true/>
+				<key>tsInputModeIsVisibleKey</key>
+				<true/>
+				<key>tsInputModeJISKeyboardShortcutKey</key>
+				<integer>2</integer>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>Mini-Katakana.tiff</string>
+				<key>tsInputModePrimaryInScriptKey</key>
+				<false/>
+				<key>tsInputModeScriptKey</key>
+				<string>smJapanese</string>
+			</dict>
+			<key>com.apple.inputmethod.Japanese.HalfWidthKana</key>
+			<dict>
+				<key>TISInputSourceID</key>
+				<string>jp.sourceforge.inputmethod.aquaskk</string>
+				<key>TISIntendedLanguage</key>
+				<string>ja</string>
+				<key>tsInputModeDefaultStateKey</key>
+				<true/>
+				<key>tsInputModeIsVisibleKey</key>
+				<true/>
+				<key>tsInputModeJISKeyboardShortcutKey</key>
+				<integer>0</integer>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>Mini-Jisx0201Kana.tiff</string>
+				<key>tsInputModePrimaryInScriptKey</key>
+				<false/>
+				<key>tsInputModeScriptKey</key>
+				<string>smJapanese</string>
+			</dict>
+			<key>com.apple.inputmethod.Japanese.FullWidthRoman</key>
+			<dict>
+				<key>TISInputSourceID</key>
+				<string>jp.sourceforge.inputmethod.aquaskk</string>
+				<key>TISIntendedLanguage</key>
+				<string>ja</string>
+				<key>tsInputModeDefaultStateKey</key>
+				<true/>
+				<key>tsInputModeIsVisibleKey</key>
+				<true/>
+				<key>tsInputModeJISKeyboardShortcutKey</key>
+				<integer>0</integer>
+				<key>tsInputModeMenuIconFileKey</key>
+				<string>Mini-Jisx0208Latin.tiff</string>
+				<key>tsInputModePrimaryInScriptKey</key>
+				<false/>
 				<key>tsInputModeScriptKey</key>
 				<string>smJapanese</string>
 			</dict>
@@ -72,9 +146,7 @@
 				<key>tsInputModeJISKeyboardShortcutKey</key>
 				<integer>3</integer>
 				<key>tsInputModeMenuIconFileKey</key>
-				<string>AquaSKK-InputMethod.tif</string>
-				<key>tsInputModeAlternateMenuIconFileKey</key>
-				<string>AquaSKK-InputMethod.tif</string>
+				<string>Mini-Ascii.tiff</string>
 				<key>tsInputModePrimaryInScriptKey</key>
 				<true/>
 				<key>tsInputModeScriptKey</key>
@@ -84,6 +156,10 @@
 		<key>tsVisibleInputModeOrderedArrayKey</key>
 		<array>
 			<string>com.apple.inputmethod.Japanese</string>
+			<string>com.apple.inputmethod.Japanese.Hiragana</string>
+			<string>com.apple.inputmethod.Japanese.Katakana</string>
+			<string>com.apple.inputmethod.Japanese.HalfWidthKana</string>
+			<string>com.apple.inputmethod.Japanese.FullWidthRoman</string>
 			<string>com.apple.inputmethod.Roman</string>
 		</array>
 	</dict>
