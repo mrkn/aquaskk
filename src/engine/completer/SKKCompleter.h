@@ -53,6 +53,9 @@ public:
     // 見出し語の補完
     bool Execute();
 
+    // 補完候補の削除
+    bool Remove();
+
     // 移動
     void Next();
     void Prev();

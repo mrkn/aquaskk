@@ -33,6 +33,18 @@ bool SKKCompleter::Execute() {
     return !completions_.empty();
 }
 
+bool SKKCompleter::Remove() {
+    if(completions_.empty()) return false;
+
+    SKKBackEnd& backend = SKKBackEnd::theInstance();
+
+    backend.Remove(completions_[pos_], SKKCandidate());
+
+    SKKCandidateSuite tmp;
+
+    return !backend.Find(completions_[pos_], tmp);
+}
+
 void SKKCompleter::Next() {
     if(completions_.empty()) return;
 

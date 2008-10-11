@@ -41,4 +41,13 @@ int main() {
     assert(dict.FindOkuriNasi("かんじ") == "/漢字/");
 
     assert(dict.FindEntry("漢字") == "かんじ");
+
+    dict.RemoveOkuriNasi("ほかん1", "");
+    assert(dict.FindOkuriNasi("ほかん1") == "/補完1/");
+
+    dict.RegisterOkuriNasi("とぐるほかん", "");
+    assert(dict.FindOkuriNasi("とぐるほかん") == "//");
+
+    dict.RemoveOkuriNasi("とぐるほかん", "");
+    assert(dict.FindOkuriNasi("とぐるほかん") == "");
 }

@@ -291,6 +291,14 @@ State SKKState::EntryCompletion(const Event& event) {
             return &SKKState::Edit;
         }
 
+        if(param.IsRemoveTrigger()) {
+            if(completer_.Remove()) {
+                return State::Transition(&SKKState::KanaInput);
+            } else {
+                return 0;
+            }
+        }
+
     default:
         // システムイベント以外は履歴に転送する
         if(!event.IsSystem()) {

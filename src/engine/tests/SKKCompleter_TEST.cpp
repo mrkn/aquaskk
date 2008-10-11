@@ -40,4 +40,12 @@ int main() {
     completer.Next();
 
     assert(buddy.Entry() == "ほかん3");
+
+    backend.Register(SKKEntry("とぐるほかん"), SKKCandidate());
+
+    buddy.SetQuery("とぐる");
+    assert(completer.Execute() && buddy.Entry() == "とぐるほかん");
+
+    backend.Remove(SKKEntry("とぐるほかん"), SKKCandidate());
+    assert(!completer.Execute());
 }

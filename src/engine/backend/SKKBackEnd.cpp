@@ -163,7 +163,7 @@ void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) 
 }
 
 void SKKBackEnd::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
-    if(entry.EntryString().empty() || candidate.IsEmpty()) {
+    if(entry.EntryString().empty()) {
 	std::cerr << "SKKBackEnd: Invalid removal received" << std::endl;
 	return;
     }
