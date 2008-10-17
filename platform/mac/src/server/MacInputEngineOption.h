@@ -32,6 +32,7 @@ public:
     MacInputEngineOption();
 
     virtual bool FixIntermediateConversion();
+    virtual bool EnableDynamicCompletion();
 };
 
 #endif

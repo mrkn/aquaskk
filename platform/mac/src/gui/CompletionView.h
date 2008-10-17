@@ -20,17 +20,17 @@
 
 */
 
-#include "MacInputEngineOption.h"
-#include "SKKConstVars.h"
+#ifndef CompletionView_h
+#define CompletionView_h
 
-MacInputEngineOption::MacInputEngineOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
+@interface CompletionView : NSView {
+    NSDictionary* attributes_;
+    NSString* completion_;
 }
 
-bool MacInputEngineOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
+- (void)setCompletion:(NSString*)completion;
 
-bool MacInputEngineOption::EnableDynamicCompletion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
-}
+@end
+
+#endif
+

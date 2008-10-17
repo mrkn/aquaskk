@@ -32,7 +32,9 @@ class SKKFrontEnd;
 class SKKContextBuffer {
     std::string fixed_;
     std::string composing_;
+    std::string completion_;
     int cursor_;
+    int completion_cursor_;
 
     SKKEntry entry_;
     SKKCandidate candidate_;
@@ -42,6 +44,7 @@ public:
 
     void Fix(const std::string& str);
     void Compose(const std::string& str, int cursor = 0);
+    void Compose(const std::string& str, const std::string& completion, int cursor = 0);
 
     void Output(SKKFrontEnd* frontend);
 

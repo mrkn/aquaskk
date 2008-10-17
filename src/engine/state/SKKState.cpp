@@ -21,6 +21,7 @@
 */
 
 #include "SKKState.h"
+#include "SKKMessenger.h"
 #include "SKKStateConfiguration.h"
 #include "SKKInputEngine.h"
 
@@ -29,19 +30,24 @@ namespace {
     typedef SKKState::State State;
 }
 
-SKKState::SKKState(SKKCandidateWindow* window, SKKStateConfiguration* configuration, SKKInputEngine* editor)
-    : window_(window),
-      configuration_(configuration),
-      editor_(editor),
-      completer_(editor_),
-      selector_(editor_, window_) {}
+SKKState::SKKState(SKKMessenger* messenger, SKKCandidateWindow* window,
+                   SKKStateConfiguration* configuration, SKKInputEngine* editor)
+    : messenger_(messenger)
+    , window_(window)
+    , configuration_(configuration)
+    , editor_(editor)
+    , completer_(editor_)
+    , selector_(editor_, window_)
+{}
 
 SKKState::SKKState(const SKKState& src)
-    : window_(src.window_),
-      configuration_(src.configuration_),
-      editor_(src.editor_),
-      completer_(editor_),
-      selector_(editor_, window_) {}
+    : messenger_(src.messenger_)
+    , window_(src.window_)
+    , configuration_(src.configuration_)
+    , editor_(src.editor_)
+    , completer_(editor_)
+    , selector_(editor_, window_)
+{}
 
 void SKKState::ToString(const Handler handler, const Event& event, std::string& result) {
     static const char* systemEvent[] = { "PROBE", "<<ENTRY>>", "<<INIT>>", "<<EXIT>>" };

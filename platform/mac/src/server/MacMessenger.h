@@ -20,17 +20,20 @@
 
 */
 
-#include "MacInputEngineOption.h"
-#include "SKKConstVars.h"
+#ifndef MacMessenger_h
+#define MacMessenger_h
 
-MacInputEngineOption::MacInputEngineOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
-}
+#include "SKKMessenger.h"
 
-bool MacInputEngineOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
+class SKKFrontEnd;
 
-bool MacInputEngineOption::EnableDynamicCompletion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
-}
+class MacMessenger : public SKKMessenger {
+    SKKFrontEnd* frontend_;
+
+public:
+    MacMessenger(SKKFrontEnd* frontend);
+
+    virtual void SendMessage(const std::string& msg);
+};
+
+#endif

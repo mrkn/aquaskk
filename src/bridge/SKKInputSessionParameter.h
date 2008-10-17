@@ -25,6 +25,7 @@
 
 class SKKFrontEnd;
 class SKKStateConfiguration;
+class SKKMessenger;
 class SKKClipboard;
 class SKKCandidateWindow;
 class SKKInputEngineOption;
@@ -35,6 +36,7 @@ public:
 
     virtual SKKFrontEnd* FrontEnd() = 0;
     virtual SKKStateConfiguration* StateConfiguration() = 0;
+    virtual SKKMessenger* Messenger() = 0;
     virtual SKKClipboard* Clipboard() = 0;
     virtual SKKCandidateWindow* CandidateWindow() = 0;
     virtual SKKInputEngineOption* InputEngineOption() = 0;

@@ -20,17 +20,21 @@
 
 */
 
-#include "MacInputEngineOption.h"
-#include "SKKConstVars.h"
+#ifndef MessengerWindow_h
+#define MessengerWindow_h
 
-MacInputEngineOption::MacInputEngineOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
+@class MessengerView;
+
+@interface MessengerWindow : NSObject {
+    NSWindow* window_;
+    MessengerView* view_;
 }
 
-bool MacInputEngineOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
++ (MessengerWindow*)sharedWindow;
+- (void)showMessage:(NSString*)message at:(NSPoint)topleft level:(int)level;
+- (void)hide;
 
-bool MacInputEngineOption::EnableDynamicCompletion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
-}
+@end
+
+#endif
+

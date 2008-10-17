@@ -237,12 +237,9 @@ bool SKKBackEnd::findOkuriNasi(const SKKEntry& entry, SKKCandidateSuite& result)
     for(unsigned i = 0; i < dicts_.size(); ++ i) {
 	tmp.Parse(dicts_[i]->FindOkuriNasi(key));
 
-        // ユーザー辞書のエントリはデコードする
-        if(dicts_[i] == userdict_.get()) {
-            SKKCandidateContainer& candidates = tmp.Candidates();
-            std::for_each(candidates.begin(), candidates.end(),
-                          std::mem_fun_ref(&SKKCandidate::Decode));
-        }
+        SKKCandidateContainer& candidates = tmp.Candidates();
+        std::for_each(candidates.begin(), candidates.end(),
+                      std::mem_fun_ref(&SKKCandidate::Decode));
 
 	result.Add(tmp);
     }

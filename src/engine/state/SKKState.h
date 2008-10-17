@@ -31,12 +31,14 @@
 
 using namespace statemachinecxx_sourceforge_jp;
 
+class SKKMessenger;
 class SKKCandidateWindow;
 class SKKStateConfiguration;
 class SKKInputEngine;
 
 // 状態コンテナ
 class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
+    SKKMessenger* messenger_;
     SKKCandidateWindow* window_;
     SKKStateConfiguration* configuration_;
     SKKInputEngine* editor_;
@@ -44,7 +46,8 @@ class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
     SKKSelector selector_;
 
 public:
-    SKKState(SKKCandidateWindow* window, SKKStateConfiguration* configuration, SKKInputEngine* editor);
+    SKKState(SKKMessenger* messenger, SKKCandidateWindow* window,
+             SKKStateConfiguration* configuration, SKKInputEngine* editor);
     SKKState(const SKKState& src);
 
     virtual const Handler InitialState() const { return &SKKState::Primary; }

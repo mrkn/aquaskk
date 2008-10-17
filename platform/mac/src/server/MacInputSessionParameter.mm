@@ -23,6 +23,7 @@
 #include "MacInputSessionParameter.h"
 #include "MacStateConfiguration.h"
 #include "MacFrontEnd.h"
+#include "MacMessenger.h"
 #include "MacClipboard.h"
 #include "MacCandidateWindow.h"
 #include "MacInputEngineOption.h"
@@ -30,6 +31,7 @@
 MacInputSessionParameter::MacInputSessionParameter(id client)
     : frontend_(new MacFrontEnd(client))
     , configuration_(new MacStateConfiguration())
+    , messenger_(new MacMessenger(frontend_.get()))
     , clipboard_(new MacClipboard())
     , candidateWindow_(new MacCandidateWindow(frontend_.get()))
     , inputEngineOption_(new MacInputEngineOption())
@@ -41,6 +43,10 @@ SKKFrontEnd* MacInputSessionParameter::FrontEnd() {
 
 SKKStateConfiguration* MacInputSessionParameter::StateConfiguration() {
     return configuration_.get();
+}
+
+SKKMessenger* MacInputSessionParameter::Messenger() {
+    return messenger_.get();
 }
 
 SKKClipboard* MacInputSessionParameter::Clipboard() {

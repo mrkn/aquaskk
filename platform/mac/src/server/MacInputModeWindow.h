@@ -36,6 +36,8 @@ class MacInputModeWindow : public SKKInputModeListener {
 
     InputModeWindowController* controller_;
 
+    bool enabled() const;
+
 public:
     MacInputModeWindow(SKKFrontEnd* frontend);
 

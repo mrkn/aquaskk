@@ -1,4 +1,4 @@
-/* -*- ObjC -*-
+/* -*- C++ -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,17 +20,17 @@
 
 */
 
-#include "MacInputEngineOption.h"
-#include "SKKConstVars.h"
+#ifndef SKKMessenger_h
+#define SKKMessenger_h
 
-MacInputEngineOption::MacInputEngineOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
-}
+#include <string>
 
-bool MacInputEngineOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
+class SKKMessenger {
+public:
+    virtual ~SKKMessenger() {}
 
-bool MacInputEngineOption::EnableDynamicCompletion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
-}
+    // メッセージの送信
+    virtual void SendMessage(const std::string& msg) = 0;
+};
+
+#endif

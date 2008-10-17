@@ -20,17 +20,21 @@
 
 */
 
-#include "MacInputEngineOption.h"
-#include "SKKConstVars.h"
+#ifndef CompletionWindow_h
+#define CompletionWindow_h
 
-MacInputEngineOption::MacInputEngineOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
+@class CompletionView;
+
+@interface CompletionWindow : NSObject {
+    NSWindow* window_;
+    CompletionView* view_;
 }
 
-bool MacInputEngineOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
++ (CompletionWindow*)sharedWindow;
+- (void)showCompletion:(NSString*)completion at:(NSPoint)topleft level:(int)level;
+- (void)hide;
 
-bool MacInputEngineOption::EnableDynamicCompletion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
-}
+@end
+
+#endif
+

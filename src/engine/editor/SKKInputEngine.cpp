@@ -73,6 +73,9 @@ void SKKInputEngine::SetStateComposing() {
         undo_.clear();
     }
 
+    // ダイナミック補完オプション設定
+    composingEditor_.EnableDynamicCompletion(option_->EnableDynamicCompletion());
+
     enableMainEditor();
 
     active_->push_back(&composingEditor_);

@@ -22,9 +22,11 @@
 
 #include "SKKComposingEditor.h"
 #include "SKKContextBuffer.h"
+#include "SKKBackEnd.h"
 #include "jconv.h"
+#include <iostream>
 
-SKKComposingEditor::SKKComposingEditor() {
+SKKComposingEditor::SKKComposingEditor() : enableDynamicCompletion_(false) {
     setModified();
 }
 
@@ -32,6 +34,7 @@ void SKKComposingEditor::Input(const std::string& fixed, const std::string&) {
     setModified();
 
     composing_.Insert(fixed);
+    updateCompletion();
 }
 
 void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
@@ -43,10 +46,12 @@ void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
             modified_ = false;
         }
         composing_.BackSpace();
+        updateCompletion();
         break;
 
     case Delete:
         composing_.Delete();
+        updateCompletion();
         break;
 
     case CursorLeft:
@@ -74,10 +79,16 @@ void SKKComposingEditor::Clear() {
     setModified();
 
     composing_.Clear();
+    completion_.clear();
 }
 
 void SKKComposingEditor::Output(SKKContextBuffer& buffer) const {
-    buffer.Compose("▽" + composing_.String(), composing_.CursorPosition());
+    if(completion_.empty()) {
+        buffer.Compose("▽" + composing_.String(), composing_.CursorPosition());
+    } else {
+        buffer.Compose("▽" + composing_.String(), completion_, composing_.CursorPosition());
+    }
+
     buffer.SetEntry(SKKEntry(composing_.LeftString()));
 }
 
@@ -105,6 +116,26 @@ void SKKComposingEditor::SetEntry(const std::string& entry) {
     composing_.Insert(entry);
 }
 
+void SKKComposingEditor::EnableDynamicCompletion(bool flag) {
+    enableDynamicCompletion_ = flag;
+}
+
+// ------------------------------------------------------------
+
 void SKKComposingEditor::setModified() {
     modified_ = true;
+}
+
+void SKKComposingEditor::updateCompletion() {
+    if(!enableDynamicCompletion_) return;
+
+    std::vector<std::string> result;
+    std::string key = composing_.String();
+
+    // 最初の候補を補完する
+    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result)) {
+        completion_ = result[0];
+    } else {
+        completion_.clear();
+    }
 }

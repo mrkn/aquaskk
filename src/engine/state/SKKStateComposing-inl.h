@@ -293,6 +293,7 @@ State SKKState::EntryCompletion(const Event& event) {
 
         if(param.IsRemoveTrigger()) {
             if(completer_.Remove()) {
+                messenger_->SendMessage("見出し語を削除しました");
                 return State::Transition(&SKKState::KanaInput);
             } else {
                 return 0;

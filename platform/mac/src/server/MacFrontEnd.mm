@@ -24,34 +24,46 @@
 #include "MacFrontEnd.h"
 #include "utf8util.h"
 
+#include "CompletionWindow.h"
+
 MacFrontEnd::MacFrontEnd(id client) : client_(client) {}
 
 void MacFrontEnd::InsertString(const std::string& str) {
     NSString* string = [NSString stringWithUTF8String:str.c_str()];
-    NSRange notfound = NSMakeRange(NSNotFound, NSNotFound);
 
-    [client_ insertText:string replacementRange:notfound];
+    [client_ insertText:string replacementRange:notFound()];
 }
 
 void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
-    NSMutableAttributedString* string = [NSMutableAttributedString alloc];
-    [string initWithString:[NSString stringWithUTF8String:str.c_str()]];
-
-    NSRange cursorPos = NSMakeRange([string length] + cursorOffset, 0);
-    NSRange notfound = NSMakeRange(NSNotFound, NSNotFound);
+    NSMutableAttributedString* marked = createMarkedText(str, cursorOffset);
+    NSRange cursorPos = NSMakeRange([marked length] + cursorOffset, 0);
 
     // *** FIXME ***
     // Carbon アプリで見出し語を入力すると、なぜか文字のベースラインが下にずれる
     // 一旦 "▽" だけ入力すると回避できるが、正解かどうかは不明
     if(utf8::length(str) == 2 && str.find("▽") == 0) {
-        [client_ setMarkedText:@"▽" selectionRange:notfound replacementRange:notfound];
+        [client_ setMarkedText:@"▽" selectionRange:notFound() replacementRange:notFound()];
     }
 
-    [string addAttribute:NSCursorAttributeName value:[NSCursor IBeamCursor] range:cursorPos];
+    [client_ setMarkedText:marked selectionRange:cursorPos replacementRange:notFound()];
 
-    [client_ setMarkedText:string selectionRange:cursorPos replacementRange:notfound];
+    [[CompletionWindow sharedWindow] hide];
 
-    [string release];
+    [marked release];
+}
+
+void MacFrontEnd::ShowCompletion(const std::string& completion, int cursorOffset) {
+    CompletionWindow* window = [CompletionWindow sharedWindow];
+    NSString* compString = [NSString stringWithUTF8String:completion.c_str()];
+    NSRect rect;
+
+    [client_ attributesForCharacterIndex:cursorOffset + 1 lineHeightRectangle:&rect];
+
+    [window showCompletion:compString at:rect.origin level:WindowLevel()];
+}
+
+void MacFrontEnd::HideCompletion() {
+    [[CompletionWindow sharedWindow] hide];
 }
 
 void MacFrontEnd::Clear() {
@@ -77,4 +89,54 @@ std::pair<int, int> MacFrontEnd::WindowPosition() const {
 
 int MacFrontEnd::WindowLevel() const {
     return [client_ windowLevel];
+}
+
+// ------------------------------------------------------------
+
+NSRange MacFrontEnd::notFound() const {
+    return NSMakeRange(NSNotFound, NSNotFound);
+}
+
+NSMutableAttributedString* MacFrontEnd::createMarkedText(const std::string& str, int cursorOffset) {
+    NSString* source = [NSString stringWithUTF8String:str.c_str()];
+    NSMutableAttributedString* marked = [[NSMutableAttributedString alloc] initWithString:source];
+
+    //[marked beginEditing];
+    [marked addAttribute:NSCursorAttributeName
+            value:[NSCursor IBeamCursor] range:NSMakeRange([marked length] + cursorOffset, 0)];
+
+#if 0
+    [marked addAttribute:NSForegroundColorAttributeName
+            value:[NSColor redColor] range:NSMakeRange(0, [marked length])];
+#endif
+
+#if 0
+    [marked addAttribute:NSMarkedClauseSegmentAttributeName
+            value:[NSNumber numberWithInt:1] range:NSMakeRange(0, [marked length])];
+#endif
+
+#if 1
+    [marked addAttribute:NSUnderlineColorAttributeName
+            value:[NSColor blackColor] range:NSMakeRange(0, [marked length])];
+#endif
+
+#if 1
+    [marked addAttribute:NSUnderlineStyleAttributeName
+            value:[NSNumber numberWithInt:NSUnderlineStyleDouble] range:NSMakeRange(0, [marked length])];
+#endif
+
+#if 0
+    [marked addAttribute:NSUnderlineStyleAttributeName
+            value:[NSNumber numberWithInt:NSUnderlinePatternDot]
+            range:NSMakeRange(0, [marked length])];
+#endif
+
+#if 1
+    [marked addAttribute:NSKernAttributeName
+            value:[NSNumber numberWithFloat:1.0] range:NSMakeRange([marked length], 0)];
+#endif
+
+    //[marked endEditing];
+
+    return marked;
 }

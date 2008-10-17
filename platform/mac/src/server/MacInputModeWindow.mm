@@ -22,6 +22,7 @@
 
 #include "MacInputModeWindow.h"
 #include "SKKFrontEnd.h"
+#include "SKKConstVars.h"
 #include "InputModeWindowController.h"
 #include <iostream>
 #include <vector>
@@ -94,6 +95,8 @@ void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
 void MacInputModeWindow::Activate() {
     active_ = true;
 
+    if(!enabled()) return;
+
     std::pair<int, int> position = frontend_->WindowPosition();
 
     CGPoint cursor = FlipPoint(position.first, position.second);
@@ -113,4 +116,14 @@ void MacInputModeWindow::Deactivate() {
     [controller_ hide];
 
     active_ = false;
+}
+
+// ------------------------------------------------------------
+
+bool MacInputModeWindow::enabled() const {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    [defaults synchronize];
+    
+    return [defaults boolForKey:SKKUserDefaultKeys::show_input_mode_icon] == YES;
 }

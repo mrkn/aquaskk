@@ -41,6 +41,8 @@ namespace SKKUserDefaultKeys {
 
     extern NSString* user_dictionary_path;
 
+    extern NSString* enable_dynamic_completion;
+    extern NSString* show_input_mode_icon;
     extern NSString* show_input_mode_cursor;
 
     extern NSString* enable_skkserv;

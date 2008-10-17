@@ -20,17 +20,22 @@
 
 */
 
-#include "MacInputEngineOption.h"
-#include "SKKConstVars.h"
+#include "MacMessenger.h"
+#include "MessengerWindow.h"
+#include "SKKFrontEnd.h"
+#include "ObjCUtil.h"
 
-MacInputEngineOption::MacInputEngineOption() {
-    defaults_ = [NSUserDefaults standardUserDefaults];
-}
+MacMessenger::MacMessenger(SKKFrontEnd* frontend) : frontend_(frontend) {}
 
-bool MacInputEngineOption::FixIntermediateConversion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::fix_intermediate_conversion] == YES;
-}
+void MacMessenger::SendMessage(const std::string& msg) {
+    ObjC::RAIIPool pool;
 
-bool MacInputEngineOption::EnableDynamicCompletion() {
-    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
+    MessengerWindow* window = [MessengerWindow sharedWindow];
+
+    NSString* str = [NSString stringWithUTF8String:msg.c_str()];
+
+    std::pair<int, int> pos = frontend_->WindowPosition();
+    int windowLevel = frontend_->WindowLevel();
+
+    [window showMessage:str at:NSMakePoint(pos.first, pos.second) level:windowLevel];
 }

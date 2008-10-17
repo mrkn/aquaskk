@@ -11,6 +11,7 @@
 		D309967B0E4C83B800B2F24E /* SKKInputEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D30996790E4C83B800B2F24E /* SKKInputEngine.cpp */; };
 		D31381550DD1D89C0002FF9C /* CandidateWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = D31381540DD1D89C0002FF9C /* CandidateWindow.xib */; };
 		D31381570DD1D8BE0002FF9C /* InputModeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = D31381560DD1D8BE0002FF9C /* InputModeWindow.xib */; };
+		D31B18100EA76F120083CD50 /* CompletionView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D31B180F0EA76F120083CD50 /* CompletionView.mm */; };
 		D31C99D00E9E4A3D00CBE4D1 /* Mini-Ascii.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CB0E9E4A3D00CBE4D1 /* Mini-Ascii.tiff */; };
 		D31C99D10E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CC0E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff */; };
 		D31C99D20E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff in Resources */ = {isa = PBXBuildFile; fileRef = D31C99CD0E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff */; };
@@ -85,9 +86,13 @@
 		D353BE2A0E175578004C68A6 /* PreferenceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BE270E175578004C68A6 /* PreferenceController.mm */; };
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
+		D3665A2B0EA8BDA90065CFD2 /* MessengerWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */; };
 		D371DD9F0E8284A100C10EE5 /* InputModeCursor.xib in Resources */ = {isa = PBXBuildFile; fileRef = D371DD9E0E8284A100C10EE5 /* InputModeCursor.xib */; };
 		D371DDA80E82866E00C10EE5 /* InputModeCursor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D371DDA70E82866E00C10EE5 /* InputModeCursor.mm */; };
 		D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D37BC8810E8527E100B19592 /* BorderlessWindow.mm */; };
+		D38D61BE0EA792CB0095AAC8 /* MessengerView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */; };
+		D38FA9D20EA78A0800C07575 /* CompletionWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */; };
+		D396A0710EA0C8C600B6B9D5 /* MacMessenger.mm in Sources */ = {isa = PBXBuildFile; fileRef = D396A0700EA0C8C600B6B9D5 /* MacMessenger.mm */; };
 		D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */; };
 		D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */; };
 		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
@@ -131,6 +136,8 @@
 		D309967A0E4C83B800B2F24E /* SKKInputEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputEngine.h; sourceTree = "<group>"; };
 		D31381540DD1D89C0002FF9C /* CandidateWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CandidateWindow.xib; sourceTree = "<group>"; };
 		D31381560DD1D8BE0002FF9C /* InputModeWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputModeWindow.xib; sourceTree = "<group>"; };
+		D31B180E0EA76F120083CD50 /* CompletionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompletionView.h; sourceTree = "<group>"; };
+		D31B180F0EA76F120083CD50 /* CompletionView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CompletionView.mm; sourceTree = "<group>"; };
 		D31C99CB0E9E4A3D00CBE4D1 /* Mini-Ascii.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Ascii.tiff"; sourceTree = "<group>"; };
 		D31C99CC0E9E4A3D00CBE4D1 /* Mini-Hirakana.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Hirakana.tiff"; sourceTree = "<group>"; };
 		D31C99CD0E9E4A3D00CBE4D1 /* Mini-Jisx0201Kana.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = "Mini-Jisx0201Kana.tiff"; sourceTree = "<group>"; };
@@ -287,11 +294,20 @@
 		D353BE760E177BAB004C68A6 /* SKKStateEntryRemove-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateEntryRemove-inl.h"; sourceTree = "<group>"; };
 		D353BE770E177BAB004C68A6 /* SKKStatePrimary-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStatePrimary-inl.h"; sourceTree = "<group>"; };
 		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
+		D3665A290EA8BDA90065CFD2 /* MessengerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerWindow.h; sourceTree = "<group>"; };
+		D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerWindow.mm; sourceTree = "<group>"; };
 		D371DD9E0E8284A100C10EE5 /* InputModeCursor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InputModeCursor.xib; sourceTree = "<group>"; };
 		D371DDA60E82866E00C10EE5 /* InputModeCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputModeCursor.h; sourceTree = "<group>"; };
 		D371DDA70E82866E00C10EE5 /* InputModeCursor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InputModeCursor.mm; sourceTree = "<group>"; };
 		D37BC8800E8527E100B19592 /* BorderlessWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BorderlessWindow.h; sourceTree = "<group>"; };
 		D37BC8810E8527E100B19592 /* BorderlessWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BorderlessWindow.mm; sourceTree = "<group>"; };
+		D38D61BC0EA792CB0095AAC8 /* MessengerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerView.h; sourceTree = "<group>"; };
+		D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerView.mm; sourceTree = "<group>"; };
+		D38FA9D00EA78A0800C07575 /* CompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompletionWindow.h; sourceTree = "<group>"; };
+		D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CompletionWindow.mm; sourceTree = "<group>"; };
+		D396A06E0EA0C8B700B6B9D5 /* SKKMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKMessenger.h; sourceTree = "<group>"; };
+		D396A06F0EA0C8C600B6B9D5 /* MacMessenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacMessenger.h; sourceTree = "<group>"; };
+		D396A0700EA0C8C600B6B9D5 /* MacMessenger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacMessenger.mm; sourceTree = "<group>"; };
 		D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputQueue.cpp; sourceTree = "<group>"; };
 		D398F2CB0E45FA940007F4B9 /* SKKInputQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputQueue.h; sourceTree = "<group>"; };
 		D39ACE790E8E4B2F00A33FF4 /* PathFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PathFormatter.h; path = ../src/preferences/PathFormatter.h; sourceTree = SOURCE_ROOT; };
@@ -347,6 +363,7 @@
 				D353BBE10E1754E3004C68A6 /* SKKInputSessionParameter.h */,
 				D353BBDF0E1754E3004C68A6 /* SKKFrontEnd.h */,
 				D353BBE20E1754E3004C68A6 /* SKKStateConfiguration.h */,
+				D396A06E0EA0C8B700B6B9D5 /* SKKMessenger.h */,
 				D353BBDE0E1754E3004C68A6 /* SKKClipboard.h */,
 				D302E2F70EA068EF00E3321E /* SKKInputModeListener.h */,
 				D353BBDD0E1754E3004C68A6 /* SKKCandidateWindow.h */,
@@ -561,6 +578,8 @@
 			children = (
 				D353BDCF0E175513004C68A6 /* MacCandidateWindow.h */,
 				D353BDD00E175513004C68A6 /* MacCandidateWindow.mm */,
+				D396A06F0EA0C8C600B6B9D5 /* MacMessenger.h */,
+				D396A0700EA0C8C600B6B9D5 /* MacMessenger.mm */,
 				D353BDD10E175513004C68A6 /* MacClipboard.h */,
 				D353BDD20E175513004C68A6 /* MacClipboard.mm */,
 				D353BDD30E175513004C68A6 /* MacFrontEnd.h */,
@@ -600,6 +619,10 @@
 			children = (
 				D37BC8800E8527E100B19592 /* BorderlessWindow.h */,
 				D37BC8810E8527E100B19592 /* BorderlessWindow.mm */,
+				D31B180E0EA76F120083CD50 /* CompletionView.h */,
+				D31B180F0EA76F120083CD50 /* CompletionView.mm */,
+				D38FA9D00EA78A0800C07575 /* CompletionWindow.h */,
+				D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */,
 				D353BDF50E175523004C68A6 /* CandidateCell.h */,
 				D353BDF60E175523004C68A6 /* CandidateCell.mm */,
 				D353BDF70E175523004C68A6 /* CandidatePageIndicator.h */,
@@ -608,6 +631,10 @@
 				D353BDFA0E175523004C68A6 /* CandidateView.mm */,
 				D353BDFD0E175523004C68A6 /* CandidateWindowController.h */,
 				D353BDFE0E175523004C68A6 /* CandidateWindowController.mm */,
+				D38D61BC0EA792CB0095AAC8 /* MessengerView.h */,
+				D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */,
+				D3665A290EA8BDA90065CFD2 /* MessengerWindow.h */,
+				D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */,
 				D353BE010E175523004C68A6 /* InputModeWindowController.h */,
 				D353BE020E175523004C68A6 /* InputModeWindowController.mm */,
 				D371DDA60E82866E00C10EE5 /* InputModeCursor.h */,
@@ -912,6 +939,11 @@
 				D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */,
 				D3FE45FE0E9FA98E009B64E7 /* SKKInputMenu.mm in Sources */,
 				D32F15C70EA0817700CADBD7 /* MacInputModeMenu.mm in Sources */,
+				D396A0710EA0C8C600B6B9D5 /* MacMessenger.mm in Sources */,
+				D31B18100EA76F120083CD50 /* CompletionView.mm in Sources */,
+				D38FA9D20EA78A0800C07575 /* CompletionWindow.mm in Sources */,
+				D38D61BE0EA792CB0095AAC8 /* MessengerView.mm in Sources */,
+				D3665A2B0EA8BDA90065CFD2 /* MessengerWindow.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,9 +28,12 @@
 
 class SKKComposingEditor : public SKKBaseEditor {
     SKKTextBuffer composing_;
+    std::string completion_;
+    bool enableDynamicCompletion_;
     bool modified_;
 
     void setModified();
+    void updateCompletion();
 
 public:
     SKKComposingEditor();
@@ -45,6 +48,7 @@ public:
 
     const std::string QueryString() const;
     void SetEntry(const std::string& entry);
+    void EnableDynamicCompletion(bool flag);
 };
 
 #endif

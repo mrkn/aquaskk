@@ -36,9 +36,23 @@ void SKKContextBuffer::Compose(const std::string& str, int cursor) {
     cursor_ += cursor;
 }
 
+void SKKContextBuffer::Compose(const std::string& str, const std::string& completion, int cursor) {
+    completion_cursor_ = utf8::length(composing_) + cursor_;
+    Compose(str, cursor);
+
+    completion_ = completion;
+}
+
 void SKKContextBuffer::Output(SKKFrontEnd* frontend) {
     frontend->InsertString(fixed_);
+
     frontend->ComposeString(composing_, cursor_);
+
+    if(!completion_.empty()) {
+        frontend->ShowCompletion(completion_, completion_cursor_);
+    } else {
+        frontend->HideCompletion();
+    }
 }
 
 void SKKContextBuffer::SetEntry(const SKKEntry& entry) {
@@ -52,6 +66,7 @@ void SKKContextBuffer::SetCandidate(const SKKCandidate& candidate) {
 void SKKContextBuffer::Clear() {
     fixed_.clear();
     composing_.clear();
+    completion_.clear();
     cursor_ = 0;
 
     SetEntry(SKKEntry());

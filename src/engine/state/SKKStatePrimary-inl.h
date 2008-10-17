@@ -48,6 +48,10 @@ State SKKState::Primary(const Event& event) {
             return State::Transition(&SKKState::AsciiEntry);
         }
 
+        if(!param.selected_text.empty()) {
+            messenger_->SendMessage("Undo できませんでした");
+        }
+
 	editor_->AbortRegistration();
 	return 0;
 

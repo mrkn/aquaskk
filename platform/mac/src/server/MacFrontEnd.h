@@ -28,12 +28,16 @@
 
 class MacFrontEnd : public SKKFrontEnd {
     id client_;
+    NSRange notFound() const;
+    NSMutableAttributedString* createMarkedText(const std::string& str, int cursorOffset);
 
 public:
     MacFrontEnd(id client);
 
     virtual void InsertString(const std::string& str);
     virtual void ComposeString(const std::string& str, int cursorOffset = 0);
+    virtual void ShowCompletion(const std::string& str, int cursorOffset = 0);
+    virtual void HideCompletion();
     virtual void Clear();
     virtual std::pair<int, int> WindowPosition() const;
     virtual int WindowLevel() const;

@@ -29,6 +29,9 @@ public:
 
     // 中間的な変換を訂正するか(n → ん)
     virtual bool FixIntermediateConversion() = 0;
+
+    // 自動ダイナミック補完を有効にするか
+    virtual bool EnableDynamicCompletion() = 0;
 };
 
 #endif

@@ -29,6 +29,7 @@
 #include "MacInputModeWindow.h"
 #include "InputModeWindowController.h"
 #include "InputModeCursor.h"
+#include "CompletionWindow.h"
 #include "SKKFrontEnd.h"
 #include "SKKBackEnd.h"
 
@@ -111,6 +112,7 @@
     session_->Deactivate();
 
     [[InputModeCursor sharedCursor] hide];
+    [[CompletionWindow sharedWindow] hide];
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {
