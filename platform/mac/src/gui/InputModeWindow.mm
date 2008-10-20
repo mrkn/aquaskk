@@ -20,32 +20,38 @@
 
 */
 
-#include "InputModeWindowController.h"
+#include "InputModeWindow.h"
 
-@interface InputModeWindowController (Local)
+@interface InputModeWindow (Local)
 - (void)prepareLayer;
 - (void)prepareAnimation;
-- (void)prepareWindow;
 - (void)updateFrame;
 - (void)setImage:(id)image;
 @end
 
-@implementation InputModeWindowController
+@implementation InputModeWindow
 
-+ (InputModeWindowController*)sharedController {
-    static InputModeWindowController* obj =  [[InputModeWindowController alloc] init];
++ (InputModeWindow*)sharedWindow {
+    static InputModeWindow* obj =  [[InputModeWindow alloc] init];
 
     return obj;
 }
 
 - (id)init {
-    if(self = [super initWithWindowNibName:@"InputModeWindow"]) {
+    if(self = [super init]) {
+        window_ = [[NSWindow alloc] initWithContentRect:NSZeroRect
+                                    styleMask:NSBorderlessWindowMask
+                                    backing:NSBackingStoreBuffered
+                                    defer:YES];
+        [window_ setBackgroundColor:[NSColor clearColor]];
+        [window_ setOpaque:NO];
+        [window_ setIgnoresMouseEvents:YES];
+
         inputMode_ = HirakanaInputMode;
         modeIcons_ = 0;
 
         [self prepareLayer];
         [self prepareAnimation];
-        [self prepareWindow];
     }
 
     return self;
@@ -54,6 +60,7 @@
 - (void)dealloc {
     [modeIcons_ release];
     [animation_ release];
+    [window_ release];
 
     [super dealloc];
 }
@@ -86,26 +93,26 @@
 - (void)show:(NSPoint)topleft level:(int)level {
     [self updateFrame];
 
-    [[self window] setFrameTopLeftPoint:topleft];
-    [[self window] setLevel:level];
-    [self showWindow:nil];
+    [window_ setFrameTopLeftPoint:topleft];
+    [window_ setLevel:level];
+    [window_ orderFront:nil];
 
     [rootLayer_ addAnimation:animation_ forKey:@"fadeOut"];
 }
 
 - (void)hide {
-    [[self window] orderOut:nil];
+    [window_ orderOut:nil];
 }
 
 @end
 
-@implementation InputModeWindowController (Local)
+@implementation InputModeWindow (Local)
         
 - (void)prepareLayer {
     rootLayer_ = [CALayer layer];
     rootLayer_.opacity = 0.0;
 
-    NSView* view = [[self window] contentView];
+    NSView* view = [window_ contentView];
 
     [view setLayer:rootLayer_];
     [view setWantsLayer:YES];
@@ -120,16 +127,8 @@
     animation_.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.5 :0.0 :0.5 :0.0];
 }
 
-- (void)prepareWindow {
-    NSWindow* window = [self window];
-
-    [window setBackgroundColor:[NSColor clearColor]];
-    [window setOpaque:NO];
-    [window setIgnoresMouseEvents:YES];
-}
-
 - (void)updateFrame {
-    NSRect rect = [[self window] frame];
+    NSRect rect = [window_ frame];
     NSSize iconSize = rect.size;
     NSImage* icon = [modeIcons_ objectForKey:[NSNumber numberWithInt:inputMode_]];
     NSArray* reps = [icon representations];
@@ -151,7 +150,7 @@
         // 矩形設定時の画像ちらつきを防ぐ
         [self setImage:0];
 
-        [[self window] setFrame:rect display:YES];
+        [window_ setFrame:rect display:YES];
     }
 }
 

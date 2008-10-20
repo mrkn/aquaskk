@@ -26,7 +26,7 @@
 #include "SKKBackEnd.h"
 #include "SKKConstVars.h"
 #include "skkserv.h"
-#include "InputModeWindowController.h"
+#include "InputModeWindow.h"
 
 #include <InputMethodKit/InputMethodKit.h>
 #include <signal.h>
@@ -233,7 +233,7 @@ static void terminate(int) {
         [image release];
     }
 
-    [[InputModeWindowController sharedController] setModeIcons:icons];
+    [[InputModeWindow sharedWindow] setModeIcons:icons];
 
     [icons release];
 }

@@ -27,8 +27,6 @@
 #include "MacInputSessionParameter.h"
 #include "MacInputModeMenu.h"
 #include "MacInputModeWindow.h"
-#include "InputModeWindowController.h"
-#include "InputModeCursor.h"
 #include "CompletionWindow.h"
 #include "SKKFrontEnd.h"
 #include "SKKBackEnd.h"
@@ -37,10 +35,8 @@
 
 - (void)initializeKeyboardLayout;
 - (const char*)selectedString;
-- (void)updateModeCursor:(id)sender;
 - (BOOL)privateMode;
 - (void)setPrivateMode:(BOOL)flag;
-- (SKKInputMode)currentInputMode;
 
 @end
 
@@ -89,8 +85,6 @@
 
     BOOL result = session_->HandleEvent(param);
 
-    [self updateModeCursor:nil];
-
     return result || param.force_handled;
 }
 
@@ -111,7 +105,6 @@
 - (void)deactivateServer:(id)sender {
     session_->Deactivate();
 
-    [[InputModeCursor sharedCursor] hide];
     [[CompletionWindow sharedWindow] hide];
 }
 
@@ -131,7 +124,7 @@
     // 個別の入力モードを保持するなら、アクティブ化直後だけ、入力メニュー
     // を内部の入力モードで更新する
     if(activated_) {
-        [menu_ updateMenu:[self currentInputMode]];
+        [menu_ updateMenu:[menu_ currentInputMode]];
         activated_ = NO;
     }
 }
@@ -245,32 +238,12 @@
     return "";
 }
 
-- (void)updateModeCursor:(id)sender {
-    if([defaults_ boolForKey:SKKUserDefaultKeys::show_input_mode_cursor] != YES) return;
-
-    if(!sender) {
-        [self performSelector:@selector(updateModeCursor:) withObject:self afterDelay:0.005];
-        return;
-    }
-
-    std::pair<int, int> pos = frontend_->WindowPosition();
-    int level = frontend_->WindowLevel();
-    InputModeCursor* cursor = [InputModeCursor sharedCursor];
-
-    [cursor changeMode:[self currentInputMode]];
-    [cursor show:NSMakePoint(pos.first, pos.second) level:level];
-}
-
 - (BOOL)privateMode {
     return [defaults_ boolForKey:SKKUserDefaultKeys::enable_private_mode];
 }
 
 - (void)setPrivateMode:(BOOL)flag {
     [defaults_ setBool:flag forKey:SKKUserDefaultKeys::enable_private_mode];
-}
-
-- (SKKInputMode)currentInputMode {
-    return [[InputModeWindowController sharedController] currentInputMode];
 }
 
 @end

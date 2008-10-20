@@ -20,13 +20,13 @@
 
 */
 
-#include "CandidateWindowController.h"
+#include "CandidateWindow.h"
 #include "CandidateView.h"
 
-@implementation CandidateWindowController
+@implementation CandidateWindow
 
-+ (CandidateWindowController*)sharedController {
-    static CandidateWindowController* obj = [[CandidateWindowController alloc] init];
++ (CandidateWindow*)sharedWindow {
+    static CandidateWindow* obj = [[CandidateWindow alloc] init];
 
     return obj;
 }

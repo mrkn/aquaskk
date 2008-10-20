@@ -42,7 +42,6 @@ namespace SKKUserDefaultKeys {
 
     DECLARE_NSStringKey(enable_dynamic_completion);
     DECLARE_NSStringKey(show_input_mode_icon);
-    DECLARE_NSStringKey(show_input_mode_cursor);
 
     DECLARE_NSStringKey(enable_skkserv);
     DECLARE_NSStringKey(skkserv_localonly);

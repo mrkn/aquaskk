@@ -25,7 +25,7 @@
 
 #include "SKKCandidateWindow.h"
 
-@class CandidateWindowController;
+@class CandidateWindow;
 class SKKFrontEnd;
 
 class MacCandidateWindow : public SKKCandidateWindow {
@@ -35,7 +35,7 @@ class MacCandidateWindow : public SKKCandidateWindow {
     NSRange page_;
     int cursor_;
     int cellCount_;
-    CandidateWindowController* controller_;
+    CandidateWindow* window_;
 
     void reloadUserDefaults();
     void prepareWindow();

@@ -49,6 +49,7 @@ namespace {
 - (id)initWithClient:(id)client {
     if(self = [super init]) {
         client_ = client;
+        currentInputMode_ = HirakanaInputMode;
     }
 
     return self;
@@ -58,6 +59,7 @@ namespace {
     NSString* identifer = [self modeIdentifier:mode];
 
     if(identifer) {
+        currentInputMode_ = mode;
         [client_ selectInputMode:identifer];
     }
 }
@@ -80,6 +82,10 @@ namespace {
     }
 
     return 0;
+}
+
+- (SKKInputMode)currentInputMode {
+    return currentInputMode_;
 }
 
 @end    

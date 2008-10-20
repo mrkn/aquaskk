@@ -30,8 +30,6 @@
         <false/>
         <key>show_input_mode_icon</key>
         <true/>
-        <key>show_input_mode_cursor</key>
-        <false/>
 
 	<key>enable_skkserv</key>
 	<false/>

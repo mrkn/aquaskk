@@ -27,14 +27,14 @@
 
 class SKKFrontEnd;
 
-@class InputModeWindowController;
+@class InputModeWindow;
 
 class MacInputModeWindow : public SKKInputModeListener {
     bool active_;
     SKKFrontEnd* frontend_;
     SKKInputMode mode_;
 
-    InputModeWindowController* controller_;
+    InputModeWindow* window_;
 
     bool enabled() const;
 

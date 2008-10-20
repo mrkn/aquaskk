@@ -20,17 +20,24 @@
 
 */
 
-#ifndef InputModeCursor_h
-#define InputModeCursor_h
+#ifndef InputModeWindow_h
+#define InputModeWindow_h
 
 #include "SKKInputMode.h"
+#include <QuartzCore/QuartzCore.h>
 
-@interface InputModeCursor : NSWindowController {
-    BOOL active_;
+@interface InputModeWindow : NSObject {
+    NSWindow* window_;
+    SKKInputMode inputMode_;
+    NSDictionary* modeIcons_;
+    CALayer* rootLayer_;
+    CABasicAnimation* animation_;
 }
 
-+ (InputModeCursor*)sharedCursor;
++ (InputModeWindow*)sharedWindow;
+- (void)setModeIcons:(NSDictionary*)icons;
 - (void)changeMode:(SKKInputMode)mode;
+- (SKKInputMode)currentInputMode;
 - (void)show:(NSPoint)topleft level:(int)level;
 - (void)hide;
 

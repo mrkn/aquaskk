@@ -20,27 +20,29 @@
 
 */
 
-#ifndef InputModeWindowController_h
-#define InputModeWindowController_h
+#ifndef CandidateWindow_h
+#define CandidateWindow_h
 
-#include "SKKInputMode.h"
-#include <QuartzCore/QuartzCore.h>
+#include <Cocoa/Cocoa.h>
 
-@interface InputModeWindowController : NSWindowController {
-    SKKInputMode inputMode_;
-    NSDictionary* modeIcons_;
-    CALayer* rootLayer_;
-    CABasicAnimation* animation_;
+@class CandidateView;
+
+@interface CandidateWindow : NSObject {
+    NSWindow* window_;
+    CandidateView* view_;
+    NSString* labels_;
 }
 
-+ (InputModeWindowController*)sharedController;
-- (void)setModeIcons:(NSDictionary*)icons;
-- (void)changeMode:(SKKInputMode)mode;
-- (SKKInputMode)currentInputMode;
-- (void)show:(NSPoint)topleft level:(int)level;
++ (CandidateWindow*)sharedWindow;
+- (NSWindow*)window;
+- (void)prepareWithFont:(NSFont*)font labels:(NSString*)labels;
+- (void)setCandidates:(NSArray*)candidates selectedIndex:(int)cursor;
+- (void)setPage:(NSRange)page;
+- (void)show;
 - (void)hide;
+- (int)indexOfLabel:(char)label;
+- (id)createCandidateCell;
 
 @end
 
 #endif
-

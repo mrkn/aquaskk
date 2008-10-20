@@ -21,7 +21,7 @@
 */
 
 #include "MacCandidateWindow.h"
-#include "CandidateWindowController.h"
+#include "CandidateWindow.h"
 #include "CandidateView.h"
 #include "CandidateCell.h"
 #include "SKKConstVars.h"
@@ -29,7 +29,7 @@
 #include "utf8util.h"
 
 MacCandidateWindow::MacCandidateWindow(SKKFrontEnd* frontend) : active_(false), frontend_(frontend) {
-    controller_ = [CandidateWindowController sharedController];
+    window_ = [CandidateWindow sharedWindow];
     candidates_ = [[NSMutableArray alloc] initWithCapacity:0];
     reloadUserDefaults();
 }
@@ -43,7 +43,7 @@ void MacCandidateWindow::Setup(SKKCandidateIterator begin, SKKCandidateIterator 
 
     std::vector<int> cell_width;
 
-    CandidateCell* cell = [controller_ createCandidateCell];
+    CandidateCell* cell = [window_ createCandidateCell];
     int width;
 
     // 全ての cell の幅を求める
@@ -123,19 +123,19 @@ void MacCandidateWindow::Activate() {
 
     prepareWindow();
 
-    [controller_ setCandidates:candidates_ selectedIndex:cursor_];
-    [controller_ setPage:page_];
-    [controller_ show];
+    [window_ setCandidates:candidates_ selectedIndex:cursor_];
+    [window_ setPage:page_];
+    [window_ show];
 }
 
 void MacCandidateWindow::Deactivate() {
     if(!active_) return;
 
-    [controller_ hide];
+    [window_ hide];
 }
 
 int MacCandidateWindow::LabelIndex(char label) {
-    return [controller_ indexOfLabel:label];
+    return [window_ indexOfLabel:label];
 }
 
 void MacCandidateWindow::reloadUserDefaults() {
@@ -149,12 +149,12 @@ void MacCandidateWindow::reloadUserDefaults() {
     NSString* labels = [defaults stringForKey:SKKUserDefaultKeys::candidate_window_labels];
     cellCount_ = [labels length];
 
-    [controller_ prepareWithFont:font labels:labels];
+    [window_ prepareWithFont:font labels:labels];
 }
 
 void MacCandidateWindow::prepareWindow() {
     // ウィンドウレベル
-    [[controller_ window] setLevel:frontend_->WindowLevel()];
+    [[window_ window] setLevel:frontend_->WindowLevel()];
 
     // カーソル位置を含むディスプレイの矩形を取得
     std::pair<int, int> position = frontend_->WindowPosition();
@@ -165,7 +165,7 @@ void MacCandidateWindow::prepareWindow() {
 
     screen.size.width += screen.origin.x;
 
-    NSSize window_size = [[controller_ window] frame].size;
+    NSSize window_size = [[window_ window] frame].size;
 
     float window_x = position.first;
     float window_y = position.second;
@@ -174,5 +174,5 @@ void MacCandidateWindow::prepareWindow() {
 	window_x = screen.size.width - window_size.width;
     }
 
-    [[controller_ window] setFrameTopLeftPoint:NSMakePoint(window_x, window_y)];
+    [[window_ window] setFrameTopLeftPoint:NSMakePoint(window_x, window_y)];
 }

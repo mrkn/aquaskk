@@ -28,12 +28,14 @@
 
 @interface SKKInputMenu : NSObject {
     id client_;
+    SKKInputMode currentInputMode_;
 }
 
 - (id)initWithClient:(id)client;
 - (void)updateMenu:(SKKInputMode)mode;
 - (int)eventId:(NSString*)identifier;
 - (NSString*)modeIdentifier:(SKKInputMode)mode;
+- (SKKInputMode)currentInputMode;
 
 @end    
 

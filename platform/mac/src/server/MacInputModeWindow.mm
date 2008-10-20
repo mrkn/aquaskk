@@ -23,7 +23,7 @@
 #include "MacInputModeWindow.h"
 #include "SKKFrontEnd.h"
 #include "SKKConstVars.h"
-#include "InputModeWindowController.h"
+#include "InputModeWindow.h"
 #include <iostream>
 #include <vector>
 
@@ -80,8 +80,8 @@ MacInputModeWindow::MacInputModeWindow(SKKFrontEnd* frontend)
   : active_(false)
   , frontend_(frontend)
   , mode_(HirakanaInputMode) {
-    controller_ = [InputModeWindowController sharedController];
-    [controller_ changeMode:mode_];
+    window_ = [InputModeWindow sharedWindow];
+    [window_ changeMode:mode_];
 }
 
 void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
@@ -107,13 +107,12 @@ void MacInputModeWindow::Activate() {
                               std::bind2nd(std::ptr_fun(CGRectContainsPoint), cursor));
     if(!count) return;
 
-    [controller_ changeMode:mode_];
-    [controller_ show:NSMakePoint(position.first, position.second)
-                 level:frontend_->WindowLevel()];
+    [window_ changeMode:mode_];
+    [window_ show:NSMakePoint(position.first, position.second) level:frontend_->WindowLevel()];
 }
 
 void MacInputModeWindow::Deactivate() {
-    [controller_ hide];
+    [window_ hide];
 
     active_ = false;
 }

@@ -27,12 +27,15 @@
 
 @class CandidateView;
 
-@interface CandidateWindowController : NSWindowController {
-    IBOutlet CandidateView* view_;
+@interface CandidateWindowController : NSObject {
+    NSWindow* window_;
+    CandidateView* view_;
+    //IBOutlet CandidateView* view_;
     NSString* labels_;
 }
 
 + (CandidateWindowController*)sharedController;
+- (NSWindow*)window;
 - (void)prepareWithFont:(NSFont*)font labels:(NSString*)labels;
 - (void)setCandidates:(NSArray*)candidates selectedIndex:(int)cursor;
 - (void)setPage:(NSRange)page;
