@@ -40,6 +40,7 @@ class SKKBackEnd {
     SKKDictionaryCache cache_;
     bool useNumericConversion_;
     bool enableExtendedCompletion_;
+    int minimumCompletionLength_;
 
     SKKBackEnd();
     SKKBackEnd(const SKKBackEnd&);
@@ -55,7 +56,7 @@ public:
     void Initialize(const std::string& userdict_path, const SKKDictionaryKeyContainer& keys);
 
     // 補完
-    bool Complete(const std::string& key, std::vector<std::string>& result);
+    bool Complete(const std::string& key, std::vector<std::string>& result, int limit = 0);
 
     // 検索
     bool Find(const SKKEntry& entry, SKKCandidateSuite& result);
@@ -77,6 +78,9 @@ public:
 
     // オプション：プライベートモード
     void EnablePrivateMode(bool flag);
+
+    // オプション：補完候補の長さの下限(足切り)
+    void SetMinimumCompletionLength(int length);
 };
 
 #endif

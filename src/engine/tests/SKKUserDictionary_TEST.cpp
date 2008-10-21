@@ -50,4 +50,7 @@ int main() {
 
     dict.RemoveOkuriNasi("とぐるほかん", "");
     assert(dict.FindOkuriNasi("とぐるほかん") == "");
+
+    result.clear();
+    assert(!dict.FindCompletions("かん", result, 3));
 }

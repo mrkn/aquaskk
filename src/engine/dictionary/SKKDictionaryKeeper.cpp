@@ -23,32 +23,9 @@
 #include "SKKDictionaryKeeper.h"
 #include "SKKCandidateParser.h"
 #include "jconv.h"
+#include "utf8util.h"
 
 namespace {
-    // 見出し語補完用比較ファンクタ
-    class CompareFunctor {
-        int length_;
-
-        bool compare(const std::string& lhs, const std::string& rhs) const {
-            return 0 < rhs.compare(0, length_, lhs, 0, length_);
-        }
-
-    public:
-        CompareFunctor(int length) : length_(length) {}
-
-        bool operator()(const SKKDictionaryEntry& lhs, const SKKDictionaryEntry& rhs) const {
-            return compare(lhs.first, rhs.first);
-        }
-
-        bool operator()(const SKKDictionaryEntry& lhs, const std::string& rhs) const {
-            return compare(lhs.first, rhs);
-        }
-
-        bool operator()(const std::string& lhs, const SKKDictionaryEntry& rhs) const {
-            return compare(lhs, rhs.first);
-        }
-    };
-
     // 逆引き用ファンクタ
     class NotInclude {
         std::string candidate_;
@@ -106,24 +83,26 @@ std::string SKKDictionaryKeeper::FindEntry(const std::string& candidate) {
     return "";
 }
 
-bool SKKDictionaryKeeper::FindCompletions(const std::string& entry, std::vector<std::string>& result) {
+bool SKKDictionaryKeeper::FindCompletions(const std::string& entry,
+                                          std::vector<std::string>& result,
+                                          int minimumCompletionLength) {
     pthread::lock scope(condition_);
 
     if(!ready()) return false;
 
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
+    std::string query = jconv::eucj_from_utf8(entry);
 
-    typedef std::pair<SKKDictionaryEntryIterator, SKKDictionaryEntryIterator> EntryRange;
-
-    std::string index = jconv::eucj_from_utf8(entry);
-
-    EntryRange range = std::equal_range(container.begin(), container.end(), index, CompareFunctor(index.size()));
-
-    for(SKKDictionaryEntryIterator iter = range.first; iter != range.second; ++ iter) {
-        result.push_back(jconv::utf8_from_eucj(iter->first));
+    for(SKKDictionaryEntryIterator iter = container.begin(); iter != container.end(); ++ iter) {
+        if(iter->first.compare(0, query.length(), query) == 0) {
+            std::string completion = jconv::utf8_from_eucj(iter->first);
+            if(minimumCompletionLength < utf8::length(completion)) {
+                result.push_back(completion);
+            }
+        }
     }
 
-    return range.first != range.second;
+    return !result.empty();
 }
 
 // ------------------------------------------------------------

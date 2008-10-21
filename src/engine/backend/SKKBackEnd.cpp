@@ -31,6 +31,7 @@ SKKBackEnd::SKKBackEnd()
     : userdict_(new SKKUserDictionary())
     , useNumericConversion_(false)
     , enableExtendedCompletion_(false)
+    , minimumCompletionLength_(0)
 {}
 
 SKKBackEnd& SKKBackEnd::theInstance() {
@@ -58,10 +59,10 @@ void SKKBackEnd::Initialize(const std::string& userdict_path, const SKKDictionar
     actives_ = keys;
 }
 
-bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& result) {
+bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& result, int limit) {
     // ユーザー辞書を優先
     result.clear();
-    userdict_->FindCompletions(key, result);
+    userdict_->FindCompletions(key, result, minimumCompletionLength_);
 
     if(key.empty() || !enableExtendedCompletion_) {
         return !result.empty();
@@ -73,9 +74,12 @@ bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& resu
 
     // 各辞書に対して補完を試みる
     for(unsigned i = 0; i < dicts_.size(); ++ i) {
+        // 充分な補完候補が見つかった？
+        if(limit != 0 && limit <= result.size()) break;
+
         std::vector<std::string> tmp;
 
-        if(!dicts_[i]->FindCompletions(key, tmp)) continue;
+        if(!dicts_[i]->FindCompletions(key, tmp, minimumCompletionLength_)) continue;
 
         for(unsigned j = 0; j < tmp.size(); ++ j) {
             if(check.find(tmp[j]) == check.end()) {
@@ -192,6 +196,10 @@ void SKKBackEnd::EnableExtendedCompletion(bool flag) {
 
 void SKKBackEnd::EnablePrivateMode(bool flag) {
     userdict_->SetPrivateMode(flag);
+}
+
+void SKKBackEnd::SetMinimumCompletionLength(int length) {
+    minimumCompletionLength_ = length;
 }
 
 // ----------------------------------------------------------------------

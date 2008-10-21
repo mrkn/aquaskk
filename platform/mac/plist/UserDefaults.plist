@@ -6,13 +6,20 @@
 	<true/>
 	<key>use_numeric_conversion</key>
 	<true/>
-        <key>enable_extended_completion</key>
-        <true/>
         <key>use_unified_input_mode</key>
         <false/>
+        <key>show_input_mode_icon</key>
+        <true/>
 
 	<key>keyboard_layout</key>
 	<string>com.apple.keylayout.US</string>
+
+        <key>enable_extended_completion</key>
+        <true/>
+        <key>enable_dynamic_completion</key>
+        <false/>
+        <key>minimum_completion_length</key>
+        <integer>0</integer>
 
 	<key>max_count_of_inline_candidates</key>
 	<integer>4</integer>
@@ -25,11 +32,6 @@
 
         <key>user_dictionary_path</key>
         <string>~/Library/Application Support/AquaSKK/skk-jisyo.utf8</string>
-
-        <key>enable_dynamic_completion</key>
-        <false/>
-        <key>show_input_mode_icon</key>
-        <true/>
 
 	<key>enable_skkserv</key>
 	<false/>

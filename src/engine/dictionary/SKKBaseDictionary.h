@@ -66,7 +66,11 @@ public:
     virtual std::string FindEntry(const std::string& candidate) { return ""; }
 
     // 見出し語の補完
-    virtual bool FindCompletions(const std::string& entry, std::vector<std::string>& result) { return false; }
+    virtual bool FindCompletions(const std::string& entry,
+                                 std::vector<std::string>& result,
+                                 int minimumCompletionLength = 0) {
+        return false;
+    }
 };
 
 #endif

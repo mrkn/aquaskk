@@ -83,7 +83,6 @@
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
 		D3665A2B0EA8BDA90065CFD2 /* MessengerWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */; };
-		D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D37BC8810E8527E100B19592 /* BorderlessWindow.mm */; };
 		D38D61BE0EA792CB0095AAC8 /* MessengerView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */; };
 		D38FA9D20EA78A0800C07575 /* CompletionWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */; };
 		D396A0710EA0C8C600B6B9D5 /* MacMessenger.mm in Sources */ = {isa = PBXBuildFile; fileRef = D396A0700EA0C8C600B6B9D5 /* MacMessenger.mm */; };
@@ -286,8 +285,6 @@
 		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
 		D3665A290EA8BDA90065CFD2 /* MessengerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerWindow.h; sourceTree = "<group>"; };
 		D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerWindow.mm; sourceTree = "<group>"; };
-		D37BC8800E8527E100B19592 /* BorderlessWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BorderlessWindow.h; sourceTree = "<group>"; };
-		D37BC8810E8527E100B19592 /* BorderlessWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BorderlessWindow.mm; sourceTree = "<group>"; };
 		D38D61BC0EA792CB0095AAC8 /* MessengerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerView.h; sourceTree = "<group>"; };
 		D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerView.mm; sourceTree = "<group>"; };
 		D38FA9D00EA78A0800C07575 /* CompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompletionWindow.h; sourceTree = "<group>"; };
@@ -608,8 +605,6 @@
 		D353BDF40E175523004C68A6 /* gui */ = {
 			isa = PBXGroup;
 			children = (
-				D37BC8800E8527E100B19592 /* BorderlessWindow.h */,
-				D37BC8810E8527E100B19592 /* BorderlessWindow.mm */,
 				D31B180E0EA76F120083CD50 /* CompletionView.h */,
 				D31B180F0EA76F120083CD50 /* CompletionView.mm */,
 				D38FA9D00EA78A0800C07575 /* CompletionWindow.h */,
@@ -916,7 +911,6 @@
 				D30996690E4C80EA00B2F24E /* SKKRecursiveEditor.cpp in Sources */,
 				D309967B0E4C83B800B2F24E /* SKKInputEngine.cpp in Sources */,
 				D330565C0E4C87580019D8B5 /* MacInputEngineOption.mm in Sources */,
-				D37BC8820E8527E100B19592 /* BorderlessWindow.mm in Sources */,
 				D3FE45FE0E9FA98E009B64E7 /* SKKInputMenu.mm in Sources */,
 				D32F15C70EA0817700CADBD7 /* MacInputModeMenu.mm in Sources */,
 				D396A0710EA0C8C600B6B9D5 /* MacMessenger.mm in Sources */,

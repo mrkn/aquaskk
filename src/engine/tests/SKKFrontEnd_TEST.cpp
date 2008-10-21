@@ -20,6 +20,9 @@ public:
         ComposeString("");
     }
 
+    virtual void ShowCompletion(const std::string&, int) {}
+    virtual void HideCompletion() {}
+
     virtual std::pair<int, int> WindowPosition() const {
         return std::make_pair<int, int>(0, 0);
     }

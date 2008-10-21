@@ -205,8 +205,10 @@ std::string SKKAutoUpdateDictionary::FindEntry(const std::string& candidate) {
     return keeper_.FindEntry(candidate);
 }
 
-bool SKKAutoUpdateDictionary::FindCompletions(const std::string& entry, std::vector<std::string>& result) {
-    return keeper_.FindCompletions(entry, result);
+bool SKKAutoUpdateDictionary::FindCompletions(const std::string& entry,
+                                              std::vector<std::string>& result,
+                                              int minimumCompletionLength) {
+    return keeper_.FindCompletions(entry, result, minimumCompletionLength);
 }
 
 // ファクトリメソッドの登録

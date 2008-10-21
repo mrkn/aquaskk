@@ -28,10 +28,14 @@
 namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(suppress_newline_on_commit);
     DECLARE_NSStringKey(use_numeric_conversion);
-    DECLARE_NSStringKey(enable_extended_completion);
     DECLARE_NSStringKey(use_unified_input_mode);
+    DECLARE_NSStringKey(show_input_mode_icon);
 
     DECLARE_NSStringKey(keyboard_layout);
+
+    DECLARE_NSStringKey(enable_extended_completion);
+    DECLARE_NSStringKey(enable_dynamic_completion);
+    DECLARE_NSStringKey(minimum_completion_length);
 
     DECLARE_NSStringKey(max_count_of_inline_candidates);
     DECLARE_NSStringKey(candidate_window_font_name);
@@ -39,9 +43,6 @@ namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(candidate_window_labels);
 
     DECLARE_NSStringKey(user_dictionary_path);
-
-    DECLARE_NSStringKey(enable_dynamic_completion);
-    DECLARE_NSStringKey(show_input_mode_icon);
 
     DECLARE_NSStringKey(enable_skkserv);
     DECLARE_NSStringKey(skkserv_localonly);

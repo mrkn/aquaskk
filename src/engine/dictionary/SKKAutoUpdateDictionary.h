@@ -46,7 +46,9 @@ public:
     virtual std::string FindOkuriNasi(const std::string& entry);
     virtual std::string FindEntry(const std::string& candidate);
 
-    virtual bool FindCompletions(const std::string& entry, std::vector<std::string>& result);
+    virtual bool FindCompletions(const std::string& entry,
+                                 std::vector<std::string>& result,
+                                 int minimumCompletionLength = 0);
 };
 
 #endif

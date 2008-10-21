@@ -133,7 +133,7 @@ void SKKComposingEditor::updateCompletion() {
     std::string key = composing_.String();
 
     // 最初の候補を補完する
-    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result)) {
+    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, 1)) {
         completion_ = result[0];
     } else {
         completion_.clear();

@@ -87,8 +87,10 @@ std::string SKKCommonDictionary::FindEntry(const std::string& candidate) {
     return keeper_.FindEntry(candidate);
 }
 
-bool SKKCommonDictionary::FindCompletions(const std::string& entry, std::vector<std::string>& result) {
-    return keeper_.FindCompletions(entry, result);
+bool SKKCommonDictionary::FindCompletions(const std::string& entry,
+                                          std::vector<std::string>& result,
+                                          int minimumCompletionLength) {
+    return keeper_.FindCompletions(entry, result, minimumCompletionLength);
 }
 
 // ファクトリメソッドの登録

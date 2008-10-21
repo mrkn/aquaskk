@@ -91,6 +91,9 @@ static void terminate(int) {
     flag = [defaults boolForKey:SKKUserDefaultKeys::enable_private_mode] == YES;
     SKKBackEnd::theInstance().EnablePrivateMode(flag);
 
+    int length = [defaults integerForKey:SKKUserDefaultKeys::minimum_completion_length];
+    SKKBackEnd::theInstance().SetMinimumCompletionLength(length);
+
     NSLog(@"UserDefaults has been reloaded");
 }
 

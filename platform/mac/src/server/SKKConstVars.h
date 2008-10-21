@@ -29,10 +29,14 @@
 namespace SKKUserDefaultKeys {
     extern NSString* suppress_newline_on_commit;
     extern NSString* use_numeric_conversion;
-    extern NSString* enable_extended_completion;
     extern NSString* use_unified_input_mode;
+    extern NSString* show_input_mode_icon;
 
     extern NSString* keyboard_layout;
+
+    extern NSString* enable_extended_completion;
+    extern NSString* enable_dynamic_completion;
+    extern NSString* minimum_completion_length;
 
     extern NSString* max_count_of_inline_candidates;
     extern NSString* candidate_window_font_name;
@@ -40,9 +44,6 @@ namespace SKKUserDefaultKeys {
     extern NSString* candidate_window_labels;
 
     extern NSString* user_dictionary_path;
-
-    extern NSString* enable_dynamic_completion;
-    extern NSString* show_input_mode_icon;
 
     extern NSString* enable_skkserv;
     extern NSString* skkserv_localonly;

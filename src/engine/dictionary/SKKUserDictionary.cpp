@@ -25,6 +25,7 @@
 #include <cerrno>
 #include "SKKUserDictionary.h"
 #include "SKKCandidateSuite.h"
+#include "utf8util.h"
 
 namespace {
     static const int MAX_IDLE_COUNT = 20;
@@ -124,13 +125,16 @@ std::string SKKUserDictionary::FindEntry(const std::string& candidate) {
     return "";
 }
 
-bool SKKUserDictionary::FindCompletions(const std::string& query, std::vector<std::string>& result) {
+bool SKKUserDictionary::FindCompletions(const std::string& query,
+                                        std::vector<std::string>& result,
+                                        int minimumCompletionLength) {
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
 
     for(SKKDictionaryEntryIterator iter = container.begin(); iter != container.end(); ++ iter) {
-	if(iter->first.find(query) == 0 && query.size() < iter->first.size()) {
-	    result.push_back(iter->first);
-	}
+        if(iter->first.compare(0, query.length(), query) == 0
+           && minimumCompletionLength < utf8::length(iter->first)) {
+            result.push_back(iter->first);
+        }
     }
 
     return !result.empty();

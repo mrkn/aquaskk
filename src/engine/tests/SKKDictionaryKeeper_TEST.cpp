@@ -26,4 +26,10 @@ int main() {
     keeper.Initialize(&loader, 5, 5);
 
     assert(keeper.FindEntry("官寺") == "かんじ");
+
+    std::vector<std::string> result;
+    assert(keeper.FindCompletions("か", result, 0));
+
+    result.clear();
+    assert(!keeper.FindCompletions("か", result, 3));
 }
