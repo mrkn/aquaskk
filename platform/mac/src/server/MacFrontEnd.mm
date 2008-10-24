@@ -29,6 +29,8 @@
 MacFrontEnd::MacFrontEnd(id client) : client_(client) {}
 
 void MacFrontEnd::InsertString(const std::string& str) {
+    if(str.empty()) return;
+
     NSString* string = [NSString stringWithUTF8String:str.c_str()];
 
     [client_ insertText:string replacementRange:notFound()];
@@ -46,8 +48,6 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     }
 
     [client_ setMarkedText:marked selectionRange:cursorPos replacementRange:notFound()];
-
-    [[CompletionWindow sharedWindow] hide];
 
     [marked release];
 }
@@ -101,42 +101,8 @@ NSMutableAttributedString* MacFrontEnd::createMarkedText(const std::string& str,
     NSString* source = [NSString stringWithUTF8String:str.c_str()];
     NSMutableAttributedString* marked = [[NSMutableAttributedString alloc] initWithString:source];
 
-    //[marked beginEditing];
     [marked addAttribute:NSCursorAttributeName
             value:[NSCursor IBeamCursor] range:NSMakeRange([marked length] + cursorOffset, 0)];
-
-#if 0
-    [marked addAttribute:NSForegroundColorAttributeName
-            value:[NSColor redColor] range:NSMakeRange(0, [marked length])];
-#endif
-
-#if 0
-    [marked addAttribute:NSMarkedClauseSegmentAttributeName
-            value:[NSNumber numberWithInt:1] range:NSMakeRange(0, [marked length])];
-#endif
-
-#if 1
-    [marked addAttribute:NSUnderlineColorAttributeName
-            value:[NSColor blackColor] range:NSMakeRange(0, [marked length])];
-#endif
-
-#if 1
-    [marked addAttribute:NSUnderlineStyleAttributeName
-            value:[NSNumber numberWithInt:NSUnderlineStyleDouble] range:NSMakeRange(0, [marked length])];
-#endif
-
-#if 0
-    [marked addAttribute:NSUnderlineStyleAttributeName
-            value:[NSNumber numberWithInt:NSUnderlinePatternDot]
-            range:NSMakeRange(0, [marked length])];
-#endif
-
-#if 1
-    [marked addAttribute:NSKernAttributeName
-            value:[NSNumber numberWithFloat:1.0] range:NSMakeRange([marked length], 0)];
-#endif
-
-    //[marked endEditing];
 
     return marked;
 }

@@ -43,6 +43,7 @@ SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
       inputModeSelector_(inputModeSelector),
       clipboard_(clipboard),
       modified_(false),
+      bypassMode_(false),
       inputQueue_(this) {
     SetStatePrimary();
 }
@@ -99,6 +100,10 @@ void SKKInputEngine::SetStateEntryRemove() {
     entryRemoveEditor_.Initialize(Entry(), contextBuffer_.Candidate());
 
     enableSubEditor(&entryRemoveEditor_);
+}
+
+void SKKInputEngine::SetBypassMode(bool flag) {
+    bypassMode_ = flag;
 }
 
 void SKKInputEngine::HandleChar(char code, bool direct) {
@@ -387,7 +392,11 @@ void SKKInputEngine::updateContextBuffer() {
 // ------------------------------------------------------------
 
 void SKKInputEngine::SKKInputQueueUpdate(const std::string& fixed, const std::string& queue) {
-    top()->Input(fixed, queue);
+    if(bypassMode_) {
+        top()->Input(fixed);
+    } else {
+        top()->Input(fixed, queue);
+    }
 }
 
 const std::string SKKInputEngine::SKKCompleterQueryString() {

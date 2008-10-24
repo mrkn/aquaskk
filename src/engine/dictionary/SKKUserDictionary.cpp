@@ -130,11 +130,16 @@ bool SKKUserDictionary::FindCompletions(const std::string& query,
                                         int minimumCompletionLength) {
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
 
+    bool lengthCheckNeeded = utf8::length(query) < minimumCompletionLength;
+
     for(SKKDictionaryEntryIterator iter = container.begin(); iter != container.end(); ++ iter) {
-        if(iter->first.compare(0, query.length(), query) == 0
-           && minimumCompletionLength < utf8::length(iter->first)) {
-            result.push_back(iter->first);
+        if(iter->first.compare(0, query.length(), query) != 0) continue;
+
+        if(lengthCheckNeeded) {
+            if(utf8::length(iter->first) <= minimumCompletionLength) continue;
         }
+
+        result.push_back(iter->first);
     }
 
     return !result.empty();

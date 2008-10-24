@@ -268,7 +268,12 @@ State SKKState::Ascii(const Event& event) {
     switch(event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(AsciiInputMode);
+        editor_->SetBypassMode(true);
 	return 0;
+
+    case EXIT_EVENT:
+        editor_->SetBypassMode(false);
+        return 0;
 
     case SKK_ASCII_MODE:
         return 0;

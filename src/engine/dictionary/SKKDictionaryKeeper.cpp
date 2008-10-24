@@ -92,14 +92,18 @@ bool SKKDictionaryKeeper::FindCompletions(const std::string& entry,
 
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
     std::string query = jconv::eucj_from_utf8(entry);
+    bool lengthCheckNeeded = utf8::length(query) < minimumCompletionLength;
 
     for(SKKDictionaryEntryIterator iter = container.begin(); iter != container.end(); ++ iter) {
-        if(iter->first.compare(0, query.length(), query) == 0) {
-            std::string completion = jconv::utf8_from_eucj(iter->first);
-            if(minimumCompletionLength < utf8::length(completion)) {
-                result.push_back(completion);
-            }
+        if(iter->first.compare(0, query.length(), query) != 0) continue;
+
+        std::string completion = jconv::utf8_from_eucj(iter->first);
+
+        if(lengthCheckNeeded) {
+            if(utf8::length(completion) <= minimumCompletionLength) continue;
         }
+
+        result.push_back(completion);
     }
 
     return !result.empty();

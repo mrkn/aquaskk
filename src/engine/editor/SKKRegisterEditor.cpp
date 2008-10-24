@@ -27,6 +27,10 @@ SKKRegisterEditor::SKKRegisterEditor(const SKKEntry& entry) {
     prompt_ = "[登録：" + entry.PromptString() + "] ";
 }
 
+void SKKRegisterEditor::Input(const std::string& ascii) {
+    word_.Insert(ascii);
+}
+
 void SKKRegisterEditor::Input(const std::string& fixed, const std::string&) {
     word_.Insert(fixed);
 }

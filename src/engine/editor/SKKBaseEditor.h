@@ -40,6 +40,9 @@ public:
         CursorDown
     };
 
+    // 入力処理(ASCII 専用)
+    virtual void Input(const std::string& ascii) {}
+
     // 入力処理(fixed=確定文字列, input=入力文字列)
     virtual void Input(const std::string& fixed, const std::string& input) {}
 

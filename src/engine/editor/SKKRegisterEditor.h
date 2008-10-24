@@ -39,6 +39,7 @@ class SKKRegisterEditor : public SKKBaseEditor {
 public:
     SKKRegisterEditor(const SKKEntry& entry);
 
+    virtual void Input(const std::string& ascii);
     virtual void Input(const std::string& fixed, const std::string& input);
     virtual void Input(Event event);
     virtual void Clear();

@@ -63,6 +63,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     EditorStack subStack_;
     EditorStack* active_;
     bool needsInitializeOkuri_;
+    bool bypassMode_;
 
     SKKInputQueue inputQueue_;
     SKKContextBuffer contextBuffer_;
@@ -117,6 +118,9 @@ public:
     void SetStateOkuri();
     void SetStateSelectCandidate();
     void SetStateEntryRemove();
+
+    // バイパスモード(ASCII モード用)
+    void SetBypassMode(bool flag);
 
     // 入力
     void HandleChar(char code, bool direct);
