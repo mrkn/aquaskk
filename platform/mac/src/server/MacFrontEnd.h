@@ -28,6 +28,8 @@
 
 class MacFrontEnd : public SKKFrontEnd {
     id client_;
+    std::string composing_;
+
     NSRange notFound() const;
     NSMutableAttributedString* createMarkedText(const std::string& str, int cursorOffset);
 

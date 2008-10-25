@@ -37,6 +37,8 @@ void MacFrontEnd::InsertString(const std::string& str) {
 }
 
 void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
+    composing_ = str;
+
     NSMutableAttributedString* marked = createMarkedText(str, cursorOffset);
     NSRange cursorPos = NSMakeRange([marked length] + cursorOffset, 0);
 
@@ -67,7 +69,11 @@ void MacFrontEnd::HideCompletion() {
 }
 
 void MacFrontEnd::Clear() {
-    ComposeString("");
+    // 未確定文字列がある時だけクリアーする
+    // Photoshop Elements の問題を回避
+    if(!composing_.empty()) {
+        ComposeString("");
+    }
 }
 
 std::pair<int, int> MacFrontEnd::WindowPosition() const {
