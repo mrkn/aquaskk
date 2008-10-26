@@ -44,7 +44,6 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
     int charcode = *[[event charactersIgnoringModifiers] UTF8String];
     int keycode = [event keyCode];
     int mods = 0;
-    bool isEisuuOrKanaKey = (keycode == 0x66 || keycode == 0x68);
 
 #ifdef SKK_DEBUG
     NSLog(@"%@", [event description]);
@@ -72,16 +71,9 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
     }
 
     // 英数キー、かなキーの文字コードがスペースのため、0 にする
-    if(isEisuuOrKanaKey) {
+    if(keycode == 0x66 || keycode == 0x68) {
         charcode = 0x00;
     }
 
-    result = keymap_.Fetch(charcode, keycode, mods);
-
-    // 英数キー、かなキーの場合は強制的に処理済みとする
-    if(isEisuuOrKanaKey) {
-        result.force_handled = true;
-    }
-
-    return result;
+    return keymap_.Fetch(charcode, keycode, mods);
 }

@@ -26,9 +26,11 @@
 #include "SKKKeymapEntry.h"
 
 // エントリーのタイプ
-// TYPE_EVENT は SKK_* を示す
-// TYPE_ATTRIBUTE は SKK_CHAR の属性を示す
-enum KeymapEntryType { TYPE_EVENT, TYPE_ATTRIBUTE };
+enum KeymapEntryType {
+    TYPE_EVENT,                 // SKK_* イベント
+    TYPE_ATTRIBUTE,             // SKK_CHAR の属性
+    TYPE_HANDLE_OPTION          // 処理オプション
+};
 
 // ======================================================================
 // キーマップシンボルテーブル
@@ -38,36 +40,41 @@ static const struct {
     int symbol;
     int type;
 } KeymapTable[] = {
-    { "SKK_JMODE", 		SKK_JMODE,		TYPE_EVENT },
-    { "SKK_ENTER", 		SKK_ENTER,		TYPE_EVENT },
-    { "SKK_CANCEL", 		SKK_CANCEL,		TYPE_EVENT },
-    { "SKK_BACKSPACE", 		SKK_BACKSPACE,		TYPE_EVENT },
-    { "SKK_DELETE", 		SKK_DELETE,		TYPE_EVENT },
-    { "SKK_TAB", 		SKK_TAB,		TYPE_EVENT },
-    { "SKK_PASTE", 		SKK_PASTE,		TYPE_EVENT },
-    { "SKK_LEFT", 		SKK_LEFT,		TYPE_EVENT },
-    { "SKK_RIGHT", 		SKK_RIGHT,		TYPE_EVENT },
-    { "SKK_UP", 		SKK_UP,			TYPE_EVENT },
-    { "SKK_DOWN", 		SKK_DOWN,		TYPE_EVENT },
-    { "SKK_CHAR", 		SKK_CHAR,		TYPE_EVENT },
-    { "SKK_PING", 		SKK_PING,		TYPE_EVENT },
-    { "SKK_YES", 		SKK_YES,		TYPE_EVENT },
-    { "SKK_NO", 		SKK_NO,			TYPE_EVENT },
-    { "Direct", 		Direct,			TYPE_ATTRIBUTE },
-    { "UpperCases", 		UpperCases,		TYPE_ATTRIBUTE },
-    { "ToggleKana", 		ToggleKana,		TYPE_ATTRIBUTE },
-    { "ToggleJisx0201Kana", 	ToggleJisx0201Kana, 	TYPE_ATTRIBUTE },
-    { "SwitchToAscii", 		SwitchToAscii, 		TYPE_ATTRIBUTE },
-    { "SwitchToJisx0208Latin", 	SwitchToJisx0208Latin,	TYPE_ATTRIBUTE },
-    { "EnterJapanese", 		EnterJapanese, 		TYPE_ATTRIBUTE },
-    { "EnterAbbrev", 		EnterAbbrev, 		TYPE_ATTRIBUTE },
-    { "NextCompletion", 	NextCompletion, 	TYPE_ATTRIBUTE },
-    { "PrevCompletion", 	PrevCompletion,		TYPE_ATTRIBUTE },
-    { "NextCandidate", 		NextCandidate,		TYPE_ATTRIBUTE },
-    { "PrevCandidate", 		PrevCandidate,		TYPE_ATTRIBUTE },
-    { "RemoveTrigger", 		RemoveTrigger,		TYPE_ATTRIBUTE },
-    { "InputChars", 		InputChars,		TYPE_ATTRIBUTE },
-    { 0x00, 			SKK_NULL,		-1 }
+    { "SKK_JMODE",              SKK_JMODE,              TYPE_EVENT },
+    { "SKK_ENTER",              SKK_ENTER,              TYPE_EVENT },
+    { "SKK_CANCEL",             SKK_CANCEL,             TYPE_EVENT },
+    { "SKK_BACKSPACE",          SKK_BACKSPACE,          TYPE_EVENT },
+    { "SKK_DELETE",             SKK_DELETE,             TYPE_EVENT },
+    { "SKK_TAB",                SKK_TAB,                TYPE_EVENT },
+    { "SKK_PASTE",              SKK_PASTE,              TYPE_EVENT },
+    { "SKK_LEFT",               SKK_LEFT,               TYPE_EVENT },
+    { "SKK_RIGHT",              SKK_RIGHT,              TYPE_EVENT },
+    { "SKK_UP",                 SKK_UP,                 TYPE_EVENT },
+    { "SKK_DOWN",               SKK_DOWN,               TYPE_EVENT },
+    { "SKK_CHAR",               SKK_CHAR,               TYPE_EVENT },
+    { "SKK_PING",               SKK_PING,               TYPE_EVENT },
+    { "SKK_YES",                SKK_YES,                TYPE_EVENT },
+    { "SKK_NO",                 SKK_NO,                 TYPE_EVENT },
+
+    { "Direct",                 Direct,                 TYPE_ATTRIBUTE },
+    { "UpperCases",             UpperCases,             TYPE_ATTRIBUTE },
+    { "ToggleKana",             ToggleKana,             TYPE_ATTRIBUTE },
+    { "ToggleJisx0201Kana",     ToggleJisx0201Kana,     TYPE_ATTRIBUTE },
+    { "SwitchToAscii",          SwitchToAscii,          TYPE_ATTRIBUTE },
+    { "SwitchToJisx0208Latin",  SwitchToJisx0208Latin,  TYPE_ATTRIBUTE },
+    { "EnterJapanese",          EnterJapanese,          TYPE_ATTRIBUTE },
+    { "EnterAbbrev",            EnterAbbrev,            TYPE_ATTRIBUTE },
+    { "NextCompletion",         NextCompletion,         TYPE_ATTRIBUTE },
+    { "PrevCompletion",         PrevCompletion,         TYPE_ATTRIBUTE },
+    { "NextCandidate",          NextCandidate,          TYPE_ATTRIBUTE },
+    { "PrevCandidate",          PrevCandidate,          TYPE_ATTRIBUTE },
+    { "RemoveTrigger",          RemoveTrigger,          TYPE_ATTRIBUTE },
+    { "InputChars",             InputChars,             TYPE_ATTRIBUTE },
+
+    { "AlwaysHandled",          AlwaysHandled,          TYPE_HANDLE_OPTION },
+    { "PseudoHandled",          PseudoHandled,          TYPE_HANDLE_OPTION },
+
+    { 0x00,                     SKK_NULL,               -1 }
 };
 
 // 検索
@@ -137,6 +144,10 @@ bool SKKKeymapEntry::operator>>(int& state) {
 
 bool SKKKeymapEntry::IsEvent() const {
     return type_ == TYPE_EVENT;
+}
+
+bool SKKKeymapEntry::IsAttribute() const {
+    return type_ == TYPE_ATTRIBUTE;
 }
 
 int SKKKeymapEntry::Symbol() const {

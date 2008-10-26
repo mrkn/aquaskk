@@ -52,8 +52,11 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     inputModeSelector_->Select(mode);
     inputQueue_.SelectInputMode(mode);
 
-    // 'q' などの入力モード切り替えに使用した文字は処理済みとする
-    modified_ = true;
+    if(IsComposing()) {
+        modified_ = true;
+    } else {
+        modified_without_output_ = true;
+    }
 }
 
 void SKKInputEngine::SetStatePrimary() {
@@ -87,6 +90,9 @@ void SKKInputEngine::SetStateOkuri() {
 
     active_->push_back(&composingEditor_);
     active_->push_back(&okuriEditor_);
+
+    // ダイナミック補完をオフにする
+    composingEditor_.EnableDynamicCompletion(false);
 
     // 次回 HandleChar で初期化が必要
     needsInitializeOkuri_ = true;
@@ -191,7 +197,7 @@ void SKKInputEngine::Reset(bool absolutely) {
 
     // 完全にリセットする場合は、IsModified() を偽にする
     if(absolutely) {
-        modified_ = false;
+        modified_ = modified_without_output_ = false;
     }
 }
 
@@ -276,7 +282,7 @@ SKKInputEngine::UndoResult SKKInputEngine::Undo(const std::string& candidate) {
 
 void SKKInputEngine::Output() {
     // 内部バッファが更新されている時だけ出力する
-    if(IsModified()) {
+    if(modified_ || top()->IsModified()) {
         updateContextBuffer();
         contextBuffer_.Output(frontend_);
 
@@ -292,11 +298,15 @@ void SKKInputEngine::Output() {
 
     inputModeSelector_->Notify();
 
-    modified_ = false;
+    modified_ = modified_without_output_ = false;
 }
 
 bool SKKInputEngine::IsModified() const {
-    return modified_ || top()->IsModified();
+    return modified_ || modified_without_output_ || top()->IsModified();
+}
+
+bool SKKInputEngine::IsComposing() const {
+    return contextBuffer_.IsComposing();
 }
 
 bool SKKInputEngine::CanConvert(char code) const {
@@ -366,6 +376,8 @@ void SKKInputEngine::enableMainEditor() {
 
     active_->clear();
     active_->push_back(bottom_);
+
+    inputQueue_.Clear();
 
     needsInitializeOkuri_ = false;
 }

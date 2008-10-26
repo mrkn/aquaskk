@@ -83,9 +83,7 @@
 
     param.selected_text = [self selectedString];
 
-    BOOL result = session_->HandleEvent(param);
-
-    return result || param.force_handled;
+    return session_->HandleEvent(param);
 }
 
 - (void)commitComposition:(id)sender {

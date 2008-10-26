@@ -45,6 +45,7 @@ public:
     void Fix(const std::string& str);
     void Compose(const std::string& str, int cursor = 0);
     void Compose(const std::string& str, const std::string& completion, int cursor = 0);
+    bool IsComposing() const;
 
     void Output(SKKFrontEnd* frontend);
 

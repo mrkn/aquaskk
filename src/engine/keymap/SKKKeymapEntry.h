@@ -59,6 +59,9 @@ public:
     // エントリーがイベントかどうか
     bool IsEvent() const;
 
+    // エントリーが SKK_CHAR 属性かどうか
+    bool IsAttribute() const;
+
     // シンボルの取得
     int Symbol() const;
 };

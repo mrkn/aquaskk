@@ -65,7 +65,21 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
 
     handleRegistrationEvent();
 
-    return top()->Output();
+    bool handled = top()->Output();
+
+    // 単語登録中ではなく、未確定状態でもない
+    if(stack_.size() == 1 && !top()->IsComposing()) {
+        // 処理オプションを調べる
+        switch(event.option) {
+        case AlwaysHandled:     // 常に処理済み
+            return true;
+
+        case PseudoHandled:     // 未処理
+            return false;
+        }
+    }
+
+    return handled;
 }
 
 void SKKInputSession::Clear() {

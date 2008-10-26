@@ -33,6 +33,7 @@ class SKKKeymap {
 
     Keymap events_;
     Keymap attributes_;
+    Keymap option_;
 
     Keymap::iterator find(int charcode, int keycode, int mods, Keymap& keymap);
 

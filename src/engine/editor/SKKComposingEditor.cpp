@@ -118,6 +118,10 @@ void SKKComposingEditor::SetEntry(const std::string& entry) {
 
 void SKKComposingEditor::EnableDynamicCompletion(bool flag) {
     enableDynamicCompletion_ = flag;
+
+    if(!enableDynamicCompletion_) {
+        completion_.clear();
+    }
 }
 
 // ------------------------------------------------------------

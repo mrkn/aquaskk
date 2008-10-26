@@ -43,6 +43,10 @@ void SKKContextBuffer::Compose(const std::string& str, const std::string& comple
     completion_ = completion;
 }
 
+bool SKKContextBuffer::IsComposing() const {
+    return !composing_.empty();
+}
+
 void SKKContextBuffer::Output(SKKFrontEnd* frontend) {
     frontend->InsertString(fixed_);
 

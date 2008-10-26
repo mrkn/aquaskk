@@ -56,10 +56,12 @@
 - (void)showCompletion:(NSString*)comp at:(NSPoint)topleft level:(int)level {
     [view_ setCompletion:comp];
 
-    [window_ setFrame:[view_ frame] display:NO];
-    [window_ setFrameTopLeftPoint:topleft];
+    NSRect frame = [view_ frame];
+    frame.origin = topleft;
+    frame.origin.y -= frame.size.height;
+
+    [window_ setFrame:frame display:NO];
     [window_ setLevel:level];
-    [window_ setAlphaValue:1.0];
     [window_ orderFront:nil];
 }
 

@@ -47,6 +47,7 @@ public:
 
     void Dispatch(const SKKEvent& event);
     bool Output();
+    bool IsComposing() const;
     void Commit(const std::string& word);
 
     void Activate();

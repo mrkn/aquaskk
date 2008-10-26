@@ -286,6 +286,8 @@ State SKKState::Ascii(const Event& event) {
 // level 2 (sub of LatinInput)：全角英数
 // ======================================================================
 State SKKState::Jisx0208Latin(const Event& event) {
+    const SKKEvent& param = event.Param();
+
     switch(event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(Jisx0208LatinInputMode);
@@ -293,6 +295,11 @@ State SKKState::Jisx0208Latin(const Event& event) {
 
     case SKK_JISX0208LATIN_MODE:
         return 0;
+
+    default:
+        if(event == SKK_ASCII_MODE || param.IsSwitchToAscii()) {
+           return State::Transition(&SKKState::Ascii);
+        }
     }
 
     return &SKKState::LatinInput;

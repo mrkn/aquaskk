@@ -66,6 +66,10 @@ bool SKKRecursiveEditor::Output() {
     return result;
 }
 
+bool SKKRecursiveEditor::IsComposing() const {
+    return editor_.IsComposing();
+}
+
 void SKKRecursiveEditor::Commit(const std::string& word) {
     if(!word.empty()) {
         SKKBackEnd::theInstance().Register(editor_.Entry(), SKKCandidate(word, false));

@@ -59,6 +59,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     SKKInputModeSelector* inputModeSelector_;
     SKKClipboard* clipboard_;
     bool modified_;
+    bool modified_without_output_;
     EditorStack mainStack_;
     EditorStack subStack_;
     EditorStack* active_;
@@ -150,6 +151,9 @@ public:
 
     // 前回の Output 以降に変更されているかどうか？
     bool IsModified() const;
+
+    // 未確定文字列があるかどうか？
+    bool IsComposing() const;
 
     // ローマ字かな変換が発生するか？
     bool CanConvert(char code) const;

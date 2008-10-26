@@ -44,13 +44,21 @@ void SKKKeymap::Initialize(const std::string& path) {
 	    // キー情報を読み取る
 	    int key;
 	    while(entry >> key) {
-		// 明示的なイベント以外は全て SKK_CHAR として扱う
+		// 明示的なイベント
 		if(entry.IsEvent()) {
 		    events_[key] = entry.Symbol();
-		} else {
+                    continue;
+                }
+
+                // SKK_CHAR 属性
+                if(entry.IsAttribute()) {
 		    events_[key] = SKK_CHAR;
 		    attributes_[key] |= entry.Symbol();
+                    continue;
 		}
+
+                // 処理オプション
+                option_[key] = entry.Symbol();
 	    }
 	}
 
@@ -81,6 +89,12 @@ SKKEvent SKKKeymap::Fetch(int charcode, int keycode, int mods) {
 	if(iter != attributes_.end()) {
             event.attribute = iter->second;
         }
+    }
+
+    // 処理オプションを検索する
+    iter = find(charcode, keycode, mods, option_);
+    if(iter != option_.end()) {
+        event.option = iter->second;
     }
 
     return event;
