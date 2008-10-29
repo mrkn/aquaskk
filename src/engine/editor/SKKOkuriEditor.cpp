@@ -44,7 +44,7 @@ bool SKKOkuriEditor::IsOkuriComplete() const {
     return !okuri_.empty();
 }
 
-void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input) {
+void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, char code) {
     if(first_) {
         first_ = false;
 
@@ -56,6 +56,22 @@ void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input) {
     }
 
     okuri_ += fixed;
+
+    // OWsa 対応
+    if(okuri_.empty()) {
+        prefix_.clear();
+        if(input.empty()) {
+            if(code != 0) {
+                prefix_ += std::tolower(code);
+            }
+        } else {
+            prefix_ += std::tolower(input[0]);
+        }
+    } else {
+        if(prefix_.empty() && code != 0) {
+            prefix_ += std::tolower(code);
+        }
+    }
 }
 
 void SKKOkuriEditor::Input(SKKBaseEditor::Event event) {

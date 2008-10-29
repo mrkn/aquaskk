@@ -26,6 +26,7 @@
 #include "MacMessenger.h"
 #include "MacClipboard.h"
 #include "MacCandidateWindow.h"
+#include "MacAnnotator.h"
 #include "MacInputEngineOption.h"
 
 MacInputSessionParameter::MacInputSessionParameter(id client)
@@ -34,6 +35,7 @@ MacInputSessionParameter::MacInputSessionParameter(id client)
     , messenger_(new MacMessenger(frontend_.get()))
     , clipboard_(new MacClipboard())
     , candidateWindow_(new MacCandidateWindow(frontend_.get()))
+    , annotator_(new MacAnnotator(client))
     , inputEngineOption_(new MacInputEngineOption())
 {}
 
@@ -55,6 +57,10 @@ SKKClipboard* MacInputSessionParameter::Clipboard() {
 
 SKKCandidateWindow* MacInputSessionParameter::CandidateWindow() {
     return candidateWindow_.get();
+}
+
+SKKAnnotator* MacInputSessionParameter::Annotator() {
+    return annotator_.get();
 }
 
 SKKInputEngineOption* MacInputSessionParameter::InputEngineOption() {

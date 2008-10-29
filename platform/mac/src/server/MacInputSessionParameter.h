@@ -32,6 +32,7 @@ class MacInputSessionParameter : public SKKInputSessionParameter {
     std::auto_ptr<SKKMessenger> messenger_;
     std::auto_ptr<SKKClipboard> clipboard_;
     std::auto_ptr<SKKCandidateWindow> candidateWindow_;
+    std::auto_ptr<SKKAnnotator> annotator_;
     std::auto_ptr<SKKInputEngineOption> inputEngineOption_;
 
 public:
@@ -42,6 +43,7 @@ public:
     virtual SKKMessenger* Messenger();
     virtual SKKClipboard* Clipboard();
     virtual SKKCandidateWindow* CandidateWindow();
+    virtual SKKAnnotator* Annotator();
     virtual SKKInputEngineOption* InputEngineOption();
 };
 

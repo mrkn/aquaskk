@@ -24,6 +24,7 @@
 #include "SKKInputEngineOption.h"
 #include "SKKInputMode.h"
 #include "SKKClipboard.h"
+#include "SKKAnnotator.h"
 #include "SKKContextBuffer.h"
 #include "SKKBackEnd.h"
 #include "jconv.h"
@@ -35,6 +36,7 @@ SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
                                SKKFrontEnd* frontend,
                                SKKInputModeSelector* inputModeSelector,
                                SKKClipboard* clipboard,
+                               SKKAnnotator* annotator,
                                SKKBaseEditor* bottom)
     : frontend_(frontend),
       bottom_(bottom),
@@ -42,6 +44,7 @@ SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
       registrationObserver_(registrationObserver),
       inputModeSelector_(inputModeSelector),
       clipboard_(clipboard),
+      annotator_(annotator),
       modified_(false),
       bypassMode_(false),
       inputQueue_(this) {
@@ -83,6 +86,8 @@ void SKKInputEngine::SetStateComposing() {
     enableMainEditor();
 
     active_->push_back(&composingEditor_);
+
+    inputQueue_.Clear();
 }
 
 void SKKInputEngine::SetStateOkuri() {
@@ -184,7 +189,7 @@ void SKKInputEngine::Commit() {
 void SKKInputEngine::Insert(const std::string& str) {
     enableMainEditor();
 
-    top()->Input(str, "");
+    top()->Input(str, "", 0);
 
     // 強制的に出力する
     Output();
@@ -284,7 +289,7 @@ void SKKInputEngine::Output() {
     // 内部バッファが更新されている時だけ出力する
     if(modified_ || top()->IsModified()) {
         updateContextBuffer();
-        contextBuffer_.Output(frontend_);
+        contextBuffer_.Output(frontend_, annotator_);
 
         // 直接入力モードのカーソル移動等では内部バッファが変更されず、
         // empty 状態が保たれる
@@ -377,8 +382,6 @@ void SKKInputEngine::enableMainEditor() {
     active_->clear();
     active_->push_back(bottom_);
 
-    inputQueue_.Clear();
-
     needsInitializeOkuri_ = false;
 }
 
@@ -403,11 +406,11 @@ void SKKInputEngine::updateContextBuffer() {
 
 // ------------------------------------------------------------
 
-void SKKInputEngine::SKKInputQueueUpdate(const std::string& fixed, const std::string& queue) {
+void SKKInputEngine::SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code) {
     if(bypassMode_) {
         top()->Input(fixed);
     } else {
-        top()->Input(fixed, queue);
+        top()->Input(fixed, queue, code);
     }
 }
 
@@ -447,4 +450,5 @@ const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
 
 void SKKInputEngine::SKKSelectorUpdate(const SKKCandidate& candidate) {
     candidateEditor_.SetCandidate(candidate);
+    annotator_->Update(candidate);
 }

@@ -38,7 +38,7 @@ class SKKComposingEditor : public SKKBaseEditor {
 public:
     SKKComposingEditor();
 
-    virtual void Input(const std::string& fixed, const std::string& input);
+    virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(Event event);
     virtual void Clear();
     virtual void Output(SKKContextBuffer& buffer) const;

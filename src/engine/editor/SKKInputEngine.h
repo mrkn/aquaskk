@@ -46,6 +46,7 @@ public:
 class SKKInputEngineOption;
 class SKKClipboard;
 class SKKFrontEnd;
+class SKKAnnotator;
 
 class SKKInputEngine : public SKKInputQueueObserver,
                        public SKKCompleterBuddy,
@@ -58,6 +59,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     SKKRegistrationObserver* registrationObserver_;
     SKKInputModeSelector* inputModeSelector_;
     SKKClipboard* clipboard_;
+    SKKAnnotator* annotator_;
     bool modified_;
     bool modified_without_output_;
     EditorStack mainStack_;
@@ -88,7 +90,8 @@ class SKKInputEngine : public SKKInputQueueObserver,
     void enableSubEditor(SKKBaseEditor* editor);
     void updateContextBuffer();
 
-    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue);
+    // ローマ字かな変換通知
+    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code);
 
     // 見出し語の取得
     virtual const std::string SKKCompleterQueryString();
@@ -108,6 +111,7 @@ public:
                    SKKFrontEnd* frontend,
                    SKKInputModeSelector* inputModeSelector,
                    SKKClipboard* clipboard,
+                   SKKAnnotator* annotator,
                    SKKBaseEditor* bottom);
 
     // 入力モード

@@ -43,8 +43,8 @@ public:
     // 入力処理(ASCII 専用)
     virtual void Input(const std::string& ascii) {}
 
-    // 入力処理(fixed=確定文字列, input=入力文字列)
-    virtual void Input(const std::string& fixed, const std::string& input) {}
+    // 入力処理(fixed=確定文字列, input=入力文字列, code=入力文字)
+    virtual void Input(const std::string& fixed, const std::string& input, char code) {}
 
     // 入力処理(event=イベント)
     virtual void Input(Event event) {}

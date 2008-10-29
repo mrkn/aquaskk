@@ -33,7 +33,7 @@ class SKKPrimaryEditor : public SKKBaseEditor {
 public:
     SKKPrimaryEditor();
 
-    virtual void Input(const std::string& fixed, const std::string& input);
+    virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Clear();
     virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);

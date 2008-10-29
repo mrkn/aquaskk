@@ -22,6 +22,7 @@
 
 #include "SKKContextBuffer.h"
 #include "SKKFrontEnd.h"
+#include "SKKAnnotator.h"
 #include "utf8util.h"
 #include <iostream>
 
@@ -47,7 +48,7 @@ bool SKKContextBuffer::IsComposing() const {
     return !composing_.empty();
 }
 
-void SKKContextBuffer::Output(SKKFrontEnd* frontend) {
+void SKKContextBuffer::Output(SKKFrontEnd* frontend, SKKAnnotator* annotator) {
     frontend->InsertString(fixed_);
 
     frontend->ComposeString(composing_, cursor_);
@@ -56,6 +57,14 @@ void SKKContextBuffer::Output(SKKFrontEnd* frontend) {
         frontend->ShowCompletion(completion_, completion_cursor_);
     } else {
         frontend->HideCompletion();
+    }
+
+    if(annotator) {
+        if(!candidate_.IsEmpty()) {
+            annotator->Show(utf8::length(composing_) - cursor_);
+        } else {
+            annotator->Hide();
+        }
     }
 }
 

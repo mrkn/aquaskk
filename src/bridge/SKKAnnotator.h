@@ -20,31 +20,23 @@
 
 */
 
-#ifndef SKKRegisterFilter_h
-#define SKKRegisterFilter_h
+#ifndef SKKAnnotator_h
+#define SKKAnnotator_h
 
-#include "SKKBaseEditor.h"
-#include "SKKTextBuffer.h"
+#include "SKKCandidate.h"
 
-class SKKEntry;
-
-class SKKRegisterEditor : public SKKBaseEditor {
-    std::string prompt_;
-    SKKTextBuffer word_;
-
-    SKKRegisterEditor();
-    SKKRegisterEditor(const SKKRegisterEditor&);
-    SKKRegisterEditor& operator=(const SKKRegisterEditor&);
-
+class SKKAnnotator {
 public:
-    SKKRegisterEditor(const SKKEntry& entry);
+    virtual ~SKKAnnotator() {}
 
-    virtual void Input(const std::string& ascii);
-    virtual void Input(const std::string& fixed, const std::string& input, char code);
-    virtual void Input(Event event);
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
-    virtual void Commit(std::string& queue);
+    // 註釈の更新
+    virtual void Update(const SKKCandidate& candidate) = 0;
+
+    // 表示
+    virtual void Show(int cursor) = 0;
+
+    // 停止
+    virtual void Hide() = 0;
 };
 
 #endif

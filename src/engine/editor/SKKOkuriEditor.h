@@ -38,7 +38,7 @@ public:
     void Initialize(char prefix);
     bool IsOkuriComplete() const;
 
-    virtual void Input(const std::string& fixed, const std::string& input);
+    virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(SKKBaseEditor::Event event);
     virtual void Clear();
     virtual void Output(SKKContextBuffer& buffer) const;

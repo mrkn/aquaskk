@@ -38,7 +38,7 @@ void SKKInputQueue::AddChar(char code) {
 
     convert(code, fixed);
 
-    notify(fixed);
+    notify(fixed, code);
 }
 
 void SKKInputQueue::RemoveChar() {
@@ -130,6 +130,6 @@ void SKKInputQueue::convert(char code, std::string& fixed, bool terminate) {
     }
 }
 
-void SKKInputQueue::notify(const std::string& fixed) {
-    observer_->SKKInputQueueUpdate(fixed, queue_);
+void SKKInputQueue::notify(const std::string& fixed, char code) {
+    observer_->SKKInputQueueUpdate(fixed, queue_, code);
 }

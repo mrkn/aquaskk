@@ -37,6 +37,7 @@ SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObse
               param_->FrontEnd(),
               &inputModeSelector_,
               param_->Clipboard(),
+              param_->Annotator(),
               bottom_.get())
     , state_(SKKState(param_->Messenger(),
                       param_->CandidateWindow(),

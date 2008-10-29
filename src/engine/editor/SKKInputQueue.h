@@ -30,7 +30,7 @@ class SKKInputQueueObserver {
 public:
     virtual ~SKKInputQueueObserver() {}
 
-    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue) = 0;
+    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code) = 0;
 };
 
 class SKKInputQueue {
@@ -39,7 +39,7 @@ class SKKInputQueue {
     std::string queue_;
 
     void convert(char code, std::string& fixed, bool terminate = false);
-    void notify(const std::string& fixed = "");
+    void notify(const std::string& fixed = "", char code = 0);
 
 public:
     SKKInputQueue(SKKInputQueueObserver* observer);

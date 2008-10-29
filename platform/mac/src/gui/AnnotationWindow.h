@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,31 +20,22 @@
 
 */
 
-#ifndef SKKRegisterFilter_h
-#define SKKRegisterFilter_h
+#ifndef AnnotationWindow_h
+#define AnnotationWindow_h
 
-#include "SKKBaseEditor.h"
-#include "SKKTextBuffer.h"
+@class AnnotationView;
 
-class SKKEntry;
+@interface AnnotationWindow : NSObject {
+    NSWindow* window_;
+    AnnotationView* view_;
+}
 
-class SKKRegisterEditor : public SKKBaseEditor {
-    std::string prompt_;
-    SKKTextBuffer word_;
++ (AnnotationWindow*)sharedWindow;
+- (void)setAnnotation:(NSString*)annotation;
+- (void)show:(NSPoint)origin level:(int)level;
+- (void)hide;
 
-    SKKRegisterEditor();
-    SKKRegisterEditor(const SKKRegisterEditor&);
-    SKKRegisterEditor& operator=(const SKKRegisterEditor&);
-
-public:
-    SKKRegisterEditor(const SKKEntry& entry);
-
-    virtual void Input(const std::string& ascii);
-    virtual void Input(const std::string& fixed, const std::string& input, char code);
-    virtual void Input(Event event);
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
-    virtual void Commit(std::string& queue);
-};
+@end
 
 #endif
+

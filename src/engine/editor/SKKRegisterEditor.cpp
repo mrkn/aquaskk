@@ -31,7 +31,7 @@ void SKKRegisterEditor::Input(const std::string& ascii) {
     word_.Insert(ascii);
 }
 
-void SKKRegisterEditor::Input(const std::string& fixed, const std::string&) {
+void SKKRegisterEditor::Input(const std::string& fixed, const std::string&, char) {
     word_.Insert(fixed);
 }
 

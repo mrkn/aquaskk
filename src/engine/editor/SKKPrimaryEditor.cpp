@@ -25,7 +25,7 @@
 
 SKKPrimaryEditor::SKKPrimaryEditor() : modified_(0) {}
 
-void SKKPrimaryEditor::Input(const std::string& fixed, const std::string&) {
+void SKKPrimaryEditor::Input(const std::string& fixed, const std::string&, char) {
     fixed_ = fixed;
 
     ++ modified_;
