@@ -35,24 +35,19 @@ MacAnnotator::MacAnnotator(id client) : client_(client) {
 void MacAnnotator::Update(const SKKCandidate& candidate) {
     candidate_ = candidate;
     NSString* str = [NSString stringWithUTF8String:candidate_.Variant().c_str()];
-    //NSString* anon = [NSString stringWithUTF8String:candidate.Annotation().c_str()];
+    NSString* annotation = [NSString stringWithUTF8String:candidate.Annotation().c_str()];
     CFRange range = CFRangeMake(0, [str length]);
 
-    NSString* result = (NSString*)DCSCopyTextDefinition(0, (CFStringRef)str, range);
+    NSString* definition = (NSString*)DCSCopyTextDefinition(0, (CFStringRef)str, range);
 
-    if(result) {
-        [window_ setAnnotation:result];
-        [result release];
-    } else {
-        [window_ setAnnotation:@""];
-    }
+    [window_ setAnnotation:definition optional:annotation];
+
+    [definition release];
 }
 
 void MacAnnotator::Show(int cursor) {
     NSRect rect;
     NSDictionary* dict = [client_ attributesForCharacterIndex:cursor - 1 lineHeightRectangle:&rect];
-
-    NSLog(@"anon dict=%@", dict);
 
     NSFont* font = [dict objectForKey:@"NSFont"];
     NSDictionary* attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];

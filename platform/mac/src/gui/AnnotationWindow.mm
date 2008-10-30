@@ -50,8 +50,8 @@
     [super dealloc];
 }
 
-- (void)setAnnotation:(NSString*)string {
-    [view_ setAnnotation:string];
+- (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation {
+    [view_ setAnnotation:definition optional:annotation];
 }
 
 - (void)show:(NSPoint)origin level:(int)level {

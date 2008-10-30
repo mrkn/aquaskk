@@ -42,6 +42,7 @@ namespace SKKUserDefaultKeys {
     extern NSString* candidate_window_font_name;
     extern NSString* candidate_window_font_size;
     extern NSString* candidate_window_labels;
+    extern NSString* enable_annotation;
 
     extern NSString* user_dictionary_path;
 

@@ -29,6 +29,8 @@
 	<integer>18</integer>
 	<key>candidate_window_labels</key>
 	<string>ASDFJKL</string>
+        <key>enable_annotation</key>
+        <false/>
 
         <key>user_dictionary_path</key>
         <string>~/Library/Application Support/AquaSKK/skk-jisyo.utf8</string>

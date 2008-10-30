@@ -41,6 +41,7 @@ namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(candidate_window_font_name);
     DECLARE_NSStringKey(candidate_window_font_size);
     DECLARE_NSStringKey(candidate_window_labels);
+    DECLARE_NSStringKey(enable_annotation);
 
     DECLARE_NSStringKey(user_dictionary_path);
 

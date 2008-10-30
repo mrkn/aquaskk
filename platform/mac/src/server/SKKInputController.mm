@@ -28,6 +28,7 @@
 #include "MacInputModeMenu.h"
 #include "MacInputModeWindow.h"
 #include "CompletionWindow.h"
+#include "AnnotationWindow.h"
 #include "SKKFrontEnd.h"
 #include "SKKBackEnd.h"
 
@@ -89,6 +90,8 @@
 - (void)commitComposition:(id)sender {
     session_->Clear();
     frontend_->Clear();
+
+    [[AnnotationWindow sharedWindow] hide];
 }
 
 // IMKStateSetting
@@ -104,6 +107,7 @@
     session_->Deactivate();
 
     [[CompletionWindow sharedWindow] hide];
+    [[AnnotationWindow sharedWindow] hide];
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {

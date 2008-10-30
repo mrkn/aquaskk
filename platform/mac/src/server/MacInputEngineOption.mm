@@ -34,3 +34,7 @@ bool MacInputEngineOption::FixIntermediateConversion() {
 bool MacInputEngineOption::EnableDynamicCompletion() {
     return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
 }
+
+bool MacInputEngineOption::EnableAnnotation() {
+    return [defaults_ boolForKey:SKKUserDefaultKeys::enable_annotation] == YES;
+}

@@ -289,7 +289,12 @@ void SKKInputEngine::Output() {
     // 内部バッファが更新されている時だけ出力する
     if(modified_ || top()->IsModified()) {
         updateContextBuffer();
-        contextBuffer_.Output(frontend_, annotator_);
+
+        if(option_->EnableAnnotation()) {
+            contextBuffer_.Output(frontend_, annotator_);
+        } else {
+            contextBuffer_.Output(frontend_, 0);
+        }
 
         // 直接入力モードのカーソル移動等では内部バッファが変更されず、
         // empty 状態が保たれる
@@ -450,5 +455,8 @@ const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
 
 void SKKInputEngine::SKKSelectorUpdate(const SKKCandidate& candidate) {
     candidateEditor_.SetCandidate(candidate);
-    annotator_->Update(candidate);
+
+    if(option_->EnableAnnotation()) {
+        annotator_->Update(candidate);
+    }
 }

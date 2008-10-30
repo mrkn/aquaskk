@@ -26,11 +26,13 @@
 @interface AnnotationView : NSView {
     NSScrollView* scrollView_;
     NSTextView* textView_;
-    NSDictionary* attributes_;
     NSMutableParagraphStyle* listStyle_;
+    NSMutableParagraphStyle* defaultStyle_;
+    NSAttributedString* header1_;
+    NSAttributedString* header2_;
 }
 
-- (void)setAnnotation:(NSString*)string;
+- (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation;
 - (BOOL)hasAnnotation;
 
 @end

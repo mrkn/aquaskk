@@ -31,7 +31,7 @@
 }
 
 + (AnnotationWindow*)sharedWindow;
-- (void)setAnnotation:(NSString*)annotation;
+- (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation;
 - (void)show:(NSPoint)origin level:(int)level;
 - (void)hide;
 
