@@ -25,8 +25,8 @@
 
 SKKCompleter::SKKCompleter(SKKCompleterBuddy* buddy) : buddy_(buddy) {}
 
-bool SKKCompleter::Execute() {
-    if(complete()) {
+bool SKKCompleter::Execute(int limit) {
+    if(complete(limit)) {
 	notify();
     }
 
@@ -65,13 +65,13 @@ void SKKCompleter::Prev() {
     notify();
 }
 
-bool SKKCompleter::complete() {
+bool SKKCompleter::complete(int limit) {
     std::string query(buddy_->SKKCompleterQueryString());
 
     pos_ = 0;
     completions_.clear();
 
-    return SKKBackEnd::theInstance().Complete(query, completions_);
+    return SKKBackEnd::theInstance().Complete(query, completions_, limit);
 }
 
 int SKKCompleter::minPosition() const {

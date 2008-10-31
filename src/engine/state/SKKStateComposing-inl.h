@@ -87,7 +87,11 @@ State SKKState::Edit(const Event& event) {
         return 0;
 
     case SKK_CHAR:
-        if(param.IsNextCandidate()) {
+        if(param.IsCompConversion()) {
+            completer_.Execute(1);
+        }
+
+        if(param.IsNextCandidate() || param.IsCompConversion()) {
             if(editor_->Entry().IsEmpty()) {
                 return State::Transition(&SKKState::KanaInput);
             }

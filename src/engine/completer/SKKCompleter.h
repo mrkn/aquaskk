@@ -42,7 +42,7 @@ class SKKCompleter {
     std::vector<std::string> completions_;
     int pos_;
 
-    bool complete();
+    bool complete(int limit);
     void notify();
     int minPosition() const;
     int maxPosition() const;
@@ -51,7 +51,7 @@ public:
     SKKCompleter(SKKCompleterBuddy* buddy);
 
     // 見出し語の補完
-    bool Execute();
+    bool Execute(int limit = 0);
 
     // 補完候補の削除
     bool Remove();

@@ -69,7 +69,8 @@ enum {
     NextCandidate               = (1 << 10),
     PrevCandidate               = (1 << 11),
     RemoveTrigger               = (1 << 12),
-    InputChars			= (1 << 13)
+    InputChars			= (1 << 13),
+    CompConversion		= (1 << 14)
 };
 
 // 処理オプション
@@ -105,6 +106,7 @@ struct SKKEvent {
     bool IsPrevCandidate() const                { return attribute & PrevCandidate; }
     bool IsRemoveTrigger() const                { return attribute & RemoveTrigger; }
     bool IsInputChars() const	                { return attribute & InputChars; }
+    bool IsCompConversion() const               { return attribute & CompConversion; }
 
     const static SKKEvent& Null() {
         static SKKEvent obj(SKK_NULL, 0, 0);
@@ -134,6 +136,7 @@ struct SKKEvent {
         TEST_attribute(PrevCandidate);
         TEST_attribute(RemoveTrigger);
         TEST_attribute(InputChars);
+        TEST_attribute(CompConversion);
 
 #undef TEST_attribute
 

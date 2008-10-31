@@ -54,7 +54,15 @@
     [view_ setAnnotation:definition optional:annotation];
 }
 
+- (void)activate:(id)sender {
+    [window_ orderFront:nil];
+
+    [view_ setNeedsDisplay:YES];
+}
+
 - (void)show:(NSPoint)origin level:(int)level {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+
     if(![view_ hasAnnotation]) {
         [self hide];
         return;
@@ -62,12 +70,12 @@
 
     [window_ setFrameOrigin:origin];
     [window_ setLevel:level];
-    [window_ orderFront:nil];
 
-    [view_ setNeedsDisplay:YES];
+    [self performSelector:@selector(activate:) withObject:self afterDelay:1.0];
 }
 
 - (void)hide {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     [window_ orderOut:nil];
 }
 

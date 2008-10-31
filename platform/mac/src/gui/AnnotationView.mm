@@ -65,7 +65,7 @@
 
         [textView_ setFrameSize:[scrollView_ contentSize]];
 
-        header1_ = [self createHeader:@"意味、語源"];
+        header1_ = [self createHeader:@"意味・語源"];
         header2_ = [self createHeader:@"SKK アノテーション"];
     }
 
@@ -146,15 +146,17 @@
             if([line length] == 0) continue;
 
             if([line length] == 1 && i + 1 < [array count]) {
-                [self insertString:[NSString stringWithFormat:@"%@\t%@\n",
-                                             [array objectAtIndex:i],
-                                             [array objectAtIndex:i + 1]]
-                      withStyle:listStyle_];
-                i += 1;
+                NSString* item = [NSString stringWithFormat:@"%@\t%@",
+                                           [array objectAtIndex:i],
+                                           [array objectAtIndex:i + 1]];
+
+                [self insertString:[self normalizeString:item] withStyle:listStyle_];
+                ++ i;
             } else {
-                [self insertString:line withStyle:defaultStyle_];
-                [textView_ insertText:@"\n"];
+                [self insertString:[self normalizeString:line] withStyle:defaultStyle_];
             }
+
+            [textView_ insertText:@"\n"];
         }
     }
 }
@@ -193,8 +195,7 @@
 }
 
 - (void)insertString:(NSString*)string withStyle:(NSParagraphStyle*)style {
-    NSMutableAttributedString* attr = [[NSMutableAttributedString alloc]
-                                          initWithString:[self normalizeString:string]];
+    NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange range = NSMakeRange(0, [attr length]);
 
     [attr addAttribute:NSParagraphStyleAttributeName value:style range:range];
