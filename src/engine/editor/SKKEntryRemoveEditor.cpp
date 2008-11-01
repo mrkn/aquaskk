@@ -33,7 +33,7 @@ void SKKEntryRemoveEditor::Initialize(const SKKEntry& entry, const SKKCandidate&
     Clear();
 }
 
-void SKKEntryRemoveEditor::Input(const std::string& fixed, const std::string&) {
+void SKKEntryRemoveEditor::Input(const std::string& fixed, const std::string&, char) {
     input_ += fixed;
 }
 
