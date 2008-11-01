@@ -25,6 +25,7 @@
 @interface CompletionView (Local)
 
 - (NSRect)completionRect;
+- (NSAttributedString*)createGuideWithString:(NSString*)string;
 
 @end
 
@@ -36,10 +37,15 @@
         completion_ = nil;
 
         NSMutableDictionary* dictionary = [NSMutableDictionary dictionaryWithCapacity:0];
-
         [dictionary setObject:[NSFont systemFontOfSize:0.0] forKey:NSFontAttributeName];
-
         attributes_ = [dictionary retain];
+
+        strokeColor_ = [[NSColor controlShadowColor] retain];
+        backgroundColor_ = [[NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.94 alpha:1.0] retain];
+
+        guide_ = [self createGuideWithString:@"  TAB で補完  "];
+        guideSize_ = [guide_ size];
+        guideSize_.height += 2;
     }
     return self;
 }
@@ -50,6 +56,9 @@
     }
 
     [attributes_ release];
+    [strokeColor_ release];
+    [backgroundColor_ release];
+    [guide_ release];
 
     [super dealloc];
 }
@@ -60,21 +69,38 @@
     }
 
     completion_ = [completion retain];
-    
+
     [self setFrame:[self completionRect]];
     [self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)rect {
-    NSRect frame = [self completionRect];
+    NSRect frame = [self frame];
 
-    [[NSColor controlColor] setFill];
-    [[NSColor controlShadowColor] setStroke];
+    frame.size.height -= guideSize_.height;
+    frame.origin.y += guideSize_.height;
 
+    [backgroundColor_ setFill];
     NSRectFill(frame);
+
+    [strokeColor_ setStroke];
     [NSBezierPath strokeRect:frame];
 
-    [completion_ drawAtPoint:NSMakePoint(3, 4) withAttributes:attributes_];
+    frame.size.height = guideSize_.height;
+    frame.origin.y = 0;
+    NSBezierPath* guidePlate = [NSBezierPath bezierPathWithRoundedRect:frame
+                                             xRadius:NSHeight(frame) / 2
+                                             yRadius:NSHeight(frame) / 2];
+    [strokeColor_ setFill];
+    [guidePlate fill];
+
+    frame.origin.y = frame.size.height = guideSize_.height / 2;
+    NSRectFill(frame);
+
+    NSPoint pt = NSMakePoint((NSWidth(frame) - guideSize_.width) / 2, 1);
+
+    [guide_ drawAtPoint:pt];
+    [completion_ drawAtPoint:NSMakePoint(3, guideSize_.height + 4) withAttributes:attributes_];
 }
 
 @end
@@ -86,10 +112,27 @@
 
     rect.origin = NSMakePoint(0, 0);
     rect.size = [completion_ sizeWithAttributes:attributes_];
+    rect.size.width = MAX(rect.size.width, guideSize_.width);
     rect.size.width += 8;
-    rect.size.height += 8;
+    rect.size.height += guideSize_.height + 8;
 
     return rect;
+}
+
+- (NSAttributedString*)createGuideWithString:(NSString*)string {
+    NSMutableAttributedString* tmp = [[NSMutableAttributedString alloc] initWithString:string];
+    NSRange range = NSMakeRange(0, [tmp length]);
+
+    [tmp addAttribute:NSFontAttributeName
+         value:[NSFont boldSystemFontOfSize:[NSFont labelFontSize]] range:range];
+
+    [tmp addAttribute:NSForegroundColorAttributeName
+         value:[NSColor whiteColor] range:range];
+
+    [tmp addAttribute:NSBackgroundColorAttributeName
+         value:strokeColor_ range:range];
+
+    return [tmp retain];
 }
 
 @end

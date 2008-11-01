@@ -26,7 +26,7 @@
 #include "jconv.h"
 #include <iostream>
 
-SKKComposingEditor::SKKComposingEditor() : enableDynamicCompletion_(false) {
+SKKComposingEditor::SKKComposingEditor() : enableDynamicCompletion_(false), completionRange_(1) {
     setModified();
 }
 
@@ -124,6 +124,10 @@ void SKKComposingEditor::EnableDynamicCompletion(bool flag) {
     }
 }
 
+void SKKComposingEditor::SetDynamicCompletionRange(int range) {
+    completionRange_ = range;
+}
+
 // ------------------------------------------------------------
 
 void SKKComposingEditor::setModified() {
@@ -136,9 +140,15 @@ void SKKComposingEditor::updateCompletion() {
     std::vector<std::string> result;
     std::string key = composing_.String();
 
-    // 最初の候補を補完する
-    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, 1)) {
-        completion_ = result[0];
+    // 候補を補完する
+    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, completionRange_)) {
+        completion_.clear();
+        unsigned limit = std::min((unsigned)result.size(), (unsigned)completionRange_);
+        for(unsigned i = 0; i < limit; ++ i) { 
+            completion_ += result[i];
+            completion_ += "\n";
+        }
+        completion_.erase(completion_.size() - 1);
     } else {
         completion_.clear();
     }

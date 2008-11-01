@@ -82,6 +82,7 @@ void SKKInputEngine::SetStateComposing() {
 
     // ダイナミック補完オプション設定
     composingEditor_.EnableDynamicCompletion(option_->EnableDynamicCompletion());
+    composingEditor_.SetDynamicCompletionRange(option_->DynamicCompletionRange());
 
     enableMainEditor();
 

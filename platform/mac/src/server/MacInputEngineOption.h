@@ -33,6 +33,7 @@ public:
 
     virtual bool FixIntermediateConversion();
     virtual bool EnableDynamicCompletion();
+    virtual int DynamicCompletionRange();
     virtual bool EnableAnnotation();
 };
 

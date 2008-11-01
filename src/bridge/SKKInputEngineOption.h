@@ -33,6 +33,9 @@ public:
     // 自動ダイナミック補完を有効にするか
     virtual bool EnableDynamicCompletion() = 0;
 
+    // 自動ダイナミック補完の幅(表示数)
+    virtual int DynamicCompletionRange() = 0;
+
     // アノテーションを有効にするか
     virtual bool EnableAnnotation() = 0;
 };

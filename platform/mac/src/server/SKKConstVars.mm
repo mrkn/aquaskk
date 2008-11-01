@@ -35,6 +35,7 @@ namespace SKKUserDefaultKeys {
 
     DECLARE_NSStringKey(enable_extended_completion);
     DECLARE_NSStringKey(enable_dynamic_completion);
+    DECLARE_NSStringKey(dynamic_completion_range);
     DECLARE_NSStringKey(minimum_completion_length);
 
     DECLARE_NSStringKey(max_count_of_inline_candidates);

@@ -18,6 +18,8 @@
         <true/>
         <key>enable_dynamic_completion</key>
         <false/>
+        <key>dynamic_completion_range</key>
+        <integer>1<integer/>
         <key>minimum_completion_length</key>
         <integer>0</integer>
 

@@ -35,6 +35,10 @@ bool MacInputEngineOption::EnableDynamicCompletion() {
     return [defaults_ boolForKey:SKKUserDefaultKeys::enable_dynamic_completion] == YES;
 }
 
+int MacInputEngineOption::DynamicCompletionRange() {
+    return [defaults_ integerForKey:SKKUserDefaultKeys::dynamic_completion_range];
+}
+
 bool MacInputEngineOption::EnableAnnotation() {
     return [defaults_ boolForKey:SKKUserDefaultKeys::enable_annotation] == YES;
 }

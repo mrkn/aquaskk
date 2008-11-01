@@ -36,6 +36,7 @@ namespace SKKUserDefaultKeys {
 
     extern NSString* enable_extended_completion;
     extern NSString* enable_dynamic_completion;
+    extern NSString* dynamic_completion_range;
     extern NSString* minimum_completion_length;
 
     extern NSString* max_count_of_inline_candidates;
