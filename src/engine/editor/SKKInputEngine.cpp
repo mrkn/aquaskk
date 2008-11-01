@@ -455,8 +455,4 @@ const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
 
 void SKKInputEngine::SKKSelectorUpdate(const SKKCandidate& candidate) {
     candidateEditor_.SetCandidate(candidate);
-
-    if(option_->EnableAnnotation()) {
-        annotator_->Update(candidate);
-    }
 }

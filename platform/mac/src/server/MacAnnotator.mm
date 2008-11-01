@@ -32,8 +32,10 @@ MacAnnotator::MacAnnotator(id client) : client_(client) {
     window_ = [AnnotationWindow sharedWindow];
 }
 
-void MacAnnotator::Update(const SKKCandidate& candidate) {
+void MacAnnotator::UpdateAnnotation(const SKKCandidate& candidate, const std::string& buffer) {
     candidate_ = candidate;
+    buffer_ = buffer;
+
     NSString* str = [NSString stringWithUTF8String:candidate_.Variant().c_str()];
     NSString* annotation = [NSString stringWithUTF8String:candidate.Annotation().c_str()];
     CFRange range = CFRangeMake(0, [str length]);
@@ -45,17 +47,19 @@ void MacAnnotator::Update(const SKKCandidate& candidate) {
     [definition release];
 }
 
-void MacAnnotator::Show(int cursor) {
+void MacAnnotator::Show() {
     NSRect rect;
-    NSDictionary* dict = [client_ attributesForCharacterIndex:cursor - 1 lineHeightRectangle:&rect];
+    NSDictionary* dict = [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
 
     NSFont* font = [dict objectForKey:@"NSFont"];
+    if(!font) {
+        NSLog(@"NSFont can't get!!!");
+        return;
+    }
+
     NSDictionary* attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
-
-    std::string last = utf8::right(candidate_.Variant(), -1);
-
     NSAttributedString* str = [[NSAttributedString alloc]
-                                  initWithString:[NSString stringWithUTF8String:last.c_str()]
+                                  initWithString:[NSString stringWithUTF8String:buffer_.c_str()]
                                   attributes:attributes];
     rect.origin.x += [str size].width + 4;
     rect.origin.y += 4;

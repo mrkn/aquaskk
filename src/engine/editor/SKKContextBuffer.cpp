@@ -61,7 +61,8 @@ void SKKContextBuffer::Output(SKKFrontEnd* frontend, SKKAnnotator* annotator) {
 
     if(annotator) {
         if(!candidate_.IsEmpty()) {
-            annotator->Show(utf8::length(composing_) - cursor_);
+            annotator->UpdateAnnotation(candidate_, utf8::left(composing_, cursor_));
+            annotator->Show();
         } else {
             annotator->Hide();
         }

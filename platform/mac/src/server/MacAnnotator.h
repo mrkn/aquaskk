@@ -31,12 +31,13 @@ class MacAnnotator : public SKKAnnotator {
     id client_;
     AnnotationWindow* window_;
     SKKCandidate candidate_;
+    std::string buffer_;
 
 public:
     MacAnnotator(id client);
 
-    virtual void Update(const SKKCandidate& candidate);
-    virtual void Show(int cursor);
+    virtual void UpdateAnnotation(const SKKCandidate& candidate, const std::string& buffer);
+    virtual void Show();
     virtual void Hide();
 };
 
