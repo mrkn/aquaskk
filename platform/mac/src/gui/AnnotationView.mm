@@ -24,74 +24,180 @@
 
 @interface AnnotationView (Local)
 
+- (void)initializeStyle;
+- (void)initializeView;
 - (NSAttributedString*)createHeader:(NSString*)string;
 - (void)setDefinitiveAnnotation:(NSString*)string;
 - (void)setOptionalAnnotation:(NSString*)string;
+- (void)scrollToTop;
 - (NSString*)normalizeString:(NSString*)string;
-- (void)insertString:(NSString*)string withStyle:(NSParagraphStyle*)style;
+- (void)appendNewLine;
+- (NSAttributedString*)getParagraph:(NSString*)string withStyle:(NSParagraphStyle*)style;
 
 @end
 
 @implementation AnnotationView
 
 - (id)init {
-    self = [super initWithFrame:NSMakeRect(0, 0, 254, 62)];
+    self = [super initWithFrame:NSMakeRect(0, 0, 256, 64)];
 
     if(self) {
-        NSTextTab* tab = [[NSTextTab alloc] initWithType:NSLeftTabStopType location:28.0];
-        listStyle_ = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        [listStyle_ addTabStop:tab];
-        [listStyle_ setFirstLineHeadIndent:10.0];
-        [listStyle_ setHeadIndent:[tab location]];
-        [tab release];
+        [self initializeStyle];
+        [self initializeView];
 
-        defaultStyle_ = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        [defaultStyle_ setFirstLineHeadIndent:10.0];
-        [defaultStyle_ setHeadIndent:10.0];
+        strokeColor_ = [[NSColor controlShadowColor] retain];
 
-        textView_ = [[NSTextView alloc] initWithFrame:[self frame]];
-        [textView_ setEditable:NO];
-        [textView_ setBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.94 alpha:1.0]];
-        [textView_ setTextContainerInset:NSMakeSize(0, 2)];
-
-        scrollView_ = [[NSScrollView alloc] initWithFrame:[self frame]];
-        [scrollView_ setHasVerticalScroller:YES];
-        [[scrollView_ verticalScroller] setControlSize:NSSmallControlSize];
-        [scrollView_ setDocumentView:textView_];
-        [scrollView_ setAutoresizingMask:NSViewMinXMargin|NSViewMaxXMargin|NSViewMinYMargin|NSViewMaxYMargin];
-
-        [self addSubview:scrollView_];
-        [self setFrame:NSMakeRect(0, 0, 256, 64)];
-
-        [textView_ setFrameSize:[scrollView_ contentSize]];
-
-        header1_ = [self createHeader:@"意味・語源"];
-        header2_ = [self createHeader:@"SKK アノテーション"];
+        definitiveHeader_ = [self createHeader:@"意味・語源"];
+        annotationHeader_ = [self createHeader:@"SKK アノテーション"];
     }
 
     return self;
 }
 
 - (void)dealloc {
-    [scrollView_ release];
     [textView_ release];
-    [defaultStyle_ release];
+    [blockStyle_ release];
     [listStyle_ release];
-    [header1_ release];
-    [header2_ release];
+    [strokeColor_ release];
+    [definitiveHeader_ release];
+    [annotationHeader_ release];
 
     [super dealloc];
 }
 
 - (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation {
     [textView_ setString:@""];
-    [textView_ setEditable:YES];
+    NSTextStorage* storage = [textView_ textStorage];
 
-    [self setDefinitiveAnnotation:definition];
-    [self setOptionalAnnotation:annotation];
+    [storage beginEditing];
 
+    if(definition) {
+        [storage appendAttributedString:definitiveHeader_];
+        [self setDefinitiveAnnotation:definition];
+    }
+
+    if(annotation) {
+        if(definition) {
+            [self appendNewLine];
+        }
+
+        [storage appendAttributedString:annotationHeader_];
+        [self setOptionalAnnotation:annotation];
+    }
+
+    [storage endEditing];
+
+    [self scrollToTop];
+}
+
+- (BOOL)hasAnnotation {
+    return [[textView_ string] length] ? YES : NO;
+}
+
+- (void)drawRect:(NSRect)rect {
+    [strokeColor_ set];
+    NSFrameRect([self frame]);
+}
+
+@end
+
+@implementation AnnotationView (Local)
+
+- (void)initializeStyle {
+    float leftMargin = [NSFont systemFontSize];
+    float tabStop = leftMargin * 2.5;
+
+    blockStyle_ = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [blockStyle_ setFirstLineHeadIndent:leftMargin];
+    [blockStyle_ setHeadIndent:leftMargin];
+
+    listStyle_ = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [listStyle_ setFirstLineHeadIndent:leftMargin];
+    [listStyle_ setHeadIndent:tabStop];
+    [listStyle_ setTabStops:[NSArray array]];
+    [listStyle_ setDefaultTabInterval:tabStop];
+}
+
+- (void)initializeView {
+    NSRect frame = [self frame];
+    frame.origin.x = 1;
+    frame.origin.y = 1;
+    frame.size.width -= 2;
+    frame.size.height -= 2;
+
+    NSScrollView* scrollView = [[NSScrollView alloc] initWithFrame:frame];
+    [scrollView setHasVerticalScroller:YES];
+    [[scrollView verticalScroller] setControlSize:NSSmallControlSize];
+
+    textView_ = [[NSTextView alloc] initWithFrame:[[scrollView contentView] frame]];
     [textView_ setEditable:NO];
+    [textView_ setBackgroundColor:[NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.94 alpha:1.0]];
+    [textView_ setTextContainerInset:NSMakeSize(0, 2)];
 
+    [scrollView setDocumentView:textView_];
+
+    [self addSubview:scrollView];
+
+    [scrollView release];
+}
+
+- (NSAttributedString*)createHeader:(NSString*)string {
+    NSMutableAttributedString* header = [[NSMutableAttributedString alloc] initWithString:string];
+    NSRange range = NSMakeRange(0, [string length]);
+
+    [header addAttribute:NSFontAttributeName
+            value:[NSFont boldSystemFontOfSize:[NSFont labelFontSize]] range:range];
+
+    [header addAttribute:NSForegroundColorAttributeName
+            value:strokeColor_ range:range];
+
+    NSMutableParagraphStyle* style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    [style setLineSpacing:4.0];
+
+    [header addAttribute:NSParagraphStyleAttributeName
+            value:style range:range];
+
+    [style release];
+
+    return header;
+}
+
+- (void)setDefinitiveAnnotation:(NSString*)string {
+    NSTextStorage* storage = [textView_ textStorage];
+    NSArray* array = [string componentsSeparatedByString:@"\n"];
+
+    for(int i = 0; array && i < [array count]; ++ i) {
+        NSString* line = [array objectAtIndex:i];
+
+        if([line length] == 0) continue;
+
+        [self appendNewLine];
+
+        if([line length] == 1 && i + 1 < [array count]) {
+            NSString* item = [NSString stringWithFormat:@"%@\t%@",
+                                       [array objectAtIndex:i],
+                                       [array objectAtIndex:i + 1]];
+
+            NSAttributedString* attr = [self getParagraph:[self normalizeString:item]
+                                             withStyle:listStyle_];
+            [storage appendAttributedString:attr];
+            ++ i;
+        } else {
+            NSAttributedString* attr = [self getParagraph:[self normalizeString:line]
+                                             withStyle:blockStyle_];
+            [storage appendAttributedString:attr];
+        }
+    }
+}
+
+- (void)setOptionalAnnotation:(NSString*)string {
+    NSTextStorage* storage = [textView_ textStorage];
+
+    [self appendNewLine];
+    [storage appendAttributedString:[self getParagraph:string withStyle:blockStyle_]];
+}
+
+- (void)scrollToTop {
     NSPoint top;
 
     if([textView_ isFlipped]) {
@@ -101,72 +207,6 @@
     }
 
     [textView_ scrollPoint:top];
-}
-
-- (BOOL)hasAnnotation {
-    return [[textView_ string] length] ? YES : NO;
-}
-
-- (void)drawRect:(NSRect)rect {
-    [[NSColor windowFrameColor] setStroke];
-    [NSBezierPath strokeRect:[self frame]];
-}
-
-@end
-
-@implementation AnnotationView (Local)
-
-- (NSAttributedString*)createHeader:(NSString*)string {
-    NSRange range = NSMakeRange(0, [string length]);
-    NSMutableAttributedString* header = [[NSMutableAttributedString alloc] initWithString:string];
-    NSMutableParagraphStyle* style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-    [style setLineSpacing:4.0];
-
-    [header addAttribute:NSFontAttributeName value:[NSFont boldSystemFontOfSize:0] range:range];
-    [header addAttribute:NSForegroundColorAttributeName value:[NSColor grayColor] range:range];
-    [header addAttribute:NSParagraphStyleAttributeName value:style range:range];
-
-    [style release];
-
-    return header;
-}
-
-- (void)setDefinitiveAnnotation:(NSString*)string {
-    if(!string) return;
-
-    NSArray* array = [string componentsSeparatedByString:@"\n"];
-
-    if(array) {
-        [textView_ insertText:header1_];
-        [textView_ insertText:@"\n"];
-
-        for(int i = 0; i < [array count]; ++ i) {
-            NSString* line = [array objectAtIndex:i];
-
-            if([line length] == 0) continue;
-
-            if([line length] == 1 && i + 1 < [array count]) {
-                NSString* item = [NSString stringWithFormat:@"%@\t%@",
-                                           [array objectAtIndex:i],
-                                           [array objectAtIndex:i + 1]];
-
-                [self insertString:[self normalizeString:item] withStyle:listStyle_];
-                ++ i;
-            } else {
-                [self insertString:[self normalizeString:line] withStyle:defaultStyle_];
-            }
-
-            [textView_ insertText:@"\n"];
-        }
-    }
-}
-
-- (void)setOptionalAnnotation:(NSString*)string {
-    if(!string || [string length] == 0) return;
-
-    [textView_ insertText:header2_];
-    [textView_ insertText:@"\n"];
-    [self insertString:string withStyle:defaultStyle_];
 }
 
 - (NSString*)normalizeString:(NSString*)string {
@@ -194,14 +234,17 @@
     return tmp;
 }
 
-- (void)insertString:(NSString*)string withStyle:(NSParagraphStyle*)style {
+- (void)appendNewLine {
+    [[[textView_ textStorage] mutableString] appendString:@"\n"];
+}
+
+- (NSAttributedString*)getParagraph:(NSString*)string withStyle:(NSParagraphStyle*)style {
     NSMutableAttributedString* attr = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange range = NSMakeRange(0, [attr length]);
 
     [attr addAttribute:NSParagraphStyleAttributeName value:style range:range];
-    [textView_ insertText:attr];
 
-    [attr release];
+    return [attr autorelease];
 }
 
 @end

@@ -77,25 +77,23 @@
 - (void)drawRect:(NSRect)rect {
     NSRect frame = [self frame];
 
-    frame.size.height -= guideSize_.height;
     frame.origin.y += guideSize_.height;
+    frame.size.height -= guideSize_.height;
 
     [backgroundColor_ setFill];
     NSRectFill(frame);
 
-    [strokeColor_ setStroke];
-    [NSBezierPath strokeRect:frame];
+    [strokeColor_ set];
+    NSFrameRect(frame);
 
-    frame.size.height = guideSize_.height;
     frame.origin.y = 0;
+    frame.size.height = guideSize_.height;
     NSBezierPath* guidePlate = [NSBezierPath bezierPathWithRoundedRect:frame
                                              xRadius:NSHeight(frame) / 2
                                              yRadius:NSHeight(frame) / 2];
-    [strokeColor_ setFill];
-    [guidePlate fill];
-
     frame.origin.y = frame.size.height = guideSize_.height / 2;
-    NSRectFill(frame);
+    [guidePlate appendBezierPathWithRect:frame];
+    [guidePlate fill];
 
     NSPoint pt = NSMakePoint((NSWidth(frame) - guideSize_.width) / 2, 1);
 

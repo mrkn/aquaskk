@@ -24,12 +24,12 @@
 #define AnnotationView_h
 
 @interface AnnotationView : NSView {
-    NSScrollView* scrollView_;
     NSTextView* textView_;
+    NSColor* strokeColor_;
+    NSMutableParagraphStyle* blockStyle_;
     NSMutableParagraphStyle* listStyle_;
-    NSMutableParagraphStyle* defaultStyle_;
-    NSAttributedString* header1_;
-    NSAttributedString* header2_;
+    NSAttributedString* definitiveHeader_;
+    NSAttributedString* annotationHeader_;
 }
 
 - (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation;

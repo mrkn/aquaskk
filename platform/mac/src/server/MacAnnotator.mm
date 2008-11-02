@@ -37,7 +37,10 @@ void MacAnnotator::UpdateAnnotation(const SKKCandidate& candidate, const std::st
     buffer_ = buffer;
 
     NSString* str = [NSString stringWithUTF8String:candidate_.Variant().c_str()];
-    NSString* annotation = [NSString stringWithUTF8String:candidate.Annotation().c_str()];
+    NSString* annotation = 0;
+    if(!candidate_.Annotation().empty()) {
+        annotation = [NSString stringWithUTF8String:candidate.Annotation().c_str()];
+    }
     CFRange range = CFRangeMake(0, [str length]);
 
     NSString* definition = (NSString*)DCSCopyTextDefinition(0, (CFStringRef)str, range);
@@ -53,7 +56,7 @@ void MacAnnotator::Show() {
 
     NSFont* font = [dict objectForKey:@"NSFont"];
     if(!font) {
-        NSLog(@"NSFont can't get!!!");
+        NSLog(@"MacAnnotator::Show(): can't get font");
         return;
     }
 
