@@ -1,13 +1,63 @@
 #include <cassert>
+#include <iostream>
+#include <sstream>
 #include "SKKTrie.h"
+
+class DebugHelper : public SKKTrieHelper {
+    SKKInputMode mode;
+    std::string original;
+    std::string string;
+    std::string output;
+    std::string intermediate;
+
+    virtual const std::string& SKKTrieRomanString() const {
+        return string;
+    }
+
+    virtual void SKKTrieNotifyConverted(const SKKTrie* node) {
+        output += node->KanaString(mode);
+    }
+
+    virtual void SKKTrieNotifyNotConverted(char code) {
+        output += code;
+    }
+
+    virtual void SKKTrieNotifyIntermediate(const SKKTrie* node) {
+        intermediate += node->KanaString(mode);
+    }
+
+    virtual void SKKTrieNotifySkipLength(int length) {
+        string = string.substr(length);
+    }
+
+    virtual void SKKTrieNotifyShort() {
+    }
+
+public:
+    void Initialize(const std::string& str, SKKInputMode inputMode = HirakanaInputMode) {
+        mode = inputMode;
+        string = original = str;
+        output.clear();
+        intermediate.clear();
+    }
+
+    std::string Dump() {
+        std::ostringstream buf;
+        buf << "output=" << output
+            << ",intermediate=" << intermediate
+            << ",queue=" << string
+            << ",original=" << original;
+        return buf.str();
+    }
+};
 
 int main() {
     SKKTrie root;
-    const SKKTrie* node;
-    int state;
+    DebugHelper helper;
 
-    node = root.Traverse("a", state);
-    assert(state == -1 && !node);
+    helper.Initialize("a");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=a,intermediate=,queue=,original=a");
 
     root.Add("a", SKKTrie("あ", "ア", "ｱ", ""));
     root.Add("kya", SKKTrie("きゃ", "キャ", "ｷｬ", ""));
@@ -16,30 +66,39 @@ int main() {
     root.Add("nn", SKKTrie("ん", "ン", "ﾝ", ""));
     root.Add("xx", SKKTrie("っ", "ッ", "ｯ", "x"));
 
-    node = root.Traverse("m", state);
-    assert(state == -1 && !node);
+    helper.Initialize("m");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=m,intermediate=,queue=,original=m");
 
-    node = root.Traverse("a", state);
-    assert(state == 1 && node && node->KanaString(HirakanaInputMode) == "あ");
+    helper.Initialize("a");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=あ,intermediate=,queue=,original=a");
 
-    node = root.Traverse("kya", state);
-    assert(state == 3 && node && node->KanaString(KatakanaInputMode) == "キャ");
+    helper.Initialize("kya");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=きゃ,intermediate=,queue=,original=kya");
 
-    node = root.Traverse("ki", state);
-    assert(state == 1 && !node);
+    helper.Initialize("ki");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=,intermediate=,queue=i,original=ki");
 
-    node = root.Traverse("ky", state);
-    assert(state == 0 && !node);
+    helper.Initialize("ky");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=,intermediate=,queue=ky,original=ky");
 
-    node = root.Traverse("n", state);
-    assert(state == 0 && !node);
+    helper.Initialize("n");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=,intermediate=ん,queue=n,original=n");
 
-    node = root.Traverse("ng", state);
-    assert(state == 1 && node && node->KanaString(Jisx0201KanaInputMode) == "ﾝ");
+    helper.Initialize("ng");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=ん,intermediate=,queue=g,original=ng");
 
-    node = root.Traverse("nn", state);
-    assert(state == 2 && node && node->KanaString(Jisx0201KanaInputMode) == "ﾝ");
+    helper.Initialize("nn");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=ん,intermediate=,queue=,original=nn");
 
-    node = root.Traverse("xx", state);
-    assert(state == 2 && node && node->NextState() == "x");
+    helper.Initialize("xx");
+    root.Traverse(helper);
+    assert(helper.Dump() == "output=っ,intermediate=,queue=,original=xx");
 }

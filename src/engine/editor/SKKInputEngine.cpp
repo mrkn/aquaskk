@@ -31,23 +31,19 @@
 #include <iostream>
 #include <cctype>
 
-SKKInputEngine::SKKInputEngine(SKKInputEngineOption* option,
-                               SKKRegistrationObserver* registrationObserver,
-                               SKKFrontEnd* frontend,
+SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
                                SKKInputModeSelector* inputModeSelector,
-                               SKKClipboard* clipboard,
-                               SKKAnnotator* annotator,
-                               SKKBaseEditor* bottom)
-    : frontend_(frontend),
-      bottom_(bottom),
-      option_(option),
-      registrationObserver_(registrationObserver),
-      inputModeSelector_(inputModeSelector),
-      clipboard_(clipboard),
-      annotator_(annotator),
-      modified_(false),
-      bypassMode_(false),
-      inputQueue_(this) {
+                               SKKBaseEditor* bottom,
+                               SKKInputSessionParameter* param)
+    : registrationObserver_(registrationObserver)
+    , inputModeSelector_(inputModeSelector)
+    , bottom_(bottom)
+    , sessionParam_(param)
+    , option_(sessionParam_->InputEngineOption())
+    , modified_(false)
+    , bypassMode_(false)
+    , inputQueue_(this)
+    , okuriEditor_(this) {
     SetStatePrimary();
 }
 
@@ -96,6 +92,8 @@ void SKKInputEngine::SetStateOkuri() {
 
     active_->push_back(&composingEditor_);
     active_->push_back(&okuriEditor_);
+
+    top()->Clear();
 
     // ダイナミック補完をオフにする
     composingEditor_.EnableDynamicCompletion(false);
@@ -165,7 +163,7 @@ void SKKInputEngine::HandleCursorDown() {
 }
 
 void SKKInputEngine::HandlePaste() {
-    Insert(clipboard_->PasteString());
+    Insert(sessionParam_->Clipboard()->PasteString());
 }
 
 void SKKInputEngine::HandlePing() {
@@ -292,9 +290,9 @@ void SKKInputEngine::Output() {
         updateContextBuffer();
 
         if(option_->EnableAnnotation()) {
-            contextBuffer_.Output(frontend_, annotator_);
+            contextBuffer_.Output(sessionParam_->FrontEnd(), sessionParam_->Annotator());
         } else {
-            contextBuffer_.Output(frontend_, 0);
+            contextBuffer_.Output(sessionParam_->FrontEnd(), 0);
         }
 
         // 直接入力モードのカーソル移動等では内部バッファが変更されず、
@@ -456,4 +454,8 @@ const SKKEntry SKKInputEngine::SKKSelectorQueryEntry() {
 
 void SKKInputEngine::SKKSelectorUpdate(const SKKCandidate& candidate) {
     candidateEditor_.SetCandidate(candidate);
+}
+
+void SKKInputEngine::SKKOkuriListenerAppendEntry(const std::string& fixed) {
+    composingEditor_.Input(fixed, "", 0);
 }

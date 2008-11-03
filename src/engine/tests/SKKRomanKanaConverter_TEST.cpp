@@ -1,5 +1,14 @@
 #include <cassert>
+#include <iostream>
 #include "SKKRomanKanaConverter.h"
+
+void dump(const std::string& input, const SKKRomanKanaConversionResult& result) {
+    std::cerr << "input=" << input
+              << ",next=" << result.next
+              << ",output=" << result.output
+              << ",intermediate=" << result.intermediate
+              << std::endl;
+}
 
 int main() {
     SKKRomanKanaConverter& conv = SKKRomanKanaConverter::theInstance();
@@ -7,72 +16,72 @@ int main() {
     conv.Initialize("kana-rule.conf");
 
     bool result;
-    std::string in;
-    std::string out;
-    std::string next;
 
-    result = conv.Execute(HirakanaInputMode, "a", out, next);
-    assert(result == true && next == "" && out == "あ");
+    SKKRomanKanaConversionResult state;
 
-    result = conv.Execute(KatakanaInputMode, "a", out, next);
-    assert(next == "" && out == "ア");
-    result = conv.Execute(Jisx0201KanaInputMode, "a", out, next);
-    assert(next == "" && out == "ｱ");
+    result = conv.Convert(HirakanaInputMode, "a", state);
+    assert(result && state.next == "" && state.output == "あ");
 
-    result = conv.Execute(HirakanaInputMode, "gg", out, next);
-    assert(next == "g" && out == "っ");
+    result = conv.Convert(KatakanaInputMode, "a", state);
+    assert(state.next == "" && state.output == "ア");
 
-    result = conv.Execute(HirakanaInputMode, ",", out, next);
-    assert(next == "" && out == "、");
+    result = conv.Convert(Jisx0201KanaInputMode, "a", state);
+    assert(state.next == "" && state.output == "ｱ");
 
-    result = conv.Execute(HirakanaInputMode, "#", out, next);
-    assert(next == "" && out == "＃");
+    result = conv.Convert(HirakanaInputMode, "gg", state);
+    assert(state.next == "g" && state.output == "っ");
 
-    result = conv.Execute(HirakanaInputMode, " ", out, next);
-    assert(next == "" && out == " ");
+    result = conv.Convert(HirakanaInputMode, ",", state);
+    assert(state.next == "" && state.output == "、");
 
-    result = conv.Execute(HirakanaInputMode, "kyl", out, next);
-    assert(next == "" && out == "l");
+    result = conv.Convert(HirakanaInputMode, "#", state);
+    assert(state.next == "" && state.output == "＃");
 
-    result = conv.Execute(HirakanaInputMode, "z,", out, next);
-    assert(next == "" && out == "‥");
+    result = conv.Convert(HirakanaInputMode, " ", state);
+    assert(state.next == "" && state.output == " ");
 
-    result = conv.Execute(HirakanaInputMode, "co", out, next);
-    assert(next == "" && out == "お");
+    result = conv.Convert(HirakanaInputMode, "kyl", state);
+    assert(state.next == "" && state.output == "l");
 
-    result = conv.Execute(HirakanaInputMode, "'", out, next);
-    assert(next == "" && out == "'");
+    result = conv.Convert(HirakanaInputMode, "z,", state);
+    assert(state.next == "" && state.output == "‥");
 
-    result = conv.Execute(HirakanaInputMode, "k1", out, next);
-    assert(next == "" && out == "1");
+    result = conv.Convert(HirakanaInputMode, "co", state);
+    assert(state.next == "" && state.output == "お");
 
-    result = conv.Execute(HirakanaInputMode, "kgya", out, next);
-    assert(next == "" && out == "ぎゃ");
+    result = conv.Convert(HirakanaInputMode, "'", state);
+    assert(state.next == "" && state.output == "'");
 
-    result = conv.Execute(HirakanaInputMode, "k1234gya", out, next);
-    assert(next == "" && out == "1234ぎゃ");
+    result = conv.Convert(HirakanaInputMode, "k1", state);
+    assert(state.next == "" && state.output == "1");
 
-    result = conv.Execute(HirakanaInputMode, "gyagyugyo", out, next);
-    assert(next == "" && out == "ぎゃぎゅぎょ");
+    result = conv.Convert(HirakanaInputMode, "kgya", state);
+    assert(state.next == "" && state.output == "ぎゃ");
 
-    result = conv.Execute(HirakanaInputMode, "chho", out, next);
-    assert(next == "" && out == "ほ");
+    result = conv.Convert(HirakanaInputMode, "k1234gya", state);
+    assert(state.next == "" && state.output == "1234ぎゃ");
 
-    result = conv.Execute(HirakanaInputMode, "c", out, next);
-    assert(next == "c" && out == "");
+    result = conv.Convert(HirakanaInputMode, "gyagyugyo", state);
+    assert(state.next == "" && state.output == "ぎゃぎゅぎょ");
 
-    result = conv.Execute(HirakanaInputMode, "pmp", out, next);
-    assert(next == "p" && out == "");
+    result = conv.Convert(HirakanaInputMode, "chho", state);
+    assert(state.next == "" && state.output == "ほ");
 
-    result = conv.Execute(HirakanaInputMode, "pmpo", out, next);
-    assert(next == "" && out == "ぽ");
+    result = conv.Convert(HirakanaInputMode, "c", state);
+    assert(state.next == "c" && state.output == "");
 
-    result = conv.Execute(HirakanaInputMode, "kanji", out, next);
-    assert(next == "" && out == "かんじ");
+    result = conv.Convert(HirakanaInputMode, "pmp", state);
+    assert(state.next == "p" && state.output == "");
 
-    result = conv.Execute(HirakanaInputMode, "/", out, next);
-    assert(next == "" && out == "/");
+    result = conv.Convert(HirakanaInputMode, "pmpo", state);
+    assert(state.next == "" && state.output == "ぽ");
 
-    result = conv.Execute(HirakanaInputMode, "z ", out, next);
-    assert(next == "" && out == "　");
+    result = conv.Convert(HirakanaInputMode, "kanji", state);
+    assert(state.next == "" && state.output == "かんじ");
+
+    result = conv.Convert(HirakanaInputMode, "/", state);
+    assert(state.next == "" && state.output == "/");
+
+    result = conv.Convert(HirakanaInputMode, "z ", state);
+    assert(state.next == "" && state.output == "　");
 }

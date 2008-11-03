@@ -27,6 +27,13 @@
 #include "SKKTrie.h"
 #include "SKKInputMode.h"
 
+// 変換結果
+struct SKKRomanKanaConversionResult {
+    std::string output;
+    std::string next;
+    std::string intermediate;
+};
+
 class SKKRomanKanaConverter {
     SKKTrie root_;
 
@@ -41,14 +48,14 @@ public:
     // ローマ字かな変換
     //
     // 引数：
+    //  mode=入力モード
     //	in=ローマ字文字列
-    //	out=結果文字列(変換されなくても設定されることはある)
-    //	next=次状態文字列
+    //	result=変換結果
     //
     // 戻り値：
     //	true=変換された、false=変換されなかった
     //
-    bool Execute(SKKInputMode mode, const std::string& in, std::string& out, std::string& next);
+    bool Convert(SKKInputMode mode, const std::string& str, SKKRomanKanaConversionResult& result);
 };
 
 #endif

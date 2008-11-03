@@ -44,11 +44,16 @@ void SKKTrie::Add(const std::string& str, const SKKTrie& node, unsigned depth) {
     }
 }
 
-const SKKTrie* SKKTrie::Traverse(const std::string& str, int& state, unsigned depth) {
+void SKKTrie::Traverse(SKKTrieHelper& helper, unsigned depth) {
+    const std::string& str = helper.SKKTrieRomanString();
+
     // [1] データ不足(ex. "k" や "ch" など)
     if(depth == str.size()) {
-	state = 0;
-	return 0;
+        if(IsLeaf()) {
+            helper.SKKTrieNotifyIntermediate(this);
+        }
+
+	return helper.SKKTrieNotifyShort();
     }
 
     // 一致？
@@ -57,29 +62,29 @@ const SKKTrie* SKKTrie::Traverse(const std::string& str, int& state, unsigned de
 
 	// 末端でないなら再帰検索
 	if(!node->children_.empty()) {
-	    return node->Traverse(str, state, depth + 1);
+	    return node->Traverse(helper, depth + 1);
 	}
 
 	// [2] 完全一致
-	state = depth + 1;
-	return node;
+        helper.SKKTrieNotifyConverted(node);
+        helper.SKKTrieNotifySkipLength(depth + 1);
+
+        return;
     }
 
     // [3] 部分一致(ex. "kb" や "chm" など)
     if(0 < depth) {
-	state = depth;
+        if(IsLeaf()) {
+            helper.SKKTrieNotifyConverted(this);
+        }
+        helper.SKKTrieNotifySkipLength(depth);
 
-	// 節かつ葉でもある「n」のような場合には、一致として扱う
-	if(leaf_) {
-	    return this;
-	}
-
-	return 0;
+        return;
     }
 
     // [4] 最初の一文字が木に存在しない
-    state = -1;
-    return 0;
+    helper.SKKTrieNotifyNotConverted(str[0]);
+    helper.SKKTrieNotifySkipLength(1);
 }
 
 const std::string& SKKTrie::KanaString(SKKInputMode mode) const {
@@ -103,4 +108,8 @@ const std::string& SKKTrie::KanaString(SKKInputMode mode) const {
 
 const std::string& SKKTrie::NextState() const {
     return next_;
+}
+
+bool SKKTrie::IsLeaf() const {
+    return leaf_;
 }

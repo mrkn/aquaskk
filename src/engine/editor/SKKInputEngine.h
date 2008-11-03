@@ -33,6 +33,7 @@
 #include "SKKEntryRemoveEditor.h"
 #include "SKKCompleter.h"
 #include "SKKSelector.h"
+#include "SKKInputSessionParameter.h"
 #include <vector>
 
 class SKKRegistrationObserver {
@@ -43,33 +44,31 @@ public:
     virtual void SKKRegistrationUpdate(Event event) = 0;
 };
 
-class SKKInputEngineOption;
-class SKKClipboard;
-class SKKFrontEnd;
-class SKKAnnotator;
-
 class SKKInputEngine : public SKKInputQueueObserver,
                        public SKKCompleterBuddy,
-                       public SKKSelectorBuddy {
+                       public SKKSelectorBuddy,
+                       public SKKOkuriListener {
     typedef std::vector<SKKBaseEditor*> EditorStack;
 
-    SKKFrontEnd* frontend_;
-    SKKBaseEditor* bottom_;
-    SKKInputEngineOption* option_;
     SKKRegistrationObserver* registrationObserver_;
     SKKInputModeSelector* inputModeSelector_;
-    SKKClipboard* clipboard_;
-    SKKAnnotator* annotator_;
-    bool modified_;
-    bool modified_without_output_;
+    SKKBaseEditor* bottom_;
+    SKKInputSessionParameter* sessionParam_;
+
+    SKKInputEngineOption* option_;
+
     EditorStack mainStack_;
     EditorStack subStack_;
     EditorStack* active_;
+
+    bool modified_;
+    bool modified_without_output_;
     bool needsInitializeOkuri_;
     bool bypassMode_;
 
     SKKInputQueue inputQueue_;
     SKKContextBuffer contextBuffer_;
+
     std::string word_;
     std::string undo_;
 
@@ -105,14 +104,14 @@ class SKKInputEngine : public SKKInputQueueObserver,
     // SKKSelector で現在選択中の候補が変更された場合に呼び出される
     virtual void SKKSelectorUpdate(const SKKCandidate& candidate);
 
+    // 送り入力中に見出し語部分が増えた場合に呼び出される
+    virtual void SKKOkuriListenerAppendEntry(const std::string& fixed);
+
 public:
-    SKKInputEngine(SKKInputEngineOption* option,
-                   SKKRegistrationObserver* registrationObserver,
-                   SKKFrontEnd* frontend,
+    SKKInputEngine(SKKRegistrationObserver* registrationObserver,
                    SKKInputModeSelector* inputModeSelector,
-                   SKKClipboard* clipboard,
-                   SKKAnnotator* annotator,
-                   SKKBaseEditor* bottom);
+                   SKKBaseEditor* bottom,
+                   SKKInputSessionParameter* param);
 
     // 入力モード
     void SelectInputMode(SKKInputMode mode);

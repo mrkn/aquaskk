@@ -34,11 +34,7 @@ void SKKInputQueue::SelectInputMode(SKKInputMode mode) {
 }
 
 void SKKInputQueue::AddChar(char code) {
-    std::string fixed;
-
-    convert(code, fixed);
-
-    notify(fixed, code);
+    notify(convert(code), code);
 }
 
 void SKKInputQueue::RemoveChar() {
@@ -52,9 +48,7 @@ void SKKInputQueue::RemoveChar() {
 void SKKInputQueue::Terminate() {
     if(IsEmpty()) return;
 
-    std::string fixed;
-
-    convert(5, fixed, true);
+    std::string fixed = terminate();
 
     Clear();
 
@@ -75,9 +69,8 @@ const std::string& SKKInputQueue::QueueString() const {
 
 bool SKKInputQueue::CanConvert(char code) const {
     SKKRomanKanaConverter& converter = SKKRomanKanaConverter::theInstance();
+    SKKRomanKanaConversionResult result;
     std::string tmp_queue(queue_);
-    std::string fixed;
-    std::string next;
 
     switch(mode_) {
     case HirakanaInputMode:
@@ -85,24 +78,28 @@ bool SKKInputQueue::CanConvert(char code) const {
     case Jisx0201KanaInputMode:
 	// ローマ字 → かな変換
 	tmp_queue += std::tolower(code);
-	return converter.Execute(mode_, tmp_queue, fixed, next);
+	return converter.Convert(mode_, tmp_queue, result);
 
-    default:
-        return false;
+    case Jisx0208LatinInputMode:
+    case AsciiInputMode:
+        break;
+
+    case InvalidInputMode:
+        assert(false);
     }
+
+    return false;
 }
 
 // ------------------------------------------------------------
 
-void SKKInputQueue::convert(char code, std::string& fixed, bool terminate) {
+std::string SKKInputQueue::convert(char code) {
     SKKRomanKanaConverter& converter = SKKRomanKanaConverter::theInstance();
-    std::string next;
-
-    fixed.clear();
+    SKKRomanKanaConversionResult result;
 
     switch(mode_) {
     case AsciiInputMode:
-        fixed += code;
+        result.output += code;
 	break;
 
     case HirakanaInputMode:
@@ -110,24 +107,45 @@ void SKKInputQueue::convert(char code, std::string& fixed, bool terminate) {
     case Jisx0201KanaInputMode:
 	// ローマ字 → かな変換
 	queue_ += std::tolower(code);
-	converter.Execute(mode_, queue_, fixed, next);
-	queue_ = next;
-
-        if(terminate) {
-            fixed.erase(fixed.size() - 1);
-        }
+	converter.Convert(mode_, queue_, result);
+	queue_ = result.next;
 	break;
 
     case Jisx0208LatinInputMode:
 	// ASCII → 全角英数変換
 	queue_ += code;
-	jconv::ascii_to_jisx0208_latin(queue_, fixed);
+	jconv::ascii_to_jisx0208_latin(queue_, result.output);
 	queue_.clear();
 	break;
 
-    default:
-        break;
+    case InvalidInputMode:
+        assert(false);
     }
+
+    return result.output;
+}
+
+std::string SKKInputQueue::terminate() {
+    SKKRomanKanaConverter& converter = SKKRomanKanaConverter::theInstance();
+    SKKRomanKanaConversionResult result;
+
+    switch(mode_) {
+    case HirakanaInputMode:
+    case KatakanaInputMode:
+    case Jisx0201KanaInputMode:
+	// ローマ字 → かな変換
+	converter.Convert(mode_, queue_, result);
+	break;
+
+    case Jisx0208LatinInputMode:
+    case AsciiInputMode:
+        break;
+
+    case InvalidInputMode:
+        assert(false);
+    }
+
+    return result.intermediate;
 }
 
 void SKKInputQueue::notify(const std::string& fixed, char code) {

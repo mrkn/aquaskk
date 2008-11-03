@@ -25,15 +25,22 @@
 
 #include "SKKBaseEditor.h"
 
+class SKKOkuriListener {
+public:
+    virtual ~SKKOkuriListener() {}
+
+    virtual void SKKOkuriListenerAppendEntry(const std::string& fixed) = 0;
+};
+
 class SKKOkuriEditor : public SKKBaseEditor {
+    SKKOkuriListener* listener_;
     bool modified_; 
     bool first_;
-    std::string entry_;
     std::string prefix_;
     std::string okuri_;
 
 public:
-    SKKOkuriEditor();
+    SKKOkuriEditor(SKKOkuriListener* listener);
 
     void Initialize(char prefix);
     bool IsOkuriComplete() const;

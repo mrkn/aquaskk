@@ -27,13 +27,13 @@
 #include <cctype>
 #include <exception>
 
-SKKOkuriEditor::SKKOkuriEditor() : modified_(true) {}
+SKKOkuriEditor::SKKOkuriEditor(SKKOkuriListener* listener)
+    : listener_(listener), modified_(true) {}
 
 void SKKOkuriEditor::Initialize(char prefix) {
     modified_ = true;
     first_ = true;
 
-    entry_.clear();
     prefix_.clear();
     okuri_.clear();
 
@@ -50,7 +50,7 @@ void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, c
 
         // KesSi 対応
         if(!fixed.empty() && !input.empty()) {
-            entry_ = fixed;
+            listener_->SKKOkuriListenerAppendEntry(fixed);
             return;
         }
     }
@@ -85,22 +85,20 @@ void SKKOkuriEditor::Input(SKKBaseEditor::Event event) {
 }
 
 void SKKOkuriEditor::Clear() {
-    // 何もしない
+    prefix_.clear();
+    okuri_.clear();
 }
 
 void SKKOkuriEditor::Output(SKKContextBuffer& buffer) const {
-    buffer.Compose(entry_ + "*" + okuri_);
+    buffer.Compose("*" + okuri_);
 
-    std::string tmp(buffer.Entry().EntryString());
-
-    SKKEntry entry(tmp + entry_);
+    SKKEntry entry = buffer.Entry();
     entry.SetOkuri(prefix_, okuri_);
 
     buffer.SetEntry(entry);
 }
 
 void SKKOkuriEditor::Commit(std::string&) {
-    entry_.clear();
     prefix_.clear();
     okuri_.clear();
 }

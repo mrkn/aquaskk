@@ -24,6 +24,12 @@ class KeymapTranslator
       'PrevCompletion' => [ ',' ],
       'NextCompletion' => [ '.' ],
       'InputChars'     => [ 'group::hex::0x20-0x7e' ],
+      'CompConversion' => [ 'alt::hex::0x20' ],
+    }
+
+    @handle_option = {
+      'AlwaysHandled'  => [ 'group::keycode::0x66,0x68' ],
+      'PseudoHandled'  => [ 'ctrl::l' ],
     }
   end
 
@@ -138,6 +144,7 @@ EOF
     File.open(path, File::CREAT|File::TRUNC|File::WRONLY) { |file|
       write(file, @events, 'event section')
       write(file, @attributes, 'attribute section (for SKK_CHAR)')
+      write(file, @handle_option, 'handle option')
     }
   end
 end

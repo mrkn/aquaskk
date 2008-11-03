@@ -38,7 +38,8 @@ class SKKInputQueue {
     SKKInputMode mode_;
     std::string queue_;
 
-    void convert(char code, std::string& fixed, bool terminate = false);
+    std::string convert(char code);
+    std::string terminate();
     void notify(const std::string& fixed = "", char code = 0);
 
 public:
@@ -51,7 +52,9 @@ public:
     void AddChar(char code);
     void RemoveChar();
 
+    // 中間状態を確定させる(n → ん)
     void Terminate();
+
     void Clear();
 
     bool IsEmpty() const;

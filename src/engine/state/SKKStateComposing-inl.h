@@ -43,6 +43,9 @@ State SKKState::Edit(const Event& event) {
     const SKKEvent& param = event.Param();
 
     switch(event) {
+    case EXIT_EVENT:
+        return State::SaveHistory();
+
     case SKK_ENTER:
     case SKK_JMODE:
         editor_->Commit();
@@ -342,7 +345,7 @@ State SKKState::SelectCandidate(const Event& event) {
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
-        return State::DeepHistory(&SKKState::EntryInput);
+        return State::DeepHistory(&SKKState::Edit);
 
     case SKK_LEFT:
         selector_.CursorLeft();

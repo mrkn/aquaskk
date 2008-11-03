@@ -27,7 +27,33 @@
 #ifndef SKKTrie_h
 #define SKKTrie_h
 
-// kana-rule-list の木表現
+class SKKTrie;
+
+// 変換ヘルパー
+class SKKTrieHelper {
+public:
+    virtual ~SKKTrieHelper() {}
+
+    // 変換用文字
+    virtual const std::string& SKKTrieRomanString() const = 0;
+
+    // 通知：変換結果
+    virtual void SKKTrieNotifyConverted(const SKKTrie* node) = 0;
+
+    // 通知：未変換結果
+    virtual void SKKTrieNotifyNotConverted(char code) = 0;
+
+    // 通知：途中結果
+    virtual void SKKTrieNotifyIntermediate(const SKKTrie* node) = 0;
+
+    // 通知：スキップ指示
+    virtual void SKKTrieNotifySkipLength(int length) = 0;
+
+    // 通知：データ不足
+    virtual void SKKTrieNotifyShort() = 0;
+};
+
+// kana-rule.conf の木表現
 class SKKTrie {
     bool leaf_;
     std::string hirakana_;
@@ -60,23 +86,19 @@ public:
     // 再帰的ノード検索
     //
     // 引数：
-    //	str=変換文字列
-    //	state=状態
-    //		-1	最初の一文字が木に存在しないことを示す
-    //		0	部分一致していることを示す(変換も削り取りもしない)
-    //		1 以上	変換文字列から削り取る文字数を示す(std::string::substr の引数)
+    //	helper=検索ヘルパー
     //	depth=探索の深度(再帰専用)
     //
-    // 戻り値：
-    //	変換結果ノードへのポインタ、変換できなかった場合は 0
-    //
-    const SKKTrie* Traverse(const std::string& str, int& state, unsigned depth = 0);
+    void Traverse(SKKTrieHelper& helper, unsigned depth = 0);
 
     // かな文字列取得
     const std::string& KanaString(SKKInputMode mode) const;
 
     // 次状態文字列取得
     const std::string& NextState() const;
+
+    // 葉の要素か？(結果が true でも、節のケースもある)
+    bool IsLeaf() const;
 };
 
 #endif

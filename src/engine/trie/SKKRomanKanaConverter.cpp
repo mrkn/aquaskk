@@ -29,31 +29,100 @@
 // ======================================================================
 // ユーティリティ
 // ======================================================================
-static void unescape_string(std::string& str) {
-    static struct {
-	std::string from;
-	const char* to;
-    } escape[] = {
-	{ "&comma;", "," },
-	{ "&space;", " " },
-	{ "&sharp;", "#" },
-	{ "",      0x00 },
+namespace {
+    void unescape_string(std::string& str) {
+        static struct {
+            std::string from;
+            const char* to;
+        } escape[] = {
+            { "&comma;", "," },
+            { "&space;", " " },
+            { "&sharp;", "#" },
+            { "",      0x00 },
+        };
+
+        for(int i = 0; escape[i].to != 0x00; ++ i) {
+            std::string& target = escape[i].from;
+            for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
+                str.replace(pos, target.length(), escape[i].to);
+            }
+        }
+    }
+
+    void escape_string(std::string& str) {
+        const std::string target(" ");
+
+        for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
+            str.replace(pos, target.length(), "&space;");
+        }
+    }
+
+    // 変換ヘルパー
+    class ConversionHelper : public SKKTrieHelper {
+        bool converted_;
+        bool short_;
+        SKKInputMode mode_;
+        std::string queue_;
+        std::string output_;
+        std::string next_;
+        std::string intermediate_;
+
+        virtual const std::string& SKKTrieRomanString() const {
+            return queue_;
+        }
+
+        virtual void SKKTrieNotifyConverted(const SKKTrie* node) {
+            converted_ = true;
+            output_ += node->KanaString(mode_);
+            next_ = node->NextState();
+            intermediate_.clear();
+        }
+
+        virtual void SKKTrieNotifyIntermediate(const SKKTrie* node) {
+            intermediate_ = node->KanaString(mode_);
+        }
+
+        virtual void SKKTrieNotifyNotConverted(char code) {
+            converted_ = false;
+            output_ += code;
+        }
+
+        virtual void SKKTrieNotifySkipLength(int length) {
+            queue_ = queue_.substr(length);
+        }
+
+        virtual void SKKTrieNotifyShort() {
+            short_ = true;
+        }
+
+    public:
+        ConversionHelper(SKKInputMode mode, const std::string& queue)
+            : converted_(false), short_(false), mode_(mode), queue_(queue) {}
+
+        const std::string& Output() const {
+            return output_;
+        }
+
+        const std::string& Next() const {
+            return next_;
+        }
+
+        const std::string& Intermediate() const {
+            return intermediate_;
+        }
+
+        const std::string& Queue() const {
+            return queue_;
+        }
+
+        bool IsConverted() const {
+            return converted_;
+        }
+
+        bool IsShort() const {
+            return short_;
+        }
     };
-
-    for(int i = 0; escape[i].to != 0x00; ++ i) {
-	std::string& target = escape[i].from;
-	for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
-	    str.replace(pos, target.length(), escape[i].to);
-	}
-    }
-}
-
-static void escape_string(std::string& str) {
-    const std::string target(" ");
-
-    for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
-        str.replace(pos, target.length(), "&space;");
-    }
 }
 
 // ======================================================================
@@ -110,40 +179,29 @@ void SKKRomanKanaConverter::Initialize(const std::string& path) {
     }
 }
 
-bool SKKRomanKanaConverter::Execute(SKKInputMode mode, const std::string& in, std::string& out, std::string& next) {
+bool SKKRomanKanaConverter::Convert(SKKInputMode mode, const std::string& str, SKKRomanKanaConversionResult& result) {
     bool converted = false;
-    std::string str(in);
+    std::string queue(str);
 
-    out.clear();
-    next.clear();
+    result = SKKRomanKanaConversionResult();
 
-    while(!str.empty()) {
-	int state;
-	const SKKTrie* node = root_.Traverse(str, state);
+    while(!queue.empty()) {
+        ConversionHelper helper(mode, queue);
 
-	// 変換できた？
-	if(node) {
-	    out += node->KanaString(mode);
-	    next = node->NextState();
-	    converted = true;
-	} else {
-	    converted = false;
-	}
+        root_.Traverse(helper);
 
-	// 部分的に一致しているがデータ不足のためこれ以上処理できない
-	if(!state) {
-	    next = str;
-	    return false;
-	}
+        result.output += helper.Output();
+        result.next = helper.Next();
+        result.intermediate = helper.Intermediate();
 
-	// 最初の一文字が木に存在しない場合、出力にコピーして次の文字を調べる
-	if(state < 0) {
-	    out += str[0];
-	    state = 1;
-	}
-	
-	// 調べた部分を削り取って次の文字を調べる
-	str = str.substr(state);
+        converted = helper.IsConverted();
+
+        if(helper.IsShort()) {
+            result.next = helper.Queue();
+            break;
+        }
+
+        queue = helper.Queue();
     }
 
     return converted;
