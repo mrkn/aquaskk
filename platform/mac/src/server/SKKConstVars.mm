@@ -39,9 +39,10 @@ namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(minimum_completion_length);
 
     DECLARE_NSStringKey(max_count_of_inline_candidates);
+    DECLARE_NSStringKey(candidate_window_labels);
     DECLARE_NSStringKey(candidate_window_font_name);
     DECLARE_NSStringKey(candidate_window_font_size);
-    DECLARE_NSStringKey(candidate_window_labels);
+    DECLARE_NSStringKey(put_candidate_window_upward);
     DECLARE_NSStringKey(enable_annotation);
 
     DECLARE_NSStringKey(user_dictionary_path);

@@ -72,6 +72,9 @@
     }
 
     [indicator_ drawAtPoint:NSMakePoint([self bounds].size.width - [indicator_ size].width - margin, margin)];
+
+    [[NSColor windowFrameColor] set];
+    NSFrameRect([self frame]);
 }
 
 - (void)prepareWithFont:(NSFont*)newFont labels:(NSString*)newLabels {

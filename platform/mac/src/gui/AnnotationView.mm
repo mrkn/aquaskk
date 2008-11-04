@@ -39,7 +39,7 @@
 @implementation AnnotationView
 
 - (id)init {
-    self = [super initWithFrame:NSMakeRect(0, 0, 256, 64)];
+    self = [super initWithFrame:NSMakeRect(0, 0, 256, 128)];
 
     if(self) {
         [self initializeStyle];

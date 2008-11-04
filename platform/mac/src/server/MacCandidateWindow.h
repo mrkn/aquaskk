@@ -26,11 +26,11 @@
 #include "SKKCandidateWindow.h"
 
 @class CandidateWindow;
-class SKKFrontEnd;
 
 class MacCandidateWindow : public SKKCandidateWindow {
+    id client_;
     bool active_;
-    SKKFrontEnd* frontend_;
+    bool putUpward_;
     NSMutableArray* candidates_;
     NSRange page_;
     int cursor_;
@@ -41,7 +41,7 @@ class MacCandidateWindow : public SKKCandidateWindow {
     void prepareWindow();
 
 public:
-    MacCandidateWindow(SKKFrontEnd* frontend);
+    MacCandidateWindow(id client);
     virtual ~MacCandidateWindow();
 
     virtual void Setup(SKKCandidateIterator begin, SKKCandidateIterator end, std::vector<int>& pages);

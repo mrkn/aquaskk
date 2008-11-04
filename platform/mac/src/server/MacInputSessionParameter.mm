@@ -34,7 +34,7 @@ MacInputSessionParameter::MacInputSessionParameter(id client)
     , configuration_(new MacStateConfiguration())
     , messenger_(new MacMessenger(frontend_.get()))
     , clipboard_(new MacClipboard())
-    , candidateWindow_(new MacCandidateWindow(frontend_.get()))
+    , candidateWindow_(new MacCandidateWindow(client))
     , annotator_(new MacAnnotator(client))
     , inputEngineOption_(new MacInputEngineOption())
 {}

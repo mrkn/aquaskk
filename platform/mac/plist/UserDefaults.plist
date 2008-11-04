@@ -25,12 +25,14 @@
 
 	<key>max_count_of_inline_candidates</key>
 	<integer>4</integer>
+	<key>candidate_window_labels</key>
+	<string>ASDFJKL</string>
 	<key>candidate_window_font_name</key>
 	<string>Trebuchet MS</string>
 	<key>candidate_window_font_size</key>
 	<integer>18</integer>
-	<key>candidate_window_labels</key>
-	<string>ASDFJKL</string>
+        <key>put_candidate_window_upward</key>
+        <false/>
         <key>enable_annotation</key>
         <false/>
 

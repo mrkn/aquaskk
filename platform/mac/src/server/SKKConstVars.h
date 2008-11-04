@@ -40,9 +40,10 @@ namespace SKKUserDefaultKeys {
     extern NSString* minimum_completion_length;
 
     extern NSString* max_count_of_inline_candidates;
+    extern NSString* candidate_window_labels;
     extern NSString* candidate_window_font_name;
     extern NSString* candidate_window_font_size;
-    extern NSString* candidate_window_labels;
+    extern NSString* put_candidate_window_upward;
     extern NSString* enable_annotation;
 
     extern NSString* user_dictionary_path;

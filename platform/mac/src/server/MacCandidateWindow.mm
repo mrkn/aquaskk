@@ -25,10 +25,12 @@
 #include "CandidateView.h"
 #include "CandidateCell.h"
 #include "SKKConstVars.h"
-#include "SKKFrontEnd.h"
 #include "utf8util.h"
 
-MacCandidateWindow::MacCandidateWindow(SKKFrontEnd* frontend) : active_(false), frontend_(frontend) {
+#include <InputMethodKit/InputMethodKit.h>
+
+MacCandidateWindow::MacCandidateWindow(id client)
+    : client_(client), active_(false) {
     window_ = [CandidateWindow sharedWindow];
     candidates_ = [[NSMutableArray alloc] initWithCapacity:0];
     reloadUserDefaults();
@@ -149,30 +151,37 @@ void MacCandidateWindow::reloadUserDefaults() {
     NSString* labels = [defaults stringForKey:SKKUserDefaultKeys::candidate_window_labels];
     cellCount_ = [labels length];
 
+    putUpward_ = [defaults boolForKey:SKKUserDefaultKeys::put_candidate_window_upward] == YES;
+
     [window_ prepareWithFont:font labels:labels];
 }
 
 void MacCandidateWindow::prepareWindow() {
     // ウィンドウレベル
-    [[window_ window] setLevel:frontend_->WindowLevel()];
+    [[window_ window] setLevel:[client_ windowLevel]];
 
     // カーソル位置を含むディスプレイの矩形を取得
-    std::pair<int, int> position = frontend_->WindowPosition();
+    NSRect rect;
+    NSDictionary* dict = [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
+    NSFont* font = [dict objectForKey:@"NSFont"];
     CGDirectDisplayID disp[1];
     CGDisplayCount count;
-    CGGetDisplaysWithPoint(CGPointMake(position.first, position.second), 1, disp, &count);
+    CGGetDisplaysWithPoint(CGPointMake(rect.origin.x, rect.origin.y), 1, disp, &count);
     CGRect screen = CGDisplayBounds(disp[0]);
 
     screen.size.width += screen.origin.x;
 
     NSSize window_size = [[window_ window] frame].size;
+    NSPoint pt = rect.origin;
 
-    float window_x = position.first;
-    float window_y = position.second;
-
-    if(window_x + window_size.width > screen.size.width) {
-	window_x = screen.size.width - window_size.width;
+    if(pt.x + window_size.width > screen.size.width) {
+	pt.x = screen.size.width - window_size.width;
     }
 
-    [[window_ window] setFrameTopLeftPoint:NSMakePoint(window_x, window_y)];
+    if(putUpward_ && font) {
+        pt.y += NSHeight([font boundingRectForFont]);
+        [[window_ window] setFrameOrigin:pt];
+    } else {
+        [[window_ window] setFrameTopLeftPoint:pt];
+    }
 }

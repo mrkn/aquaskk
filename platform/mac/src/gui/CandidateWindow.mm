@@ -41,7 +41,6 @@
                                     defer:YES];
         [window_ setIgnoresMouseEvents:YES];
         [window_ setContentView:view_];
-        [window_ setHasShadow:YES];
         labels_ = @"";
     }
     return self;

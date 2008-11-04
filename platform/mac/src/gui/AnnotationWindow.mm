@@ -60,7 +60,7 @@
     [view_ setNeedsDisplay:YES];
 }
 
-- (void)show:(NSPoint)origin level:(int)level {
+- (void)show:(NSPoint)origin level:(int)level topleft:(BOOL)topleft {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     if(![view_ hasAnnotation]) {
@@ -68,7 +68,12 @@
         return;
     }
 
-    [window_ setFrameOrigin:origin];
+    if(topleft) {
+        [window_ setFrameTopLeftPoint:origin];
+    } else {
+        [window_ setFrameOrigin:origin];
+    }
+
     [window_ setLevel:level];
 
     [self performSelector:@selector(activate:) withObject:self afterDelay:1.0];

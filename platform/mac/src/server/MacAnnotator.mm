@@ -22,6 +22,7 @@
 
 #include "MacAnnotator.h"
 #include "AnnotationWindow.h"
+#include "SKKConstVars.h"
 #include "utf8util.h"
 
 #include <InputMethodKit/InputMethodKit.h>
@@ -53,22 +54,27 @@ void MacAnnotator::UpdateAnnotation(const SKKCandidate& candidate, const std::st
 void MacAnnotator::Show() {
     NSRect rect;
     NSDictionary* dict = [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
-    NSFont* font = [dict objectForKey:@"NSFont"];
-    if(!font) {
-        NSLog(@"MacAnnotator::Show(): can't get font");
-        return;
+    if([defaults boolForKey:SKKUserDefaultKeys::put_candidate_window_upward] == YES) {
+        [window_ show:rect.origin level:[client_ windowLevel] topleft:YES];
+    } else {
+        NSFont* font = [dict objectForKey:@"NSFont"];
+        if(!font) {
+            NSLog(@"MacAnnotator::Show(): can't get font");
+            return;
+        }
+
+        NSDictionary* attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
+        NSAttributedString* str = [[NSAttributedString alloc]
+                                      initWithString:[NSString stringWithUTF8String:buffer_.c_str()]
+                                      attributes:attributes];
+        rect.origin.x += [str size].width + 2;
+        rect.origin.y += 2;
+        [str release];
+
+        [window_ show:rect.origin level:[client_ windowLevel] topleft:NO];
     }
-
-    NSDictionary* attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
-    NSAttributedString* str = [[NSAttributedString alloc]
-                                  initWithString:[NSString stringWithUTF8String:buffer_.c_str()]
-                                  attributes:attributes];
-    rect.origin.x += [str size].width + 4;
-    rect.origin.y += 4;
-    [str release];
-
-    [window_ show:rect.origin level:[client_ windowLevel]];
 }
 
 void MacAnnotator::Hide() {

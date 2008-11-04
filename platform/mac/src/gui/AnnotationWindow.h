@@ -32,7 +32,7 @@
 
 + (AnnotationWindow*)sharedWindow;
 - (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation;
-- (void)show:(NSPoint)origin level:(int)level;
+- (void)show:(NSPoint)origin level:(int)level topleft:(BOOL)flag;
 - (void)hide;
 
 @end
