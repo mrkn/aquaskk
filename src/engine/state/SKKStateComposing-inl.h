@@ -146,19 +146,19 @@ State SKKState::KanaEntry(const Event& event) {
         // 変換
         if(param.IsNextCandidate()) break;
 
+        // トグル変換 #1
+        if(param.IsToggleKana()) {
+            editor_->ToggleKana();
+            return State::Transition(&SKKState::KanaInput);
+        }
+
+        // トグル変換 #2
+        if(param.IsToggleJisx0201Kana()) {
+            editor_->ToggleJisx0201Kana();
+            return State::Transition(&SKKState::KanaInput);
+        }
+
         if(!editor_->Entry().IsEmpty()) {
-            // トグル変換 #1
-            if(param.IsToggleKana()) {
-                editor_->ToggleKana();
-                return State::Transition(&SKKState::KanaInput);
-            }
-
-            // トグル変換 #2
-            if(param.IsToggleJisx0201Kana()) {
-                editor_->ToggleJisx0201Kana();
-                return State::Transition(&SKKState::KanaInput);
-            }
-
             // 送りあり
             if(param.IsUpperCases()) {
                 return State::Forward(&SKKState::OkuriInput);

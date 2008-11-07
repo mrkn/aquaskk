@@ -42,6 +42,7 @@ public:
     virtual void Input(const std::string& ascii);
     virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(Event event);
+    virtual void Paste(const std::string& string);
     virtual void Clear();
     virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);

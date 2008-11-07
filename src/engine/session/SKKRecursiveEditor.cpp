@@ -70,9 +70,15 @@ bool SKKRecursiveEditor::IsComposing() const {
 
 void SKKRecursiveEditor::Commit(const std::string& word) {
     if(!word.empty()) {
-        SKKBackEnd::theInstance().Register(editor_.Entry(), SKKCandidate(word, false));
+        const SKKEntry entry = editor_.Entry();
 
-        editor_.Insert(word);
+        SKKBackEnd::theInstance().Register(entry, SKKCandidate(word, false));
+
+        if(entry.IsOkuriAri()) {
+            editor_.Insert(word + entry.OkuriString());
+        } else {
+            editor_.Insert(word);
+        }
 
         Dispatch(SKKEvent(SKK_ENTER, 0));
     } else {

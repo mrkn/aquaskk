@@ -33,6 +33,7 @@ void SKKKeymap::Initialize(const std::string& path) {
     // 初期化
     events_.clear();
     attributes_.clear();
+    option_.clear();
 
     std::string configKey;
     std::string configValue;

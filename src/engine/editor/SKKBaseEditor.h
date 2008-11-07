@@ -49,6 +49,9 @@ public:
     // 入力処理(event=イベント)
     virtual void Input(Event event) {}
 
+    // 入力処理(ペースト)
+    virtual void Paste(const std::string& string) {}
+
     // クリアー
     virtual void Clear() = 0;
 

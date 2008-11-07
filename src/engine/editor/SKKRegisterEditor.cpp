@@ -66,6 +66,10 @@ void SKKRegisterEditor::Input(SKKBaseEditor::Event event) {
     }
 }
 
+void SKKRegisterEditor::Paste(const std::string& string) {
+    word_.Insert(string);
+}
+
 void SKKRegisterEditor::Clear() {
     // 何もしない
 }

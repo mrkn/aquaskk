@@ -163,7 +163,7 @@ void SKKInputEngine::HandleCursorDown() {
 }
 
 void SKKInputEngine::HandlePaste() {
-    Insert(sessionParam_->Clipboard()->PasteString());
+    top()->Paste(sessionParam_->Clipboard()->PasteString());
 }
 
 void SKKInputEngine::HandlePing() {
