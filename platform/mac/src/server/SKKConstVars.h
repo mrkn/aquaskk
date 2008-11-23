@@ -55,6 +55,7 @@ namespace SKKUserDefaultKeys {
     extern NSString* enable_private_mode;
 
     extern NSString* fix_intermediate_conversion;
+    extern NSString* display_shortest_match_of_kana_conversions;
     extern NSString* openlab_host;
     extern NSString* openlab_path;
 };

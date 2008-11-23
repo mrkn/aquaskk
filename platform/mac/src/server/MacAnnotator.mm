@@ -29,32 +29,47 @@
 #include <CoreServices/CoreServices.h>
 #include <iostream>
 
-MacAnnotator::MacAnnotator(id client) : client_(client) {
+MacAnnotator::MacAnnotator(id client) : client_(client), definition_(nil), optional_(nil) {
     window_ = [AnnotationWindow sharedWindow];
 }
 
-void MacAnnotator::UpdateAnnotation(const SKKCandidate& candidate, const std::string& buffer) {
+void MacAnnotator::Update(const SKKCandidate& candidate, const std::string& buffer) {
     candidate_ = candidate;
     buffer_ = buffer;
 
+    release(definition_);
+    release(optional_);
+
     NSString* str = [NSString stringWithUTF8String:candidate_.Variant().c_str()];
-    NSString* annotation = 0;
-    if(!candidate_.Annotation().empty()) {
-        annotation = [NSString stringWithUTF8String:candidate.Annotation().c_str()];
-    }
     CFRange range = CFRangeMake(0, [str length]);
+    definition_ = (NSString*)DCSCopyTextDefinition(0, (CFStringRef)str, range);
 
-    NSString* definition = (NSString*)DCSCopyTextDefinition(0, (CFStringRef)str, range);
-
-    [window_ setAnnotation:definition optional:annotation];
-
-    [definition release];
+    if(!candidate_.Annotation().empty()) {
+        optional_ = [NSString stringWithUTF8String:candidate_.Annotation().c_str()];
+        [optional_ retain];
+    }
 }
 
-void MacAnnotator::Show() {
+// ------------------------------------------------------------
+
+void MacAnnotator::release(NSString*& str) {
+    if(str) {
+        [str release];
+    }
+
+    str = nil;
+}
+
+void MacAnnotator::SKKWidgetShow() {
     NSRect rect;
     NSDictionary* dict = [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    [window_ setAnnotation:definition_ optional:optional_];
+
+    if(!definition_ && !optional_) {
+        SKKWidgetHide();
+    }
 
     if([defaults boolForKey:SKKUserDefaultKeys::put_candidate_window_upward] == YES) {
         [window_ show:rect.origin level:[client_ windowLevel] topleft:YES];
@@ -77,6 +92,6 @@ void MacAnnotator::Show() {
     }
 }
 
-void MacAnnotator::Hide() {
+void MacAnnotator::SKKWidgetHide() {
     [window_ hide];
 }

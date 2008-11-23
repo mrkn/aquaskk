@@ -22,7 +22,9 @@
 
 #include "SKKRecursiveEditor.h"
 #include "SKKInputSessionParameter.h"
+#include "SKKAnnotator.h"
 #include "SKKCandidateWindow.h"
+#include "SKKDynamicCompletor.h"
 #include "SKKBackEnd.h"
 
 SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
@@ -50,6 +52,15 @@ SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObse
     //
     // ※本来はこのような知識は不要(設計にゆがみがある証拠)
     editor_.Reset(true);
+
+    widgets_.push_back(param_->Annotator());
+    widgets_.push_back(param_->CandidateWindow());
+    widgets_.push_back(param_->DynamicCompletor());
+    widgets_.push_back(&inputModeSelector_);
+}
+
+SKKRecursiveEditor::~SKKRecursiveEditor() {
+    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(&SKKWidget::Hide));
 }
 
 void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {
@@ -87,13 +98,11 @@ void SKKRecursiveEditor::Commit(const std::string& word) {
 }
 
 void SKKRecursiveEditor::Activate() {
-    inputModeSelector_.Activate();
-    param_->CandidateWindow()->Activate();
+    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(&SKKWidget::Activate));
 }
 
 void SKKRecursiveEditor::Deactivate() {
-    inputModeSelector_.Deactivate();
-    param_->CandidateWindow()->Deactivate();
+    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(&SKKWidget::Deactivate));
 }
 
 const SKKEntry SKKRecursiveEditor::Entry() const {

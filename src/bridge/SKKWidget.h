@@ -20,27 +20,42 @@
 
 */
 
-#ifndef SKKInputEngineOption_h
-#define SKKInputEngineOption_h
+#ifndef SKKWidget_h
+#define SKKWidget_h
 
-class SKKInputEngineOption {
+// ユーザーインタフェース用基底クラス
+class SKKWidget {
+    bool visible_;
+
+    // 派生クラスで実装すべきメソッド(NVI パターン)
+    virtual void SKKWidgetShow() = 0;
+    virtual void SKKWidgetHide() = 0;
+
 public:
-    virtual ~SKKInputEngineOption() {}
+    SKKWidget() : visible_(false) {}
+    virtual ~SKKWidget() {}
 
-    // 中間的な変換を訂正するか(n → ん)
-    virtual bool FixIntermediateConversion() = 0;
+    void Show() {
+        visible_ = true;
+        SKKWidgetShow();
+    }
 
-    // 自動ダイナミック補完を有効にするか
-    virtual bool EnableDynamicCompletion() = 0;
+    void Hide() {
+        visible_ = false;
+        SKKWidgetHide();
+    }
 
-    // 自動ダイナミック補完の幅(表示数)
-    virtual int DynamicCompletionRange() = 0;
+    void Activate() {
+        if(visible_) {
+            SKKWidgetShow();
+        }
+    }
 
-    // アノテーションを有効にするか
-    virtual bool EnableAnnotation() = 0;
-
-    // 最小マッチしたかな変換を表示するか(n → ん)
-    virtual bool DisplayShortestMatchOfKanaConversions() = 0;
+    void Deactivate() {
+        if(visible_) {
+            SKKWidgetHide();
+        }
+    }
 };
 
 #endif

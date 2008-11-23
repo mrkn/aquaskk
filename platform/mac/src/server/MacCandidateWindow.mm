@@ -29,8 +29,7 @@
 
 #include <InputMethodKit/InputMethodKit.h>
 
-MacCandidateWindow::MacCandidateWindow(id client)
-    : client_(client), active_(false) {
+MacCandidateWindow::MacCandidateWindow(id client) : client_(client) {
     window_ = [CandidateWindow sharedWindow];
     candidates_ = [[NSMutableArray alloc] initWithCapacity:0];
     reloadUserDefaults();
@@ -97,8 +96,8 @@ void MacCandidateWindow::Setup(SKKCandidateIterator begin, SKKCandidateIterator 
     [cell release];
 }
 
-void MacCandidateWindow::Show(SKKCandidateIterator begin, SKKCandidateIterator end,
-				    int cursor, int page_pos, int page_max) {
+void MacCandidateWindow::Update(SKKCandidateIterator begin, SKKCandidateIterator end,
+                                int cursor, int page_pos, int page_max) {
     [candidates_ removeAllObjects];
 
     for(SKKCandidateIterator curr = begin; curr != end; ++ curr) {
@@ -108,37 +107,13 @@ void MacCandidateWindow::Show(SKKCandidateIterator begin, SKKCandidateIterator e
 
     page_ = NSMakeRange(page_pos, page_max);
     cursor_ = cursor;
-
-    active_ = true;
-
-    Activate();
-}
-
-void MacCandidateWindow::Hide() {
-    Deactivate();
-
-    active_ = false;
-}
-
-void MacCandidateWindow::Activate() {
-    if(!active_) return;
-
-    prepareWindow();
-
-    [window_ setCandidates:candidates_ selectedIndex:cursor_];
-    [window_ setPage:page_];
-    [window_ show];
-}
-
-void MacCandidateWindow::Deactivate() {
-    if(!active_) return;
-
-    [window_ hide];
 }
 
 int MacCandidateWindow::LabelIndex(char label) {
     return [window_ indexOfLabel:label];
 }
+
+// ------------------------------------------------------------
 
 void MacCandidateWindow::reloadUserDefaults() {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -184,4 +159,16 @@ void MacCandidateWindow::prepareWindow() {
     } else {
         [[window_ window] setFrameTopLeftPoint:pt];
     }
+}
+
+void MacCandidateWindow::SKKWidgetShow() {
+    prepareWindow();
+
+    [window_ setCandidates:candidates_ selectedIndex:cursor_];
+    [window_ setPage:page_];
+    [window_ show];
+}
+
+void MacCandidateWindow::SKKWidgetHide() {
+    [window_ hide];
 }

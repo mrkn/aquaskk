@@ -42,3 +42,7 @@ int MacInputEngineOption::DynamicCompletionRange() {
 bool MacInputEngineOption::EnableAnnotation() {
     return [defaults_ boolForKey:SKKUserDefaultKeys::enable_annotation] == YES;
 }
+
+bool MacInputEngineOption::DisplayShortestMatchOfKanaConversions() {
+    return [defaults_ boolForKey:SKKUserDefaultKeys::display_shortest_match_of_kana_conversions] == YES;
+}

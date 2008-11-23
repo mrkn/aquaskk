@@ -24,8 +24,6 @@
 #include "MacFrontEnd.h"
 #include "utf8util.h"
 
-#include "CompletionWindow.h"
-
 MacFrontEnd::MacFrontEnd(id client) : client_(client) {}
 
 void MacFrontEnd::InsertString(const std::string& str) {
@@ -52,20 +50,6 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     [client_ setMarkedText:marked selectionRange:cursorPos replacementRange:notFound()];
 
     [marked release];
-}
-
-void MacFrontEnd::ShowCompletion(const std::string& completion, int cursorOffset) {
-    CompletionWindow* window = [CompletionWindow sharedWindow];
-    NSString* compString = [NSString stringWithUTF8String:completion.c_str()];
-    NSRect rect;
-
-    [client_ attributesForCharacterIndex:cursorOffset + 1 lineHeightRectangle:&rect];
-
-    [window showCompletion:compString at:rect.origin level:WindowLevel()];
-}
-
-void MacFrontEnd::HideCompletion() {
-    [[CompletionWindow sharedWindow] hide];
 }
 
 void MacFrontEnd::Clear() {

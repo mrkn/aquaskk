@@ -34,7 +34,7 @@ void SKKInputQueue::SelectInputMode(SKKInputMode mode) {
 }
 
 void SKKInputQueue::AddChar(char code) {
-    notify(convert(code), code);
+    observer_->SKKInputQueueUpdate(convert(code));
 }
 
 void SKKInputQueue::RemoveChar() {
@@ -42,21 +42,24 @@ void SKKInputQueue::RemoveChar() {
 
     queue_.erase(queue_.size() - 1);
 
-    notify();
+    SKKInputQueueObserver::State state;
+
+    state.queue = queue_;
+    state.code = 0;
+
+    observer_->SKKInputQueueUpdate(state);
 }
 
 void SKKInputQueue::Terminate() {
     if(IsEmpty()) return;
 
-    std::string fixed = terminate();
-
-    Clear();
-
-    notify(fixed);
+    observer_->SKKInputQueueUpdate(terminate());
 }
 
 void SKKInputQueue::Clear() {
     queue_.clear();
+
+    observer_->SKKInputQueueUpdate(SKKInputQueueObserver::State());
 }
 
 bool SKKInputQueue::IsEmpty() const {
@@ -93,9 +96,10 @@ bool SKKInputQueue::CanConvert(char code) const {
 
 // ------------------------------------------------------------
 
-std::string SKKInputQueue::convert(char code) {
+SKKInputQueueObserver::State SKKInputQueue::convert(char code) {
     SKKRomanKanaConverter& converter = SKKRomanKanaConverter::theInstance();
     SKKRomanKanaConversionResult result;
+    SKKInputQueueObserver::State state;
 
     switch(mode_) {
     case AsciiInputMode:
@@ -122,12 +126,18 @@ std::string SKKInputQueue::convert(char code) {
         assert(false);
     }
 
-    return result.output;
+    state.fixed = result.output;
+    state.intermediate = result.intermediate;
+    state.queue = queue_;
+    state.code = code;
+
+    return state;
 }
 
-std::string SKKInputQueue::terminate() {
+SKKInputQueueObserver::State SKKInputQueue::terminate() {
     SKKRomanKanaConverter& converter = SKKRomanKanaConverter::theInstance();
     SKKRomanKanaConversionResult result;
+    SKKInputQueueObserver::State state;
 
     switch(mode_) {
     case HirakanaInputMode:
@@ -145,9 +155,10 @@ std::string SKKInputQueue::terminate() {
         assert(false);
     }
 
-    return result.intermediate;
-}
+    queue_.clear();
 
-void SKKInputQueue::notify(const std::string& fixed, char code) {
-    observer_->SKKInputQueueUpdate(fixed, queue_, code);
+    state.fixed = result.output + result.intermediate;
+    state.code = 0;
+
+    return state;
 }

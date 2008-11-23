@@ -44,6 +44,8 @@ namespace {
         { -1,				InvalidInputMode,
           0 }
     };
+
+    static SKKInputMode unifiedInputMode__ = HirakanaInputMode;
 };
 
 - (id)initWithClient:(id)client {
@@ -60,6 +62,7 @@ namespace {
 
     if(identifer) {
         currentInputMode_ = mode;
+        unifiedInputMode__ = mode;
         [client_ selectInputMode:identifer];
     }
 }
@@ -88,4 +91,8 @@ namespace {
     return currentInputMode_;
 }
 
-@end    
+- (SKKInputMode)unifiedInputMode {
+    return unifiedInputMode__;
+}
+
+@end

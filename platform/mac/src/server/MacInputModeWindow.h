@@ -30,20 +30,19 @@ class SKKFrontEnd;
 @class InputModeWindow;
 
 class MacInputModeWindow : public SKKInputModeListener {
-    bool active_;
     SKKFrontEnd* frontend_;
     SKKInputMode mode_;
-
     InputModeWindow* window_;
 
     bool enabled() const;
+
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
 
 public:
     MacInputModeWindow(SKKFrontEnd* frontend);
 
     virtual void SelectInputMode(SKKInputMode mode);
-    virtual void Activate();
-    virtual void Deactivate();
 };
 
 #endif

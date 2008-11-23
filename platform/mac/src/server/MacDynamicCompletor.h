@@ -1,4 +1,4 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
@@ -20,27 +20,26 @@
 
 */
 
-#ifndef SKKInputEngineOption_h
-#define SKKInputEngineOption_h
+#ifndef MacDynamicCompletor_h
+#define MacDynamicCompletor_h
 
-class SKKInputEngineOption {
+#include "SKKDynamicCompletor.h"
+
+@class CompletionWindow;
+
+class MacDynamicCompletor : public SKKDynamicCompletor {
+    id client_;
+    CompletionWindow* window_;
+    std::string completion_;
+    int cursorOffset_;
+
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
+
 public:
-    virtual ~SKKInputEngineOption() {}
+    MacDynamicCompletor(id client);
 
-    // 中間的な変換を訂正するか(n → ん)
-    virtual bool FixIntermediateConversion() = 0;
-
-    // 自動ダイナミック補完を有効にするか
-    virtual bool EnableDynamicCompletion() = 0;
-
-    // 自動ダイナミック補完の幅(表示数)
-    virtual int DynamicCompletionRange() = 0;
-
-    // アノテーションを有効にするか
-    virtual bool EnableAnnotation() = 0;
-
-    // 最小マッチしたかな変換を表示するか(n → ん)
-    virtual bool DisplayShortestMatchOfKanaConversions() = 0;
+    virtual void Update(const std::string& completion, int cursorOffset);
 };
 
 #endif

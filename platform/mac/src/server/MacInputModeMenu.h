@@ -29,13 +29,15 @@
 
 class MacInputModeMenu : public SKKInputModeListener {
     SKKInputMenu* menu_;
+    SKKInputMode mode_;
+
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
 
 public:
     MacInputModeMenu(SKKInputMenu* menu);
 
     virtual void SelectInputMode(SKKInputMode mode);
-    virtual void Activate();
-    virtual void Deactivate();
 };
 
 #endif

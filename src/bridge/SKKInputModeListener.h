@@ -24,14 +24,13 @@
 #define SKKInputModeListener_h
 
 #include "SKKInputMode.h"
+#include "SKKWidget.h"
 
-class SKKInputModeListener {
+class SKKInputModeListener : public SKKWidget {
 public:
     virtual ~SKKInputModeListener() {}
 
     virtual void SelectInputMode(SKKInputMode mode) = 0;
-    virtual void Activate() = 0;
-    virtual void Deactivate() = 0;
 };
 
 #endif

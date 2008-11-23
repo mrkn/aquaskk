@@ -28,6 +28,7 @@
 #include "SKKCandidate.h"
 
 class SKKFrontEnd;
+class SKKDynamicCompletor;
 class SKKAnnotator;
 
 class SKKContextBuffer {
@@ -48,7 +49,7 @@ public:
     void Compose(const std::string& str, const std::string& completion, int cursor = 0);
     bool IsComposing() const;
 
-    void Output(SKKFrontEnd* frontend, SKKAnnotator* annotator = 0);
+    void Output(SKKFrontEnd* frontend, SKKDynamicCompletor* completor, SKKAnnotator* annotator = 0);
 
     void SetEntry(const SKKEntry& entry);
     void SetCandidate(const SKKCandidate& candidate);

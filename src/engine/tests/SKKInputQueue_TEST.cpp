@@ -4,32 +4,24 @@
 #include "SKKRomanKanaConverter.h"
 
 class TestInputQueueObserver : public SKKInputQueueObserver {
-    std::string fixed_;
-    std::string queue_;
-    char code_;
+    State state_;
 
 public:
-    virtual void SKKInputQueueUpdate(const std::string& fixed) {
-        fixed_ += fixed;
-    }
-
-    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code) {
-        fixed_ += fixed;
-        queue_ = queue;
-        code_ = code;
+    virtual void SKKInputQueueUpdate(const State& state) {
+        state_.fixed += state.fixed;
+        state_.queue = state.queue;
     }
 
     void Clear() {
-        fixed_.clear();
-        queue_.clear();
+        state_ = State();
     }
 
     bool Test(const std::string& fixed, const std::string& queue) {
-        return fixed_ == fixed && queue_ == queue;
+        return state_.fixed == fixed && state_.queue == queue;
     }
 
     void Dump() {
-        std::cerr << "fixed=" << fixed_ << ", queue=" << queue_ << std::endl;
+        std::cerr << "fixed=" << state_.fixed << ", queue=" << state_.queue << std::endl;
     }
 };
 

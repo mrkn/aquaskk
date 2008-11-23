@@ -297,7 +297,8 @@ State SKKState::Jisx0208Latin(const Event& event) {
         return 0;
 
     default:
-        if(event == SKK_ASCII_MODE || param.IsSwitchToAscii()) {
+        if(event == SKK_ASCII_MODE ||
+           (!param.IsInputChars() && param.IsSwitchToAscii())) {
            return State::Transition(&SKKState::Ascii);
         }
     }

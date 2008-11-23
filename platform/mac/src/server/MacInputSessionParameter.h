@@ -33,6 +33,7 @@ class MacInputSessionParameter : public SKKInputSessionParameter {
     std::auto_ptr<SKKClipboard> clipboard_;
     std::auto_ptr<SKKCandidateWindow> candidateWindow_;
     std::auto_ptr<SKKAnnotator> annotator_;
+    std::auto_ptr<SKKDynamicCompletor> completor_;
     std::auto_ptr<SKKInputEngineOption> inputEngineOption_;
 
 public:
@@ -44,6 +45,7 @@ public:
     virtual SKKClipboard* Clipboard();
     virtual SKKCandidateWindow* CandidateWindow();
     virtual SKKAnnotator* Annotator();
+    virtual SKKDynamicCompletor* DynamicCompletor();
     virtual SKKInputEngineOption* InputEngineOption();
 };
 

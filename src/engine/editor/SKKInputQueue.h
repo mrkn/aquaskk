@@ -28,9 +28,17 @@
 
 class SKKInputQueueObserver {
 public:
+    // 入力状態
+    struct State {
+        std::string fixed;        // 確定した文字
+        std::string intermediate; // 最小マッチした文字
+        std::string queue;        // 入力バッファ
+        char code;                // 入力文字
+    };
+
     virtual ~SKKInputQueueObserver() {}
 
-    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code) = 0;
+    virtual void SKKInputQueueUpdate(const State& state) = 0;
 };
 
 class SKKInputQueue {
@@ -38,9 +46,8 @@ class SKKInputQueue {
     SKKInputMode mode_;
     std::string queue_;
 
-    std::string convert(char code);
-    std::string terminate();
-    void notify(const std::string& fixed = "", char code = 0);
+    SKKInputQueueObserver::State convert(char code);
+    SKKInputQueueObserver::State terminate();
 
 public:
     SKKInputQueue(SKKInputQueueObserver* observer);

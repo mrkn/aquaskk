@@ -27,6 +27,7 @@
 #include "MacClipboard.h"
 #include "MacCandidateWindow.h"
 #include "MacAnnotator.h"
+#include "MacDynamicCompletor.h"
 #include "MacInputEngineOption.h"
 
 MacInputSessionParameter::MacInputSessionParameter(id client)
@@ -36,6 +37,7 @@ MacInputSessionParameter::MacInputSessionParameter(id client)
     , clipboard_(new MacClipboard())
     , candidateWindow_(new MacCandidateWindow(client))
     , annotator_(new MacAnnotator(client))
+    , completor_(new MacDynamicCompletor(client))
     , inputEngineOption_(new MacInputEngineOption())
 {}
 
@@ -61,6 +63,10 @@ SKKCandidateWindow* MacInputSessionParameter::CandidateWindow() {
 
 SKKAnnotator* MacInputSessionParameter::Annotator() {
     return annotator_.get();
+}
+
+SKKDynamicCompletor* MacInputSessionParameter::DynamicCompletor() {
+    return completor_.get();
 }
 
 SKKInputEngineOption* MacInputSessionParameter::InputEngineOption() {

@@ -27,10 +27,12 @@
 #include "SKKInputEngine.h"
 
 class SKKInputSessionParameter;
+class SKKWidget;
 
 class SKKRecursiveEditor {
     std::auto_ptr<SKKBaseEditor> bottom_;
     SKKInputSessionParameter* param_;
+    std::vector<SKKWidget*> widgets_;
     SKKInputModeSelector inputModeSelector_;
     SKKInputEngine editor_;
     SKKStateMachine state_;
@@ -44,6 +46,8 @@ public:
                        SKKInputSessionParameter* param,
                        SKKInputModeSelector* selector,
                        SKKBaseEditor* bottom);
+
+    ~SKKRecursiveEditor();
 
     void Dispatch(const SKKEvent& event);
     bool Output();

@@ -29,16 +29,21 @@
 
 class MacAnnotator : public SKKAnnotator {
     id client_;
+    NSString* definition_;
+    NSString* optional_;
     AnnotationWindow* window_;
     SKKCandidate candidate_;
     std::string buffer_;
 
+    void release(NSString*& str);
+
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
+
 public:
     MacAnnotator(id client);
 
-    virtual void UpdateAnnotation(const SKKCandidate& candidate, const std::string& buffer);
-    virtual void Show();
-    virtual void Hide();
+    virtual void Update(const SKKCandidate& candidate, const std::string& buffer);
 };
 
 #endif

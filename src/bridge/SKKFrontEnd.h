@@ -36,10 +36,6 @@ public:
     // 未確定文字入力(カーソル位置は末尾からのオフセット)
     virtual void ComposeString(const std::string& str, int cursorOffset = 0) = 0;
 
-    // 補完文字列
-    virtual void ShowCompletion(const std::string& completion, int cursorOffset = 0) = 0;
-    virtual void HideCompletion() = 0;
-
     // 入力状態をクリアーする
     virtual void Clear() = 0;
 

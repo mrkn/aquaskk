@@ -29,7 +29,6 @@
 
 class MacCandidateWindow : public SKKCandidateWindow {
     id client_;
-    bool active_;
     bool putUpward_;
     NSMutableArray* candidates_;
     NSRange page_;
@@ -39,16 +38,16 @@ class MacCandidateWindow : public SKKCandidateWindow {
 
     void reloadUserDefaults();
     void prepareWindow();
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
 
 public:
     MacCandidateWindow(id client);
     virtual ~MacCandidateWindow();
 
     virtual void Setup(SKKCandidateIterator begin, SKKCandidateIterator end, std::vector<int>& pages);
-    virtual void Show(SKKCandidateIterator begin, SKKCandidateIterator end, int cursor, int page_pos, int page_max);
-    virtual void Hide();
-    virtual void Activate();
-    virtual void Deactivate();
+    virtual void Update(SKKCandidateIterator begin, SKKCandidateIterator end,
+                        int cursor, int page_pos, int page_max);
     virtual int LabelIndex(char label);
 };
 

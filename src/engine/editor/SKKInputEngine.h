@@ -68,6 +68,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
 
     SKKInputQueue inputQueue_;
     SKKContextBuffer contextBuffer_;
+    SKKInputQueueObserver::State inputState_;
 
     std::string word_;
     std::string undo_;
@@ -90,7 +91,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     void updateContextBuffer();
 
     // ローマ字かな変換通知
-    virtual void SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code);
+    virtual void SKKInputQueueUpdate(const SKKInputQueueObserver::State& state);
 
     // 見出し語の取得
     virtual const std::string SKKCompleterQueryString();

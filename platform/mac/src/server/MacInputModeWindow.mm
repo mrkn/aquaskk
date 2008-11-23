@@ -77,24 +77,27 @@ namespace {
 // ============================================================
 
 MacInputModeWindow::MacInputModeWindow(SKKFrontEnd* frontend)
-  : active_(false)
-  , frontend_(frontend)
+  : frontend_(frontend)
   , mode_(HirakanaInputMode) {
     window_ = [InputModeWindow sharedWindow];
     [window_ changeMode:mode_];
 }
 
 void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
-    if(mode_ != mode) {
-        mode_ = mode;
-
-        if(active_) Activate();
-    }
+    mode_ = mode;
 }
 
-void MacInputModeWindow::Activate() {
-    active_ = true;
+// ------------------------------------------------------------
 
+bool MacInputModeWindow::enabled() const {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    [defaults synchronize];
+    
+    return [defaults boolForKey:SKKUserDefaultKeys::show_input_mode_icon] == YES;
+}
+
+void MacInputModeWindow::SKKWidgetShow() {
     if(!enabled()) return;
 
     std::pair<int, int> position = frontend_->WindowPosition();
@@ -111,18 +114,6 @@ void MacInputModeWindow::Activate() {
     [window_ show:NSMakePoint(position.first, position.second) level:frontend_->WindowLevel()];
 }
 
-void MacInputModeWindow::Deactivate() {
+void MacInputModeWindow::SKKWidgetHide() {
     [window_ hide];
-
-    active_ = false;
-}
-
-// ------------------------------------------------------------
-
-bool MacInputModeWindow::enabled() const {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
-    [defaults synchronize];
-    
-    return [defaults boolForKey:SKKUserDefaultKeys::show_input_mode_icon] == YES;
 }

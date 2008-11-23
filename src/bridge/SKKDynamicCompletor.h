@@ -20,27 +20,18 @@
 
 */
 
-#ifndef SKKInputEngineOption_h
-#define SKKInputEngineOption_h
+#ifndef SKKDynamicCompletor_h
+#define SKKDynamicCompletor_h
 
-class SKKInputEngineOption {
+#include "SKKWidget.h"
+#include <string>
+
+class SKKDynamicCompletor : public SKKWidget {
 public:
-    virtual ~SKKInputEngineOption() {}
+    virtual ~SKKDynamicCompletor() {}
 
-    // 中間的な変換を訂正するか(n → ん)
-    virtual bool FixIntermediateConversion() = 0;
-
-    // 自動ダイナミック補完を有効にするか
-    virtual bool EnableDynamicCompletion() = 0;
-
-    // 自動ダイナミック補完の幅(表示数)
-    virtual int DynamicCompletionRange() = 0;
-
-    // アノテーションを有効にするか
-    virtual bool EnableAnnotation() = 0;
-
-    // 最小マッチしたかな変換を表示するか(n → ん)
-    virtual bool DisplayShortestMatchOfKanaConversions() = 0;
+    // 更新
+    virtual void Update(const std::string& completion, int cursorOffset) = 0;
 };
 
 #endif

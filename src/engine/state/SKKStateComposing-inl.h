@@ -282,6 +282,10 @@ State SKKState::EntryCompletion(const Event& event) {
     const SKKEvent& param = event.Param();
 
     switch(event) {
+    case ENTRY_EVENT:
+        editor_->SetStateComposing();
+        return 0;
+
     case SKK_TAB:
     case SKK_CHAR:
         if(event == SKK_TAB || param.IsNextCompletion()) {
@@ -383,14 +387,16 @@ State SKKState::SelectCandidate(const Event& event) {
             return State::Transition(&SKKState::EntryRemove);
         }
 
-        if(selector_.IsInline()) {
-            editor_->Commit();
-            return State::DeepForward(&SKKState::KanaInput);
-        }
+        if(param.IsInputChars()) {
+            if(selector_.IsInline()) {
+                editor_->Commit();
+                return State::DeepForward(&SKKState::KanaInput);
+            }
 
-        if(selector_.Select(param.code)) {
-            editor_->Commit();
-            return State::Transition(&SKKState::KanaInput);
+            if(selector_.Select(param.code)) {
+                editor_->Commit();
+                return State::Transition(&SKKState::KanaInput);
+            }
         }
 
         return 0;

@@ -29,6 +29,7 @@ class SKKMessenger;
 class SKKClipboard;
 class SKKCandidateWindow;
 class SKKAnnotator;
+class SKKDynamicCompletor;
 class SKKInputEngineOption;
 
 class SKKInputSessionParameter {
@@ -41,6 +42,7 @@ public:
     virtual SKKClipboard* Clipboard() = 0;
     virtual SKKCandidateWindow* CandidateWindow() = 0;
     virtual SKKAnnotator* Annotator() = 0;
+    virtual SKKDynamicCompletor* DynamicCompletor() = 0;
     virtual SKKInputEngineOption* InputEngineOption() = 0;
 };
 

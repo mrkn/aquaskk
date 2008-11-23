@@ -90,13 +90,12 @@
 - (void)commitComposition:(id)sender {
     session_->Clear();
     frontend_->Clear();
-
-    [[AnnotationWindow sharedWindow] hide];
 }
 
 // IMKStateSetting
 - (void)activateServer:(id)sender {
-    activated_ = YES;
+    // 直前のセッションの入力モードを保存しておく
+    unifiedInputMode_ = [menu_ unifiedInputMode];
 
     [self initializeKeyboardLayout];
 
@@ -105,29 +104,19 @@
 
 - (void)deactivateServer:(id)sender {
     session_->Deactivate();
-
-    [[CompletionWindow sharedWindow] hide];
-    [[AnnotationWindow sharedWindow] hide];
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {
-    // 入力モードを統一する場合は、Leopard デフォルトの挙動に従い、入力
-    // メニューのモードで内部の入力モードを更新する
+    // 入力モードを統一する
     if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
-        SKKEvent param;
+        NSString* identifier = [menu_ modeIdentifier:unifiedInputMode_];
+        if(identifier) {
+            SKKEvent param;
 
-        // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
-        param.id = [menu_ eventId:value];
-        session_->HandleEvent(param);
-
-        return;
-    }
-
-    // 個別の入力モードを保持するなら、アクティブ化直後だけ、入力メニュー
-    // を内部の入力モードで更新する
-    if(activated_) {
-        [menu_ updateMenu:[menu_ currentInputMode]];
-        activated_ = NO;
+            // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
+            param.id = [menu_ eventId:identifier];
+            session_->HandleEvent(param);
+        }
     }
 }
 

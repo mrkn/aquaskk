@@ -20,24 +20,35 @@
 
 */
 
-#ifndef SKKInputMenu_h
-#define SKKInputMenu_h
+#include "MacDynamicCompletor.h"
+#include "CompletionWindow.h"
 
-#include "SKKInputMode.h"
 #include <InputMethodKit/InputMethodKit.h>
 
-@interface SKKInputMenu : NSObject {
-    id client_;
-    SKKInputMode currentInputMode_;
+MacDynamicCompletor::MacDynamicCompletor(id client) : client_(client) {
+    window_ = [CompletionWindow sharedWindow];
 }
 
-- (id)initWithClient:(id)client;
-- (void)updateMenu:(SKKInputMode)mode;
-- (int)eventId:(NSString*)identifier;
-- (NSString*)modeIdentifier:(SKKInputMode)mode;
-- (SKKInputMode)currentInputMode;
-- (SKKInputMode)unifiedInputMode;
+void MacDynamicCompletor::Update(const std::string& completion, int cursorOffset) {
+    completion_ = completion;
+    cursorOffset_ = cursorOffset;
+}
 
-@end    
+// ------------------------------------------------------------
 
-#endif
+void MacDynamicCompletor::SKKWidgetShow() {
+    if(completion_.empty()) {
+        SKKWidgetHide();
+        return;
+    }
+
+    NSString* compString = [NSString stringWithUTF8String:completion_.c_str()];
+    NSRect rect;
+
+    [client_ attributesForCharacterIndex:cursorOffset_ + 1 lineHeightRectangle:&rect];
+    [window_ showCompletion:compString at:rect.origin level:[client_ windowLevel]];
+}
+
+void MacDynamicCompletor::SKKWidgetHide() {
+    [window_ hide];
+}

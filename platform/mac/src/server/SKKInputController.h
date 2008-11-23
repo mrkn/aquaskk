@@ -37,13 +37,13 @@ class SKKInputModeListener;
     NSUserDefaults* defaults_;
     SKKServerProxy* proxy_;
     SKKInputMenu* menu_;
+    SKKInputMode unifiedInputMode_;
 
     SKKInputSessionParameter* param_;
     SKKInputSession* session_;
     SKKFrontEnd* frontend_;
     SKKInputModeListener* modeMenu_;
     SKKInputModeListener* modeWindow_;
-    BOOL activated_;
 }
 @end
 

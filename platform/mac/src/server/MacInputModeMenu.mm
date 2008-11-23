@@ -23,12 +23,15 @@
 #include "MacInputModeMenu.h"
 #include "SKKInputMenu.h"
 
-MacInputModeMenu::MacInputModeMenu(SKKInputMenu* menu) : menu_(menu) {}
+MacInputModeMenu::MacInputModeMenu(SKKInputMenu* menu)
+  : menu_(menu), mode_([menu currentInputMode]) {}
 
 void MacInputModeMenu::SelectInputMode(SKKInputMode mode) {
-    [menu_ updateMenu:mode];
+    mode_ = mode;
 }
 
-void MacInputModeMenu::Activate() {}
+void MacInputModeMenu::SKKWidgetShow() {
+    [menu_ updateMenu:mode_];
+}
 
-void MacInputModeMenu::Deactivate() {}
+void MacInputModeMenu::SKKWidgetHide() {}

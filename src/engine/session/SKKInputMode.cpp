@@ -25,33 +25,39 @@
 #include <algorithm>
 #include <functional>
 
-SKKInputModeSelector::SKKInputModeSelector() {
+SKKInputModeSelector::SKKInputModeSelector() : mode_(InvalidInputMode) {
     Select(HirakanaInputMode);
-}
-
-void SKKInputModeSelector::Select(SKKInputMode mode) {
-    mode_ = mode;
 }
 
 void SKKInputModeSelector::AddListener(SKKInputModeListener* listener) {
     listeners_.push_back(listener);
 }
 
-void SKKInputModeSelector::Notify() {
+void SKKInputModeSelector::Select(SKKInputMode mode) {
+    needsUpdate_ = mode_ != mode;
+    mode_ = mode;
+
     std::for_each(listeners_.begin(), listeners_.end(),
                   std::bind2nd(std::mem_fun(&SKKInputModeListener::SelectInputMode), mode_));
 }
 
-void SKKInputModeSelector::Activate() {
-    std::for_each(listeners_.begin(), listeners_.end(),
-                  std::mem_fun(&SKKInputModeListener::Activate));
-}
-
-void SKKInputModeSelector::Deactivate() {
-    std::for_each(listeners_.begin(), listeners_.end(),
-                  std::mem_fun(&SKKInputModeListener::Deactivate));
+void SKKInputModeSelector::Notify() {
+    if(needsUpdate_) {
+        needsUpdate_ = false;
+        SKKWidgetShow();
+    }
 }
 
 SKKInputModeSelector::operator SKKInputMode() const {
     return mode_;
+}
+
+// ------------------------------------------------------------
+
+void SKKInputModeSelector::SKKWidgetShow() {
+    std::for_each(listeners_.begin(), listeners_.end(), std::mem_fun(&SKKWidget::Show));
+}
+
+void SKKInputModeSelector::SKKWidgetHide() {
+    std::for_each(listeners_.begin(), listeners_.end(), std::mem_fun(&SKKWidget::Hide));
 }

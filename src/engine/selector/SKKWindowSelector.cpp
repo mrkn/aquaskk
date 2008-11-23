@@ -114,7 +114,8 @@ bool SKKWindowSelector::Select(char label) {
 }
 
 void SKKWindowSelector::Show() {
-    window_->Show(view_.begin(), view_.end(), cursor_pos_, page_pos_ + 1, pages_.size());
+    window_->Update(view_.begin(), view_.end(), cursor_pos_, page_pos_ + 1, pages_.size());
+    window_->Show();
 }
 
 void SKKWindowSelector::Hide() {

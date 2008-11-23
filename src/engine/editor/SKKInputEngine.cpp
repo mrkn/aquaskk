@@ -48,10 +48,12 @@ SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
 }
 
 void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
+    bool composing = IsComposing() || !inputQueue_.IsEmpty();
+
     inputModeSelector_->Select(mode);
     inputQueue_.SelectInputMode(mode);
 
-    if(IsComposing()) {
+    if(composing) {
         modified_ = true;
     } else {
         modified_without_output_ = true;
@@ -167,7 +169,7 @@ void SKKInputEngine::HandlePaste() {
 }
 
 void SKKInputEngine::HandlePing() {
-    inputModeSelector_->Activate();
+    inputModeSelector_->Show();
 }
 
 void SKKInputEngine::Commit() {
@@ -289,11 +291,18 @@ void SKKInputEngine::Output() {
     if(modified_ || top()->IsModified()) {
         updateContextBuffer();
 
-        if(option_->EnableAnnotation()) {
-            contextBuffer_.Output(sessionParam_->FrontEnd(), sessionParam_->Annotator());
-        } else {
-            contextBuffer_.Output(sessionParam_->FrontEnd(), 0);
+        SKKDynamicCompletor* completer = 0;
+        SKKAnnotator* annotator = 0;
+
+        if(option_->EnableDynamicCompletion()) {
+            completer = sessionParam_->DynamicCompletor();
         }
+
+        if(option_->EnableAnnotation()) {
+            annotator = sessionParam_->Annotator();
+        }
+
+        contextBuffer_.Output(sessionParam_->FrontEnd(), completer, annotator);
 
         // 直接入力モードのカーソル移動等では内部バッファが変更されず、
         // empty 状態が保たれる
@@ -405,16 +414,26 @@ void SKKInputEngine::updateContextBuffer() {
     }
 
     // 非確定文字があれば挿入(ex. "ky" など)
-    contextBuffer_.Compose(inputQueue_.QueueString());
+    if(option_->DisplayShortestMatchOfKanaConversions()) {
+        if(inputState_.intermediate.empty()) {
+            contextBuffer_.Compose(inputState_.queue);
+        } else {
+            contextBuffer_.Compose(inputState_.intermediate);
+        }
+    } else {
+        contextBuffer_.Compose(inputState_.queue);
+    }
 }
 
 // ------------------------------------------------------------
 
-void SKKInputEngine::SKKInputQueueUpdate(const std::string& fixed, const std::string& queue, char code) {
+void SKKInputEngine::SKKInputQueueUpdate(const SKKInputQueueObserver::State& state) {
+    inputState_ = state;
+
     if(bypassMode_) {
-        top()->Input(fixed);
+        top()->Input(state.fixed);
     } else {
-        top()->Input(fixed, queue, code);
+        top()->Input(state.fixed, state.queue, state.code);
     }
 }
 

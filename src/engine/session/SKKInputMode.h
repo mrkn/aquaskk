@@ -24,6 +24,7 @@
 #define SKKInputMode_h
 
 #include <vector>
+#include "SKKWidget.h"
 
 enum SKKInputMode {
     HirakanaInputMode,
@@ -36,9 +37,13 @@ enum SKKInputMode {
 
 class SKKInputModeListener;
 
-class SKKInputModeSelector {
+class SKKInputModeSelector : public SKKWidget {
     std::vector<SKKInputModeListener*> listeners_;
     SKKInputMode mode_;
+    bool needsUpdate_;
+
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
 
 public:
     SKKInputModeSelector();
@@ -47,9 +52,6 @@ public:
 
     void Select(SKKInputMode mode);
     void Notify();
-
-    void Activate();
-    void Deactivate();
 
     operator SKKInputMode() const;
 };

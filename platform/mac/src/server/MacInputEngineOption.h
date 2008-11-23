@@ -35,6 +35,7 @@ public:
     virtual bool EnableDynamicCompletion();
     virtual int DynamicCompletionRange();
     virtual bool EnableAnnotation();
+    virtual bool DisplayShortestMatchOfKanaConversions();
 };
 
 #endif

@@ -23,20 +23,15 @@
 #ifndef SKKAnnotator_h
 #define SKKAnnotator_h
 
+#include "SKKWidget.h"
 #include "SKKCandidate.h"
 
-class SKKAnnotator {
+class SKKAnnotator : public SKKWidget {
 public:
     virtual ~SKKAnnotator() {}
 
     // 註釈の更新(candidate=候補, buffer=カーソル位置までの部分文字列)
-    virtual void UpdateAnnotation(const SKKCandidate& candidate, const std::string& buffer) = 0;
-
-    // 表示
-    virtual void Show() = 0;
-
-    // 停止
-    virtual void Hide() = 0;
+    virtual void Update(const SKKCandidate& candidate, const std::string& buffer) = 0;
 };
 
 #endif

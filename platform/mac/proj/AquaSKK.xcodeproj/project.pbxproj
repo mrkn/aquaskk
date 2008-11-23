@@ -83,6 +83,7 @@
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
 		D3665A2B0EA8BDA90065CFD2 /* MessengerWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */; };
+		D376C0FD0EC728D8001B2CE9 /* MacDynamicCompletor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */; };
 		D38D61BE0EA792CB0095AAC8 /* MessengerView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */; };
 		D38FA9D20EA78A0800C07575 /* CompletionWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */; };
 		D3949A810EB4857900D46500 /* AnnotationView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3949A7E0EB4857900D46500 /* AnnotationView.mm */; };
@@ -288,6 +289,10 @@
 		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
 		D3665A290EA8BDA90065CFD2 /* MessengerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerWindow.h; sourceTree = "<group>"; };
 		D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerWindow.mm; sourceTree = "<group>"; };
+		D368A06B0EC68CC100145C40 /* SKKWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKWidget.h; sourceTree = "<group>"; };
+		D376C0FA0EC728C7001B2CE9 /* SKKDynamicCompletor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKDynamicCompletor.h; sourceTree = "<group>"; };
+		D376C0FB0EC728D8001B2CE9 /* MacDynamicCompletor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacDynamicCompletor.h; sourceTree = "<group>"; };
+		D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacDynamicCompletor.mm; sourceTree = "<group>"; };
 		D38D61BC0EA792CB0095AAC8 /* MessengerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerView.h; sourceTree = "<group>"; };
 		D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerView.mm; sourceTree = "<group>"; };
 		D38FA9D00EA78A0800C07575 /* CompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompletionWindow.h; sourceTree = "<group>"; };
@@ -358,12 +363,14 @@
 		D353BBDC0E1754E3004C68A6 /* bridge */ = {
 			isa = PBXGroup;
 			children = (
+				D368A06B0EC68CC100145C40 /* SKKWidget.h */,
 				D353BBE10E1754E3004C68A6 /* SKKInputSessionParameter.h */,
 				D353BBDF0E1754E3004C68A6 /* SKKFrontEnd.h */,
 				D353BBE20E1754E3004C68A6 /* SKKStateConfiguration.h */,
 				D396A06E0EA0C8B700B6B9D5 /* SKKMessenger.h */,
 				D353BBDE0E1754E3004C68A6 /* SKKClipboard.h */,
 				D3CB86750EB47E790069107D /* SKKAnnotator.h */,
+				D376C0FA0EC728C7001B2CE9 /* SKKDynamicCompletor.h */,
 				D302E2F70EA068EF00E3321E /* SKKInputModeListener.h */,
 				D353BBDD0E1754E3004C68A6 /* SKKCandidateWindow.h */,
 				D33056590E4C87480019D8B5 /* SKKInputEngineOption.h */,
@@ -579,6 +586,8 @@
 				D3CB86770EB47E970069107D /* MacAnnotator.mm */,
 				D353BDCF0E175513004C68A6 /* MacCandidateWindow.h */,
 				D353BDD00E175513004C68A6 /* MacCandidateWindow.mm */,
+				D376C0FB0EC728D8001B2CE9 /* MacDynamicCompletor.h */,
+				D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */,
 				D396A06F0EA0C8C600B6B9D5 /* MacMessenger.h */,
 				D396A0700EA0C8C600B6B9D5 /* MacMessenger.mm */,
 				D353BDD10E175513004C68A6 /* MacClipboard.h */,
@@ -940,6 +949,7 @@
 				D3CB86780EB47E970069107D /* MacAnnotator.mm in Sources */,
 				D3949A810EB4857900D46500 /* AnnotationView.mm in Sources */,
 				D3949A820EB4857900D46500 /* AnnotationWindow.mm in Sources */,
+				D376C0FD0EC728D8001B2CE9 /* MacDynamicCompletor.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
