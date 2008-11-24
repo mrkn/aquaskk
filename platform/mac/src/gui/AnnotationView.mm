@@ -48,7 +48,7 @@
         strokeColor_ = [[NSColor controlShadowColor] retain];
 
         definitiveHeader_ = [self createHeader:@"意味・語源"];
-        annotationHeader_ = [self createHeader:@"SKK アノテーション"];
+        annotationHeader_ = [self createHeader:@"SKK 辞書の註釈"];
     }
 
     return self;
