@@ -16,6 +16,7 @@ class KeymapTranslator
       'SKK_UP'         => [ 'hex::0x1e', 'ctrl::a' ],
       'SKK_DOWN'       => [ 'hex::0x1f', 'ctrl::e' ],
       'SKK_PING'       => [ 'ctrl::l' ],
+      'SKK_UNDO'       => [ 'ctrl::/' ],
     }
 
     @attributes = {
@@ -24,7 +25,7 @@ class KeymapTranslator
       'PrevCompletion' => [ ',' ],
       'NextCompletion' => [ '.' ],
       'InputChars'     => [ 'group::hex::0x20-0x7e' ],
-      'CompConversion' => [ 'alt::hex::0x20' ],
+      'CompConversion' => [ 'alt::hex::0x20', 'shift::hex::0x20' ],
     }
 
     @handle_option = {

@@ -107,14 +107,19 @@
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {
-    // 入力モードを統一する
-    if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
-        NSString* identifier = [menu_ modeIdentifier:unifiedInputMode_];
-        if(identifier) {
-            SKKEvent param;
+    NSString* identifier = (NSString*)value;
 
-            // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
-            param.id = [menu_ eventId:identifier];
+    // 入力モードを統一する場合
+    if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
+        identifier = [menu_ modeIdentifier:unifiedInputMode_];
+    }
+
+    if(identifier) {
+        SKKEvent param;
+
+        // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
+        param.id = [menu_ eventId:identifier];
+        if(param.id != InvalidInputMode) {
             session_->HandleEvent(param);
         }
     }

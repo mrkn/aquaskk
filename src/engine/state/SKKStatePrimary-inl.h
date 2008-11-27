@@ -39,6 +39,10 @@ State SKKState::Primary(const Event& event) {
 	return 0;
 
     case SKK_CANCEL:
+	editor_->AbortRegistration();
+	return 0;
+
+    case SKK_UNDO:
         // Undo 可能なら見出し語入力に遷移する
         switch(editor_->Undo(param.selected_text)) {
         case SKKInputEngine::UndoKanaEntry:
@@ -51,9 +55,7 @@ State SKKState::Primary(const Event& event) {
         if(!param.selected_text.empty()) {
             messenger_->SendMessage("Undo できませんでした");
         }
-
-	editor_->AbortRegistration();
-	return 0;
+        return 0;
 
     case SKK_JMODE:
         editor_->Commit();

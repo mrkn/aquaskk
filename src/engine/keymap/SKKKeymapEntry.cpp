@@ -55,6 +55,7 @@ static const struct {
     { "SKK_PING",               SKK_PING,               TYPE_EVENT },
     { "SKK_YES",                SKK_YES,                TYPE_EVENT },
     { "SKK_NO",                 SKK_NO,                 TYPE_EVENT },
+    { "SKK_UNDO",               SKK_UNDO,               TYPE_EVENT },
 
     { "Direct",                 Direct,                 TYPE_ATTRIBUTE },
     { "UpperCases",             UpperCases,             TYPE_ATTRIBUTE },
