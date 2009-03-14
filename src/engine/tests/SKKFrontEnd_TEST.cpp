@@ -16,6 +16,10 @@ public:
 	cursor_ = cursorOffset;
     }
 
+    virtual std::string SelectedString() {
+        return "";
+    }
+
     virtual void Clear() {
         ComposeString("");
     }

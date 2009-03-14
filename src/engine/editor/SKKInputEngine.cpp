@@ -27,6 +27,7 @@
 #include "SKKAnnotator.h"
 #include "SKKContextBuffer.h"
 #include "SKKBackEnd.h"
+#include "SKKFrontEnd.h"
 #include "jconv.h"
 #include <iostream>
 #include <cctype>
@@ -267,7 +268,9 @@ void SKKInputEngine::ToggleJisx0201Kana() {
     Insert(result);
 }
 
-SKKInputEngine::UndoResult SKKInputEngine::Undo(const std::string& candidate) {
+SKKInputEngine::UndoResult SKKInputEngine::Undo() {
+    std::string candidate(sessionParam_->FrontEnd()->SelectedString());
+
     if(candidate.empty()) return UndoFailed;
 
     // 逆引き

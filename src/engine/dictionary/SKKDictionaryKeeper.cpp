@@ -26,6 +26,30 @@
 #include "utf8util.h"
 
 namespace {
+    // 見出し語補完用比較ファンクタ
+    class CompareFunctor {
+        int length_;
+
+        bool compare(const std::string& lhs, const std::string& rhs) const {
+            return 0 < rhs.compare(0, length_, lhs, 0, length_);
+        }
+
+    public:
+        CompareFunctor(int length) : length_(length) {}
+
+        bool operator()(const SKKDictionaryEntry& lhs, const SKKDictionaryEntry& rhs) const {
+            return compare(lhs.first, rhs.first);
+        }
+
+        bool operator()(const SKKDictionaryEntry& lhs, const std::string& rhs) const {
+            return compare(lhs.first, rhs);
+        }
+
+        bool operator()(const std::string& lhs, const SKKDictionaryEntry& rhs) const {
+            return compare(lhs, rhs.first);
+        }
+    };
+
     // 逆引き用ファンクタ
     class NotInclude {
         std::string candidate_;
@@ -85,18 +109,20 @@ std::string SKKDictionaryKeeper::FindEntry(const std::string& candidate) {
 
 bool SKKDictionaryKeeper::FindCompletions(const std::string& entry,
                                           std::vector<std::string>& result,
-                                          int minimumCompletionLength) {
+                                          unsigned minimumCompletionLength) {
     pthread::lock scope(condition_);
 
     if(!ready()) return false;
 
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
+    typedef std::pair<SKKDictionaryEntryIterator, SKKDictionaryEntryIterator> EntryRange;
     std::string query = jconv::eucj_from_utf8(entry);
     bool lengthCheckNeeded = utf8::length(query) < minimumCompletionLength;
 
-    for(SKKDictionaryEntryIterator iter = container.begin(); iter != container.end(); ++ iter) {
-        if(iter->first.compare(0, query.length(), query) != 0) continue;
+    EntryRange range = std::equal_range(container.begin(), container.end(),
+                                        query, CompareFunctor(query.size()));
 
+    for(SKKDictionaryEntryIterator iter = range.first; iter != range.second; ++ iter) {
         std::string completion = jconv::utf8_from_eucj(iter->first);
 
         if(lengthCheckNeeded) {

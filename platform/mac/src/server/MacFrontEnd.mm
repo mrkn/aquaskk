@@ -81,6 +81,17 @@ int MacFrontEnd::WindowLevel() const {
     return [client_ windowLevel];
 }
 
+std::string MacFrontEnd::SelectedString() {
+    NSRange range = [client_ selectedRange];
+    NSAttributedString* text = [client_ attributedSubstringFromRange:range];
+
+    if(text) {
+        return [[text string] UTF8String];
+    }
+
+    return "";
+}
+
 // ------------------------------------------------------------
 
 NSRange MacFrontEnd::notFound() const {

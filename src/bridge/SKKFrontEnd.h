@@ -44,6 +44,9 @@ public:
 
     // ウィンドウレベル
     virtual int WindowLevel() const = 0;
+
+    // 選択中の文字列
+    virtual std::string SelectedString() = 0;
 };
 
 #endif

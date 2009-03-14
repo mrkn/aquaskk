@@ -78,7 +78,7 @@ public:
     // 見出し語補完
     bool FindCompletions(const std::string& entry,
                          std::vector<std::string>& result,
-                         int minimumCompletionLength = 0);
+                         unsigned minimumCompletionLength = 0);
 };
 
 #endif

@@ -28,6 +28,7 @@
 @interface PreferenceController (Local)
 - (NSArray*)collectKeyboardLayout;
 - (NSMenuItem*)menuItemWithInputSource:(TISInputSourceRef)inputSource imageSize:(NSSize)size;
+- (void)initializeVersion;
 - (void)setupKeyboardLayout;
 - (void)updatePopUpButton;
 - (void)updateFontButton;
@@ -68,6 +69,7 @@
     [objController_ setContent:preferences_];
     [arrayController_ setContent:dictionarySet_];
 
+    [self initializeVersion];
     [self setupKeyboardLayout];
     [self updatePopUpButton];
     [self updateFontButton];
@@ -172,6 +174,16 @@ static int compareInputSource(id obj1, id obj2, void *context) {
     [image release];
 
     return [item autorelease];
+}
+
+- (void)initializeVersion {
+    NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
+    NSString* version = [NSString stringWithFormat:@"AquaSKK %@ (%@)",
+				  [info objectForKey:@"CFBundleShortVersionString"],
+				  [info objectForKey:@"CFBundleVersion"]];
+
+    [version_ setStringValue:version];
+    [copyright_ setStringValue:[info objectForKey:@"CFBundleGetInfoString"]];
 }
 
 - (void)setupKeyboardLayout {

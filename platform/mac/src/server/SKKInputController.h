@@ -34,6 +34,7 @@ class SKKInputModeListener;
 
 @interface SKKInputController : IMKInputController {
     id client_;
+    BOOL activated_;
     NSUserDefaults* defaults_;
     SKKServerProxy* proxy_;
     SKKInputMenu* menu_;

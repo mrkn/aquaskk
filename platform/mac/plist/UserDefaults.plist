@@ -6,10 +6,10 @@
 	<true/>
 	<key>use_numeric_conversion</key>
 	<true/>
-        <key>use_unified_input_mode</key>
-        <false/>
         <key>show_input_mode_icon</key>
         <true/>
+        <key>use_individual_input_mode</key>
+        <false/>
 
 	<key>keyboard_layout</key>
 	<string>com.apple.keylayout.US</string>

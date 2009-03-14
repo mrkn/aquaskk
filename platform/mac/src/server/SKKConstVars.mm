@@ -28,8 +28,8 @@
 namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(suppress_newline_on_commit);
     DECLARE_NSStringKey(use_numeric_conversion);
-    DECLARE_NSStringKey(use_unified_input_mode);
     DECLARE_NSStringKey(show_input_mode_icon);
+    DECLARE_NSStringKey(use_individual_input_mode);
 
     DECLARE_NSStringKey(keyboard_layout);
 

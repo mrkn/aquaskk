@@ -148,7 +148,7 @@ public:
 
     // 再変換
     enum UndoResult { UndoFailed, UndoKanaEntry, UndoAsciiEntry };
-    UndoResult Undo(const std::string& candidate);
+    UndoResult Undo();
 
     // 出力
     void Output();

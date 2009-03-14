@@ -31,6 +31,8 @@
     IBOutlet NSButton* fontButton_;
     IBOutlet NSObjectController* objController_;
     IBOutlet NSArrayController* arrayController_;
+    IBOutlet NSTextField* version_;
+    IBOutlet NSTextField* copyright_;
 
     NSMutableDictionary* preferences_;
     NSMutableArray* dictionarySet_;

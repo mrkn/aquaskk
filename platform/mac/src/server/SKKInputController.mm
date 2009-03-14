@@ -35,7 +35,6 @@
 @interface SKKInputController (Local)
 
 - (void)initializeKeyboardLayout;
-- (const char*)selectedString;
 - (BOOL)privateMode;
 - (void)setPrivateMode:(BOOL)flag;
 
@@ -47,6 +46,7 @@
     self = [super initWithServer:server delegate:delegate client:client];
     if(self) {
         client_ = client;
+        activated_ = NO;
         defaults_ = [NSUserDefaults standardUserDefaults];
         proxy_ = [[SKKServerProxy alloc] init];
         menu_ = [[SKKInputMenu alloc] initWithClient:client];
@@ -82,8 +82,6 @@
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
 
-    param.selected_text = [self selectedString];
-
     return session_->HandleEvent(param);
 }
 
@@ -94,10 +92,9 @@
 
 // IMKStateSetting
 - (void)activateServer:(id)sender {
-    // 直前のセッションの入力モードを保存しておく
-    unifiedInputMode_ = [menu_ unifiedInputMode];
-
     [self initializeKeyboardLayout];
+
+    activated_ = YES;
 
     session_->Activate();
 }
@@ -107,21 +104,43 @@
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {
-    NSString* identifier = (NSString*)value;
+    if(tag != kTextServiceInputModePropertyTag) return;
 
-    // 入力モードを統一する場合
-    if([defaults_ boolForKey:SKKUserDefaultKeys::use_unified_input_mode]) {
-        identifier = [menu_ modeIdentifier:unifiedInputMode_];
+    bool individual = ([defaults_ boolForKey:SKKUserDefaultKeys::use_individual_input_mode] == YES);
+
+    // 個別の入力モードが有効な状態では強制的に入力モードを統一する
+    // 「AquaSKK 統合」以外では、文書毎に独立した入力モードを保持できない
+    if([menu_ eventId:value] != 0) {
+        individual = false;
     }
 
-    if(identifier) {
-        SKKEvent param;
+    if(activated_) {
+        if(individual) {
+            NSString* identifier = [menu_ modeIdentifier:[menu_ currentInputMode]];
+            SKKEvent param;
 
-        // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
-        param.id = [menu_ eventId:identifier];
-        if(param.id != InvalidInputMode) {
+            param.id = [menu_ eventId:identifier];
+            session_->HandleEvent(param);
+
+            [menu_ updateMenu:[menu_ currentInputMode]];
+        } else {
+            NSString* identifier = [menu_ modeIdentifier:[menu_ unifiedInputMode]];
+            SKKEvent param;
+
+            param.id = [menu_ eventId:identifier];
             session_->HandleEvent(param);
         }
+
+        activated_ = NO;
+        return;
+    }
+
+    SKKEvent param;
+
+    // ex) "com.apple.inputmethod.Roman" => SKK_ASCII_MODE
+    param.id = [menu_ eventId:(NSString*)value];
+    if(param.id != InvalidInputMode) {
+        session_->HandleEvent(param);
     }
 }
 
@@ -221,17 +240,6 @@
 - (void)initializeKeyboardLayout {
     NSString* keyboardLayout = [defaults_ stringForKey:SKKUserDefaultKeys::keyboard_layout];
     [client_ overrideKeyboardWithKeyboardNamed:keyboardLayout];
-}
-
-- (const char*)selectedString {
-    NSRange range = [client_ selectedRange];
-    NSAttributedString* text = [client_ attributedSubstringFromRange:range];
-
-    if(text) {
-        return [[text string] UTF8String];
-    }
-
-    return "";
 }
 
 - (BOOL)privateMode {

@@ -29,8 +29,8 @@
 namespace SKKUserDefaultKeys {
     extern NSString* suppress_newline_on_commit;
     extern NSString* use_numeric_conversion;
-    extern NSString* use_unified_input_mode;
     extern NSString* show_input_mode_icon;
+    extern NSString* use_individual_input_mode;
 
     extern NSString* keyboard_layout;
 
