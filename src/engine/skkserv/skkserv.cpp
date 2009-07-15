@@ -94,11 +94,9 @@ void* skkserv::worker(void* param) {
             session >> word;
             session.get();
 
-	    std::string key;
+	    std::string key = jconv::eucj_from_utf8(word);
 	    SKKEntry entry;
 	    SKKCandidateSuite result;
-
-	    jconv::convert_eucj_to_utf8(word, key);
 
 	    // 検索文字列の最後が [a-z] なら『送りあり』とする
 	    if(1 < key.size() && 0x7f < (unsigned)key[0] && std::isalpha(key[key.size() - 1])) {
@@ -107,9 +105,9 @@ void* skkserv::worker(void* param) {
 		entry = SKKEntry(key);
 	    }
 	    
-	    if(SKKBackEnd::theInstance().Find(entry, result)) {
-		std::string candidates;
-		jconv::convert_utf8_to_eucj(result.ToString(), candidates);
+	    SKKBackEnd::theInstance().Find(entry, result);
+            std::string candidates = jconv::utf8_from_eucj(result.ToString(true));
+            if(!candidates.empty()) {
 		session << '1' << candidates << std::endl;
 	    } else {
 		session << '4' << word << std::endl;

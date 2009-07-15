@@ -28,7 +28,6 @@
 #include "SKKDictionaryKey.h"
 
 class SKKBaseDictionary;
-class SKKNullDictionary;
 
 class SKKDictionaryFactory {
     typedef SKKBaseDictionary* (*SKKDictionaryCreator)(const std::string& location);

@@ -31,6 +31,7 @@ class SKKCandidate {
     std::string word_;
     std::string annotation_;
     std::string variant_;	// 数値変換用
+    bool avoid_study_;          // 動的変換は学習しない
 
     void parse(const std::string& str) {
 	std::string::size_type pos = str.find_first_of(';');
@@ -43,9 +44,9 @@ class SKKCandidate {
     }
 
 public:
-    SKKCandidate() {}
+    SKKCandidate() : avoid_study_(false) {}
 
-    SKKCandidate(const std::string& candidate, bool auto_parse = true) {
+    SKKCandidate(const std::string& candidate, bool auto_parse = true) : avoid_study_(false) {
 	if(auto_parse) {
             parse(candidate);
         } else {
@@ -69,12 +70,20 @@ public:
 	return (variant_.empty() ? Word() : variant_);
     }
 
+    bool AvoidStudy() const {
+        return avoid_study_;
+    }
+
     void SetVariant(const std::string& str) {
 	variant_ = str;
     }
 
+    void SetAvoidStudy() {
+        avoid_study_ = true;
+    }
+
     std::string ToString() const {
-	return Word() + (annotation_.empty() ? "" : (";" + annotation_));
+	return Encode(Word()) + (annotation_.empty() ? "" : (";" + annotation_));
     }
 
     bool operator==(const SKKCandidate& rhs) const {

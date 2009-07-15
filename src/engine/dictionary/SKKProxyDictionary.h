@@ -32,7 +32,7 @@ class SKKProxyDictionary: public SKKBaseDictionary {
     net::socket::endpoint server_;
     bool active_;
 
-    bool search(const std::string& key, std::string& response);
+    void search(const std::string& query, SKKCandidateSuite& result);
 
 public:
     SKKProxyDictionary();
@@ -40,8 +40,8 @@ public:
 
     virtual void Initialize(const std::string& path);
 
-    virtual std::string FindOkuriAri(const std::string& query);
-    virtual std::string FindOkuriNasi(const std::string& query);
+    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
+    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
 };
 
 #endif

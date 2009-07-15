@@ -148,13 +148,12 @@ public:
 	}
     }
 
-    std::string Find(const std::string& str) {
+    void Find(const std::string& str, SKKCandidateSuite& result) {
 	OSStatus status;
-	std::string result;
 
 	DCMFoundRecordIterator iterator;
 	if(!find(str, &iterator)) {
-	    return result;
+	    return;
 	}
 
 	while(true) {
@@ -195,16 +194,9 @@ public:
 	    std::string tmp = UTF8WithCFString(entry);
 	    CFRelease(entry);
 
-	    result += '/';
-	    result += SKKCandidate::Encode(tmp);
+            result.Add(SKKCandidate(tmp, false));
 	}
 	DCMDisposeRecordIterator(iterator);
-
-	if(!result.empty()) {
-	    result += '/';
-	}
-
-	return result;
     }
 };
 
@@ -222,13 +214,12 @@ void SKKKotoeriDictionary::Initialize(const std::string& location) {
     impl_->Initialize(location);
 }
 
-std::string SKKKotoeriDictionary::FindOkuriAri(const std::string& /* str */) {
+void SKKKotoeriDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
     // ことえり辞書には「送りあり」は存在しない
-    return std::string();
 }
 
-std::string SKKKotoeriDictionary::FindOkuriNasi(const std::string& str) {
-    return impl_->Find(str);
+void SKKKotoeriDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
+    impl_->Find(entry, result);
 }
 
 // ファクトリメソッドの登録

@@ -27,6 +27,40 @@
 #include "SKKCandidateSuite.h"
 #include "SKKNumericConverter.h"
 
+namespace {
+    typedef void (SKKBaseDictionary::*FindMethod)(const std::string&, SKKCandidateSuite&);
+
+    // 検索用ファンクタ
+    class Invoke {
+        FindMethod method_;
+        std::string entry_;
+        SKKCandidateSuite* result_;
+
+    public:
+        Invoke(FindMethod method, const SKKEntry& entry, SKKCandidateSuite& result)
+            : method_(method), entry_(entry.EntryString()), result_(&result) {}
+
+        void operator()(SKKBaseDictionary* dict) const {
+            (dict->*method_)(entry_, *result_);
+        }
+    };
+
+
+    // 数値変換用ファンクタ
+    class NumericConversion {
+        SKKNumericConverter* converter_;
+
+    public:
+        NumericConversion(SKKNumericConverter& converter)
+            : converter_(&converter) {}
+
+        SKKCandidate& operator()(SKKCandidate& candidate) const {
+            converter_->Apply(candidate);
+            return candidate;
+        }
+    };
+}
+
 SKKBackEnd::SKKBackEnd()
     : userdict_(new SKKUserDictionary())
     , useNumericConversion_(false)
@@ -92,42 +126,41 @@ bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& resu
     return !result.empty();
 }
 
-// 数値変換用ファンクタ
-class NumericConversionFunctor {
-    SKKNumericConverter* converter_;
-
-public:
-    NumericConversionFunctor(SKKNumericConverter* converter) : converter_(converter) {}
-
-    SKKCandidate& operator()(SKKCandidate& candidate) const {
-        converter_->Apply(candidate);
-        return candidate;
-    }
-};
-
 bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
-    if(entry.IsOkuriAri()) {
-	return findOkuriAri(entry, result);
+    FindMethod method = &SKKBaseDictionary::FindOkuriNasi;
+    bool okuriAri = entry.IsOkuriAri();
+
+    result.Clear();
+
+    if(okuriAri) {
+        method = &SKKBaseDictionary::FindOkuriAri;
+    }
+
+    std::for_each(dicts_.begin(), dicts_.end(), Invoke(method, entry, result));
+
+    if(okuriAri) {
+        std::string okuri(entry.OkuriString());
+        if(!okuri.empty()) {
+            SKKOkuriHintContainer& hints = result.Hints();
+            std::partition(hints.begin(), hints.end(), CompareOkuriHint(okuri));
+        }
     } else {
-        SKKCandidateSuite tmp;
         SKKNumericConverter converter;
-
-	findOkuriNasi(entry, result);
-
         if(useNumericConversion_ && converter.Setup(entry.EntryString())) {
-            findOkuriNasi(converter.NormalizedKey(), tmp);
+            SKKCandidateSuite suite;
+            std::for_each(dicts_.begin(), dicts_.end(),
+                          Invoke(method, converter.NormalizedKey(), suite));
 
-            SKKCandidateContainer& container = tmp.Candidates();
-
-            std::transform(container.begin(), container.end(), container.begin(),
-                           NumericConversionFunctor(&converter));
+            SKKCandidateContainer& cands = suite.Candidates();
+            std::transform(cands.begin(), cands.end(),
+                           std::back_inserter(result.Candidates()),
+                           NumericConversion(converter));
         }
 
-        // 数値変換の結果に関わらず、重複した候補を除外する
-        mergeCandidates(converter.OriginalKey(), result, tmp);
-
-        return !result.IsEmpty();
+        result.Remove(SKKCandidate(converter.OriginalKey()));
     }
+
+    return !result.IsEmpty();
 }
 
 std::string SKKBackEnd::ReverseLookup(const std::string& candidate) {
@@ -148,6 +181,10 @@ void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) 
 	std::cerr << "SKKBackEnd: Invalid registration received" << std::endl;
 	return;
     }
+
+    if(candidate.AvoidStudy()) {
+        return;
+    }
     
     if(entry.IsOkuriAri()) {
 	userdict_->RegisterOkuriAri(entry.EntryString(), entry.OkuriString(), candidate.ToString());
@@ -159,10 +196,7 @@ void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) 
             key = converter.NormalizedKey();
         }
 
-        // 登録時は常にエンコードする
-        SKKCandidate tmp(candidate);
-        tmp.Encode();
-        userdict_->RegisterOkuriNasi(key, tmp.ToString());
+        userdict_->RegisterOkuriNasi(key, candidate.ToString());
     }
 }
 
@@ -182,7 +216,7 @@ void SKKBackEnd::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
             key = converter.NormalizedKey();
         }
 
-	userdict_->RemoveOkuriNasi(key, SKKCandidate::Encode(candidate.ToString()));
+	userdict_->RemoveOkuriNasi(key, candidate.ToString());
     }
 }
 
@@ -200,96 +234,4 @@ void SKKBackEnd::EnablePrivateMode(bool flag) {
 
 void SKKBackEnd::SetMinimumCompletionLength(int length) {
     minimumCompletionLength_ = length;
-}
-
-// ----------------------------------------------------------------------
-
-bool SKKBackEnd::findOkuriAri(const SKKEntry& entry, SKKCandidateSuite& result) {
-    SKKCandidateSuite normal;
-    SKKCandidateParser parser;
-    std::string key(entry.EntryString());
-    std::string okuri(entry.OkuriString());
-
-    result.Clear();
-
-    for(unsigned i = 0; i < dicts_.size(); ++ i) {
-	parser.Parse(dicts_[i]->FindOkuriAri(key));
-
-	if(okuri.empty()) {
-	    result.Add(parser.Hints());
-	} else {
-	    SKKOkuriHintContainer hints = parser.Hints();
-	    SKKOkuriHintIterator iter = std::find_if(hints.begin(), hints.end(), CompareOkuriHint(okuri));
-
-	    if(iter != hints.end()) {
-		result.Add(*iter);
-		hints.erase(iter);
-		normal.Add(hints);
-	    }
-	}
-
-	normal.Add(parser.Candidates());
-    }
-
-    result.Add(normal);
-
-    return !result.IsEmpty();
-}
-
-bool SKKBackEnd::findOkuriNasi(const SKKEntry& entry, SKKCandidateSuite& result) {
-    SKKCandidateSuite tmp;
-    std::string key(entry.EntryString());
-
-    result.Clear();
-
-    for(unsigned i = 0; i < dicts_.size(); ++ i) {
-	tmp.Parse(dicts_[i]->FindOkuriNasi(key));
-
-        SKKCandidateContainer& candidates = tmp.Candidates();
-        std::for_each(candidates.begin(), candidates.end(),
-                      std::mem_fun_ref(&SKKCandidate::Decode));
-
-	result.Add(tmp);
-    }
-
-    return !result.IsEmpty();
-}
-
-typedef std::set<std::string> StringSet;
-
-// マージ用述語
-class ExistIn {
-    StringSet* check_;
-
-public:
-    ExistIn(StringSet* check) : check_(check) {}
-
-    bool operator()(const SKKCandidate& candidate) const {
-        std::string word(candidate.Variant());
-            
-        if(check_->find(word) == check_->end()) {
-            check_->insert(word);
-            return false;       // 存在しない
-        }
-
-        return true;            // 存在する
-    }
-};
-
-void SKKBackEnd::mergeCandidates(const std::string& key, SKKCandidateSuite& result1, SKKCandidateSuite& result2) {
-    StringSet candidates;
-    SKKCandidateSuite result;
-    SKKCandidateContainer* in;
-    SKKCandidateContainer& out = result.Candidates();
-
-    // 数値変換で使用した見出し語も重複チェックに使う
-    candidates.insert(key);
-
-    in = &result1.Candidates();
-    std::remove_copy_if(in->begin(), in->end(), std::back_inserter(out), ExistIn(&candidates));
-
-    in = &result2.Candidates();
-    std::remove_copy_if(in->begin(), in->end(), std::back_inserter(out), ExistIn(&candidates));
-
-    result1 = result;
 }

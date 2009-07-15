@@ -36,8 +36,8 @@ public:
 
     virtual void Initialize(const std::string& location);
 
-    virtual std::string FindOkuriAri(const std::string& query);
-    virtual std::string FindOkuriNasi(const std::string& query);
+    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
+    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
     virtual std::string FindEntry(const std::string& query);
 
     virtual bool FindCompletions(const std::string& entry,

@@ -115,21 +115,24 @@ static void terminate(int) {
             NSNumber* type = [entry valueForKey:SKKDictionarySetKeys::type];
             NSString* location = [entry valueForKey:SKKDictionarySetKeys::location];
 
-            location = [location stringByExpandingTildeInPath];
+            if(location) {
+                location = [location stringByExpandingTildeInPath];
 
-            // 自動更新辞書の場合
-            if([type intValue] == SKKAutoUpdateDictionaryType) {
-                NSString* file = [location lastPathComponent];
-                NSString* path = [NSString stringWithFormat:@"%@ %@/%@ %@",
-                                           [defaults stringForKey:SKKUserDefaultKeys::openlab_host],
-                                           [defaults stringForKey:SKKUserDefaultKeys::openlab_path],
-                                           location,
-                                           [self pathForUserResource:file]];
-                location = path;
+                // 自動更新辞書の場合
+                if([type intValue] == SKKAutoUpdateDictionaryType) {
+                    NSString* file = [location lastPathComponent];
+                    NSString* path = [NSString stringWithFormat:@"%@ %@/%@ %@",
+                                               [defaults stringForKey:SKKUserDefaultKeys::openlab_host],
+                                               [defaults stringForKey:SKKUserDefaultKeys::openlab_path],
+                                               location,
+                                               [self pathForUserResource:file]];
+                    location = path;
+                }
+            } else {
+                location = @"[location was not specified]";
             }
 
             NSLog(@"loading %@", location);
-
             keys.push_back(SKKDictionaryKey([type intValue], [location UTF8String]));
         }
     }

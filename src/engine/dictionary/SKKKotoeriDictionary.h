@@ -40,8 +40,8 @@ public:
 
     virtual void Initialize(const std::string& location);
 
-    virtual std::string FindOkuriAri(const std::string& str);
-    virtual std::string FindOkuriNasi(const std::string& str);
+    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
+    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
 };
 
 #endif

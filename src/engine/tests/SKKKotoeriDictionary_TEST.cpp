@@ -20,8 +20,15 @@ int main() {
     SKKKotoeriDictionary dict;
 
     dict.Initialize(user_dictionary());
+    SKKCandidateSuite suite;
 
-    assert(dict.FindOkuriAri("てすと") == "");
-    assert(dict.FindOkuriNasi("ことえりてすと") == "/[2f][5b][3b]/言選りテスト/");
-    assert(dict.FindOkuriNasi("NOT-EXIST") == "");
+    dict.FindOkuriAri("てすと", suite);
+    assert(suite.IsEmpty());
+
+    dict.FindOkuriNasi("ことえりてすと", suite);
+    assert(suite.ToString() == "/[2f][5b][3b]/言選りテスト/");
+
+    suite.Clear();
+    dict.FindOkuriNasi("NOT-EXIST", suite);
+    assert(suite.IsEmpty());
 }

@@ -75,12 +75,16 @@ void SKKCommonDictionary::Initialize(const std::string& path) {
     keeper_.Initialize(loader_.get(), 60, 1);
 }
 
-std::string SKKCommonDictionary::FindOkuriAri(const std::string& query) {
-    return keeper_.FindOkuriAri(query);
+void SKKCommonDictionary::FindOkuriAri(const std::string& query, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite(keeper_.FindOkuriAri(query));
+
+    result.Add(suite);
 }
 
-std::string SKKCommonDictionary::FindOkuriNasi(const std::string& query) {
-    return keeper_.FindOkuriNasi(query);
+void SKKCommonDictionary::FindOkuriNasi(const std::string& query, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite(keeper_.FindOkuriNasi(query));
+
+    result.Add(suite);
 }
 
 std::string SKKCommonDictionary::FindEntry(const std::string& candidate) {

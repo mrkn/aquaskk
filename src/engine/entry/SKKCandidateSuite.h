@@ -72,14 +72,23 @@ class SKKCandidateSuite {
 	container.erase(std::remove(container.begin(), container.end(), candidate), container.end());
     }
 
-    void flatten(const SKKCandidateContainer& container, std::string& result) const {
+    void flatten(const SKKCandidateContainer& container, std::string& result, bool exclude_avoid_study) const {
 	for(unsigned i = 0; i < container.size(); ++ i) {
+            if(exclude_avoid_study && container[i].AvoidStudy()) {
+                continue;
+            }
 	    result += "/";
 	    result += container[i].ToString();
 	}
     }
 
 public:
+    SKKCandidateSuite() {}
+
+    SKKCandidateSuite(const std::string& line) {
+        Parse(line);
+    }
+
     void Parse(const std::string& str) {
 	parser_.Parse(str);
 
@@ -164,17 +173,21 @@ public:
 	return candidates_;
     }
 
-    const std::string ToString() const {
+    SKKOkuriHintContainer& Hints() {
+        return hints_;
+    }
+
+    const std::string ToString(bool exclude_avoid_study = false) const {
 	std::string str;
 
-	flatten(candidates_, str);
+	flatten(candidates_, str, exclude_avoid_study);
 
 	if(!hints_.empty()) {
 	    for(unsigned i = 0; i < hints_.size(); ++ i) {
 		str += "/[";
 		str += hints_[i].first;
 
-		flatten(hints_[i].second, str);
+		flatten(hints_[i].second, str, false);
 
 		str += "/]";
 	    }

@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,31 +20,48 @@
 
 */
 
-#ifndef SKKAutoUpdateDictionary_h
-#define SKKAutoUpdateDictionary_h
+#ifndef SKKGadgetDictionary_h
+#define SKKGadgetDictionary_h
 
+#include <map>
 #include "SKKBaseDictionary.h"
-#include "SKKDictionaryKeeper.h"
 
-class SKKAutoUpdateDictionary : public SKKBaseDictionary {
-    std::auto_ptr<SKKDictionaryLoader> loader_;
-    SKKDictionaryKeeper keeper_;
+// ======================================================================
+// プログラム実行変換辞書クラス
+// ======================================================================
+class SKKGadgetDictionary : public SKKBaseDictionary {
+    typedef void (*DispatchHandler)(const std::string&, std::vector<std::string>&);
+    typedef std::pair<std::string, DispatchHandler> DispatchPair;
+    typedef std::vector<DispatchPair> DispatchTable;
+
+    struct Match;
+    struct Search;
+    struct Complete;
+    struct Store;
+
+    DispatchTable table_;
+
+    DispatchTable selectHandlers(const std::string& entry, bool complete = false) const;
+
+    template <typename Predicate, typename Func>
+    void apply(Predicate pred, Func func) {
+        DispatchTable::iterator first = table_.begin();
+        DispatchTable::iterator last = table_.end();
+
+        while(first != last) {
+            if(pred(*first)) {
+                func(*first);
+            }
+            ++ first;
+        }
+    }
 
 public:
-    SKKAutoUpdateDictionary();
 
-    //
-    // 引数の形式は "host:port url path" とする。":port" は省略化。
-    //
-    // 例)
-    //
-    // Initialize("openlab.ring.gr.jp /skk/skk/dic/SKK-JISYO.L /path/to/the/SKK-JISYO.L");
-    //
     virtual void Initialize(const std::string& location);
 
     virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
     virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
-    virtual std::string FindEntry(const std::string& candidate);
 
     virtual bool FindCompletions(const std::string& entry,
                                  std::vector<std::string>& result,

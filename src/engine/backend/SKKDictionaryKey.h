@@ -32,7 +32,8 @@ enum SKKDictionaryType {
     SKKCommonDictionaryType,
     SKKAutoUpdateDictionaryType,
     SKKProxyDictionaryType,
-    SKKKotoeriDictionaryType
+    SKKKotoeriDictionaryType,
+    SKKGadgetDictionaryType,
 };
 
 // ======================================================================

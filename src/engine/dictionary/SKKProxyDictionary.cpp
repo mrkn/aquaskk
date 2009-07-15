@@ -41,52 +41,39 @@ void SKKProxyDictionary::Initialize(const std::string& location) {
     server_ = net::socket::endpoint(host, port);
 }
 
-std::string SKKProxyDictionary::FindOkuriAri(const std::string& key) {
-    std::string response;
-
-    // ヒットした？
-    if(search(jconv::eucj_from_utf8(key), response)) {
-	return jconv::utf8_from_eucj(response);
-    }
-
-    return "";
+void SKKProxyDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
+    search(entry, result);
 }
 
-std::string SKKProxyDictionary::FindOkuriNasi(const std::string& key) {
-    std::string response;
-
-    // ヒットした？
-    if(search(jconv::eucj_from_utf8(key), response)) {
-	return jconv::utf8_from_eucj(response);
-    }
-
-    return "";
+void SKKProxyDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
+    search(entry, result);
 }
 
-bool SKKProxyDictionary::search(const std::string& str, std::string& response) {
+
+void SKKProxyDictionary::search(const std::string& query, SKKCandidateSuite& result) {
     // 接続する
     if(!session_) {
 	session_.open(server_);
-	if(!session_) return false;
+	if(!session_) return;
     }
 
     // 再入でループするのを防ぐ
-    if(active_) return false;
+    if(active_) return;
     active_ = true;
 
     // クエリ送信
-    session_ << '1' << str << ' ' << std::flush;
+    session_ << '1' << jconv::eucj_from_utf8(query) << ' ' << std::flush;
 
     // 結果受信
+    std::string response;
     std::getline(session_, response);
 
     active_ = false;
 
     if(response[0] == '1') {
-	response = response.substr(1);
-	return true;
-    } else {
-	return false;
+        SKKCandidateSuite suite(jconv::utf8_from_eucj(response.substr(1)));
+
+        result.Add(suite);
     }
 }
 

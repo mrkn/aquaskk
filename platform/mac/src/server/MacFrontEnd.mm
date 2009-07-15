@@ -27,9 +27,11 @@
 MacFrontEnd::MacFrontEnd(id client) : client_(client) {}
 
 void MacFrontEnd::InsertString(const std::string& str) {
-    if(str.empty()) return;
+    NSString* string = @"";
 
-    NSString* string = [NSString stringWithUTF8String:str.c_str()];
+    if(!str.empty()) {
+        string = [NSString stringWithUTF8String:str.c_str()];
+    }
 
     [client_ insertText:string replacementRange:notFound()];
 }

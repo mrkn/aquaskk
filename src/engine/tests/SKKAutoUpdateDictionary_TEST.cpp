@@ -6,6 +6,7 @@ int main() {
     const char* path1 = "SKK-JISYO.S1";
     const char* path2 = "SKK-JISYO.S2";
     SKKAutoUpdateDictionary dict1, dict2;
+    SKKCandidateSuite suite;
 
     remove(path1);
     remove(path2);
@@ -13,8 +14,8 @@ int main() {
     dict1.Initialize("openlab.ring.gr.jp /skk/skk/dic/SKK-JISYO.S SKK-JISYO.S1");
     dict2.Initialize("openlab.ring.gr.jp:80 /skk/skk/dic/SKK-JISYO.S SKK-JISYO.S2");
 
-    dict1.FindOkuriAri("dummy");
-    dict2.FindOkuriAri("dummy");
+    dict1.FindOkuriAri("dummy", suite);
+    dict2.FindOkuriAri("dummy", suite);
 
     struct stat st1, st2;
 

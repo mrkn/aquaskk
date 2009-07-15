@@ -97,12 +97,20 @@ void SKKUserDictionary::Initialize(const std::string& path) {
     }
 }
 
-std::string SKKUserDictionary::FindOkuriAri(const std::string& query) {
-    return fetch(query, file_.OkuriAri());
+void SKKUserDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite(fetch(entry, file_.OkuriAri()));
+
+    result.Add(suite);
 }
 
-std::string SKKUserDictionary::FindOkuriNasi(const std::string& query) {
-    return fetch(query, file_.OkuriNasi());
+void SKKUserDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite(fetch(entry, file_.OkuriNasi()));
+
+    SKKCandidateContainer& candidates = suite.Candidates();
+
+    std::for_each(candidates.begin(), candidates.end(), std::mem_fun_ref(&SKKCandidate::Decode));
+
+    result.Add(suite);
 }
 
 std::string SKKUserDictionary::FindEntry(const std::string& candidate) {

@@ -8,7 +8,9 @@ int main() {
 
     SKKBaseDictionary* dict = factory.Create(SKKCommonDictionaryType, "SKK-JISYO.TEST");
 
-    assert(dict->FindOkuriNasi("かんじ") == "/漢字/寛治/官寺/");
+    SKKCandidateSuite suite;
+    dict->FindOkuriNasi("かんじ", suite);
+    assert(suite.ToString() == "/漢字/寛治/官寺/");
 
     return 0;
 }

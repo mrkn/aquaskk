@@ -193,12 +193,16 @@ void SKKAutoUpdateDictionary::Initialize(const std::string& location) {
     keeper_.Initialize(loader_.get(), 60 * 60 * 6, 3);
 }
 
-std::string SKKAutoUpdateDictionary::FindOkuriAri(const std::string& query) {
-    return keeper_.FindOkuriAri(query);
+void SKKAutoUpdateDictionary::FindOkuriAri(const std::string& query, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite(keeper_.FindOkuriAri(query));
+
+    result.Add(suite);
 }
 
-std::string SKKAutoUpdateDictionary::FindOkuriNasi(const std::string& query) {
-    return keeper_.FindOkuriNasi(query);
+void SKKAutoUpdateDictionary::FindOkuriNasi(const std::string& query, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite(keeper_.FindOkuriNasi(query));
+
+    result.Add(suite);
 }
 
 std::string SKKAutoUpdateDictionary::FindEntry(const std::string& candidate) {

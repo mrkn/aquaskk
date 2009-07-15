@@ -25,6 +25,7 @@
 
 #include <string>
 #include <vector>
+#include "SKKCandidateSuite.h"
 
 // ======================================================================
 // 抽象辞書クラス(文字列は UTF-8)
@@ -40,22 +41,10 @@ public:
     virtual void Initialize(const std::string& location) = 0;
 
     // 「送りあり」検索
-    //
-    // 例)
-    //
-    // if(dict->FindOkuriAri("つよi") == "/強/") ...
-    // if(dict->FindOkuriAri("NOT_EXIST") == "") ...
-    //
-    virtual std::string FindOkuriAri(const std::string& entry) = 0;
+    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) = 0;
 
     // 「送りなし」検索
-    //
-    // 例)
-    //
-    // if(dict->FindOkuriNasi("まつり") == "/祭/祭り/祀/祀り/") ...
-    // if(dict->FindOkuriNasi("NOT_EXIST") == "") ...
-    //
-    virtual std::string FindOkuriNasi(const std::string& entry) = 0;
+    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) = 0;
 
     // 逆引き
     //
