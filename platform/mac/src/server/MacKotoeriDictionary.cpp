@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include <vector>
 #include <Carbon/Carbon.h>
 #include "SKKCandidate.h"
-#include "SKKKotoeriDictionary.h"
+#include "MacKotoeriDictionary.h"
 
 // ======================================================================
 // ことえり辞書実装クラス
@@ -203,25 +203,21 @@ public:
 // ======================================================================
 // ことえり辞書インタフェース
 // ======================================================================
-SKKKotoeriDictionary::SKKKotoeriDictionary() : impl_(new KotoeriImpl()) {}
+MacKotoeriDictionary::MacKotoeriDictionary() : impl_(new KotoeriImpl()) {}
 
-SKKKotoeriDictionary::~SKKKotoeriDictionary() {
+MacKotoeriDictionary::~MacKotoeriDictionary() {
     // auto_ptr<KotoeriImpl> のデストラクタが実体化されるタイミングを遅
     // 延させるために、空のデストラクタ実装が必要
 }
 
-void SKKKotoeriDictionary::Initialize(const std::string& location) {
+void MacKotoeriDictionary::Initialize(const std::string& location) {
     impl_->Initialize(location);
 }
 
-void SKKKotoeriDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
+void MacKotoeriDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
     // ことえり辞書には「送りあり」は存在しない
 }
 
-void SKKKotoeriDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
+void MacKotoeriDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
     impl_->Find(entry, result);
 }
-
-// ファクトリメソッドの登録
-#include "SKKDictionaryFactory.h"
-static bool initialize = SKKRegisterFactoryMethod<SKKKotoeriDictionary>(SKKKotoeriDictionaryType);

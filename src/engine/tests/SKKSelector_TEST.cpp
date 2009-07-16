@@ -2,6 +2,8 @@
 #include "SKKSelector.h"
 #include "SKKCandidateWindow.h"
 #include "SKKBackEnd.h"
+#include "SKKCommonDictionary.h"
+#include "SKKDictionaryFactory.h"
 
 #include "TestFrontEnd.h"
 #include "TestCandidateWindow.h"
@@ -27,7 +29,8 @@ int main() {
     SKKSelector selector(&buddy, &test_window);
     SKKDictionaryKeyContainer dicts;
 
-    dicts.push_back(SKKDictionaryKey(SKKCommonDictionaryType, "SKK-JISYO.TEST"));
+    SKKRegisterFactoryMethod<SKKCommonDictionary>(0);
+    dicts.push_back(SKKDictionaryKey(0, "SKK-JISYO.TEST"));
     SKKBackEnd::theInstance().Initialize("skk-jisyo.utf8", dicts);
 
     assert(selector.Execute(3) && buddy.Current().ToString() == "漢字");

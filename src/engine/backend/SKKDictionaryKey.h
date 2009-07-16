@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2007-2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -26,15 +26,6 @@
 #include <string>
 #include <vector>
 #include <utility>
-
-// 辞書の型
-enum SKKDictionaryType {
-    SKKCommonDictionaryType,
-    SKKAutoUpdateDictionaryType,
-    SKKProxyDictionaryType,
-    SKKKotoeriDictionaryType,
-    SKKGadgetDictionaryType,
-};
 
 // ======================================================================
 // 辞書のキー(辞書の型と場所のペア)

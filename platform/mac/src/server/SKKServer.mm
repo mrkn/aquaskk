@@ -24,12 +24,38 @@
 #include "SKKPreProcessor.h"
 #include "SKKRomanKanaConverter.h"
 #include "SKKBackEnd.h"
+#include "SKKCommonDictionary.h"
+#include "SKKAutoUpdateDictionary.h"
+#include "SKKProxyDictionary.h"
+#include "SKKGadgetDictionary.h"
+#include "SKKDictionaryFactory.h"
 #include "SKKConstVars.h"
+#include "MacKotoeriDictionary.h"
 #include "skkserv.h"
 #include "InputModeWindow.h"
 
 #include <InputMethodKit/InputMethodKit.h>
 #include <signal.h>
+
+namespace {
+    struct DictionaryTypes {
+        enum {
+            Common,
+            AutoUpdate,
+            Proxy,
+            Kotoeri,
+            Gadget,
+        };
+    };
+
+    NSString* DictionaryNames[] = {
+        @"SKK 辞書",
+        @"SKK 辞書(自動更新)",
+        @"skkserv 辞書",
+        @"ことえり辞書",
+        @"プログラム辞書"
+    };
+}
 
 static void terminate(int) {
     [NSApp terminate:nil];
@@ -119,7 +145,7 @@ static void terminate(int) {
                 location = [location stringByExpandingTildeInPath];
 
                 // 自動更新辞書の場合
-                if([type intValue] == SKKAutoUpdateDictionaryType) {
+                if([type intValue] == DictionaryTypes::AutoUpdate) {
                     NSString* file = [location lastPathComponent];
                     NSString* path = [NSString stringWithFormat:@"%@ %@/%@ %@",
                                                [defaults stringForKey:SKKUserDefaultKeys::openlab_host],
@@ -157,6 +183,14 @@ static void terminate(int) {
     [self initializeInputModeIcons];
 
     NSLog(@"Components has been reloaded");
+}
+
+- (void)createDictionaryTypes:(NSMenu*)menu {
+    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Common] action:0 keyEquivalent:@""];
+    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::AutoUpdate] action:0 keyEquivalent:@""];
+    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Proxy] action:0 keyEquivalent:@""];
+    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Kotoeri] action:0 keyEquivalent:@""];
+    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Gadget] action:0 keyEquivalent:@""];
 }
 
 @end
@@ -207,6 +241,12 @@ static void terminate(int) {
         NSData* data = [NSData dataWithContentsOfFile:factoryDictionarySet];
         [data writeToFile:userDictionarySet atomically:YES];
     }
+
+    SKKRegisterFactoryMethod<SKKCommonDictionary>(DictionaryTypes::Common);
+    SKKRegisterFactoryMethod<SKKAutoUpdateDictionary>(DictionaryTypes::AutoUpdate);
+    SKKRegisterFactoryMethod<SKKProxyDictionary>(DictionaryTypes::Proxy);
+    SKKRegisterFactoryMethod<MacKotoeriDictionary>(DictionaryTypes::Kotoeri);
+    SKKRegisterFactoryMethod<SKKGadgetDictionary>(DictionaryTypes::Gadget);
 }
 
 - (void)prepareInputMethodKit {

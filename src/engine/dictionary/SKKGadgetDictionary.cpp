@@ -174,7 +174,3 @@ bool SKKGadgetDictionary::FindCompletions(const std::string& entry,
     
     return !result.empty();
 }
-
-// ファクトリメソッドの登録
-#include "SKKDictionaryFactory.h"
-static bool initialize = SKKRegisterFactoryMethod<SKKGadgetDictionary>(SKKGadgetDictionaryType);

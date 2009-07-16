@@ -1,12 +1,16 @@
 #include <cassert>
 #include <iostream>
 #include "SKKBackEnd.h"
+#include "SKKDictionaryFactory.h"
+#include "SKKCommonDictionary.h"
 
 int main() {
+    SKKRegisterFactoryMethod<SKKCommonDictionary>(0);
+    
     SKKDictionaryKeyContainer dicts;
 
-    dicts.push_back(SKKDictionaryKey(SKKCommonDictionaryType, "SKK-JISYO.TEST"));
-    dicts.push_back(SKKDictionaryKey(SKKCommonDictionaryType, "SKK-JISYO.TEST"));
+    dicts.push_back(SKKDictionaryKey(0, "SKK-JISYO.TEST"));
+    dicts.push_back(SKKDictionaryKey(0, "SKK-JISYO.TEST"));
 
     SKKBackEnd& backend = SKKBackEnd::theInstance();
 

@@ -76,7 +76,3 @@ void SKKProxyDictionary::search(const std::string& query, SKKCandidateSuite& res
         result.Add(suite);
     }
 }
-
-// ファクトリメソッドの登録
-#include "SKKDictionaryFactory.h"
-static bool initialize = SKKRegisterFactoryMethod<SKKProxyDictionary>(SKKProxyDictionaryType);

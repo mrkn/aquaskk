@@ -4,9 +4,11 @@
 #include "SKKCommonDictionary.h"
 
 int main() {
+    SKKRegisterFactoryMethod<SKKCommonDictionary>(0);
+
     SKKDictionaryFactory& factory = SKKDictionaryFactory::theInstance();
 
-    SKKBaseDictionary* dict = factory.Create(SKKCommonDictionaryType, "SKK-JISYO.TEST");
+    SKKBaseDictionary* dict = factory.Create(0, "SKK-JISYO.TEST");
 
     SKKCandidateSuite suite;
     dict->FindOkuriNasi("かんじ", suite);

@@ -25,6 +25,8 @@
 
 #include <Cocoa/Cocoa.h>
 
+@class SKKServerProxy;
+
 @interface PreferenceController : NSObject {
     IBOutlet NSWindow* prefWindow_;
     IBOutlet NSPopUpButton* layoutPopUp_;
@@ -33,11 +35,13 @@
     IBOutlet NSArrayController* arrayController_;
     IBOutlet NSTextField* version_;
     IBOutlet NSTextField* copyright_;
+    IBOutlet NSMenu* menu_;
 
     NSMutableDictionary* preferences_;
     NSMutableArray* dictionarySet_;
     NSMutableArray* layoutNames_;
     NSFont* candidateWindowFont_;
+    SKKServerProxy* proxy_;
 }
 
 - (IBAction)showFontPanel:(id)sender;

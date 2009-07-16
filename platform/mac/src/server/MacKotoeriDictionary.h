@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,19 +24,19 @@
     Directory Maneger対応　2002.09.25 Shin_ichi Abe.
 */
 
-#ifndef SKKKotoeriDictionary_h
-#define SKKKotoeriDictionary_h
+#ifndef MacKotoeriDictionary_h
+#define MacKotoeriDictionary_h
 
 #include "SKKBaseDictionary.h"
 
 class KotoeriImpl;
 
-class SKKKotoeriDictionary : public SKKBaseDictionary {
+class MacKotoeriDictionary : public SKKBaseDictionary {
     std::auto_ptr<KotoeriImpl> impl_;
 
 public:
-    SKKKotoeriDictionary();
-    virtual ~SKKKotoeriDictionary();
+    MacKotoeriDictionary();
+    virtual ~MacKotoeriDictionary();
 
     virtual void Initialize(const std::string& location);
 

@@ -214,7 +214,3 @@ bool SKKAutoUpdateDictionary::FindCompletions(const std::string& entry,
                                               int minimumCompletionLength) {
     return keeper_.FindCompletions(entry, result, minimumCompletionLength);
 }
-
-// ファクトリメソッドの登録
-#include "SKKDictionaryFactory.h"
-static bool initialize = SKKRegisterFactoryMethod<SKKAutoUpdateDictionary>(SKKAutoUpdateDictionaryType);

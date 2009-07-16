@@ -94,7 +94,7 @@ void* skkserv::worker(void* param) {
             session >> word;
             session.get();
 
-	    std::string key = jconv::eucj_from_utf8(word);
+	    std::string key = jconv::utf8_from_eucj(word);
 	    SKKEntry entry;
 	    SKKCandidateSuite result;
 
@@ -106,7 +106,7 @@ void* skkserv::worker(void* param) {
 	    }
 	    
 	    SKKBackEnd::theInstance().Find(entry, result);
-            std::string candidates = jconv::utf8_from_eucj(result.ToString(true));
+            std::string candidates = jconv::eucj_from_utf8(result.ToString(true));
             if(!candidates.empty()) {
 		session << '1' << candidates << std::endl;
 	    } else {

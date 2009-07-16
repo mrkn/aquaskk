@@ -49,12 +49,14 @@
         NSString* fontName = [preferences_ objectForKey:SKKUserDefaultKeys::candidate_window_font_name];
         NSNumber* fontSize =  [preferences_ objectForKey:SKKUserDefaultKeys::candidate_window_font_size];
         candidateWindowFont_ = [[NSFont fontWithName:fontName size:[fontSize floatValue]] retain];
+        proxy_ = [[SKKServerProxy alloc] init];
     }
 
     return self;
 }
 
 - (void)dealloc {
+    [proxy_ release];
     [candidateWindowFont_ release];
     [dictionarySet_ release];
     [preferences_ release];
@@ -68,6 +70,7 @@
 
     [objController_ setContent:preferences_];
     [arrayController_ setContent:dictionarySet_];
+    [proxy_ createDictionaryTypes:menu_];
 
     [self initializeVersion];
     [self setupKeyboardLayout];
@@ -233,12 +236,8 @@ static int compareInputSource(id obj1, id obj2, void *context) {
 }
 
 - (void)reloadServer {
-    SKKServerProxy* proxy = [[SKKServerProxy alloc] init];
-
-    [proxy reloadUserDefaults];
-    [proxy reloadDictionarySet];
-
-    [proxy release];
+    [proxy_ reloadUserDefaults];
+    [proxy_ reloadDictionarySet];
 }
 
 @end
