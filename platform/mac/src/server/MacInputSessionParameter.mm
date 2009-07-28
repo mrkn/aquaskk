@@ -31,12 +31,13 @@
 #include "MacInputEngineOption.h"
 
 MacInputSessionParameter::MacInputSessionParameter(id client)
-    : frontend_(new MacFrontEnd(client))
+    : layout_(new SKKLayoutManager(client))
+    , frontend_(new MacFrontEnd(client))
     , configuration_(new MacStateConfiguration())
     , messenger_(new MacMessenger(frontend_.get()))
     , clipboard_(new MacClipboard())
-    , candidateWindow_(new MacCandidateWindow(client))
-    , annotator_(new MacAnnotator(client))
+    , candidateWindow_(new MacCandidateWindow(client, layout_.get()))
+    , annotator_(new MacAnnotator(client, layout_.get()))
     , completor_(new MacDynamicCompletor(client))
     , inputEngineOption_(new MacInputEngineOption())
 {}

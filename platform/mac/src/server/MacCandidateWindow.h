@@ -24,11 +24,13 @@
 #define MacCandidateWindowMacOSX_h
 
 #include "SKKCandidateWindow.h"
+#include "SKKLayoutManager.h"
 
 @class CandidateWindow;
 
 class MacCandidateWindow : public SKKCandidateWindow {
     id client_;
+    SKKLayoutManager* layout_;
     bool putUpward_;
     NSMutableArray* candidates_;
     NSRange page_;
@@ -37,12 +39,11 @@ class MacCandidateWindow : public SKKCandidateWindow {
     CandidateWindow* window_;
 
     void reloadUserDefaults();
-    void prepareWindow();
     virtual void SKKWidgetShow();
     virtual void SKKWidgetHide();
 
 public:
-    MacCandidateWindow(id client);
+    MacCandidateWindow(id client, SKKLayoutManager* layout);
     virtual ~MacCandidateWindow();
 
     virtual void Setup(SKKCandidateIterator begin, SKKCandidateIterator end, std::vector<int>& pages);

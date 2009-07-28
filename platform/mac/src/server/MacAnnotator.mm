@@ -22,6 +22,7 @@
 
 #include "MacAnnotator.h"
 #include "AnnotationWindow.h"
+#include "CandidateWindow.h"
 #include "SKKConstVars.h"
 #include "utf8util.h"
 
@@ -29,7 +30,8 @@
 #include <CoreServices/CoreServices.h>
 #include <iostream>
 
-MacAnnotator::MacAnnotator(id client) : client_(client), definition_(nil), optional_(nil) {
+MacAnnotator::MacAnnotator(id client, SKKLayoutManager* layout)
+    : client_(client), layout_(layout), definition_(nil), optional_(nil) {
     window_ = [AnnotationWindow sharedWindow];
 }
 
@@ -61,35 +63,13 @@ void MacAnnotator::release(NSString*& str) {
 }
 
 void MacAnnotator::SKKWidgetShow() {
-    NSRect rect;
-    NSDictionary* dict = [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
     [window_ setAnnotation:definition_ optional:optional_];
 
     if(!definition_ && !optional_) {
         SKKWidgetHide();
     }
 
-    if([defaults boolForKey:SKKUserDefaultKeys::put_candidate_window_upward] == YES) {
-        [window_ show:rect.origin level:[client_ windowLevel] topleft:YES];
-    } else {
-        NSFont* font = [dict objectForKey:@"NSFont"];
-        if(!font) {
-            NSLog(@"MacAnnotator::Show(): can't get font");
-            return;
-        }
-
-        NSDictionary* attributes = [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
-        NSAttributedString* str = [[NSAttributedString alloc]
-                                      initWithString:[NSString stringWithUTF8String:buffer_.c_str()]
-                                      attributes:attributes];
-        rect.origin.x += [str size].width + 2;
-        rect.origin.y += 2;
-        [str release];
-
-        [window_ show:rect.origin level:[client_ windowLevel] topleft:NO];
-    }
+    [window_ showAt:layout_->AnnotationWindowOrigin() level:[client_ windowLevel]];
 }
 
 void MacAnnotator::SKKWidgetHide() {

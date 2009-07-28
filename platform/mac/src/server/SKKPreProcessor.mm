@@ -40,8 +40,10 @@ void SKKPreProcessor::Initialize(const std::string& path) {
 
 SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
     SKKEvent result;
-    int dispchar = *[[event characters] UTF8String];
-    int charcode = *[[event charactersIgnoringModifiers] UTF8String];
+    NSString* diststr = [event characters];
+    int dispchar = diststr ? *[diststr UTF8String] : 0;
+    NSString* charstr = [event charactersIgnoringModifiers];
+    int charcode = charstr ? *[charstr UTF8String] : 0;
     int keycode = [event keyCode];
     int mods = 0;
 

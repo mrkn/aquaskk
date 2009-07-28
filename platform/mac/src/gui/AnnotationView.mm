@@ -45,7 +45,7 @@
         [self initializeStyle];
         [self initializeView];
 
-        strokeColor_ = [[NSColor controlShadowColor] retain];
+        strokeColor_ = [[NSColor windowFrameColor] retain];
 
         definitiveHeader_ = [self createHeader:@"意味・語源"];
         annotationHeader_ = [self createHeader:@"SKK 辞書の註釈"];

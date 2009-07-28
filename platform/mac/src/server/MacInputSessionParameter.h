@@ -24,9 +24,11 @@
 #define MacInputSessionParameter_h
 
 #include "SKKInputSessionParameter.h"
+#include "SKKLayoutManager.h"
 #include <memory>
 
 class MacInputSessionParameter : public SKKInputSessionParameter {
+    std::auto_ptr<SKKLayoutManager> layout_;
     std::auto_ptr<SKKFrontEnd> frontend_;
     std::auto_ptr<SKKStateConfiguration> configuration_;
     std::auto_ptr<SKKMessenger> messenger_;

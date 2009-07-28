@@ -27,11 +27,17 @@
 - (id)init {
     self = [super init];
 
-    proxy_ = (id<SKKSupervisor>)[NSConnection
-                                    rootProxyForConnectionWithRegisteredName:SKKSupervisorConnectionName
-                                    host:nil];
+    proxy_ = [[NSConnection
+                  rootProxyForConnectionWithRegisteredName:SKKSupervisorConnectionName
+                  host:nil] retain];
+    [proxy_ setProtocolForProxy:@protocol(SKKSupervisor)];
 
     return self;
+}
+
+- (void)dealloc {
+    [proxy_ release];
+    [super dealloc];
 }
 
 - (void)reloadUserDefaults {
@@ -48,6 +54,10 @@
 
 - (void)createDictionaryTypes:(NSMenu*)menu {
     [proxy_ createDictionaryTypes:menu];
+}
+
+- (BOOL)needsWorkaround:(id)client {
+    return [proxy_ needsWorkaround:client];
 }
 
 @end

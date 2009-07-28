@@ -26,7 +26,7 @@
 #include "SKKSupervisor.h"
 
 @interface SKKServerProxy : NSObject <SKKSupervisor> {
-    id<SKKSupervisor> proxy_;
+    id proxy_;
 }
 @end
 

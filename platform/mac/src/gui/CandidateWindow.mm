@@ -74,7 +74,9 @@
     [view_ setPage:page];
 }
 
-- (void)show {
+- (void)showAt:(NSPoint)origin level:(int)level {
+    [window_ setFrameOrigin:origin];
+    [window_ setLevel:level];
     [window_ orderFront:nil];
 }
 

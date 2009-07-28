@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,19 +20,25 @@
 
 */
 
-#ifndef SKKSupervisor_h
-#define SKKSupervisor_h
+#ifndef SKKLayoutManager_h
+#define SKKLayoutManager_h
 
-#define SKKSupervisorConnectionName	@"SKKSupervisorConnection"
+#include <Foundation/Foundation.h>
 
-// AquaSKK 制御用プロトコル
+class SKKLayoutManager {
+    id client_;
 
-@protocol SKKSupervisor
-- (void)reloadUserDefaults;
-- (void)reloadDictionarySet;
-- (void)reloadComponents;
-- (void)createDictionaryTypes:(NSMenu*)menu;
-- (BOOL)needsWorkaround:(id)client;
-@end
+    BOOL putUpward() const;
+    NSRect inputFrame() const;
+    NSRect screenFrame() const;
+    NSPoint fit(const NSRect& screen, const NSRect& window) const;
+    int margin() const; 
+
+public:
+    SKKLayoutManager(id client);
+
+    NSPoint CandidateWindowOrigin() const;
+    NSPoint AnnotationWindowOrigin() const;
+};
 
 #endif

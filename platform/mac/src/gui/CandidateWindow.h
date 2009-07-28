@@ -38,7 +38,7 @@
 - (void)prepareWithFont:(NSFont*)font labels:(NSString*)labels;
 - (void)setCandidates:(NSArray*)candidates selectedIndex:(int)cursor;
 - (void)setPage:(NSRange)page;
-- (void)show;
+- (void)showAt:(NSPoint)origin level:(int)level;
 - (void)hide;
 - (int)indexOfLabel:(char)label;
 - (id)createCandidateCell;

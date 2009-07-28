@@ -32,6 +32,46 @@
 #include "SKKFrontEnd.h"
 #include "SKKBackEnd.h"
 
+class SelectedTextProblemWorkaround : public SKKInputModeListener {
+    id client_;
+    bool required_;
+    bool updated_;
+    NSString* selectedText_;
+
+    virtual void SKKWidgetShow() {}
+    virtual void SKKWidgetHide() {}
+    virtual void SelectInputMode(SKKInputMode mode) {
+        updated_ = true;
+    }
+
+public:
+    SelectedTextProblemWorkaround(id client, bool required)
+        : client_(client), required_(required) {}
+
+    void BeginEvent() {
+        selectedText_ = 0;
+        updated_ = false;
+
+        if(!required_) return;
+
+        NSRange selection = [client_ selectedRange];
+        if(selection.location != NSNotFound) {
+            NSAttributedString* attr = [client_ attributedSubstringFromRange:selection];
+            if(attr) {
+                selectedText_ = [[attr string] retain];
+            }
+        }
+    }
+        
+    void EndEvent() {
+        if(required_ && updated_) {
+            [client_ insertText:selectedText_
+                     replacementRange:NSMakeRange(NSNotFound, NSNotFound)];
+            [selectedText_ release];
+        }
+    }
+};
+
 @interface SKKInputController (Local)
 
 - (void)initializeKeyboardLayout;
@@ -57,9 +97,11 @@
 
         modeMenu_ = new MacInputModeMenu(menu_);
         modeWindow_ = new MacInputModeWindow(frontend_);
+        workaround_ = new SelectedTextProblemWorkaround(client_, [proxy_ needsWorkaround:client]);
 
         master->AddListener(modeMenu_);
         master->AddListener(modeWindow_);
+        master->AddListener(workaround_);
 
         session_ = new SKKInputSession(param_, master);
     }
@@ -69,9 +111,10 @@
 
 - (void)dealloc {
     delete session_;
-    delete param_;
+    delete workaround_;
     delete modeWindow_;
     delete modeMenu_;
+    delete param_;
 
     [menu_ release];
     [proxy_ release];
@@ -82,7 +125,13 @@
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
 
-    return session_->HandleEvent(param);
+    workaround_->BeginEvent();
+
+    BOOL result = session_->HandleEvent(param);
+
+    workaround_->EndEvent();
+
+    return result;
 }
 
 - (void)commitComposition:(id)sender {
@@ -155,6 +204,9 @@
         { Normal,	"環境設定",			@selector(showPreferences:) },
         { PrivateMode,	"プライベートモード",		@selector(togglePrivateMode:) },
         { Normal,	"設定ファイルの再読み込み",	@selector(reloadComponents:) },
+#ifdef SKK_DEBUG
+        { Normal,	"デバッグ情報",			@selector(showDebugInfo:) },
+#endif
         { Normal,	"AquaSKK ヘルプ",		@selector(showHelp:) },
         { Selector,	"__selector__",			0 },
         { Normal,	"Web::プロジェクトホーム",	@selector(webHome:) },
@@ -209,6 +261,41 @@
 
 - (void)reloadComponents:(id)sender {
     [proxy_ reloadComponents];
+}
+
+- (void)showDebugInfo:(id)sender {
+    NSMutableString* info = [[NSMutableString alloc] initWithCapacity:0];
+    NSRect rect;
+
+    [info appendFormat:@"bundleId = %@\n", [client_ bundleIdentifier]];
+    [info appendFormat:@"attributes = %@\n",
+          [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect]];
+    [info appendFormat:@"inline rect = %@\n", NSStringFromRect(rect)];
+    [info appendFormat:@"selected range = %@\n",NSStringFromRange([client_ selectedRange])];
+    [info appendFormat:@"marked range = %@\n", NSStringFromRange([client_ markedRange])];
+    [info appendFormat:@"supports unicode = %@\n",
+          ([client_ supportsUnicode] == 1 ? @"YES" : @"NO")];
+    [info appendFormat:@"window level = %d\n", [client_ windowLevel]];
+    [info appendFormat:@"length = %d\n", [client_ length]];
+    [info appendFormat:@"valid attributes = %@\n", [client_ validAttributesForMarkedText]];
+
+    NSAlert* alert = [[NSAlert alloc] init];
+    [alert addButtonWithTitle:@"OK"];
+    [alert setMessageText:@"デバッグ情報"];
+    [alert setInformativeText:info];
+    [alert setAlertStyle:NSInformationalAlertStyle];
+    [alert setIcon:[NSImage imageNamed:NSImageNameInfo]];
+    [[alert window] setLevel:kCGPopUpMenuWindowLevel];
+    [[alert window] setTitle:@"AquaSKK"];
+
+    [alert beginSheetModalForWindow:0 modalDelegate:self didEndSelector:0 contextInfo:0];
+
+    NSPasteboard* pb = [NSPasteboard generalPasteboard];
+
+    [pb declareTypes:[NSArray arrayWithObjects:NSStringPboardType, nil] owner:self];
+    [pb setString:info forType:NSStringPboardType];
+
+    [info release];
 }
 
 - (void)showHelp:(id)sender {

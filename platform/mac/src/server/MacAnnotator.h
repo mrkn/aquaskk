@@ -24,11 +24,13 @@
 #define MacAnnotator_h
 
 #include "SKKAnnotator.h"
+#include "SKKLayoutManager.h"
 
 @class AnnotationWindow;
 
 class MacAnnotator : public SKKAnnotator {
     id client_;
+    SKKLayoutManager* layout_;
     NSString* definition_;
     NSString* optional_;
     AnnotationWindow* window_;
@@ -41,7 +43,7 @@ class MacAnnotator : public SKKAnnotator {
     virtual void SKKWidgetHide();
 
 public:
-    MacAnnotator(id client);
+    MacAnnotator(id client, SKKLayoutManager* layout);
 
     virtual void Update(const SKKCandidate& candidate, const std::string& buffer);
 };

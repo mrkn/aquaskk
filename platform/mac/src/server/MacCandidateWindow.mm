@@ -29,7 +29,8 @@
 
 #include <InputMethodKit/InputMethodKit.h>
 
-MacCandidateWindow::MacCandidateWindow(id client) : client_(client) {
+MacCandidateWindow::MacCandidateWindow(id client, SKKLayoutManager* layout)
+    : client_(client), layout_(layout) {
     window_ = [CandidateWindow sharedWindow];
     candidates_ = [[NSMutableArray alloc] initWithCapacity:0];
     reloadUserDefaults();
@@ -131,42 +132,11 @@ void MacCandidateWindow::reloadUserDefaults() {
     [window_ prepareWithFont:font labels:labels];
 }
 
-void MacCandidateWindow::prepareWindow() {
-    // ウィンドウレベル
-    [[window_ window] setLevel:[client_ windowLevel]];
-
-    // カーソル位置を含むディスプレイの矩形を取得
-    NSRect rect;
-    NSDictionary* dict = [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
-    NSFont* font = [dict objectForKey:@"NSFont"];
-    CGDirectDisplayID disp[1];
-    CGDisplayCount count;
-    CGGetDisplaysWithPoint(CGPointMake(rect.origin.x, rect.origin.y), 1, disp, &count);
-    CGRect screen = CGDisplayBounds(disp[0]);
-
-    screen.size.width += screen.origin.x;
-
-    NSSize window_size = [[window_ window] frame].size;
-    NSPoint pt = rect.origin;
-
-    if(pt.x + window_size.width > screen.size.width) {
-	pt.x = screen.size.width - window_size.width;
-    }
-
-    if(putUpward_ && font) {
-        pt.y += NSHeight([font boundingRectForFont]);
-        [[window_ window] setFrameOrigin:pt];
-    } else {
-        [[window_ window] setFrameTopLeftPoint:pt];
-    }
-}
-
 void MacCandidateWindow::SKKWidgetShow() {
-    prepareWindow();
-
     [window_ setCandidates:candidates_ selectedIndex:cursor_];
     [window_ setPage:page_];
-    [window_ show];
+    [window_ showAt:layout_->CandidateWindowOrigin()
+             level:[client_ windowLevel]];
 }
 
 void MacCandidateWindow::SKKWidgetHide() {

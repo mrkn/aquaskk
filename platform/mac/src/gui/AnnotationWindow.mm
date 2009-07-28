@@ -50,6 +50,10 @@
     [super dealloc];
 }
 
+- (NSWindow*)window {
+    return window_;
+}
+
 - (void)setAnnotation:(NSString*)definition optional:(NSString*)annotation {
     [view_ setAnnotation:definition optional:annotation];
 }
@@ -60,7 +64,7 @@
     [view_ setNeedsDisplay:YES];
 }
 
-- (void)show:(NSPoint)origin level:(int)level topleft:(BOOL)topleft {
+- (void)showAt:(NSPoint)origin level:(int)level {
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
 
     if(![view_ hasAnnotation]) {
@@ -68,12 +72,7 @@
         return;
     }
 
-    if(topleft) {
-        [window_ setFrameTopLeftPoint:origin];
-    } else {
-        [window_ setFrameOrigin:origin];
-    }
-
+    [window_ setFrameOrigin:origin];
     [window_ setLevel:level];
 
     [self performSelector:@selector(activate:) withObject:self afterDelay:1.0];

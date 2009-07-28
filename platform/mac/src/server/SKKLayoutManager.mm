@@ -1,0 +1,135 @@
+/* -*- ObjC -*-
+
+  MacOS X implementation of the SKK input method.
+
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+*/
+
+#include <InputMethodKit/InputMethodKit.h>
+#include "SKKConstVars.h"
+#include "SKKLayoutManager.h"
+#include "CandidateWindow.h"
+#include "AnnotationWindow.h"
+
+SKKLayoutManager::SKKLayoutManager(id client)
+    : client_(client) {}
+
+// 候補ウィンドウ原点
+NSPoint SKKLayoutManager::CandidateWindowOrigin() const {
+    NSRect input = inputFrame();
+    NSRect candidate = [[[CandidateWindow sharedWindow] window] frame];
+    NSRect screen = screenFrame();
+    NSPoint pt = candidate.origin = input.origin;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    bool candidateIsUpward = [defaults boolForKey:SKKUserDefaultKeys::put_candidate_window_upward] == YES;
+
+    // 右端
+    pt = fit(screen, candidate);
+
+    if(candidateIsUpward) {
+        pt.y = NSMaxY(input) + margin();
+
+        // 上端
+        if(NSHeight(screen) < pt.y + NSHeight(candidate)) {
+            pt.y = NSMinY(input) - NSHeight(candidate) - margin();
+        }
+    } else {
+        pt.y -= NSHeight(candidate) + margin();
+
+        // 下端
+        if(pt.y < NSMinY(screen)) {
+            pt.y = NSMaxY(input) + margin();
+        }
+    }
+
+    return pt;
+}
+
+// アノテーションウィンドウ原点
+NSPoint SKKLayoutManager::AnnotationWindowOrigin() const {
+    NSRect input = inputFrame();
+    NSRect annotation = [[[AnnotationWindow sharedWindow] window] frame];
+    NSRect screen = screenFrame();
+    NSPoint pt = annotation.origin = input.origin;
+    NSWindow* candwindow = [[CandidateWindow sharedWindow] window];
+    NSRect candidate = [candwindow frame];
+    bool candidateIsVisible = [candwindow isVisible];
+    bool candidateIsUpward = (input.origin.y < candidate.origin.y);
+
+    // 右端
+    pt = fit(screen, annotation);
+
+    // アノテーションは常に下に表示する
+    pt.y -= NSHeight(annotation) + margin();
+    if(candidateIsVisible && !candidateIsUpward) {
+        pt.y -= NSHeight(candidate) + margin();
+    }
+
+    // 下端
+    if(!NSPointInRect(pt, screen)) {
+        pt.y = NSMaxY(input) + margin();
+        if(candidateIsVisible && candidateIsUpward) {
+            pt.y += NSHeight(candidate) + margin();
+        }
+    }
+
+    return pt;
+}
+
+// 入力エリア矩形
+NSRect SKKLayoutManager::inputFrame() const {
+    NSRect frame;
+    NSRect candidate = [[[CandidateWindow sharedWindow] window] frame];
+    NSDictionary* dict = [[client_ attributesForCharacterIndex:0
+                                   lineHeightRectangle:&frame] retain];
+    NSFont* font = [dict objectForKey:NSFontAttributeName];
+
+    frame.size.height = font ? NSHeight([font boundingRectForFont]) : NSHeight(candidate);
+
+    [dict release];
+
+    return frame;
+}
+
+// メニューバーを除いたスクリーン矩形
+NSRect SKKLayoutManager::screenFrame() const {
+    NSScreen* screen = [NSScreen mainScreen];
+    NSRect whole = [screen frame];
+    NSRect without_menubar = [screen visibleFrame];
+
+    without_menubar.origin = whole.origin;
+    without_menubar.size.width = NSWidth(whole);
+
+    return without_menubar;
+}
+
+// 右端調整
+NSPoint SKKLayoutManager::fit(const NSRect& screen, const NSRect& window) const {
+    NSPoint pt = window.origin;
+
+    if(NSMaxX(screen) < NSMaxX(window)) {
+        pt.x = NSWidth(screen) - NSWidth(window);
+    }
+
+    return pt;
+}
+
+// ウィンドウ間のマージン
+int SKKLayoutManager::margin() const {
+    return 1;
+}

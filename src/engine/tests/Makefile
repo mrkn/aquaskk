@@ -34,10 +34,10 @@ OTHER_OBJS = SKKEntry.o SKKCandidate.o \
 	SKKCompleter.o SKKState.o SKKInputMode.o \
 	jconv.o
 
-LIBOBJS	= $(BACKEND_OBJS) $(KEYMAP_OBJS) $(SELECTOR_OBJS) \
+LIBOBJS	= $(DICT_OBJS) $(BACKEND_OBJS) $(KEYMAP_OBJS) $(SELECTOR_OBJS) \
 	$(EDITOR_OBJS) $(SESSION_OBJS) $(TRIE_OBJS) $(OTHER_OBJS)
 
-LDFLAGS	= $(DICT_OBJS) -L. -lskk -framework ApplicationServices
+LDFLAGS	= -L. -lskk
 
 all: $(TESTBINS)
 

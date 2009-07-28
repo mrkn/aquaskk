@@ -107,5 +107,8 @@ NSMutableAttributedString* MacFrontEnd::createMarkedText(const std::string& str,
     [marked addAttribute:NSCursorAttributeName
             value:[NSCursor IBeamCursor] range:NSMakeRange([marked length] + cursorOffset, 0)];
 
+    [marked addAttribute:NSUnderlineStyleAttributeName
+            value:[NSNumber numberWithInt:NSUnderlineStyleThick] range:NSMakeRange(0, [marked length])];
+
     return marked;
 }
