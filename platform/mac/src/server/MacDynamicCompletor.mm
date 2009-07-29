@@ -25,7 +25,7 @@
 
 #include <InputMethodKit/InputMethodKit.h>
 
-MacDynamicCompletor::MacDynamicCompletor(id client) : client_(client) {
+MacDynamicCompletor::MacDynamicCompletor(SKKLayoutManager* layout) : layout_(layout) {
     window_ = [CompletionWindow sharedWindow];
 }
 
@@ -43,10 +43,10 @@ void MacDynamicCompletor::SKKWidgetShow() {
     }
 
     NSString* compString = [NSString stringWithUTF8String:completion_.c_str()];
-    NSRect rect;
 
-    [client_ attributesForCharacterIndex:cursorOffset_ + 1 lineHeightRectangle:&rect];
-    [window_ showCompletion:compString at:rect.origin level:[client_ windowLevel]];
+    [window_ showCompletion:compString
+             at:layout_->InputOrigin(cursorOffset_ + 1)
+             level:layout_->WindowLevel()];
 }
 
 void MacDynamicCompletor::SKKWidgetHide() {

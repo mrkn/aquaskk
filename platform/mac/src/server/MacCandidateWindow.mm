@@ -29,8 +29,8 @@
 
 #include <InputMethodKit/InputMethodKit.h>
 
-MacCandidateWindow::MacCandidateWindow(id client, SKKLayoutManager* layout)
-    : client_(client), layout_(layout) {
+MacCandidateWindow::MacCandidateWindow(SKKLayoutManager* layout)
+    : layout_(layout) {
     window_ = [CandidateWindow sharedWindow];
     candidates_ = [[NSMutableArray alloc] initWithCapacity:0];
     reloadUserDefaults();
@@ -136,7 +136,7 @@ void MacCandidateWindow::SKKWidgetShow() {
     [window_ setCandidates:candidates_ selectedIndex:cursor_];
     [window_ setPage:page_];
     [window_ showAt:layout_->CandidateWindowOrigin()
-             level:[client_ windowLevel]];
+             level:layout_->WindowLevel()];
 }
 
 void MacCandidateWindow::SKKWidgetHide() {

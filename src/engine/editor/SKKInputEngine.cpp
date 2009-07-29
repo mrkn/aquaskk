@@ -183,9 +183,11 @@ void SKKInputEngine::Commit() {
         (*iter)->Commit(word_);
     }
 
-    contextBuffer_.Clear();
-
     enableMainEditor();
+
+    Output();
+
+    contextBuffer_.Clear();
 }
 
 void SKKInputEngine::Insert(const std::string& str) {
@@ -291,7 +293,7 @@ SKKInputEngine::UndoResult SKKInputEngine::Undo() {
 
 void SKKInputEngine::Output() {
     // 内部バッファが更新されている時だけ出力する
-    if(modified_ || top()->IsModified()) {
+    if(!modified_without_output_ && (modified_ || top()->IsModified())) {
         updateContextBuffer();
 
         SKKDynamicCompletor* completer = 0;

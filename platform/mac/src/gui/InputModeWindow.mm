@@ -90,7 +90,7 @@
     return inputMode_;
 }
 
-- (void)show:(NSPoint)topleft level:(int)level {
+- (void)showAt:(NSPoint)topleft level:(int)level {
     [self updateFrame];
 
     [window_ setFrameTopLeftPoint:topleft];

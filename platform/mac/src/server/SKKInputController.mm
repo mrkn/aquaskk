@@ -32,46 +32,6 @@
 #include "SKKFrontEnd.h"
 #include "SKKBackEnd.h"
 
-class SelectedTextProblemWorkaround : public SKKInputModeListener {
-    id client_;
-    bool required_;
-    bool updated_;
-    NSString* selectedText_;
-
-    virtual void SKKWidgetShow() {}
-    virtual void SKKWidgetHide() {}
-    virtual void SelectInputMode(SKKInputMode mode) {
-        updated_ = true;
-    }
-
-public:
-    SelectedTextProblemWorkaround(id client, bool required)
-        : client_(client), required_(required) {}
-
-    void BeginEvent() {
-        selectedText_ = 0;
-        updated_ = false;
-
-        if(!required_) return;
-
-        NSRange selection = [client_ selectedRange];
-        if(selection.location != NSNotFound) {
-            NSAttributedString* attr = [client_ attributedSubstringFromRange:selection];
-            if(attr) {
-                selectedText_ = [[attr string] retain];
-            }
-        }
-    }
-        
-    void EndEvent() {
-        if(required_ && updated_) {
-            [client_ insertText:selectedText_
-                     replacementRange:NSMakeRange(NSNotFound, NSNotFound)];
-            [selectedText_ release];
-        }
-    }
-};
-
 @interface SKKInputController (Local)
 
 - (void)initializeKeyboardLayout;
@@ -90,18 +50,16 @@ public:
         defaults_ = [NSUserDefaults standardUserDefaults];
         proxy_ = [[SKKServerProxy alloc] init];
         menu_ = [[SKKInputMenu alloc] initWithClient:client];
-        param_ = new MacInputSessionParameter(client_);
-        frontend_ = param_->FrontEnd();
+        layout_ = new SKKLayoutManager(client_);
+        param_ = new MacInputSessionParameter(client_, layout_);
 
         SKKInputModeSelector* master = new SKKInputModeSelector();
 
         modeMenu_ = new MacInputModeMenu(menu_);
-        modeWindow_ = new MacInputModeWindow(frontend_);
-        workaround_ = new SelectedTextProblemWorkaround(client_, [proxy_ needsWorkaround:client]);
+        modeWindow_ = new MacInputModeWindow(layout_);
 
         master->AddListener(modeMenu_);
         master->AddListener(modeWindow_);
-        master->AddListener(workaround_);
 
         session_ = new SKKInputSession(param_, master);
     }
@@ -111,10 +69,10 @@ public:
 
 - (void)dealloc {
     delete session_;
-    delete workaround_;
     delete modeWindow_;
     delete modeMenu_;
     delete param_;
+    delete layout_;
 
     [menu_ release];
     [proxy_ release];
@@ -125,13 +83,7 @@ public:
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
 
-    workaround_->BeginEvent();
-
-    BOOL result = session_->HandleEvent(param);
-
-    workaround_->EndEvent();
-
-    return result;
+    return session_->HandleEvent(param);
 }
 
 - (void)commitComposition:(id)sender {

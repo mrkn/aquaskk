@@ -56,8 +56,4 @@
     [proxy_ createDictionaryTypes:menu];
 }
 
-- (BOOL)needsWorkaround:(id)client {
-    return [proxy_ needsWorkaround:client];
-}
-
 @end

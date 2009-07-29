@@ -28,7 +28,6 @@
 
 @interface SKKServer : NSObject <SKKSupervisor> {
     NSConnection* connection_;
-    NSArray* naiveClients_;
     class skkserv* skkserv_;
 }
 

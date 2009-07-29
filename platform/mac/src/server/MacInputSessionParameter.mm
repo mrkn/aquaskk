@@ -30,15 +30,14 @@
 #include "MacDynamicCompletor.h"
 #include "MacInputEngineOption.h"
 
-MacInputSessionParameter::MacInputSessionParameter(id client)
-    : layout_(new SKKLayoutManager(client))
-    , frontend_(new MacFrontEnd(client))
+MacInputSessionParameter::MacInputSessionParameter(id client, SKKLayoutManager* layout)
+    : frontend_(new MacFrontEnd(client))
     , configuration_(new MacStateConfiguration())
-    , messenger_(new MacMessenger(frontend_.get()))
+    , messenger_(new MacMessenger(layout))
     , clipboard_(new MacClipboard())
-    , candidateWindow_(new MacCandidateWindow(client, layout_.get()))
-    , annotator_(new MacAnnotator(client, layout_.get()))
-    , completor_(new MacDynamicCompletor(client))
+    , candidateWindow_(new MacCandidateWindow(layout))
+    , annotator_(new MacAnnotator(layout))
+    , completor_(new MacDynamicCompletor(layout))
     , inputEngineOption_(new MacInputEngineOption())
 {}
 

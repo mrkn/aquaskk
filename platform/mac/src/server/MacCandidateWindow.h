@@ -29,7 +29,6 @@
 @class CandidateWindow;
 
 class MacCandidateWindow : public SKKCandidateWindow {
-    id client_;
     SKKLayoutManager* layout_;
     bool putUpward_;
     NSMutableArray* candidates_;
@@ -43,7 +42,7 @@ class MacCandidateWindow : public SKKCandidateWindow {
     virtual void SKKWidgetHide();
 
 public:
-    MacCandidateWindow(id client, SKKLayoutManager* layout);
+    MacCandidateWindow(SKKLayoutManager* layout);
     virtual ~MacCandidateWindow();
 
     virtual void Setup(SKKCandidateIterator begin, SKKCandidateIterator end, std::vector<int>& pages);

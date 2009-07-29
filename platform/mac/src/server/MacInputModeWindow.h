@@ -24,13 +24,12 @@
 #define MacInputModeWindow_h
 
 #include "SKKInputModeListener.h"
-
-class SKKFrontEnd;
+#include "SKKLayoutManager.h"
 
 @class InputModeWindow;
 
 class MacInputModeWindow : public SKKInputModeListener {
-    SKKFrontEnd* frontend_;
+    SKKLayoutManager* layout_;
     SKKInputMode mode_;
     InputModeWindow* window_;
 
@@ -40,7 +39,7 @@ class MacInputModeWindow : public SKKInputModeListener {
     virtual void SKKWidgetHide();
 
 public:
-    MacInputModeWindow(SKKFrontEnd* frontend);
+    MacInputModeWindow(SKKLayoutManager* layout);
 
     virtual void SelectInputMode(SKKInputMode mode);
 };

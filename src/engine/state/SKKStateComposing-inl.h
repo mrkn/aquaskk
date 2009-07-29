@@ -142,6 +142,11 @@ State SKKState::KanaEntry(const Event& event) {
     const SKKEvent& param = event.Param();
 
     switch(event) {
+    case ENTRY_EVENT:
+        // 再入用
+        editor_->SetStateComposing();
+        return 0;
+
     case SKK_CHAR:
         // 変換
         if(param.IsNextCandidate()) break;

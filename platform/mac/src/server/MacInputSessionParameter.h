@@ -28,7 +28,6 @@
 #include <memory>
 
 class MacInputSessionParameter : public SKKInputSessionParameter {
-    std::auto_ptr<SKKLayoutManager> layout_;
     std::auto_ptr<SKKFrontEnd> frontend_;
     std::auto_ptr<SKKStateConfiguration> configuration_;
     std::auto_ptr<SKKMessenger> messenger_;
@@ -39,7 +38,7 @@ class MacInputSessionParameter : public SKKInputSessionParameter {
     std::auto_ptr<SKKInputEngineOption> inputEngineOption_;
 
 public:
-    MacInputSessionParameter(id client);
+    MacInputSessionParameter(id client, SKKLayoutManager* layout);
 
     virtual SKKFrontEnd* FrontEnd();
     virtual SKKStateConfiguration* StateConfiguration();

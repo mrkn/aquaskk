@@ -30,8 +30,8 @@
 #include <CoreServices/CoreServices.h>
 #include <iostream>
 
-MacAnnotator::MacAnnotator(id client, SKKLayoutManager* layout)
-    : client_(client), layout_(layout), definition_(nil), optional_(nil) {
+MacAnnotator::MacAnnotator(SKKLayoutManager* layout)
+    : layout_(layout), definition_(nil), optional_(nil) {
     window_ = [AnnotationWindow sharedWindow];
 }
 
@@ -69,7 +69,8 @@ void MacAnnotator::SKKWidgetShow() {
         SKKWidgetHide();
     }
 
-    [window_ showAt:layout_->AnnotationWindowOrigin() level:[client_ windowLevel]];
+    [window_ showAt:layout_->AnnotationWindowOrigin()
+             level:layout_->WindowLevel()];
 }
 
 void MacAnnotator::SKKWidgetHide() {

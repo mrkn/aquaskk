@@ -39,12 +39,6 @@ public:
     // 入力状態をクリアーする
     virtual void Clear() = 0;
 
-    // ウィンドウ表示位置
-    virtual std::pair<int, int> WindowPosition() const = 0;
-
-    // ウィンドウレベル
-    virtual int WindowLevel() const = 0;
-
     // 選択中の文字列
     virtual std::string SelectedString() = 0;
 };

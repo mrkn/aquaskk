@@ -24,14 +24,13 @@
 #define MacMessenger_h
 
 #include "SKKMessenger.h"
-
-class SKKFrontEnd;
+#include "SKKLayoutManager.h"
 
 class MacMessenger : public SKKMessenger {
-    SKKFrontEnd* frontend_;
+    SKKLayoutManager* layout_;
 
 public:
-    MacMessenger(SKKFrontEnd* frontend);
+    MacMessenger(SKKLayoutManager* layout);
 
     virtual void SendMessage(const std::string& msg);
 };

@@ -80,7 +80,6 @@ static void terminate(int) {
 @implementation SKKServer
 
 - (void)awakeFromNib {
-    naiveClients_ = 0;
     skkserv_ = 0;
 
     [self prepareSignalHandler];
@@ -180,12 +179,6 @@ static void terminate(int) {
     tmp = [self pathForResource:@"kana-rule.conf"];
     SKKRomanKanaConverter::theInstance().Initialize([tmp UTF8String]);
 
-    tmp = [self pathForResource:@"NaiveClients.plist"];
-    if(naiveClients_) {
-        [naiveClients_ release];
-    }
-    naiveClients_ = [[NSArray arrayWithContentsOfFile:tmp] retain];
-
     [self initializeInputModeIcons];
 
     NSLog(@"Components has been reloaded");
@@ -197,10 +190,6 @@ static void terminate(int) {
     [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Proxy] action:0 keyEquivalent:@""];
     [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Kotoeri] action:0 keyEquivalent:@""];
     [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Gadget] action:0 keyEquivalent:@""];
-}
-
-- (BOOL)needsWorkaround:(id)client {
-    return [naiveClients_ containsObject:[client bundleIdentifier]];
 }
 
 @end

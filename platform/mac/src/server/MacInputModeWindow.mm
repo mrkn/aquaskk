@@ -76,8 +76,8 @@ namespace {
 
 // ============================================================
 
-MacInputModeWindow::MacInputModeWindow(SKKFrontEnd* frontend)
-  : frontend_(frontend)
+MacInputModeWindow::MacInputModeWindow(SKKLayoutManager* layout)
+  : layout_(layout)
   , mode_(HirakanaInputMode) {
     window_ = [InputModeWindow sharedWindow];
     [window_ changeMode:mode_];
@@ -100,9 +100,9 @@ bool MacInputModeWindow::enabled() const {
 void MacInputModeWindow::SKKWidgetShow() {
     if(!enabled()) return;
 
-    std::pair<int, int> position = frontend_->WindowPosition();
+    NSPoint pt = layout_->InputOrigin();
 
-    CGPoint cursor = FlipPoint(position.first, position.second);
+    CGPoint cursor = FlipPoint(pt.x, pt.y);
     CGRectContainer list = CreateWindowBoundsListOf(ActiveProcessID());
 
     // カーソル位置がウィンドウ矩形に含まれていなければ無視する
@@ -111,7 +111,7 @@ void MacInputModeWindow::SKKWidgetShow() {
     if(!count) return;
 
     [window_ changeMode:mode_];
-    [window_ show:NSMakePoint(position.first, position.second) level:frontend_->WindowLevel()];
+    [window_ showAt:pt level:layout_->WindowLevel()];
 }
 
 void MacInputModeWindow::SKKWidgetHide() {

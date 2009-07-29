@@ -24,11 +24,12 @@
 #define MacDynamicCompletor_h
 
 #include "SKKDynamicCompletor.h"
+#include "SKKLayoutManager.h"
 
 @class CompletionWindow;
 
 class MacDynamicCompletor : public SKKDynamicCompletor {
-    id client_;
+    SKKLayoutManager* layout_;
     CompletionWindow* window_;
     std::string completion_;
     int cursorOffset_;
@@ -37,7 +38,7 @@ class MacDynamicCompletor : public SKKDynamicCompletor {
     virtual void SKKWidgetHide();
 
 public:
-    MacDynamicCompletor(id client);
+    MacDynamicCompletor(SKKLayoutManager* layout);
 
     virtual void Update(const std::string& completion, int cursorOffset);
 };

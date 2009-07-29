@@ -84,7 +84,6 @@
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
 		D3665A2B0EA8BDA90065CFD2 /* MessengerWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */; };
-		D36E94611019FF2900BAF670 /* NaiveClients.plist in Resources */ = {isa = PBXBuildFile; fileRef = D36E94601019FF2900BAF670 /* NaiveClients.plist */; };
 		D376C0FD0EC728D8001B2CE9 /* MacDynamicCompletor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */; };
 		D38D61BE0EA792CB0095AAC8 /* MessengerView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */; };
 		D38FA9D20EA78A0800C07575 /* CompletionWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */; };
@@ -296,7 +295,6 @@
 		D3665A290EA8BDA90065CFD2 /* MessengerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerWindow.h; sourceTree = "<group>"; };
 		D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerWindow.mm; sourceTree = "<group>"; };
 		D368A06B0EC68CC100145C40 /* SKKWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKWidget.h; sourceTree = "<group>"; };
-		D36E94601019FF2900BAF670 /* NaiveClients.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = NaiveClients.plist; sourceTree = "<group>"; };
 		D376C0FA0EC728C7001B2CE9 /* SKKDynamicCompletor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKDynamicCompletor.h; sourceTree = "<group>"; };
 		D376C0FB0EC728D8001B2CE9 /* MacDynamicCompletor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacDynamicCompletor.h; sourceTree = "<group>"; };
 		D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacDynamicCompletor.mm; sourceTree = "<group>"; };
@@ -673,7 +671,6 @@
 		D353BE0A0E17552F004C68A6 /* plist */ = {
 			isa = PBXGroup;
 			children = (
-				D36E94601019FF2900BAF670 /* NaiveClients.plist */,
 				D353BE0C0E17552F004C68A6 /* UserDefaults.plist */,
 				D353BE0B0E17552F004C68A6 /* DictionarySet.plist */,
 			);
@@ -885,7 +882,6 @@
 				D31C99D30E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff in Resources */,
 				D31C99D40E9E4A3D00CBE4D1 /* Mini-Katakana.tiff in Resources */,
 				D3CD2F581018BA16001884C0 /* azik-kana-rule.conf in Resources */,
-				D36E94611019FF2900BAF670 /* NaiveClients.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

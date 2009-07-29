@@ -25,7 +25,7 @@
 #include "SKKFrontEnd.h"
 #include "ObjCUtil.h"
 
-MacMessenger::MacMessenger(SKKFrontEnd* frontend) : frontend_(frontend) {}
+MacMessenger::MacMessenger(SKKLayoutManager* layout) : layout_(layout) {}
 
 void MacMessenger::SendMessage(const std::string& msg) {
     ObjC::RAIIPool pool;
@@ -34,8 +34,6 @@ void MacMessenger::SendMessage(const std::string& msg) {
 
     NSString* str = [NSString stringWithUTF8String:msg.c_str()];
 
-    std::pair<int, int> pos = frontend_->WindowPosition();
-    int windowLevel = frontend_->WindowLevel();
-
-    [window showMessage:str at:NSMakePoint(pos.first, pos.second) level:windowLevel];
+    [window showMessage:str
+            at:layout_->InputOrigin() level:layout_->WindowLevel()];
 }

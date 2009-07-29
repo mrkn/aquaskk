@@ -62,27 +62,6 @@ void MacFrontEnd::Clear() {
     }
 }
 
-std::pair<int, int> MacFrontEnd::WindowPosition() const {
-    NSRect rect;
-
-    [client_ attributesForCharacterIndex:0 lineHeightRectangle:&rect];
-
-#ifdef SKK_DEBUG
-    BOOL markedRange = NO;
-    NSInteger pos = [client_ characterIndexForPoint:rect.origin
-                             tracking:kIMKNearestBoundaryMode inMarkedRange:&markedRange];
-
-    NSLog(@"pos=%d, marked=%d, origin=(%f, %f), size=(%f, %f)",
-          pos, markedRange, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
-#endif
-
-    return std::make_pair<int, int>(rect.origin.x, rect.origin.y);
-}
-
-int MacFrontEnd::WindowLevel() const {
-    return [client_ windowLevel];
-}
-
 std::string MacFrontEnd::SelectedString() {
     NSRange range = [client_ selectedRange];
     NSAttributedString* text = [client_ attributedSubstringFromRange:range];

@@ -29,7 +29,7 @@ class SKKLayoutManager {
     id client_;
 
     BOOL putUpward() const;
-    NSRect inputFrame() const;
+    NSRect inputFrame(int index) const;
     NSRect screenFrame() const;
     NSPoint fit(const NSRect& screen, const NSRect& window) const;
     int margin() const; 
@@ -37,8 +37,14 @@ class SKKLayoutManager {
 public:
     SKKLayoutManager(id client);
 
+    // 入力位置の原点
+    NSPoint InputOrigin(int index = 0) const;
+
+    // 各ウィンドウ向け原点
     NSPoint CandidateWindowOrigin() const;
     NSPoint AnnotationWindowOrigin() const;
+
+    int WindowLevel() const;
 };
 
 #endif

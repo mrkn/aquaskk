@@ -29,9 +29,16 @@
 SKKLayoutManager::SKKLayoutManager(id client)
     : client_(client) {}
 
+// 入力位置の原点
+NSPoint SKKLayoutManager::InputOrigin(int index) const {
+    NSRect frame = inputFrame(index);
+
+    return frame.origin;
+}
+
 // 候補ウィンドウ原点
 NSPoint SKKLayoutManager::CandidateWindowOrigin() const {
-    NSRect input = inputFrame();
+    NSRect input = inputFrame(0);
     NSRect candidate = [[[CandidateWindow sharedWindow] window] frame];
     NSRect screen = screenFrame();
     NSPoint pt = candidate.origin = input.origin;
@@ -62,7 +69,7 @@ NSPoint SKKLayoutManager::CandidateWindowOrigin() const {
 
 // アノテーションウィンドウ原点
 NSPoint SKKLayoutManager::AnnotationWindowOrigin() const {
-    NSRect input = inputFrame();
+    NSRect input = inputFrame(0);
     NSRect annotation = [[[AnnotationWindow sharedWindow] window] frame];
     NSRect screen = screenFrame();
     NSPoint pt = annotation.origin = input.origin;
@@ -91,11 +98,17 @@ NSPoint SKKLayoutManager::AnnotationWindowOrigin() const {
     return pt;
 }
 
+int SKKLayoutManager::WindowLevel() const {
+    return [client_ windowLevel];
+}
+
+// ----------------------------------------------------------------------
+
 // 入力エリア矩形
-NSRect SKKLayoutManager::inputFrame() const {
+NSRect SKKLayoutManager::inputFrame(int index) const {
     NSRect frame;
     NSRect candidate = [[[CandidateWindow sharedWindow] window] frame];
-    NSDictionary* dict = [[client_ attributesForCharacterIndex:0
+    NSDictionary* dict = [[client_ attributesForCharacterIndex:index
                                    lineHeightRectangle:&frame] retain];
     NSFont* font = [dict objectForKey:NSFontAttributeName];
 

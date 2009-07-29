@@ -32,7 +32,6 @@
 - (void)reloadDictionarySet;
 - (void)reloadComponents;
 - (void)createDictionaryTypes:(NSMenu*)menu;
-- (BOOL)needsWorkaround:(id)client;
 @end
 
 #endif

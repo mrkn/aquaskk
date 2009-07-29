@@ -29,9 +29,9 @@
 
 class SKKInputSessionParameter;
 class SKKInputSession;
+class SKKLayoutManager;
 class SKKFrontEnd;
 class SKKInputModeListener;
-class SelectedTextProblemWorkaround;
 
 @interface SKKInputController : IMKInputController {
     id client_;
@@ -43,10 +43,10 @@ class SelectedTextProblemWorkaround;
 
     SKKInputSessionParameter* param_;
     SKKInputSession* session_;
+    SKKLayoutManager* layout_;
     SKKFrontEnd* frontend_;
     SKKInputModeListener* modeMenu_;
     SKKInputModeListener* modeWindow_;
-    SelectedTextProblemWorkaround* workaround_;
 }
 @end
 
