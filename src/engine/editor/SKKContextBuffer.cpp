@@ -27,7 +27,7 @@
 #include "utf8util.h"
 #include <iostream>
 
-SKKContextBuffer::SKKContextBuffer() : cursor_(0) {}
+SKKContextBuffer::SKKContextBuffer() : cursor_(0), completion_cursor_(0) {}
 
 void SKKContextBuffer::Fix(const std::string& str) {
     fixed_ += str;
@@ -106,4 +106,20 @@ void SKKContextBuffer::Dump() const {
     utf8::push(tmp, "[I]", cursor_);
     
     std::cerr << "fixed(" << fixed_ << "), composing(" << tmp << ")" << std::endl;
+}
+
+// ----------------------------------------------------------------------
+ 
+bool operator==(const SKKContextBuffer& left, const SKKContextBuffer& right) {
+    return left.fixed_ == right.fixed_
+        && left.composing_ == right.composing_
+        && left.completion_ == right.completion_
+        && left.cursor_ == right.cursor_
+        && left.completion_cursor_ == right.completion_cursor_
+        && left.entry_ == right.entry_
+        && left.candidate_ == right.candidate_;
+}
+
+bool operator!=(const SKKContextBuffer& left, const SKKContextBuffer& right) {
+    return !(left == right);
 }

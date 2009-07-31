@@ -37,6 +37,7 @@
 - (void)initializeKeyboardLayout;
 - (BOOL)privateMode;
 - (void)setPrivateMode:(BOOL)flag;
+- (void)debug:(NSString*)message;
 
 @end
 
@@ -87,12 +88,15 @@
 }
 
 - (void)commitComposition:(id)sender {
+    [self debug:@"commitComposition"];
+
     session_->Clear();
-    frontend_->Clear();
 }
 
 // IMKStateSetting
 - (void)activateServer:(id)sender {
+    [self debug:@"activateServer"];
+
     [self initializeKeyboardLayout];
 
     activated_ = YES;
@@ -101,11 +105,15 @@
 }
 
 - (void)deactivateServer:(id)sender {
+    [self debug:@"deactivateServer"];
+
     session_->Deactivate();
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {
     if(tag != kTextServiceInputModePropertyTag) return;
+
+    [self debug:@"setValue"];
 
     bool individual = ([defaults_ boolForKey:SKKUserDefaultKeys::use_individual_input_mode] == YES);
 
@@ -287,6 +295,12 @@
 
 - (void)setPrivateMode:(BOOL)flag {
     [defaults_ setBool:flag forKey:SKKUserDefaultKeys::enable_private_mode];
+}
+
+- (void)debug:(NSString*)str {
+#ifdef SKK_DEBUG
+    NSLog(@"%@: %@", [client_ bundleIdentifier], str);
+#endif
 }
 
 @end

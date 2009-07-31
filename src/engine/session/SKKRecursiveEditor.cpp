@@ -44,15 +44,6 @@ SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObse
                       &editor_)) {
     state_.Start();
 
-    // *** FIXME ***
-    // 初期遷移により入力モードが初期化され、editor_ の内部変更フラグが
-    // 立つので、これをクリアする
-    //
-    // 理由：次のイベントが必ず「処理済み」になってしまうのを防ぐため
-    //
-    // ※本来はこのような知識は不要(設計にゆがみがある証拠)
-    editor_.Reset(true);
-
     widgets_.push_back(param_->Annotator());
     widgets_.push_back(param_->CandidateWindow());
     widgets_.push_back(param_->DynamicCompletor());
@@ -73,6 +64,10 @@ bool SKKRecursiveEditor::Output() {
     editor_.Output();
 
     return result;
+}
+
+void SKKRecursiveEditor::Clear() {
+    editor_.Reset();
 }
 
 bool SKKRecursiveEditor::IsComposing() const {

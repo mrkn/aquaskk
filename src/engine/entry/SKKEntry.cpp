@@ -69,6 +69,16 @@ bool SKKEntry::IsOkuriAri() const {
     return !kana_.empty();
 }
 
+bool operator==(const SKKEntry& left, const SKKEntry& right) {
+    return left.normal_entry_ == right.normal_entry_
+        && left.okuri_entry_ == right.okuri_entry_
+        && left.prefix_ == right.prefix_
+        && left.kana_ == right.kana_
+        && left.prompt_ == right.prompt_;
+}
+
+// ----------------------------------------------------------------------
+
 void SKKEntry::updateEntry() {
     okuri_entry_ = prompt_ = normal_entry_;
     okuri_entry_ += prefix_;

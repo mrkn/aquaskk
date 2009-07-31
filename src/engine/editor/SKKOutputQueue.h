@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,36 +20,23 @@
 
 */
 
-#ifndef	SKKEntry_h
-#define SKKEntry_h
+#ifndef SKKOutputQueue_h
+#define SKKOutputQueue_h
 
-#include <string>
+#include <vector>
+#include "SKKContextBuffer.h"
 
-// 見出し語
-class SKKEntry {
-    std::string normal_entry_;
-    std::string okuri_entry_;
-    std::string prefix_;
-    std::string kana_;
-    std::string prompt_;
+class SKKOutputQueue {
+    typedef std::vector<SKKContextBuffer> OutputQueue;
+    typedef OutputQueue::iterator OutputQueueIterator;
 
-    void updateEntry();
+    SKKContextBuffer prev_;
+    OutputQueue queue_;
 
 public:
-    SKKEntry();
-    SKKEntry(const std::string& entry, const std::string& okuri = "");
-
-    void SetEntry(const std::string& entry);
-    void SetOkuri(const std::string& prefix, const std::string& kana);
-
-    const std::string& EntryString() const;
-    const std::string& OkuriString() const;
-    const std::string& PromptString() const;
-
-    bool IsEmpty() const;
-    bool IsOkuriAri() const;
-
-    friend bool operator==(const SKKEntry& left, const SKKEntry& right);
+    void Add(const SKKContextBuffer& context);
+    void Output(SKKFrontEnd* frontend, SKKDynamicCompletor* completor, SKKAnnotator* annotator);
 };
 
 #endif
+

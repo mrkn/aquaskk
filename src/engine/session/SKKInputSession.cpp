@@ -87,11 +87,11 @@ void SKKInputSession::Clear() {
 
     ScopedFlag on(preventReentrantCall_);
 
-    while(!stack_.empty()) {
+    while(stack_.size() != 1) {
         popEditor();
     }
 
-    pushEditor();
+    top()->Clear();
 }
 
 void SKKInputSession::Activate() {

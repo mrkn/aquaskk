@@ -41,7 +41,6 @@ SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
     , bottom_(bottom)
     , sessionParam_(param)
     , option_(sessionParam_->InputEngineOption())
-    , modified_(false)
     , bypassMode_(false)
     , inputQueue_(this)
     , okuriEditor_(this) {
@@ -49,16 +48,10 @@ SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
 }
 
 void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
-    bool composing = IsComposing() || !inputQueue_.IsEmpty();
-
     inputModeSelector_->Select(mode);
     inputQueue_.SelectInputMode(mode);
 
-    if(composing) {
-        modified_ = true;
-    } else {
-        modified_without_output_ = true;
-    }
+    outputQueue_.Add(SKKContextBuffer());
 }
 
 void SKKInputEngine::SetStatePrimary() {
@@ -183,11 +176,7 @@ void SKKInputEngine::Commit() {
         (*iter)->Commit(word_);
     }
 
-    enableMainEditor();
-
-    Output();
-
-    contextBuffer_.Clear();
+    outputQueue_.Add(contextBuffer_);
 }
 
 void SKKInputEngine::Insert(const std::string& str) {
@@ -199,15 +188,10 @@ void SKKInputEngine::Insert(const std::string& str) {
     Output();
 }
 
-void SKKInputEngine::Reset(bool absolutely) {
+void SKKInputEngine::Reset() {
     cancel();
 
     top()->Flush();
-
-    // 完全にリセットする場合は、IsModified() を偽にする
-    if(absolutely) {
-        modified_ = modified_without_output_ = false;
-    }
 }
 
 void SKKInputEngine::ToggleKana() {
@@ -292,40 +276,29 @@ SKKInputEngine::UndoResult SKKInputEngine::Undo() {
 }
 
 void SKKInputEngine::Output() {
-    // 内部バッファが更新されている時だけ出力する
-    if(!modified_without_output_ && (modified_ || top()->IsModified())) {
-        updateContextBuffer();
+    SKKDynamicCompletor* completer = 0;
+    SKKAnnotator* annotator = 0;
 
-        SKKDynamicCompletor* completer = 0;
-        SKKAnnotator* annotator = 0;
-
-        if(option_->EnableDynamicCompletion()) {
-            completer = sessionParam_->DynamicCompletor();
-        }
-
-        if(option_->EnableAnnotation()) {
-            annotator = sessionParam_->Annotator();
-        }
-
-        contextBuffer_.Output(sessionParam_->FrontEnd(), completer, annotator);
-
-        // 直接入力モードのカーソル移動等では内部バッファが変更されず、
-        // empty 状態が保たれる
-        //
-        // こういったケースを弾かないと、クライアント側で文字列選択状態
-        // だった場合に empty 内部バッファで選択文字列が消されてしまう
+    if(option_->EnableDynamicCompletion()) {
+        completer = sessionParam_->DynamicCompletor();
     }
+
+    if(option_->EnableAnnotation()) {
+        annotator = sessionParam_->Annotator();
+    }
+
+    updateContextBuffer();
+    outputQueue_.Add(contextBuffer_);
+    outputQueue_.Output(sessionParam_->FrontEnd(), completer, annotator);
 
     // 全てのエディターを Flush する
     std::for_each(active_->begin(), active_->end(), std::mem_fun(&SKKBaseEditor::Flush));
 
     inputModeSelector_->Notify();
-
-    modified_ = modified_without_output_ = false;
 }
 
 bool SKKInputEngine::IsModified() const {
-    return modified_ || modified_without_output_ || top()->IsModified();
+    return top()->IsModified();
 }
 
 bool SKKInputEngine::IsComposing() const {
@@ -386,7 +359,7 @@ void SKKInputEngine::terminate() {
 
 void SKKInputEngine::cancel() {
     if(!inputQueue_.IsEmpty()) {
-        modified_ = true;
+        outputQueue_.Add(SKKContextBuffer());
     }
 
     inputQueue_.Clear();

@@ -19,7 +19,8 @@ BACKEND_OBJS = SKKBackEnd.o SKKDictionaryCache.o SKKDictionaryFactory.o \
 
 EDITOR_OBJS = SKKPrimaryEditor.o  SKKComposingEditor.o SKKOkuriEditor.o \
 	SKKCandidateEditor.o SKKEntryRemoveEditor.o SKKRegisterEditor.o \
-	SKKInputEngine.o SKKContextBuffer.o SKKTextBuffer.o SKKInputQueue.o
+	SKKInputEngine.o SKKContextBuffer.o SKKTextBuffer.o SKKInputQueue.o \
+	SKKOutputQueue.o
 
 KEYMAP_OBJS = SKKKeymapEntry.o SKKKeymap.o
 

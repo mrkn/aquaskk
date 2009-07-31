@@ -60,6 +60,9 @@ public:
     const SKKCandidate& Candidate() const;
 
     void Dump() const;
+
+    friend bool operator==(const SKKContextBuffer& left, const SKKContextBuffer& right);
+    friend bool operator!=(const SKKContextBuffer& left, const SKKContextBuffer& right);
 };
 
 #endif

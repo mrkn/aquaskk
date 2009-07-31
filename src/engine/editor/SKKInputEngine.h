@@ -27,6 +27,7 @@
 #include "SKKContextBuffer.h"
 #include "SKKInputMode.h"
 #include "SKKInputQueue.h"
+#include "SKKOutputQueue.h"
 #include "SKKComposingEditor.h"
 #include "SKKOkuriEditor.h"
 #include "SKKCandidateEditor.h"
@@ -61,12 +62,11 @@ class SKKInputEngine : public SKKInputQueueObserver,
     EditorStack subStack_;
     EditorStack* active_;
 
-    bool modified_;
-    bool modified_without_output_;
     bool needsInitializeOkuri_;
     bool bypassMode_;
 
     SKKInputQueue inputQueue_;
+    SKKOutputQueue outputQueue_;
     SKKContextBuffer contextBuffer_;
     SKKInputQueueObserver::State inputState_;
 
@@ -140,7 +140,7 @@ public:
 
     void Commit();
     void Insert(const std::string& str);
-    void Reset(bool absolutely = false);
+    void Reset();
 
     // トグル変換
     void ToggleKana();
