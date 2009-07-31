@@ -392,7 +392,7 @@ State SKKState::SelectCandidate(const Event& event) {
             return State::Transition(&SKKState::EntryRemove);
         }
 
-        if(param.IsInputChars()) {
+        if(param.IsInputChars() || param.IsToggleJisx0201Kana()) {
             if(selector_.IsInline()) {
                 editor_->Commit();
                 return State::DeepForward(&SKKState::KanaInput);

@@ -176,7 +176,9 @@ void SKKInputEngine::Commit() {
         (*iter)->Commit(word_);
     }
 
-    outputQueue_.Add(contextBuffer_);
+    enableMainEditor();
+
+    contextBuffer_.Clear();
 }
 
 void SKKInputEngine::Insert(const std::string& str) {
@@ -314,6 +316,8 @@ bool SKKInputEngine::IsOkuriComplete() const {
 }
 
 void SKKInputEngine::BeginRegistration() {
+    outputQueue_.Clear();
+
     registrationObserver_->SKKRegistrationUpdate(SKKRegistrationObserver::Begin);
 }
 

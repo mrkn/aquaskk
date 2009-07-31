@@ -41,3 +41,8 @@ void SKKOutputQueue::Output(SKKFrontEnd* frontend, SKKDynamicCompletor* completo
         queue_.clear();
     }
 }
+
+void SKKOutputQueue::Clear() {
+    prev_.Clear();
+    queue_.clear();
+}

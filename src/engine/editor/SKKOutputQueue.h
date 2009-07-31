@@ -36,6 +36,7 @@ class SKKOutputQueue {
 public:
     void Add(const SKKContextBuffer& context);
     void Output(SKKFrontEnd* frontend, SKKDynamicCompletor* completor, SKKAnnotator* annotator);
+    void Clear();
 };
 
 #endif
