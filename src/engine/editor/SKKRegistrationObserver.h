@@ -20,16 +20,20 @@
 
 */
 
-#ifndef SKKInputMode_h
-#define SKKInputMode_h
+#ifndef SKKRegistrationObserver_h
+#define SKKRegistrationObserver_h
 
-enum SKKInputMode {
-    HirakanaInputMode,
-    KatakanaInputMode,
-    Jisx0201KanaInputMode,
-    AsciiInputMode,
-    Jisx0208LatinInputMode,
-    InvalidInputMode
+#include <string>
+
+class SKKBaseEditor;
+
+class SKKRegistrationObserver {
+public:
+    virtual ~SKKRegistrationObserver() {}
+
+    virtual void SKKRegistrationBegin(SKKBaseEditor* bottom) = 0;
+    virtual void SKKRegistrationFinish(const std::string& word) = 0;
+    virtual void SKKRegistrationCancel() = 0;
 };
 
 #endif

@@ -20,20 +20,19 @@ BACKEND_OBJS = SKKBackEnd.o SKKDictionaryCache.o SKKDictionaryFactory.o \
 EDITOR_OBJS = SKKPrimaryEditor.o  SKKComposingEditor.o SKKOkuriEditor.o \
 	SKKCandidateEditor.o SKKEntryRemoveEditor.o SKKRegisterEditor.o \
 	SKKInputEngine.o SKKContextBuffer.o SKKTextBuffer.o SKKInputQueue.o \
-	SKKOutputQueue.o
+	SKKOutputQueue.o SKKInputEngine.o
 
 KEYMAP_OBJS = SKKKeymapEntry.o SKKKeymap.o
 
 SELECTOR_OBJS = SKKSelector.o SKKInlineSelector.o SKKWindowSelector.o
 
-SESSION_OBJS = SKKInputSession.o SKKInputEngine.o
+SESSION_OBJS = SKKInputSession.o SKKRecursiveEditor.o SKKInputModeSelector.o
 
 TRIE_OBJS = SKKRomanKanaConverter.o SKKTrie.o
 
 OTHER_OBJS = SKKEntry.o SKKCandidate.o \
 	SKKDictionaryFile.o SKKDictionaryKeeper.o \
-	SKKCompleter.o SKKState.o SKKInputMode.o \
-	jconv.o
+	SKKCompleter.o SKKState.o jconv.o
 
 LIBOBJS	= $(DICT_OBJS) $(BACKEND_OBJS) $(KEYMAP_OBJS) $(SELECTOR_OBJS) \
 	$(EDITOR_OBJS) $(SESSION_OBJS) $(TRIE_OBJS) $(OTHER_OBJS)

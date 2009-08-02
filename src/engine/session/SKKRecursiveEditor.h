@@ -23,19 +23,22 @@
 #ifndef SKKRecursiveEditor_h
 #define SKKRecursiveEditor_h
 
-#include "SKKStateMachine.h"
+#include "SKKInputModeSelector.h"
 #include "SKKInputEngine.h"
+#include "SKKStateMachine.h"
 
 class SKKInputSessionParameter;
 class SKKWidget;
 
 class SKKRecursiveEditor {
-    std::auto_ptr<SKKBaseEditor> bottom_;
     SKKInputSessionParameter* param_;
-    std::vector<SKKWidget*> widgets_;
-    SKKInputModeSelector inputModeSelector_;
+    std::auto_ptr<SKKBaseEditor> bottom_;
     SKKInputEngine editor_;
     SKKStateMachine state_;
+    std::vector<SKKWidget*> widgets_;
+
+    typedef void (SKKWidget::*WidgetMethod)();
+    void forEachWidget(WidgetMethod method);
 
     SKKRecursiveEditor();
     SKKRecursiveEditor(const SKKRecursiveEditor&);
@@ -44,8 +47,8 @@ class SKKRecursiveEditor {
 public:
     SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                        SKKInputSessionParameter* param,
-                       SKKInputModeSelector* selector,
-                       SKKBaseEditor* bottom);
+                       SKKBaseEditor* bottom,
+                       SKKInputModeSelector* selector);
 
     ~SKKRecursiveEditor();
 
@@ -57,9 +60,6 @@ public:
 
     void Activate();
     void Deactivate();
-
-    const SKKEntry Entry() const;
-    const std::string Word() const;
 };
 
 #endif

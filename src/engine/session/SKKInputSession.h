@@ -23,34 +23,40 @@
 #ifndef SKKInputSession_h
 #define SKKInputSession_h
 
-#include "SKKInputEngine.h"
+#include "SKKRegistrationObserver.h"
+#include "SKKInputModeSelector.h"
+#include <vector>
 
 class SKKInputSessionParameter;
 class SKKRecursiveEditor;
 class SKKEvent;
 
 class SKKInputSession : public SKKRegistrationObserver {
+    std::auto_ptr<SKKInputSessionParameter> param_;
     std::vector<SKKRecursiveEditor*> stack_;
-    SKKInputSessionParameter* param_;
-    std::auto_ptr<SKKInputModeSelector> master_;
-    SKKRegistrationObserver::Event event_;
-    bool preventReentrantCall_;
+    std::vector<SKKRecursiveEditor*> temp_;
+    SKKInputModeSelector selector_;
+    bool inEvent_;
+
+    SKKRecursiveEditor* top();
+    SKKRecursiveEditor* createEditor(SKKBaseEditor* bottom);
+    void popEditor();
+    void beginEvent();
+    void endEvent();
+
+    virtual void SKKRegistrationBegin(SKKBaseEditor* bottom);
+    virtual void SKKRegistrationFinish(const std::string& word);
+    virtual void SKKRegistrationCancel();
 
     SKKInputSession();
     SKKInputSession(const SKKInputSession&);
     SKKInputSession& operator=(const SKKInputSession&);
 
-    SKKRecursiveEditor* top();
-    void pushEditor();
-    void popEditor();
-    void handleRegistrationEvent();
-    void commit(const std::string& word = "");
-
-    virtual void SKKRegistrationUpdate(SKKRegistrationObserver::Event event);
-
 public:
-    SKKInputSession(SKKInputSessionParameter* param, SKKInputModeSelector* master);
+    SKKInputSession(SKKInputSessionParameter* param);
     ~SKKInputSession();
+
+    void AddInputModeListener(SKKInputModeListener* listener);
 
     bool HandleEvent(const SKKEvent& event);
     void Clear();

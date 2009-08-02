@@ -29,29 +29,26 @@
 
 SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                                        SKKInputSessionParameter* param,
-                                       SKKInputModeSelector* inputModeSelector,
-                                       SKKBaseEditor* bottom)
-    : bottom_(bottom)
-    , param_(param)
-    , inputModeSelector_(*inputModeSelector)
+                                       SKKBaseEditor* bottom,
+                                       SKKInputModeSelector* selector)
+    : param_(param)
+    , bottom_(bottom)
     , editor_(registrationObserver,
-              &inputModeSelector_,
+              selector,
               bottom_.get(),
               param_)
     , state_(SKKState(param_->Messenger(),
                       param_->CandidateWindow(),
                       param_->StateConfiguration(),
                       &editor_)) {
-    state_.Start();
-
     widgets_.push_back(param_->Annotator());
     widgets_.push_back(param_->CandidateWindow());
     widgets_.push_back(param_->DynamicCompletor());
-    widgets_.push_back(&inputModeSelector_);
+    widgets_.push_back(selector);
 }
 
 SKKRecursiveEditor::~SKKRecursiveEditor() {
-    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(&SKKWidget::Hide));
+    forEachWidget(&SKKWidget::Hide);
 }
 
 void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {
@@ -76,15 +73,7 @@ bool SKKRecursiveEditor::IsComposing() const {
 
 void SKKRecursiveEditor::Commit(const std::string& word) {
     if(!word.empty()) {
-        const SKKEntry entry = editor_.Entry();
-
-        SKKBackEnd::theInstance().Register(entry, SKKCandidate(word, false));
-
-        if(entry.IsOkuriAri()) {
-            editor_.Insert(word + entry.OkuriString());
-        } else {
-            editor_.Insert(word);
-        }
+        editor_.Register(word);
 
         Dispatch(SKKEvent(SKK_ENTER, 0));
     } else {
@@ -93,17 +82,15 @@ void SKKRecursiveEditor::Commit(const std::string& word) {
 }
 
 void SKKRecursiveEditor::Activate() {
-    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(&SKKWidget::Activate));
+    forEachWidget(&SKKWidget::Activate);
 }
 
 void SKKRecursiveEditor::Deactivate() {
-    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(&SKKWidget::Deactivate));
+    forEachWidget(&SKKWidget::Deactivate);
 }
 
-const SKKEntry SKKRecursiveEditor::Entry() const {
-    return editor_.Entry();
-}
+// ----------------------------------------------------------------------
 
-const std::string SKKRecursiveEditor::Word() const {
-    return editor_.Word();
+void SKKRecursiveEditor::forEachWidget(WidgetMethod method) {
+    std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(method));
 }

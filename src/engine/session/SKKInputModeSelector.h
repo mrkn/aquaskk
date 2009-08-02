@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,16 +20,33 @@
 
 */
 
-#ifndef SKKInputMode_h
-#define SKKInputMode_h
+#ifndef SKKInputModeSelector_h
+#define SKKInputModeSelector_h
 
-enum SKKInputMode {
-    HirakanaInputMode,
-    KatakanaInputMode,
-    Jisx0201KanaInputMode,
-    AsciiInputMode,
-    Jisx0208LatinInputMode,
-    InvalidInputMode
+#include <vector>
+#include "SKKWidget.h"
+#include "SKKInputMode.h"
+
+class SKKInputModeListener;
+
+class SKKInputModeSelector : public SKKWidget {
+    std::vector<SKKInputModeListener*> listeners_;
+    SKKInputMode mode_;
+    bool needsUpdate_;
+
+    virtual void SKKWidgetShow();
+    virtual void SKKWidgetHide();
+
+public:
+    SKKInputModeSelector();
+
+    void AddListener(SKKInputModeListener* listener);
+    void DeleteAllListener();
+
+    void Select(SKKInputMode mode);
+    void Notify();
+
+    operator SKKInputMode() const;
 };
 
 #endif

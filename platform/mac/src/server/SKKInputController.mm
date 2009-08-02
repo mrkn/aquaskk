@@ -21,16 +21,16 @@
 */
 
 #include "SKKInputController.h"
+#include "SKKLayoutManager.h"
 #include "SKKInputSession.h"
+#include "SKKBackEnd.h"
+
 #include "SKKPreProcessor.h"
 #include "SKKConstVars.h"
+
 #include "MacInputSessionParameter.h"
 #include "MacInputModeMenu.h"
 #include "MacInputModeWindow.h"
-#include "CompletionWindow.h"
-#include "AnnotationWindow.h"
-#include "SKKFrontEnd.h"
-#include "SKKBackEnd.h"
 
 @interface SKKInputController (Local)
 
@@ -51,18 +51,12 @@
         defaults_ = [NSUserDefaults standardUserDefaults];
         proxy_ = [[SKKServerProxy alloc] init];
         menu_ = [[SKKInputMenu alloc] initWithClient:client];
+
         layout_ = new SKKLayoutManager(client_);
-        param_ = new MacInputSessionParameter(client_, layout_);
+        session_ = new SKKInputSession(new MacInputSessionParameter(client_, layout_));
 
-        SKKInputModeSelector* master = new SKKInputModeSelector();
-
-        modeMenu_ = new MacInputModeMenu(menu_);
-        modeWindow_ = new MacInputModeWindow(layout_);
-
-        master->AddListener(modeMenu_);
-        master->AddListener(modeWindow_);
-
-        session_ = new SKKInputSession(param_, master);
+        session_->AddInputModeListener(new MacInputModeMenu(menu_));
+        session_->AddInputModeListener(new MacInputModeWindow(layout_));
     }
 
     return self;
@@ -70,9 +64,6 @@
 
 - (void)dealloc {
     delete session_;
-    delete modeWindow_;
-    delete modeMenu_;
-    delete param_;
     delete layout_;
 
     [menu_ release];

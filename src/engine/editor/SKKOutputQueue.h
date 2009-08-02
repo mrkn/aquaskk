@@ -30,13 +30,15 @@ class SKKOutputQueue {
     typedef std::vector<SKKContextBuffer> OutputQueue;
     typedef OutputQueue::iterator OutputQueueIterator;
 
+    SKKContextBuffer empty_;
     SKKContextBuffer prev_;
     OutputQueue queue_;
 
 public:
     void Add(const SKKContextBuffer& context);
-    void Output(SKKFrontEnd* frontend, SKKDynamicCompletor* completor, SKKAnnotator* annotator);
-    void Clear();
+    void Output(SKKFrontEnd* frontend,
+                SKKDynamicCompletor* completor,
+                SKKAnnotator* annotator);
 };
 
 #endif

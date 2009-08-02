@@ -28,6 +28,7 @@
 #include "SKKContextBuffer.h"
 #include "SKKBackEnd.h"
 #include "SKKFrontEnd.h"
+#include "SKKRegisterEditor.h"
 #include "jconv.h"
 #include <iostream>
 #include <cctype>
@@ -51,7 +52,7 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     inputModeSelector_->Select(mode);
     inputQueue_.SelectInputMode(mode);
 
-    outputQueue_.Add(SKKContextBuffer());
+    terminate();
 }
 
 void SKKInputEngine::SetStatePrimary() {
@@ -181,19 +182,18 @@ void SKKInputEngine::Commit() {
     contextBuffer_.Clear();
 }
 
-void SKKInputEngine::Insert(const std::string& str) {
-    enableMainEditor();
-
-    top()->Input(str, "", 0);
-
-    // 強制的に出力する
-    Output();
-}
-
 void SKKInputEngine::Reset() {
     cancel();
 
     top()->Flush();
+}
+
+void SKKInputEngine::Register(const std::string& word) {
+    SKKEntry entry = Entry();
+
+    study(entry, SKKCandidate(word, false));
+
+    insert(word + entry.OkuriString());
 }
 
 void SKKInputEngine::ToggleKana() {
@@ -219,9 +219,9 @@ void SKKInputEngine::ToggleKana() {
 	break;
     }
 
-    SKKBackEnd::theInstance().Register(entry, SKKCandidate());
+    study(entry, SKKCandidate());
 
-    Insert(result);
+    insert(result);
 }
 
 void SKKInputEngine::ToggleJisx0201Kana() {
@@ -251,9 +251,9 @@ void SKKInputEngine::ToggleJisx0201Kana() {
 	break;
     }
 
-    SKKBackEnd::theInstance().Register(entry, SKKCandidate());
+    study(entry, SKKCandidate());
 
-    Insert(result);
+    insert(result);
 }
 
 SKKInputEngine::UndoResult SKKInputEngine::Undo() {
@@ -316,29 +316,23 @@ bool SKKInputEngine::IsOkuriComplete() const {
 }
 
 void SKKInputEngine::BeginRegistration() {
-    outputQueue_.Clear();
-
-    registrationObserver_->SKKRegistrationUpdate(SKKRegistrationObserver::Begin);
+    registrationObserver_->SKKRegistrationBegin(new SKKRegisterEditor(Entry()));
 }
 
 void SKKInputEngine::FinishRegistration() {
     Commit();
 
-    registrationObserver_->SKKRegistrationUpdate(SKKRegistrationObserver::Finish);
+    registrationObserver_->SKKRegistrationFinish(word_);
 }
 
 void SKKInputEngine::AbortRegistration() {
     cancel();
 
-    registrationObserver_->SKKRegistrationUpdate(SKKRegistrationObserver::Abort);
+    registrationObserver_->SKKRegistrationCancel();
 }
 
 const SKKEntry SKKInputEngine::Entry() const {
     return contextBuffer_.Entry();
-}
-
-const std::string SKKInputEngine::Word() const {
-    return word_;
 }
 
 // ------------------------------------------------------------
@@ -405,6 +399,19 @@ void SKKInputEngine::updateContextBuffer() {
     } else {
         contextBuffer_.Compose(inputState_.queue);
     }
+}
+
+void SKKInputEngine::study(const SKKEntry& entry, const SKKCandidate& candidate) {
+    SKKBackEnd::theInstance().Register(entry, candidate);
+}
+
+void SKKInputEngine::insert(const std::string& str) {
+    enableMainEditor();
+
+    top()->Input(str, "", 0);
+
+    // 強制的に出力する
+    Output();
 }
 
 // ------------------------------------------------------------

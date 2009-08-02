@@ -46,7 +46,6 @@
 		D353BD140E175501004C68A6 /* SKKInlineSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC260E175500004C68A6 /* SKKInlineSelector.cpp */; };
 		D353BD150E175501004C68A6 /* SKKSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC280E175500004C68A6 /* SKKSelector.cpp */; };
 		D353BD160E175501004C68A6 /* SKKWindowSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC2A0E175500004C68A6 /* SKKWindowSelector.cpp */; };
-		D353BD180E175501004C68A6 /* SKKInputMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC2F0E175500004C68A6 /* SKKInputMode.cpp */; };
 		D353BD190E175501004C68A6 /* SKKInputSession.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC310E175500004C68A6 /* SKKInputSession.cpp */; };
 		D353BD1A0E175501004C68A6 /* skkserv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC340E175500004C68A6 /* skkserv.cpp */; };
 		D353BD1B0E175501004C68A6 /* SKKState.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BC390E175500004C68A6 /* SKKState.cpp */; };
@@ -96,6 +95,7 @@
 		D39E444F0EAB4FB300FB584C /* InputModeWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D39E444E0EAB4FB300FB584C /* InputModeWindow.mm */; };
 		D3CB86780EB47E970069107D /* MacAnnotator.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3CB86770EB47E970069107D /* MacAnnotator.mm */; };
 		D3CD2F581018BA16001884C0 /* azik-kana-rule.conf in Resources */ = {isa = PBXBuildFile; fileRef = D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */; };
+		D3D549BF1024904000622CB2 /* SKKInputModeSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */; };
 		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
 		D3E61C4F0EAB544F000C1536 /* CandidateWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3E61C4E0EAB544F000C1536 /* CandidateWindow.mm */; };
 		D3F467B90E9E5FAC000A8C6A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC339A0DD1B550006A3F5A /* Carbon.framework */; };
@@ -219,7 +219,6 @@
 		D353BC290E175500004C68A6 /* SKKSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKSelector.h; sourceTree = "<group>"; };
 		D353BC2A0E175500004C68A6 /* SKKWindowSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKWindowSelector.cpp; sourceTree = "<group>"; };
 		D353BC2B0E175500004C68A6 /* SKKWindowSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKWindowSelector.h; sourceTree = "<group>"; };
-		D353BC2F0E175500004C68A6 /* SKKInputMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputMode.cpp; sourceTree = "<group>"; };
 		D353BC300E175500004C68A6 /* SKKInputMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputMode.h; sourceTree = "<group>"; };
 		D353BC310E175500004C68A6 /* SKKInputSession.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputSession.cpp; sourceTree = "<group>"; };
 		D353BC320E175500004C68A6 /* SKKInputSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputSession.h; sourceTree = "<group>"; };
@@ -322,6 +321,9 @@
 		D3CB86760EB47E970069107D /* MacAnnotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacAnnotator.h; sourceTree = "<group>"; };
 		D3CB86770EB47E970069107D /* MacAnnotator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacAnnotator.mm; sourceTree = "<group>"; };
 		D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "azik-kana-rule.conf"; sourceTree = "<group>"; };
+		D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputModeSelector.cpp; sourceTree = "<group>"; };
+		D3D549BE1024904000622CB2 /* SKKInputModeSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputModeSelector.h; sourceTree = "<group>"; };
+		D3D549C01024912400622CB2 /* SKKRegistrationObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKRegistrationObserver.h; sourceTree = "<group>"; };
 		D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		D3E61C4D0EAB544F000C1536 /* CandidateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CandidateWindow.h; sourceTree = "<group>"; };
 		D3E61C4E0EAB544F000C1536 /* CandidateWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidateWindow.mm; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 		D353BC010E175500004C68A6 /* editor */ = {
 			isa = PBXGroup;
 			children = (
+				D3D549C01024912400622CB2 /* SKKRegistrationObserver.h */,
 				D309967A0E4C83B800B2F24E /* SKKInputEngine.h */,
 				D30996790E4C83B800B2F24E /* SKKInputEngine.cpp */,
 				D398F2CB0E45FA940007F4B9 /* SKKInputQueue.h */,
@@ -531,8 +534,9 @@
 		D353BC2C0E175500004C68A6 /* session */ = {
 			isa = PBXGroup;
 			children = (
-				D353BC2F0E175500004C68A6 /* SKKInputMode.cpp */,
 				D353BC300E175500004C68A6 /* SKKInputMode.h */,
+				D3D549BE1024904000622CB2 /* SKKInputModeSelector.h */,
+				D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */,
 				D353BC310E175500004C68A6 /* SKKInputSession.cpp */,
 				D353BC320E175500004C68A6 /* SKKInputSession.h */,
 				D30996680E4C80EA00B2F24E /* SKKRecursiveEditor.h */,
@@ -931,7 +935,6 @@
 				D353BD140E175501004C68A6 /* SKKInlineSelector.cpp in Sources */,
 				D353BD150E175501004C68A6 /* SKKSelector.cpp in Sources */,
 				D353BD160E175501004C68A6 /* SKKWindowSelector.cpp in Sources */,
-				D353BD180E175501004C68A6 /* SKKInputMode.cpp in Sources */,
 				D353BD190E175501004C68A6 /* SKKInputSession.cpp in Sources */,
 				D353BD1A0E175501004C68A6 /* skkserv.cpp in Sources */,
 				D353BD1B0E175501004C68A6 /* SKKState.cpp in Sources */,
@@ -974,6 +977,7 @@
 				D35343B4100F6645007C7B13 /* MacKotoeriDictionary.cpp in Sources */,
 				D3046C2C101F3228008A6F47 /* SKKLayoutManager.mm in Sources */,
 				D37C01FB1021D67C00C9CE91 /* SKKOutputQueue.cpp in Sources */,
+				D3D549BF1024904000622CB2 /* SKKInputModeSelector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

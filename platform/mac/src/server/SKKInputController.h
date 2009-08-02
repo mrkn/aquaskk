@@ -24,29 +24,24 @@
 #define SKKInputController_h
 
 #import <InputMethodKit/InputMethodKit.h>
+#include "SKKInputMenu.h"
 #include "SKKServerProxy.h"
 #include "SKKInputMenu.h"
 
-class SKKInputSessionParameter;
-class SKKInputSession;
 class SKKLayoutManager;
-class SKKFrontEnd;
-class SKKInputModeListener;
+class SKKInputSession;
 
 @interface SKKInputController : IMKInputController {
     id client_;
     BOOL activated_;
+    SKKInputMode unifiedInputMode_;
+
     NSUserDefaults* defaults_;
     SKKServerProxy* proxy_;
     SKKInputMenu* menu_;
-    SKKInputMode unifiedInputMode_;
-
-    SKKInputSessionParameter* param_;
-    SKKInputSession* session_;
     SKKLayoutManager* layout_;
-    SKKFrontEnd* frontend_;
-    SKKInputModeListener* modeMenu_;
-    SKKInputModeListener* modeWindow_;
+
+    SKKInputSession* session_;
 }
 @end
 

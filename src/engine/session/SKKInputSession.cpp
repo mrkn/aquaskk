@@ -22,48 +22,52 @@
 
 #include "SKKInputSession.h"
 #include "SKKInputSessionParameter.h"
+#include "SKKInputModeSelector.h"
 #include "SKKRecursiveEditor.h"
 #include "SKKPrimaryEditor.h"
-#include "SKKRegisterEditor.h"
 
 namespace {
-    class ScopedFlag {
+    class scoped_flag {
         bool& flag_;
 
     public:
-        ScopedFlag(bool& flag) : flag_(flag) {
+        scoped_flag(bool& flag) : flag_(flag) {
             flag_ = true;
         }
 
-        ~ScopedFlag() {
+        ~scoped_flag() {
             flag_ = false;
         }
     };
 }
 
-SKKInputSession::SKKInputSession(SKKInputSessionParameter* param, SKKInputModeSelector* master)
-    : param_(param)
-    , master_(master) {
-    pushEditor();
-
-    event_ = SKKRegistrationObserver::None;
-    preventReentrantCall_ = false;
+SKKInputSession::SKKInputSession(SKKInputSessionParameter* param)
+    : param_(param), inEvent_(false) {
+    stack_.push_back(createEditor(new SKKPrimaryEditor()));
 }
 
 SKKInputSession::~SKKInputSession() {
     while(!stack_.empty()) {
         popEditor();
     }
+
+    selector_.DeleteAllListener();
+}
+
+void SKKInputSession::AddInputModeListener(SKKInputModeListener* listener) {
+    selector_.AddListener(listener);
 }
 
 bool SKKInputSession::HandleEvent(const SKKEvent& event) {
-    if(preventReentrantCall_) return false;
+    if(inEvent_) return false;
 
-    ScopedFlag on(preventReentrantCall_);
+    scoped_flag on(inEvent_);
+
+    beginEvent();
 
     top()->Dispatch(event);
 
-    handleRegistrationEvent();
+    endEvent();
 
     bool handled = top()->Output();
 
@@ -83,9 +87,9 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
 }
 
 void SKKInputSession::Clear() {
-    if(preventReentrantCall_) return;
+    if(inEvent_) return;
 
-    ScopedFlag on(preventReentrantCall_);
+    scoped_flag on(inEvent_);
 
     while(stack_.size() != 1) {
         popEditor();
@@ -102,58 +106,52 @@ void SKKInputSession::Deactivate() {
     top()->Deactivate();
 }
 
+// ----------------------------------------------------------------------
+
 SKKRecursiveEditor* SKKInputSession::top() {
     return stack_.back();
 }
 
-void SKKInputSession::pushEditor() {
-    SKKBaseEditor* editor;
-
-    if(stack_.empty()) {
-        editor = new SKKPrimaryEditor();
-    } else {
-        editor = new SKKRegisterEditor(top()->Entry());
-    }
-
-    stack_.push_back(new SKKRecursiveEditor(this, param_, master_.get(), editor));
+SKKRecursiveEditor* SKKInputSession::createEditor(SKKBaseEditor* bottom) {
+    return new SKKRecursiveEditor(this, param_.get(), bottom, &selector_);
 }
 
 void SKKInputSession::popEditor() {
     delete top();
-
     stack_.pop_back();
 }
 
-void SKKInputSession::handleRegistrationEvent() {
-    switch(event_) {
-    case SKKRegistrationObserver::Begin:
-	pushEditor();
-	break;
+void SKKInputSession::beginEvent() {
+    temp_ = stack_;
+}
 
-    case SKKRegistrationObserver::Finish:
-        if(stack_.size() == 1) {
-            top()->Output();
-        } else {
-            commit(top()->Word());
-        }
-	break;
+void SKKInputSession::endEvent() {
+    if(stack_.size() == temp_.size()) return;
 
-    case SKKRegistrationObserver::Abort:
-        commit();
-	break;
+    if(stack_.size() < temp_.size()) {
+        stack_.push_back(temp_.back());
+    } else {
+        popEditor();
     }
-
-    event_ = SKKRegistrationObserver::None;
 }
 
-void SKKInputSession::commit(const std::string& word) {
-    if(stack_.size() == 1) return;
+// ----------------------------------------------------------------------
+// SKKRegistrationObserver インタフェース
+// ----------------------------------------------------------------------
 
-    popEditor();
-
-    top()->Commit(word);
+void SKKInputSession::SKKRegistrationBegin(SKKBaseEditor* bottom) {
+    temp_.push_back(createEditor(bottom));
 }
 
-void SKKInputSession::SKKRegistrationUpdate(SKKRegistrationObserver::Event event) {
-    event_ = event;
+void SKKInputSession::SKKRegistrationFinish(const std::string& word) {
+    if(temp_.size() == 1) {
+        top()->Output();
+    } else {
+        temp_.pop_back();
+        temp_.back()->Commit(word);
+    }
+}
+
+void SKKInputSession::SKKRegistrationCancel() {
+    SKKRegistrationFinish("");
 }

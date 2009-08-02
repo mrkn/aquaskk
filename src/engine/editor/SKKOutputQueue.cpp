@@ -23,26 +23,39 @@
 #include "SKKOutputQueue.h"
 
 void SKKOutputQueue::Add(const SKKContextBuffer& context) {
-    if(context != prev_) {
-        queue_.push_back(context);
-    }
+    // *** 重要な出力制御 ***
+    //
+    // No.|prev    |context |制御
+    // ---+--------+--------+--------------------
+    //  1 |empty   |empty   |何もしない
+    // ---+--------+--------+--------------------
+    //  2 |!empty  |empty   |context を出力
+    // ---+--------+--------+--------------------
+    //  3 |empty   |!empty  |context を出力
+    // ---+--------+--------+--------------------
+    //  4 |!empty  |!empty  |context を出力
+    // ---+--------+--------+--------------------
+    //
+    // 1 のケースを弾かないと、finder や iTunes で不具合が出る 
+    //
+    if(prev_ == context && context == empty_) return;
+
+    queue_.push_back(context);
 }
 
-void SKKOutputQueue::Output(SKKFrontEnd* frontend, SKKDynamicCompletor* completor, SKKAnnotator* annotator) {
+void SKKOutputQueue::Output(SKKFrontEnd* frontend,
+                            SKKDynamicCompletor* completor,
+                            SKKAnnotator* annotator) {
+    if(queue_.empty()) return;
+
     for(OutputQueueIterator iter = queue_.begin(); iter != queue_.end(); ++ iter) {
         iter->Output(frontend, completor, annotator);
     }
 
-    if(!queue_.empty()) {
-        prev_ = queue_.back();
-        if(!prev_.IsComposing()) {
-            prev_.Clear();
-        }
-        queue_.clear();
+    prev_ = queue_.back();
+    if(!prev_.IsComposing()) {
+        prev_.Clear();
     }
-}
 
-void SKKOutputQueue::Clear() {
-    prev_.Clear();
     queue_.clear();
 }

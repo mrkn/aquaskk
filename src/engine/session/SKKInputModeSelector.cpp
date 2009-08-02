@@ -20,17 +20,25 @@
 
 */
 
-#include "SKKInputMode.h"
+#include "SKKInputModeSelector.h"
 #include "SKKInputModeListener.h"
 #include <algorithm>
 #include <functional>
 
-SKKInputModeSelector::SKKInputModeSelector() : SKKWidget(true), mode_(InvalidInputMode) {
+SKKInputModeSelector::SKKInputModeSelector()
+    : SKKWidget(true), mode_(InvalidInputMode) {
     Select(HirakanaInputMode);
 }
 
 void SKKInputModeSelector::AddListener(SKKInputModeListener* listener) {
     listeners_.push_back(listener);
+}
+
+void SKKInputModeSelector::DeleteAllListener() {
+    while(!listeners_.empty()) {
+        delete listeners_.back();
+        listeners_.pop_back();
+    }
 }
 
 void SKKInputModeSelector::Select(SKKInputMode mode) {

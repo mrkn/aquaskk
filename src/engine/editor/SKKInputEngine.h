@@ -35,15 +35,9 @@
 #include "SKKCompleter.h"
 #include "SKKSelector.h"
 #include "SKKInputSessionParameter.h"
+#include "SKKInputModeSelector.h"
+#include "SKKRegistrationObserver.h"
 #include <vector>
-
-class SKKRegistrationObserver {
-public:
-    virtual ~SKKRegistrationObserver() {}
-
-    enum Event { None, Begin, Finish, Abort };
-    virtual void SKKRegistrationUpdate(Event event) = 0;
-};
 
 class SKKInputEngine : public SKKInputQueueObserver,
                        public SKKCompleterBuddy,
@@ -89,6 +83,8 @@ class SKKInputEngine : public SKKInputQueueObserver,
     void enableMainEditor();
     void enableSubEditor(SKKBaseEditor* editor);
     void updateContextBuffer();
+    void study(const SKKEntry& entry, const SKKCandidate& candidate);
+    void insert(const std::string& str);
 
     // ローマ字かな変換通知
     virtual void SKKInputQueueUpdate(const SKKInputQueueObserver::State& state);
@@ -139,8 +135,8 @@ public:
     void HandlePing();
 
     void Commit();
-    void Insert(const std::string& str);
     void Reset();
+    void Register(const std::string& word);
 
     // トグル変換
     void ToggleKana();
@@ -171,7 +167,6 @@ public:
     void AbortRegistration();
 
     const SKKEntry Entry() const;
-    const std::string Word() const;
 };
 
 #endif
