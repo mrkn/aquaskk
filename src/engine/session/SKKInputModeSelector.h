@@ -26,11 +26,10 @@
 #include <vector>
 #include "SKKWidget.h"
 #include "SKKInputMode.h"
-
-class SKKInputModeListener;
+#include "SKKInputModeListener.h"
 
 class SKKInputModeSelector : public SKKWidget {
-    std::vector<SKKInputModeListener*> listeners_;
+    SKKInputModeListenerCollection* listeners_;
     SKKInputMode mode_;
     bool needsUpdate_;
 
@@ -38,13 +37,11 @@ class SKKInputModeSelector : public SKKWidget {
     virtual void SKKWidgetHide();
 
 public:
-    SKKInputModeSelector();
-
-    void AddListener(SKKInputModeListener* listener);
-    void DeleteAllListener();
+    SKKInputModeSelector(SKKInputModeListenerCollection* listeners);
 
     void Select(SKKInputMode mode);
     void Notify();
+    void Refresh();
 
     operator SKKInputMode() const;
 };

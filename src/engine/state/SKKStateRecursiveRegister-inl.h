@@ -33,6 +33,7 @@ State SKKState::RecursiveRegister(const Event& event) {
 	return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
+        editor_->RefreshInputMode();
 	return State::DeepHistory(&SKKState::Composing);
     }
 

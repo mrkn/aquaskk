@@ -23,6 +23,7 @@
 #ifndef SKKInputModeListener_h
 #define SKKInputModeListener_h
 
+#include <vector>
 #include "SKKInputMode.h"
 #include "SKKWidget.h"
 
@@ -32,5 +33,7 @@ public:
 
     virtual void SelectInputMode(SKKInputMode mode) = 0;
 };
+
+typedef std::vector<SKKInputModeListener*> SKKInputModeListenerCollection;
 
 #endif

@@ -30,11 +30,12 @@
 SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                                        SKKInputSessionParameter* param,
                                        SKKBaseEditor* bottom,
-                                       SKKInputModeSelector* selector)
+                                       SKKInputModeListenerCollection* listeners)
     : param_(param)
     , bottom_(bottom)
+    , selector_(listeners)
     , editor_(registrationObserver,
-              selector,
+              &selector_,
               bottom_.get(),
               param_)
     , state_(SKKState(param_->Messenger(),
@@ -44,7 +45,7 @@ SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObse
     widgets_.push_back(param_->Annotator());
     widgets_.push_back(param_->CandidateWindow());
     widgets_.push_back(param_->DynamicCompletor());
-    widgets_.push_back(selector);
+    widgets_.push_back(&selector_);
 }
 
 SKKRecursiveEditor::~SKKRecursiveEditor() {

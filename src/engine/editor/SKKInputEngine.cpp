@@ -55,6 +55,10 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     terminate();
 }
 
+void SKKInputEngine::RefreshInputMode() {
+    inputModeSelector_->Refresh();
+}
+
 void SKKInputEngine::SetStatePrimary() {
     enableMainEditor();
 

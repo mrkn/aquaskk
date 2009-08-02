@@ -22,7 +22,6 @@
 
 #include "SKKInputSession.h"
 #include "SKKInputSessionParameter.h"
-#include "SKKInputModeSelector.h"
 #include "SKKRecursiveEditor.h"
 #include "SKKPrimaryEditor.h"
 
@@ -51,11 +50,14 @@ SKKInputSession::~SKKInputSession() {
         popEditor();
     }
 
-    selector_.DeleteAllListener();
+    while(!listeners_.empty()) {
+        delete listeners_.back();
+        listeners_.pop_back();
+    }
 }
 
 void SKKInputSession::AddInputModeListener(SKKInputModeListener* listener) {
-    selector_.AddListener(listener);
+    listeners_.push_back(listener);
 }
 
 bool SKKInputSession::HandleEvent(const SKKEvent& event) {
@@ -113,7 +115,7 @@ SKKRecursiveEditor* SKKInputSession::top() {
 }
 
 SKKRecursiveEditor* SKKInputSession::createEditor(SKKBaseEditor* bottom) {
-    return new SKKRecursiveEditor(this, param_.get(), bottom, &selector_);
+    return new SKKRecursiveEditor(this, param_.get(), bottom, &listeners_);
 }
 
 void SKKInputSession::popEditor() {

@@ -24,7 +24,7 @@
 #define SKKInputSession_h
 
 #include "SKKRegistrationObserver.h"
-#include "SKKInputModeSelector.h"
+#include "SKKInputModeListener.h"
 #include <vector>
 
 class SKKInputSessionParameter;
@@ -35,7 +35,7 @@ class SKKInputSession : public SKKRegistrationObserver {
     std::auto_ptr<SKKInputSessionParameter> param_;
     std::vector<SKKRecursiveEditor*> stack_;
     std::vector<SKKRecursiveEditor*> temp_;
-    SKKInputModeSelector selector_;
+    SKKInputModeListenerCollection listeners_;
     bool inEvent_;
 
     SKKRecursiveEditor* top();

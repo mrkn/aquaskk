@@ -24,6 +24,7 @@
 #define SKKRecursiveEditor_h
 
 #include "SKKInputModeSelector.h"
+#include "SKKInputModeListener.h"
 #include "SKKInputEngine.h"
 #include "SKKStateMachine.h"
 
@@ -33,6 +34,7 @@ class SKKWidget;
 class SKKRecursiveEditor {
     SKKInputSessionParameter* param_;
     std::auto_ptr<SKKBaseEditor> bottom_;
+    SKKInputModeSelector selector_;
     SKKInputEngine editor_;
     SKKStateMachine state_;
     std::vector<SKKWidget*> widgets_;
@@ -48,7 +50,7 @@ public:
     SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
                        SKKInputSessionParameter* param,
                        SKKBaseEditor* bottom,
-                       SKKInputModeSelector* selector);
+                       SKKInputModeListenerCollection* listeners);
 
     ~SKKRecursiveEditor();
 

@@ -112,6 +112,7 @@ public:
 
     // 入力モード
     void SelectInputMode(SKKInputMode mode);
+    void RefreshInputMode();
 
     // 状態変更
     void SetStatePrimary();
