@@ -203,8 +203,8 @@ State SKKState::Katakana(const Event& event) {
     case SKK_KATAKANA_MODE:
         return 0;
 
-    case SKK_CHAR:
-	if(param.IsToggleKana()) {
+    default:
+	if(event == SKK_JMODE || param.IsToggleKana()) {
 	    return State::Transition(&SKKState::Hirakana);
 	}
 
@@ -230,8 +230,9 @@ State SKKState::Jisx0201Kana(const Event& event) {
     case SKK_JISX0201KANA_MODE:
         return 0;
 
-    case SKK_CHAR:
-	if(param.IsToggleKana() || param.IsToggleJisx0201Kana()) {
+    default:
+	if(event == SKK_JMODE ||
+           param.IsToggleKana() || param.IsToggleJisx0201Kana()) {
 	    return State::Transition(&SKKState::Hirakana);
 	}
     }

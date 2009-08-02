@@ -354,7 +354,7 @@ State SKKState::SelectCandidate(const Event& event) {
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
-        return State::DeepHistory(&SKKState::Edit);
+        return State::DeepHistory(&SKKState::EntryInput);
 
     case SKK_LEFT:
         selector_.CursorLeft();
