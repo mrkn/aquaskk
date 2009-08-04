@@ -78,7 +78,8 @@ enum {
 enum {
     Default,
     AlwaysHandled,              // 強制的に「処理済み」にする
-    PseudoHandled               // 処理は行うが「未処理」とする
+    PseudoHandled,              // 処理は行うが「未処理」とする
+    CapsLock                    // CapsLock
 };
 
 // イベントパラメータ

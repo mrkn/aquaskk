@@ -48,8 +48,12 @@ void SKKEntryRemoveEditor::Clear() {
 }
 
 void SKKEntryRemoveEditor::Output(SKKContextBuffer& buffer) const {
-    buffer.Compose(prompt_ + input_);
-    buffer.SetEntry(SKKEntry(input_));
+    SKKContextBuffer tmp;
+    
+    tmp.Compose(prompt_ + input_);
+    tmp.SetEntry(SKKEntry(input_));
+
+    buffer = tmp;
 }
 
 void SKKEntryRemoveEditor::Commit(std::string& queue) {

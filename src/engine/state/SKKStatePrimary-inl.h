@@ -244,7 +244,7 @@ State SKKState::Jisx0201Kana(const Event& event) {
 // level 2 (sub of Primary)：Latin 入力
 // ======================================================================
 State SKKState::LatinInput(const Event& event) {
-    const SKKEvent& param = event.Param();
+    SKKEvent param(event.Param());
 
     switch(event) {
     case SKK_JMODE:
@@ -252,6 +252,9 @@ State SKKState::LatinInput(const Event& event) {
 
     case SKK_CHAR:
         if(param.IsInputChars()) {
+            if(param.option & CapsLock) {
+                param.code = std::toupper(param.code);
+            }
             editor_->HandleChar(param.code, param.IsDirect());
             return 0;
         }

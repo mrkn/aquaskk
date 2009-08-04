@@ -24,6 +24,7 @@
 #include "SKKMessenger.h"
 #include "SKKStateConfiguration.h"
 #include "SKKInputEngine.h"
+#include <cctype>
 
 namespace {
     typedef SKKState::Event Event;

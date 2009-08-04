@@ -39,7 +39,6 @@ void SKKPreProcessor::Initialize(const std::string& path) {
 }
 
 SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
-    SKKEvent result;
     NSString* diststr = [event characters];
     int dispchar = diststr ? *[diststr UTF8String] : 0;
     NSString* charstr = [event charactersIgnoringModifiers];
@@ -52,7 +51,7 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
 #endif
 
     // シフト属性が有効なのはデッドキーのみ
-    if([event modifierFlags] & (NSAlphaShiftKeyMask | NSShiftKeyMask)) {
+    if([event modifierFlags] & NSShiftKeyMask) {
 	if(std::isgraph(dispchar)) { // 空白類を除いた英数字記号
 	    charcode = dispchar;
 	} else {
@@ -77,5 +76,11 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
         charcode = 0x00;
     }
 
-    return keymap_.Fetch(charcode, keycode, mods);
+    SKKEvent result = keymap_.Fetch(charcode, keycode, mods);
+
+    if([event modifierFlags] & NSAlphaShiftKeyMask) {
+        result.option |= CapsLock;
+    }
+
+    return result;
 }
