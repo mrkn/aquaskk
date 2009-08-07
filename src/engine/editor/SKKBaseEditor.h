@@ -40,7 +40,7 @@ public:
         CursorDown
     };
 
-    // 入力処理(ASCII 専用)
+    // 入力処理(ASCII もしくはペースト用)
     virtual void Input(const std::string& ascii) {}
 
     // 入力処理(fixed=確定文字列, input=入力文字列, code=入力文字)
@@ -48,9 +48,6 @@ public:
 
     // 入力処理(event=イベント)
     virtual void Input(Event event) {}
-
-    // 入力処理(ペースト)
-    virtual void Paste(const std::string& string) {}
 
     // クリアー
     virtual void Clear() = 0;

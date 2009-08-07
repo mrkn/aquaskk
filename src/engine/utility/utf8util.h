@@ -36,6 +36,7 @@
 #define utf8util_h
 
 #include <string>
+#include <cstdlib>
 
 // UTF8 イテレータ
 template <typename Iterator>
@@ -110,8 +111,8 @@ public:
 	return iter;
     }
 
-    utf8iterator& operator+=(int count) { return 0 < count ? next(count) : prev(abs(count)); }
-    utf8iterator& operator-=(int count) { return 0 < count ? prev(count) : next(abs(count)); }
+    utf8iterator& operator+=(int count) { return 0 < count ? next(count) : prev(std::abs(count)); }
+    utf8iterator& operator-=(int count) { return 0 < count ? prev(count) : next(std::abs(count)); }
 
     friend bool operator==(const utf8iterator& lhs, const utf8iterator& rhs) { return lhs.curr_ == rhs.curr_; }
     friend bool operator!=(const utf8iterator& lhs, const utf8iterator& rhs) { return lhs.curr_ != rhs.curr_; }

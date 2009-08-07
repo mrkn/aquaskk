@@ -23,12 +23,13 @@
 #ifndef	SKKBackEnd_h
 #define SKKBackEnd_h
 
-#include <string>
-#include <vector>
 #include "SKKCandidateSuite.h"
 #include "SKKDictionaryKey.h"
 #include "SKKDictionaryCache.h"
 #include "SKKEntry.h"
+#include <string>
+#include <vector>
+#include <memory>
 
 class SKKBaseDictionary;
 class SKKUserDictionary;

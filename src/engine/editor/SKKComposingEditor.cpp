@@ -30,11 +30,15 @@ SKKComposingEditor::SKKComposingEditor() : enableDynamicCompletion_(false), comp
     setModified();
 }
 
-void SKKComposingEditor::Input(const std::string& fixed, const std::string&, char) {
+void SKKComposingEditor::Input(const std::string& ascii) {
     setModified();
 
-    composing_.Insert(fixed);
+    composing_.Insert(ascii);
     updateCompletion();
+}
+
+void SKKComposingEditor::Input(const std::string& fixed, const std::string&, char) {
+    Input(fixed);
 }
 
 void SKKComposingEditor::Input(SKKBaseEditor::Event event) {

@@ -1,0 +1,303 @@
+###
+### テストデータ
+###
+### syntax      = { line }
+###             ;
+###
+### line        = [ empty | comment | rule ] { space } "\n"
+###             ;
+###
+### empty       = {}
+###             ;
+###
+### comment     = "#" { any_characters }
+###             ;
+###
+### rule        = key option space expectation
+###             ;
+###
+### space       = ( " " | "\t" ) { space }
+###             ;
+###
+### key         = { modifier } ascii_or_hex
+###             ;
+###
+### option      = selection | yank { "," option }
+###             ;
+###
+### selection   = "sel=" any_characters
+###             ;
+###
+### yank        = "yank=" any_characters
+###             ;
+###
+### expectation = attribute { "," expectation }
+###             ;
+###
+### modifier    = "ctrl::" | "shift::" | "alt::" | "meta::"
+###             ;
+###
+### attribute   = fixed | marked | mode | pos | ret
+###             ;
+###
+### fixed       = "fixed=" any_characters
+###             ;
+###
+### marked      = "marked=" any_characters
+###             ;
+###
+### mode        = "mode=" ( "J" | "K" | "Q" | "A" | "L" )
+###             ;
+###
+### pos         = "pos=" { "-" } any_numbers
+###             ;
+###
+### ret         = "ret=" ( "1" | "0" )
+###             ;
+###
+
+# ----------------------------------------------------------------------
+# 直接入力モード
+# ----------------------------------------------------------------------
+
+# 文字種変更
+ctrl::j                 mode=J
+a                       mode=J,fixed=あ
+k                       mode=J,marked=k
+a                       mode=J,fixed=か
+q                       mode=K
+a                       mode=K,fixed=ア
+ctrl::q                 mode=Q
+a                       mode=Q,fixed=ｱ
+l                       mode=A
+a                       mode=A,ret=0
+ctrl::j                 mode=J
+L                       mode=L
+a                       mode=L,fixed=ａ
+
+# キャンセル
+ctrl::j                 mode=J
+k                       mode=J,marked=k
+ctrl::g                 mode=J
+k                       mode=J,marked=k
+ctrl::h                 mode=J
+k                       mode=J,marked=k
+y                       mode=J,marked=ky
+o                       mode=J,fixed=きょ
+k                       mode=J,marked=k
+l                       mode=A
+ctrl::j                 mode=J
+k                       mode=J,marked=k
+ctrl::m                 mode=J,ret=0
+k                       mode=J,marked=k
+ctrl::p                 mode=J,ret=0
+
+# ペースト
+ctrl::y,yank=abc        mode=J,ret=0
+
+# Undo
+ctrl::/,sel=abc         mode=J,ret=0
+
+# 見出し語
+K                       mode=J,marked=▽k
+ctrl::g                 mode=J
+K                       mode=J,marked=▽k
+a                       mode=J,marked=▽か
+n                       mode=J,marked=▽かn
+j                       mode=J,marked=▽かんj
+i                       mode=J,marked=▽かんじ
+ctrl::h                 mode=J,marked=▽かん
+ctrl::h                 mode=J,marked=▽か
+ctrl::h                 mode=J,marked=▽
+ctrl::h                 mode=J
+K                       mode=J,marked=▽k
+a                       mode=J,marked=▽か
+n                       mode=J,marked=▽かn
+j                       mode=J,marked=▽かんj
+i                       mode=J,marked=▽かんじ
+ctrl::j                 mode=J,fixed=かんじ
+
+# カーソル
+K                       mode=J,marked=▽k
+a                       mode=J,marked=▽か
+n                       mode=J,marked=▽かn
+j                       mode=J,marked=▽かんj
+i                       mode=J,marked=▽かんじ
+ctrl::a                 mode=J,marked=▽かんじ,pos=-3
+ctrl::d                 mode=J,marked=▽んじ,pos=-2
+ctrl::f                 mode=J,marked=▽んじ,pos=-1
+ctrl::e                 mode=J,marked=▽んじ,pos=0
+ctrl::b                 mode=J,marked=▽んじ,pos=-1
+n                       mode=J,marked=▽んnじ,pos=-1
+a                       mode=J,marked=▽んなじ,pos=-1
+ctrl::g                 mode=J
+
+# 送りあり
+
+
+# トグル変換 => カタカナ
+K                       mode=J,marked=▽k
+a                       mode=J,marked=▽か
+n                       mode=J,marked=▽かn
+j                       mode=J,marked=▽かんj
+i                       mode=J,marked=▽かんじ
+q                       mode=J,fixed=カンジ
+
+# トグル変換 => 半角カナ
+K                       mode=J,marked=▽k
+a                       mode=J,marked=▽か
+n                       mode=J,marked=▽かn
+j                       mode=J,marked=▽かんj
+i                       mode=J,marked=▽かんじ
+ctrl::q                 mode=J,fixed=ｶﾝｼﾞ
+
+# トグル変換 => Latin
+/                       mode=A,marked=▽
+a                       mode=A,marked=▽a
+b                       mode=A,marked=▽ab
+c                       mode=A,marked=▽abc
+ctrl::q                 mode=J,fixed=ａｂｃ
+
+# ----------------------------------------------------------------------
+# 単語登録
+# ----------------------------------------------------------------------
+
+T                       mode=J,marked=▽t
+a                       mode=J,marked=▽た
+n                       mode=J,marked=▽たn
+g                       mode=J,marked=▽たんg
+o                       mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# 文字種変更
+ctrl::j                 mode=J,marked=[登録：たんご]
+a                       mode=J,marked=[登録：たんご]あ
+k                       mode=J,marked=[登録：たんご]あk
+a                       mode=J,marked=[登録：たんご]あか
+q                       mode=K,marked=[登録：たんご]あか
+a                       mode=K,marked=[登録：たんご]あかア
+ctrl::q                 mode=Q,marked=[登録：たんご]あかア
+a                       mode=Q,marked=[登録：たんご]あかアｱ
+l                       mode=A,marked=[登録：たんご]あかアｱ
+a                       mode=A,marked=[登録：たんご]あかアｱa
+ctrl::j                 mode=J,marked=[登録：たんご]あかアｱa
+L                       mode=L,marked=[登録：たんご]あかアｱa
+a                       mode=L,marked=[登録：たんご]あかアｱaａ
+ctrl::g                 mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# キャンセル
+ctrl::j                 mode=J,marked=[登録：たんご]
+k                       mode=J,marked=[登録：たんご]k
+ctrl::g                 mode=J,marked=[登録：たんご]
+k                       mode=J,marked=[登録：たんご]k
+ctrl::h                 mode=J,marked=[登録：たんご]
+ctrl::h                 mode=J,marked=[登録：たんご]
+k                       mode=J,marked=[登録：たんご]k
+y                       mode=J,marked=[登録：たんご]ky
+o                       mode=J,marked=[登録：たんご]きょ
+k                       mode=J,marked=[登録：たんご]きょk
+l                       mode=A,marked=[登録：たんご]きょ
+ctrl::j                 mode=J,marked=[登録：たんご]きょ
+k                       mode=J,marked=[登録：たんご]きょk
+ctrl::p                 mode=J,marked=[登録：たんご]きょ
+ctrl::g                 mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# ペースト
+ctrl::y,yank=abc        mode=J,marked=[登録：たんご]abc
+ctrl::g                 mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# 見出し語
+K                       mode=J,marked=[登録：たんご]▽k
+ctrl::g                 mode=J,marked=[登録：たんご]
+K                       mode=J,marked=[登録：たんご]▽k
+a                       mode=J,marked=[登録：たんご]▽か
+n                       mode=J,marked=[登録：たんご]▽かn
+j                       mode=J,marked=[登録：たんご]▽かんj
+i                       mode=J,marked=[登録：たんご]▽かんじ
+ctrl::h                 mode=J,marked=[登録：たんご]▽かん
+ctrl::h                 mode=J,marked=[登録：たんご]▽か
+ctrl::h                 mode=J,marked=[登録：たんご]▽
+ctrl::h                 mode=J,marked=[登録：たんご]
+K                       mode=J,marked=[登録：たんご]▽k
+a                       mode=J,marked=[登録：たんご]▽か
+n                       mode=J,marked=[登録：たんご]▽かn
+j                       mode=J,marked=[登録：たんご]▽かんj
+i                       mode=J,marked=[登録：たんご]▽かんじ
+ctrl::j                 mode=J,marked=[登録：たんご]かんじ
+ctrl::g                 mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# カーソル
+K                       mode=J,marked=[登録：たんご]▽k
+a                       mode=J,marked=[登録：たんご]▽か
+n                       mode=J,marked=[登録：たんご]▽かn
+j                       mode=J,marked=[登録：たんご]▽かんj
+i                       mode=J,marked=[登録：たんご]▽かんじ
+ctrl::a                 mode=J,marked=[登録：たんご]▽かんじ,pos=-3
+ctrl::d                 mode=J,marked=[登録：たんご]▽んじ,pos=-2
+ctrl::f                 mode=J,marked=[登録：たんご]▽んじ,pos=-1
+ctrl::e                 mode=J,marked=[登録：たんご]▽んじ,pos=0
+ctrl::b                 mode=J,marked=[登録：たんご]▽んじ,pos=-1
+n                       mode=J,marked=[登録：たんご]▽んnじ,pos=-1
+a                       mode=J,marked=[登録：たんご]▽んなじ,pos=-1
+ctrl::g                 mode=J,marked=[登録：たんご]
+
+# トグル変換 => カタカナ
+K                       mode=J,marked=[登録：たんご]▽k
+a                       mode=J,marked=[登録：たんご]▽か
+n                       mode=J,marked=[登録：たんご]▽かn
+j                       mode=J,marked=[登録：たんご]▽かんj
+i                       mode=J,marked=[登録：たんご]▽かんじ
+q                       mode=J,marked=[登録：たんご]カンジ
+ctrl::g                 mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# トグル変換 => 半角カナ
+K                       mode=J,marked=[登録：たんご]▽k
+a                       mode=J,marked=[登録：たんご]▽か
+n                       mode=J,marked=[登録：たんご]▽かn
+j                       mode=J,marked=[登録：たんご]▽かんj
+i                       mode=J,marked=[登録：たんご]▽かんじ
+ctrl::q                 mode=J,marked=[登録：たんご]ｶﾝｼﾞ
+ctrl::g                 mode=J,marked=▽たんご
+0x20                    mode=J,marked=[登録：たんご]
+
+# トグル変換 => Latin
+/                       mode=A,marked=[登録：たんご]▽
+a                       mode=A,marked=[登録：たんご]▽a
+b                       mode=A,marked=[登録：たんご]▽ab
+c                       mode=A,marked=[登録：たんご]▽abc
+ctrl::q                 mode=J,marked=[登録：たんご]ａｂｃ
+ctrl::g                 mode=J,marked=▽たんご
+
+# 登録
+0x20                    mode=J,marked=[登録：たんご]
+Q                       mode=J,marked=[登録：たんご]▽
+t                       mode=J,marked=[登録：たんご]▽t
+e                       mode=J,marked=[登録：たんご]▽て
+s                       mode=J,marked=[登録：たんご]▽てs
+u                       mode=J,marked=[登録：たんご]▽てす
+t                       mode=J,marked=[登録：たんご]▽てすt
+o                       mode=J,marked=[登録：たんご]▽てすと
+q                       mode=J,marked=[登録：たんご]テスト
+ctrl::m                 mode=J,fixed=テスト
+
+# 変換
+T                       mode=J,marked=▽t
+a                       mode=J,marked=▽た
+n                       mode=J,marked=▽たn
+g                       mode=J,marked=▽たんg
+o                       mode=J,marked=▽たんご
+0x20                    mode=J,marked=▼テスト
+0x20                    mode=J,marked=[登録：たんご]
+ctrl::g                 mode=J,marked=▼テスト
+ctrl::h                 mode=J,marked=▽たんご
+ctrl::g                 mode=J
+
+# Undo
+ctrl::/,sel=テスト      mode=J,marked=▽たんご
+ctrl::g                 mode=J,fixed=テスト
+K                       mode=J,marked=▽k

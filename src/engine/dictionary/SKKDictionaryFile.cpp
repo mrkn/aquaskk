@@ -20,10 +20,11 @@
 
 */
 
+#include "SKKDictionaryFile.h"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <sys/stat.h>
-#include "SKKDictionaryFile.h"
 
 static std::string OKURI_ARI_MARK = ";; okuri-ari entries.";
 static std::string OKURI_NASI_MARK = ";; okuri-nasi entries.";

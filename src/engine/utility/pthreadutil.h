@@ -36,6 +36,7 @@
 #define pthreadutil_h
 
 #include <pthread.h>
+#include <ctime>
 #include <cerrno>
 #include <cassert>
 

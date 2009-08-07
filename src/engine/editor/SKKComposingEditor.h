@@ -39,6 +39,7 @@ class SKKComposingEditor : public SKKBaseEditor {
 public:
     SKKComposingEditor();
 
+    virtual void Input(const std::string& ascii);
     virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(Event event);
     virtual void Clear();

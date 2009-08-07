@@ -103,14 +103,6 @@ State SKKState::Primary(const Event& event) {
 
     case SKK_JISX0208LATIN_MODE:
         return State::Transition(&SKKState::Jisx0208Latin);
-
-    case SKK_CHAR:
-        // *** FIXME ***
-        // 未確定文字列がある状態で Ctrl-P などが押された場合、
-        // 次回入力時にゴミとなるのでクリアしておく
-        // この問題はもう少しスマートに解決したい...
-        editor_->Reset();
-        return 0;
     }
     
     return &SKKState::TopState;
@@ -270,12 +262,7 @@ State SKKState::Ascii(const Event& event) {
     switch(event) {
     case ENTRY_EVENT:
         editor_->SelectInputMode(AsciiInputMode);
-        editor_->SetBypassMode(true);
 	return 0;
-
-    case EXIT_EVENT:
-        editor_->SetBypassMode(false);
-        return 0;
 
     case SKK_ASCII_MODE:
         return 0;

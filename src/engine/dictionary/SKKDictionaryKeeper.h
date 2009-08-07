@@ -23,9 +23,10 @@
 #ifndef SKKDictionaryKeeper_h
 #define SKKDictionaryKeeper_h
 
-#include <vector>
 #include "SKKDictionaryFile.h"
 #include "pthreadutil.h"
+#include <vector>
+#include <memory>
 
 class SKKDictionaryLoaderObserver {
 public:

@@ -23,17 +23,18 @@
 #include "SKKOutputQueue.h"
 
 void SKKOutputQueue::Add(const SKKContextBuffer& context) {
+    //
     // *** 重要な出力制御 ***
     //
     // No.|prev    |context |制御
     // ---+--------+--------+--------------------
     //  1 |empty   |empty   |何もしない
     // ---+--------+--------+--------------------
-    //  2 |!empty  |empty   |context を出力
-    // ---+--------+--------+--------------------
+    //  2 |!empty  |empty   |
+    // ---+--------+--------+
     //  3 |empty   |!empty  |context を出力
-    // ---+--------+--------+--------------------
-    //  4 |!empty  |!empty  |context を出力
+    // ---+--------+--------+
+    //  4 |!empty  |!empty  |
     // ---+--------+--------+--------------------
     //
     // 1 のケースを弾かないと、finder や iTunes で不具合が出る 
@@ -41,6 +42,7 @@ void SKKOutputQueue::Add(const SKKContextBuffer& context) {
     if(prev_ == context && context == empty_) return;
 
     queue_.push_back(context);
+    prev_ = context;
 }
 
 void SKKOutputQueue::Output(SKKFrontEnd* frontend,

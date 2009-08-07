@@ -5,10 +5,10 @@
 #include "SKKCommonDictionary.h"
 #include "SKKDictionaryFactory.h"
 
-#include "TestFrontEnd.h"
-#include "TestCandidateWindow.h"
+#include "MockFrontEnd.h"
+#include "MockCandidateWindow.h"
 
-class TestBuddy : public SKKSelectorBuddy {
+class MockBuddy : public SKKSelectorBuddy {
     SKKCandidate candidate_;
 
     virtual const SKKEntry SKKSelectorQueryEntry() {
@@ -24,8 +24,8 @@ public:
 };
 
 int main() {
-    TestCandidateWindow test_window;
-    TestBuddy buddy;
+    MockCandidateWindow test_window;
+    MockBuddy buddy;
     SKKSelector selector(&buddy, &test_window);
     SKKDictionaryKeyContainer dicts;
 

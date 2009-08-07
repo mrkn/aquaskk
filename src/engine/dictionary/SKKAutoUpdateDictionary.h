@@ -25,6 +25,7 @@
 
 #include "SKKBaseDictionary.h"
 #include "SKKDictionaryKeeper.h"
+#include <memory>
 
 class SKKAutoUpdateDictionary : public SKKBaseDictionary {
     std::auto_ptr<SKKDictionaryLoader> loader_;

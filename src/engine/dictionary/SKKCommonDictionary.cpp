@@ -21,6 +21,7 @@
 */
 
 #include "SKKCommonDictionary.h"
+#include <ctime>
 #include <sys/stat.h>
 
 namespace {

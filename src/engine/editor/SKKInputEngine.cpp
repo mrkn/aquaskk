@@ -42,17 +42,17 @@ SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
     , bottom_(bottom)
     , sessionParam_(param)
     , option_(sessionParam_->InputEngineOption())
-    , bypassMode_(false)
+    , handled_(false)
     , inputQueue_(this)
     , okuriEditor_(this) {
     SetStatePrimary();
 }
 
 void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
+    handled_ = true;
+
     inputModeSelector_->Select(mode);
     inputQueue_.SelectInputMode(mode);
-
-    terminate();
 }
 
 void SKKInputEngine::RefreshInputMode() {
@@ -62,7 +62,8 @@ void SKKInputEngine::RefreshInputMode() {
 void SKKInputEngine::SetStatePrimary() {
     enableMainEditor();
 
-    top()->Clear();
+    insert(restore_);
+    restore_.clear();
 }
 
 void SKKInputEngine::SetStateComposing() {
@@ -84,8 +85,6 @@ void SKKInputEngine::SetStateComposing() {
     enableMainEditor();
 
     active_->push_back(&composingEditor_);
-
-    inputQueue_.Clear();
 }
 
 void SKKInputEngine::SetStateOkuri() {
@@ -111,10 +110,6 @@ void SKKInputEngine::SetStateEntryRemove() {
     entryRemoveEditor_.Initialize(Entry(), contextBuffer_.Candidate());
 
     enableSubEditor(&entryRemoveEditor_);
-}
-
-void SKKInputEngine::SetBypassMode(bool flag) {
-    bypassMode_ = flag;
 }
 
 void SKKInputEngine::HandleChar(char code, bool direct) {
@@ -144,27 +139,27 @@ void SKKInputEngine::HandleBackSpace() {
 }
 
 void SKKInputEngine::HandleDelete() {
-    top()->Input(SKKBaseEditor::Delete);
+    fire(SKKBaseEditor::Delete);
 }
 
 void SKKInputEngine::HandleCursorLeft() {
-    top()->Input(SKKBaseEditor::CursorLeft);
+    fire(SKKBaseEditor::CursorLeft);
 }
 
 void SKKInputEngine::HandleCursorRight() {
-    top()->Input(SKKBaseEditor::CursorRight);
+    fire(SKKBaseEditor::CursorRight);
 }
 
 void SKKInputEngine::HandleCursorUp() {
-    top()->Input(SKKBaseEditor::CursorUp);
+    fire(SKKBaseEditor::CursorUp);
 }
 
 void SKKInputEngine::HandleCursorDown() {
-    top()->Input(SKKBaseEditor::CursorDown);
+    fire(SKKBaseEditor::CursorDown);
 }
 
 void SKKInputEngine::HandlePaste() {
-    top()->Paste(sessionParam_->Clipboard()->PasteString());
+    top()->Input(sessionParam_->Clipboard()->PasteString());
 }
 
 void SKKInputEngine::HandlePing() {
@@ -174,6 +169,7 @@ void SKKInputEngine::HandlePing() {
 void SKKInputEngine::Commit() {
     terminate();
 
+    restore_.clear();
     word_.clear();
 
     // Top のフィルターから Commit していき、最終的な単語を取得する
@@ -261,14 +257,13 @@ void SKKInputEngine::ToggleJisx0201Kana() {
 }
 
 SKKInputEngine::UndoResult SKKInputEngine::Undo() {
-    std::string candidate(sessionParam_->FrontEnd()->SelectedString());
-
-    if(candidate.empty()) return UndoFailed;
+    restore_ = sessionParam_->FrontEnd()->SelectedString();
 
     // 逆引き
-    undo_ = SKKBackEnd::theInstance().ReverseLookup(candidate);
+    undo_ = SKKBackEnd::theInstance().ReverseLookup(restore_);
 
     if(undo_.empty()) {
+        restore_.clear();
         return UndoFailed;
     }
 
@@ -301,10 +296,12 @@ void SKKInputEngine::Output() {
     std::for_each(active_->begin(), active_->end(), std::mem_fun(&SKKBaseEditor::Flush));
 
     inputModeSelector_->Notify();
+
+    handled_ = false;
 }
 
 bool SKKInputEngine::IsModified() const {
-    return top()->IsModified();
+    return top()->IsModified() || handled_;
 }
 
 bool SKKInputEngine::IsComposing() const {
@@ -330,8 +327,12 @@ void SKKInputEngine::FinishRegistration() {
 }
 
 void SKKInputEngine::AbortRegistration() {
-    cancel();
+    if(!inputQueue_.IsEmpty()) {
+        terminate();
+        return;
+    }
 
+    cancel();
     registrationObserver_->SKKRegistrationCancel();
 }
 
@@ -357,6 +358,15 @@ void SKKInputEngine::terminate() {
     }
 
     updateContextBuffer();
+}
+
+void SKKInputEngine::fire(SKKBaseEditor::Event event) {
+    if(!inputQueue_.IsEmpty()) {
+        inputQueue_.Clear();
+        top()->Flush();
+    } else {
+        top()->Input(event);
+    }
 }
 
 void SKKInputEngine::cancel() {
@@ -423,7 +433,7 @@ void SKKInputEngine::insert(const std::string& str) {
 void SKKInputEngine::SKKInputQueueUpdate(const SKKInputQueueObserver::State& state) {
     inputState_ = state;
 
-    if(bypassMode_) {
+    if(inputMode() == AsciiInputMode) {
         top()->Input(state.fixed);
     } else {
         top()->Input(state.fixed, state.queue, state.code);

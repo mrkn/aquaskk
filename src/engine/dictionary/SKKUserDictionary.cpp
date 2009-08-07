@@ -21,11 +21,13 @@
 
 */
 
-#include <iostream>
-#include <cerrno>
 #include "SKKUserDictionary.h"
 #include "SKKCandidateSuite.h"
 #include "utf8util.h"
+#include <iostream>
+#include <cerrno>
+#include <cstring>
+#include <ctime>
 
 namespace {
     static const int MAX_IDLE_COUNT = 20;

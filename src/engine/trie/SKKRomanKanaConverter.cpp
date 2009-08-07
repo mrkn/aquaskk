@@ -20,11 +20,12 @@
 
 */
 
+#include "jconv.h"
+#include "SKKRomanKanaConverter.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "jconv.h"
-#include "SKKRomanKanaConverter.h"
+#include <algorithm>
 
 // ======================================================================
 // ユーティリティ

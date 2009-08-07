@@ -25,6 +25,7 @@
 
 #include "SKKCandidate.h"
 #include "SKKOkuriHint.h"
+#include <algorithm>
 
 class SKKCandidateParser {
     SKKCandidateContainer candidates_;

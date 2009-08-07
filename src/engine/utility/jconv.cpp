@@ -33,6 +33,7 @@
  */
 
 #include "jconv.h"
+#include <algorithm>
 
 namespace jconv {
 #include "jconv_ucs2eucj-inl.h"
