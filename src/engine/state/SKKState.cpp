@@ -31,11 +31,10 @@ namespace {
     typedef SKKState::State State;
 }
 
-SKKState::SKKState(SKKMessenger* messenger, SKKCandidateWindow* window,
-                   SKKStateConfiguration* configuration, SKKInputEngine* editor)
-    : messenger_(messenger)
-    , window_(window)
-    , configuration_(configuration)
+SKKState::SKKState(SKKInputEnvironment* env, SKKInputEngine* editor)
+    : messenger_(env->InputSessionParameter()->Messenger())
+    , window_(env->InputSessionParameter()->CandidateWindow())
+    , configuration_(env->InputSessionParameter()->StateConfiguration())
     , editor_(editor)
     , completer_(editor_)
     , selector_(editor_, window_)

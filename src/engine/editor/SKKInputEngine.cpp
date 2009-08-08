@@ -21,8 +21,6 @@
 */
 
 #include "SKKInputEngine.h"
-#include "SKKInputEngineOption.h"
-#include "SKKInputMode.h"
 #include "SKKClipboard.h"
 #include "SKKAnnotator.h"
 #include "SKKContextBuffer.h"
@@ -33,30 +31,20 @@
 #include <iostream>
 #include <cctype>
 
-SKKInputEngine::SKKInputEngine(SKKRegistrationObserver* registrationObserver,
-                               SKKInputModeSelector* inputModeSelector,
-                               SKKBaseEditor* bottom,
-                               SKKInputSessionParameter* param)
-    : registrationObserver_(registrationObserver)
-    , inputModeSelector_(inputModeSelector)
-    , bottom_(bottom)
-    , sessionParam_(param)
-    , option_(sessionParam_->InputEngineOption())
-    , handled_(false)
-    , inputQueue_(this)
-    , okuriEditor_(this) {
+SKKInputEngine::SKKInputEngine(SKKInputEnvironment* env)
+    : env_(env) , handled_(false) , inputQueue_(this) , okuriEditor_(this) {
     SetStatePrimary();
 }
 
 void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     handled_ = true;
 
-    inputModeSelector_->Select(mode);
+    env_->InputModeSelector()->Select(mode);
     inputQueue_.SelectInputMode(mode);
 }
 
 void SKKInputEngine::RefreshInputMode() {
-    inputModeSelector_->Refresh();
+    env_->InputModeSelector()->Refresh();
 }
 
 void SKKInputEngine::SetStatePrimary() {
@@ -68,7 +56,7 @@ void SKKInputEngine::SetStatePrimary() {
 
 void SKKInputEngine::SetStateComposing() {
     // 直接入力モードから遷移してきた時だけ初期化する
-    if(top() == bottom_) {
+    if(top() == env_->BaseEditor()) {
         composingEditor_.Clear();
     }
 
@@ -79,8 +67,9 @@ void SKKInputEngine::SetStateComposing() {
     }
 
     // ダイナミック補完オプション設定
-    composingEditor_.EnableDynamicCompletion(option_->EnableDynamicCompletion());
-    composingEditor_.SetDynamicCompletionRange(option_->DynamicCompletionRange());
+    SKKInputEngineOption* option = env_->InputEngineOption();
+    composingEditor_.EnableDynamicCompletion(option->EnableDynamicCompletion());
+    composingEditor_.SetDynamicCompletionRange(option->DynamicCompletionRange());
 
     enableMainEditor();
 
@@ -119,15 +108,7 @@ void SKKInputEngine::HandleChar(char code, bool direct) {
         okuriEditor_.Initialize(code);
     }
 
-    if(direct) {
-        inputQueue_.SelectInputMode(AsciiInputMode);
-    }
-    
-    inputQueue_.AddChar(code);
-
-    if(direct) {
-        inputQueue_.SelectInputMode(inputMode());
-    }
+    inputQueue_.AddChar(code, direct);
 }
 
 void SKKInputEngine::HandleBackSpace() {
@@ -159,11 +140,11 @@ void SKKInputEngine::HandleCursorDown() {
 }
 
 void SKKInputEngine::HandlePaste() {
-    top()->Input(sessionParam_->Clipboard()->PasteString());
+    top()->Input(env_->InputSessionParameter()->Clipboard()->PasteString());
 }
 
 void SKKInputEngine::HandlePing() {
-    inputModeSelector_->Show();
+    env_->InputModeSelector()->Show();
 }
 
 void SKKInputEngine::Commit() {
@@ -257,7 +238,7 @@ void SKKInputEngine::ToggleJisx0201Kana() {
 }
 
 SKKInputEngine::UndoResult SKKInputEngine::Undo() {
-    restore_ = sessionParam_->FrontEnd()->SelectedString();
+    restore_ = env_->InputSessionParameter()->FrontEnd()->SelectedString();
 
     // 逆引き
     undo_ = SKKBackEnd::theInstance().ReverseLookup(restore_);
@@ -277,25 +258,28 @@ SKKInputEngine::UndoResult SKKInputEngine::Undo() {
 }
 
 void SKKInputEngine::Output() {
+    SKKInputEngineOption* option = env_->InputEngineOption();
+    SKKInputSessionParameter* param = env_->InputSessionParameter();
     SKKDynamicCompletor* completer = 0;
     SKKAnnotator* annotator = 0;
 
-    if(option_->EnableDynamicCompletion()) {
-        completer = sessionParam_->DynamicCompletor();
+
+    if(option->EnableDynamicCompletion()) {
+        completer = param->DynamicCompletor();
     }
 
-    if(option_->EnableAnnotation()) {
-        annotator = sessionParam_->Annotator();
+    if(option->EnableAnnotation()) {
+        annotator = param->Annotator();
     }
 
     updateContextBuffer();
     outputQueue_.Add(contextBuffer_);
-    outputQueue_.Output(sessionParam_->FrontEnd(), completer, annotator);
+    outputQueue_.Output(param->FrontEnd(), completer, annotator);
 
     // 全てのエディターを Flush する
     std::for_each(active_->begin(), active_->end(), std::mem_fun(&SKKBaseEditor::Flush));
 
-    inputModeSelector_->Notify();
+    env_->InputModeSelector()->Notify();
 
     handled_ = false;
 }
@@ -317,13 +301,13 @@ bool SKKInputEngine::IsOkuriComplete() const {
 }
 
 void SKKInputEngine::BeginRegistration() {
-    registrationObserver_->SKKRegistrationBegin(new SKKRegisterEditor(Entry()));
+    env_->RegistrationObserver()->SKKRegistrationBegin(new SKKRegisterEditor(Entry()));
 }
 
 void SKKInputEngine::FinishRegistration() {
     Commit();
 
-    registrationObserver_->SKKRegistrationFinish(word_);
+    env_->RegistrationObserver()->SKKRegistrationFinish(word_);
 }
 
 void SKKInputEngine::AbortRegistration() {
@@ -333,7 +317,8 @@ void SKKInputEngine::AbortRegistration() {
     }
 
     cancel();
-    registrationObserver_->SKKRegistrationCancel();
+
+    env_->RegistrationObserver()->SKKRegistrationCancel();
 }
 
 const SKKEntry SKKInputEngine::Entry() const {
@@ -347,11 +332,11 @@ SKKBaseEditor* SKKInputEngine::top() const {
 }
 
 SKKInputMode SKKInputEngine::inputMode() const {
-    return *inputModeSelector_;
+    return *(env_->InputModeSelector());
 }
 
 void SKKInputEngine::terminate() {
-    if(option_->FixIntermediateConversion()) {
+    if(env_->InputEngineOption()->FixIntermediateConversion()) {
         inputQueue_.Terminate();
     } else {
         inputQueue_.Clear();
@@ -383,7 +368,7 @@ void SKKInputEngine::enableMainEditor() {
     active_ = &mainStack_;
 
     active_->clear();
-    active_->push_back(bottom_);
+    active_->push_back(env_->BaseEditor());
 
     needsInitializeOkuri_ = false;
 }
@@ -392,7 +377,7 @@ void SKKInputEngine::enableSubEditor(SKKBaseEditor* editor) {
     active_ = &subStack_;
 
     active_->clear();
-    active_->push_back(bottom_);
+    active_->push_back(env_->BaseEditor());
     active_->push_back(editor);
 }
 
@@ -404,7 +389,7 @@ void SKKInputEngine::updateContextBuffer() {
     }
 
     // 非確定文字があれば挿入(ex. "ky" など)
-    if(option_->DisplayShortestMatchOfKanaConversions()) {
+    if(env_->InputEngineOption()->DisplayShortestMatchOfKanaConversions()) {
         if(inputState_.intermediate.empty()) {
             contextBuffer_.Compose(inputState_.queue);
         } else {
@@ -441,9 +426,9 @@ void SKKInputEngine::SKKInputQueueUpdate(const SKKInputQueueObserver::State& sta
 }
 
 const std::string SKKInputEngine::SKKCompleterQueryString() {
-    terminate();
+    SKKEntry entry = SKKSelectorQueryEntry();
 
-    return composingEditor_.QueryString();
+    return entry.EntryString();
 }
 
 void SKKInputEngine::SKKCompleterUpdate(const std::string& entry) {

@@ -231,56 +231,6 @@ State SKKState::AsciiEntry(const Event& event) {
 }
 
 // ======================================================================
-// level 3 (sub of Edit)：送り
-// ======================================================================
-State SKKState::OkuriInput(const Event& event) {
-    const SKKEvent& param = event.Param();
-
-    switch(event) {
-    case ENTRY_EVENT:
-        editor_->SetStateOkuri();
-        return 0;
-
-    case SKK_CANCEL:
-        return State::Transition(&SKKState::KanaEntry);
-
-    case SKK_TAB:
-    case SKK_DELETE:
-    case SKK_LEFT:
-    case SKK_RIGHT:
-    case SKK_UP:
-    case SKK_DOWN:
-        return 0;
-
-    case SKK_BACKSPACE:
-        editor_->HandleBackSpace();
-
-        if(!editor_->IsModified()) {
-            return State::Transition(&SKKState::KanaEntry);
-        }
-
-        return 0;
-
-    case SKK_CHAR:
-        if(param.IsInputChars()) {
-            editor_->HandleChar(param.code, param.IsDirect());
-        }
-
-        if(param.IsNextCandidate() || editor_->IsOkuriComplete()) {
-            if(selector_.Execute(configuration_->MaxCountOfInlineCandidates())) {
-                return State::Transition(&SKKState::SelectCandidate);
-            }
-
-            return State::Transition(&SKKState::RecursiveRegister);
-        }
-
-        return 0;
-    }
-
-    return &SKKState::Edit;
-}
-
-// ======================================================================
 // level 3 (sub of Edit)：見出し語補完
 // ======================================================================
 State SKKState::EntryCompletion(const Event& event) {
@@ -408,4 +358,65 @@ State SKKState::SelectCandidate(const Event& event) {
     }
 
     return &SKKState::Composing;
+}
+
+// ======================================================================
+// level 1：送り
+// ======================================================================
+State SKKState::OkuriInput(const Event& event) {
+    const SKKEvent& param = event.Param();
+
+    switch(event) {
+    case ENTRY_EVENT:
+        editor_->SetStateOkuri();
+        return 0;
+
+    case SKK_ENTER:
+    case SKK_JMODE:
+        editor_->Commit();
+
+        // 改行するかどうか？(egg-like-new-line)
+        if(event == SKK_ENTER && !configuration_->SuppressNewlineOnCommit()) {
+            return State::Forward(&SKKState::KanaInput);
+        }
+
+        return State::Transition(&SKKState::KanaInput);
+
+    case SKK_CANCEL:
+        return State::Transition(&SKKState::KanaEntry);
+
+    case SKK_TAB:
+    case SKK_DELETE:
+    case SKK_LEFT:
+    case SKK_RIGHT:
+    case SKK_UP:
+    case SKK_DOWN:
+        return 0;
+
+    case SKK_BACKSPACE:
+        editor_->HandleBackSpace();
+
+        if(!editor_->IsModified()) {
+            return State::Transition(&SKKState::KanaEntry);
+        }
+
+        return 0;
+
+    case SKK_CHAR:
+        if(param.IsInputChars()) {
+            editor_->HandleChar(param.code, param.IsDirect());
+        }
+
+        if(param.IsNextCandidate() || editor_->IsOkuriComplete()) {
+            if(selector_.Execute(configuration_->MaxCountOfInlineCandidates())) {
+                return State::Transition(&SKKState::SelectCandidate);
+            }
+
+            return State::Transition(&SKKState::RecursiveRegister);
+        }
+
+        return 0;
+    }
+
+    return &SKKState::TopState;
 }

@@ -27,25 +27,13 @@
 #include "SKKDynamicCompletor.h"
 #include "SKKBackEnd.h"
 
-SKKRecursiveEditor::SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
-                                       SKKInputSessionParameter* param,
-                                       SKKBaseEditor* bottom,
-                                       SKKInputModeListenerCollection* listeners)
-    : param_(param)
-    , bottom_(bottom)
-    , selector_(listeners)
-    , editor_(registrationObserver,
-              &selector_,
-              bottom_.get(),
-              param_)
-    , state_(SKKState(param_->Messenger(),
-                      param_->CandidateWindow(),
-                      param_->StateConfiguration(),
-                      &editor_)) {
-    widgets_.push_back(param_->Annotator());
-    widgets_.push_back(param_->CandidateWindow());
-    widgets_.push_back(param_->DynamicCompletor());
-    widgets_.push_back(&selector_);
+SKKRecursiveEditor::SKKRecursiveEditor(SKKInputEnvironment* env)
+    : env_(env), editor_(env), state_(SKKState(env, &editor_)) {
+    // initialize widgets
+    widgets_.push_back(env->InputSessionParameter()->Annotator());
+    widgets_.push_back(env->InputSessionParameter()->CandidateWindow());
+    widgets_.push_back(env->InputSessionParameter()->DynamicCompletor());
+    widgets_.push_back(env->InputModeSelector());
 }
 
 SKKRecursiveEditor::~SKKRecursiveEditor() {

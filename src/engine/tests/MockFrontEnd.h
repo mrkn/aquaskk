@@ -23,9 +23,6 @@ class MockFrontEnd : public SKKFrontEnd, public SKKInputModeListener {
         return selected_string_;
     }
 
-    virtual void Clear() {
-    }
-
     virtual void SelectInputMode(SKKInputMode mode) {
         result_.mode = mode;
     }

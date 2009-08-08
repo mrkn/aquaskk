@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D304587A102D3E590055E32F /* SKKInputEnvironment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3045878102D3E590055E32F /* SKKInputEnvironment.cpp */; };
 		D3046C2C101F3228008A6F47 /* SKKLayoutManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3046C2B101F3228008A6F47 /* SKKLayoutManager.mm */; };
 		D30996690E4C80EA00B2F24E /* SKKRecursiveEditor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D30996670E4C80EA00B2F24E /* SKKRecursiveEditor.cpp */; };
 		D309967B0E4C83B800B2F24E /* SKKInputEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D30996790E4C83B800B2F24E /* SKKInputEngine.cpp */; };
@@ -133,6 +134,8 @@
 
 /* Begin PBXFileReference section */
 		D302E2F70EA068EF00E3321E /* SKKInputModeListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputModeListener.h; sourceTree = "<group>"; };
+		D3045878102D3E590055E32F /* SKKInputEnvironment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputEnvironment.cpp; sourceTree = "<group>"; };
+		D3045879102D3E590055E32F /* SKKInputEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputEnvironment.h; sourceTree = "<group>"; };
 		D3046C2A101F3228008A6F47 /* SKKLayoutManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKLayoutManager.h; sourceTree = "<group>"; };
 		D3046C2B101F3228008A6F47 /* SKKLayoutManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SKKLayoutManager.mm; sourceTree = "<group>"; };
 		D30996670E4C80EA00B2F24E /* SKKRecursiveEditor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKRecursiveEditor.cpp; sourceTree = "<group>"; };
@@ -534,6 +537,8 @@
 		D353BC2C0E175500004C68A6 /* session */ = {
 			isa = PBXGroup;
 			children = (
+				D3045879102D3E590055E32F /* SKKInputEnvironment.h */,
+				D3045878102D3E590055E32F /* SKKInputEnvironment.cpp */,
 				D353BC300E175500004C68A6 /* SKKInputMode.h */,
 				D3D549BE1024904000622CB2 /* SKKInputModeSelector.h */,
 				D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */,
@@ -978,6 +983,7 @@
 				D3046C2C101F3228008A6F47 /* SKKLayoutManager.mm in Sources */,
 				D37C01FB1021D67C00C9CE91 /* SKKOutputQueue.cpp in Sources */,
 				D3D549BF1024904000622CB2 /* SKKInputModeSelector.cpp in Sources */,
+				D304587A102D3E590055E32F /* SKKInputEnvironment.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

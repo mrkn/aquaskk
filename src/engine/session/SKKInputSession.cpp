@@ -21,7 +21,6 @@
 */
 
 #include "SKKInputSession.h"
-#include "SKKInputSessionParameter.h"
 #include "SKKRecursiveEditor.h"
 #include "SKKPrimaryEditor.h"
 
@@ -115,7 +114,8 @@ SKKRecursiveEditor* SKKInputSession::top() {
 }
 
 SKKRecursiveEditor* SKKInputSession::createEditor(SKKBaseEditor* bottom) {
-    return new SKKRecursiveEditor(this, param_.get(), bottom, &listeners_);
+    return new SKKRecursiveEditor(
+        new SKKInputEnvironment(this, param_.get(), &listeners_, bottom));
 }
 
 void SKKInputSession::popEditor() {

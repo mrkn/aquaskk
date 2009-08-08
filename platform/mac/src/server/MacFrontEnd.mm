@@ -54,14 +54,6 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     [marked release];
 }
 
-void MacFrontEnd::Clear() {
-    // 未確定文字列がある時だけクリアーする
-    // Photoshop Elements の問題を回避
-    if(!composing_.empty()) {
-        ComposeString("");
-    }
-}
-
 std::string MacFrontEnd::SelectedString() {
     NSRange range = [client_ selectedRange];
     NSAttributedString* text = [client_ attributedSubstringFromRange:range];

@@ -26,7 +26,8 @@ KEYMAP_OBJS = SKKKeymapEntry.o SKKKeymap.o
 
 SELECTOR_OBJS = SKKSelector.o SKKInlineSelector.o SKKWindowSelector.o
 
-SESSION_OBJS = SKKInputSession.o SKKRecursiveEditor.o SKKInputModeSelector.o
+SESSION_OBJS = SKKInputSession.o SKKRecursiveEditor.o SKKInputModeSelector.o \
+	SKKInputEnvironment.o
 
 TRIE_OBJS = SKKRomanKanaConverter.o SKKTrie.o
 

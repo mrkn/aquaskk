@@ -46,7 +46,7 @@ class SKKInputQueue {
     SKKInputMode mode_;
     std::string queue_;
 
-    SKKInputQueueObserver::State convert(char code);
+    SKKInputQueueObserver::State convert(char code, bool direct);
     SKKInputQueueObserver::State terminate();
 
 public:
@@ -56,7 +56,7 @@ public:
     void SelectInputMode(SKKInputMode mode);
 
     // 文字の追加と削除
-    void AddChar(char code);
+    void AddChar(char code, bool direct = false);
     void RemoveChar();
 
     // 中間状態を確定させる(n → ん)

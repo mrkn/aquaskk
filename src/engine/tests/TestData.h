@@ -20,6 +20,11 @@ class TestData {
     std::vector<TestEntry> tests_;
     unsigned current_;
 
+    std::string& decode(std::string& str) {
+        string::translate(str, "%20", " ");
+        return str;
+    }
+
     TestEvent makeEvent(const std::string& event) {
         TestEvent result;
         string::splitter splitter;
@@ -109,7 +114,7 @@ class TestData {
             entry.split(str, "=");
             if(entry >> key >> value) {
                 if(key == "fixed") result.fixed = value;
-                if(key == "marked") result.marked = value;
+                if(key == "marked") result.marked = decode(value);
                 if(key == "mode") result.mode = inputMode(value);
                 if(key == "pos") result.pos = integer(value);
                 if(key == "ret") result.ret = (integer(value) == 1);

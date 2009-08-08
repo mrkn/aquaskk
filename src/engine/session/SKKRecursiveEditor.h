@@ -23,18 +23,15 @@
 #ifndef SKKRecursiveEditor_h
 #define SKKRecursiveEditor_h
 
-#include "SKKInputModeSelector.h"
-#include "SKKInputModeListener.h"
+#include "SKKInputEnvironment.h"
 #include "SKKInputEngine.h"
 #include "SKKStateMachine.h"
+#include <memory>
 
-class SKKInputSessionParameter;
 class SKKWidget;
 
 class SKKRecursiveEditor {
-    SKKInputSessionParameter* param_;
-    std::auto_ptr<SKKBaseEditor> bottom_;
-    SKKInputModeSelector selector_;
+    std::auto_ptr<SKKInputEnvironment> env_;
     SKKInputEngine editor_;
     SKKStateMachine state_;
     std::vector<SKKWidget*> widgets_;
@@ -47,11 +44,7 @@ class SKKRecursiveEditor {
     SKKRecursiveEditor& operator=(const SKKRecursiveEditor&);
 
 public:
-    SKKRecursiveEditor(SKKRegistrationObserver* registrationObserver,
-                       SKKInputSessionParameter* param,
-                       SKKBaseEditor* bottom,
-                       SKKInputModeListenerCollection* listeners);
-
+    SKKRecursiveEditor(SKKInputEnvironment* env);
     ~SKKRecursiveEditor();
 
     void Dispatch(const SKKEvent& event);

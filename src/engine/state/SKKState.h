@@ -24,6 +24,7 @@
 #define SKKState_h
 
 #include "GenericStateMachine.h"
+#include "SKKInputEnvironment.h"
 #include "SKKInputMode.h"
 #include "SKKEvent.h"
 #include "SKKCompleter.h"
@@ -46,8 +47,7 @@ class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
     SKKSelector selector_;
 
 public:
-    SKKState(SKKMessenger* messenger, SKKCandidateWindow* window,
-             SKKStateConfiguration* configuration, SKKInputEngine* editor);
+    SKKState(SKKInputEnvironment* env, SKKInputEngine* editor);
     SKKState(const SKKState& src);
 
     virtual const Handler InitialState() const { return &SKKState::Primary; }
@@ -83,14 +83,14 @@ public:
 		State KanaEntry(const Event& event);
 		State AsciiEntry(const Event& event);
 
-            // level 3 (sub of Edit)
-            State OkuriInput(const Event& event);
-
 	    // level 3 (sub of Edit)
 	    State EntryCompletion(const Event& event);
 
 	// level 2 (sub of Composing)
 	State SelectCandidate(const Event& event);
+
+    // level 1
+    State OkuriInput(const Event& event);
 
     // level 1
     State EntryRemove(const Event& event);

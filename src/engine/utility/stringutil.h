@@ -39,43 +39,29 @@
 #include <numeric>
 
 namespace string {
+    // 置換ユーティリティ
+    static void translate(std::string& str, const std::string& from, const std::string& to) {
+        unsigned pos = 0;
+
+        if(from == to) return;
+
+        while((pos = str.find(from, pos)) != std::string::npos) {
+            str.replace(pos, from.size(), to);
+        }
+    }
+
+    // 分割ユーティリティ
     class splitter {
         std::istringstream buf_;
 
-        struct replace {
-            std::string from_;
-            std::string to_;
-            unsigned index_;
-            unsigned last_;
-        
-        public:
-            replace(std::string from, std::string to)
-                : from_(from), to_(to), index_(0), last_(from_.size() - 1) {}
-
-            std::string& operator()(std::string& result, char ch) {
-                if(ch != from_[index_]) {
-                    result += from_.substr(0, index_);
-                    result += ch;
-                    index_ = 0;
-                } else {
-                    if(index_ == last_) {
-                        result += to_;
-                        index_ = 0;
-                    } else {
-                        ++ index_;
-                    }
-                }
-
-                return result;
-            }
-        };
-
     public:
-        void split(const std::string& str, const std::string& delimiter = ",") {
-            std::string empty;
+        void split(const std::string& target, const std::string& delimiter = ",") {
+            std::string str(target);
+
+            translate(str, delimiter, " ");
+
             buf_.clear();
-            buf_.str(std::accumulate(str.begin(), str.end(),
-                                     empty, replace(delimiter, " ")));
+            buf_.str(str);
         }
 
         splitter& operator>>(std::string& str) {
@@ -87,6 +73,7 @@ namespace string {
             return buf_;
         }
     };
+
 };
 
 #endif

@@ -23,7 +23,7 @@
 #ifndef SKKInputEngine_h
 #define SKKInputEngine_h
 
-#include "SKKBaseEditor.h"
+#include "SKKInputEnvironment.h"
 #include "SKKContextBuffer.h"
 #include "SKKInputMode.h"
 #include "SKKInputQueue.h"
@@ -34,9 +34,6 @@
 #include "SKKEntryRemoveEditor.h"
 #include "SKKCompleter.h"
 #include "SKKSelector.h"
-#include "SKKInputSessionParameter.h"
-#include "SKKInputModeSelector.h"
-#include "SKKRegistrationObserver.h"
 #include <vector>
 
 class SKKInputEngine : public SKKInputQueueObserver,
@@ -45,12 +42,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
                        public SKKOkuriListener {
     typedef std::vector<SKKBaseEditor*> EditorStack;
 
-    SKKRegistrationObserver* registrationObserver_;
-    SKKInputModeSelector* inputModeSelector_;
-    SKKBaseEditor* bottom_;
-    SKKInputSessionParameter* sessionParam_;
-
-    SKKInputEngineOption* option_;
+    SKKInputEnvironment* env_;
 
     EditorStack mainStack_;
     EditorStack subStack_;
@@ -107,10 +99,7 @@ class SKKInputEngine : public SKKInputQueueObserver,
     virtual void SKKOkuriListenerAppendEntry(const std::string& fixed);
 
 public:
-    SKKInputEngine(SKKRegistrationObserver* registrationObserver,
-                   SKKInputModeSelector* inputModeSelector,
-                   SKKBaseEditor* bottom,
-                   SKKInputSessionParameter* param);
+    SKKInputEngine(SKKInputEnvironment* env);
 
     // 入力モード
     void SelectInputMode(SKKInputMode mode);

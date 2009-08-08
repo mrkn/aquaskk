@@ -24,4 +24,13 @@ int main() {
     splitter.split("::abc:,def:,ghi::", "::");
     assert(splitter >> str && str == "abc:,def:,ghi");
     assert(!(splitter >> str));
+
+    splitter.split("abc def", " ");
+    assert(splitter >> str && str == "abc");
+    assert(splitter >> str && str == "def");
+    assert(!(splitter >> str));
+
+    str = "begin%20%20first%2second%0third20%end";
+    string::translate(str, "%20", " ");
+    assert(str == "begin  first%2second%0third20%end");
 }
