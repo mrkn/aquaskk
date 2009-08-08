@@ -2,11 +2,11 @@
 #include "SKKWindowSelector.h"
 #include "SKKCandidateWindow.h"
 
-#include "TestCandidateWindow.h"
+#include "MockCandidateWindow.h"
 
 int main() {
     SKKCandidateContainer container;
-    TestCandidateWindow test_window;
+    MockCandidateWindow test_window;
     SKKWindowSelector selector(&test_window);
 
     container.push_back(SKKCandidate("候補1"));

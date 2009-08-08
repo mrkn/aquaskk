@@ -37,7 +37,7 @@ int main() {
     assert(param == SKKEvent(SKK_RIGHT, 'f', 0));
 
     param = keymap.Fetch(0x20, 0, SKKKeyState::SHIFT);
-    assert(param == SKKEvent(SKK_CHAR, 0x20, PrevCandidate));
+    assert(param == SKKEvent(SKK_CHAR, 0x20, PrevCandidate|CompConversion));
 
     param = keymap.Fetch('v', 0, SKKKeyState::META);
     assert(param == SKKEvent(SKK_PASTE, 'v', 0));
