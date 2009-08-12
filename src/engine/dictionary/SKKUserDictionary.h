@@ -24,9 +24,10 @@
 #ifndef SKKUserDictionary_h
 #define SKKUserDictionary_h
 
-#include <vector>
 #include "SKKBaseDictionary.h"
 #include "SKKDictionaryFile.h"
+#include <vector>
+#include <ctime>
 
 class SKKUserDictionary: public SKKBaseDictionary {
     std::string path_;

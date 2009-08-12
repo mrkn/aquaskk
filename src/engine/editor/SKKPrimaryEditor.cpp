@@ -21,43 +21,37 @@
 */
 
 #include "SKKPrimaryEditor.h"
-#include "SKKContextBuffer.h"
+#include "SKKInputContext.h"
 
-SKKPrimaryEditor::SKKPrimaryEditor() : modified_(0) {}
+SKKPrimaryEditor::SKKPrimaryEditor(SKKInputContext* context)
+    : SKKBaseEditor(context) {}
 
-void SKKPrimaryEditor::Input(const std::string& fixed, const std::string&, char) {
-    fixed_ = fixed;
+void SKKPrimaryEditor::ReadContext() {
+    context()->entry = SKKEntry();
 
-    ++ modified_;
-}
+    SKKUndoContext& undo = context()->undo;
 
-void SKKPrimaryEditor::Clear() {
-    if(!fixed_.empty()) {
-        fixed_.clear();
-
-        ++ modified_;
+    if(!undo.Candidate().empty()) {
+        Input(undo.Candidate(), "", 0);
+        undo.Clear();
     }
 }
 
-void SKKPrimaryEditor::Output(SKKContextBuffer& buffer) const {
-    buffer.Fix(commit_);
-    buffer.Fix(fixed_);
+void SKKPrimaryEditor::Input(const std::string& ascii) {
+    context()->event_handled = false;
+}
+
+void SKKPrimaryEditor::Input(const std::string& fixed, const std::string&, char) {
+    context()->output.Fix(fixed);
+}
+
+void SKKPrimaryEditor::Input(SKKBaseEditor::Event event) {
+    context()->event_handled = false;
 }
 
 void SKKPrimaryEditor::Commit(std::string& queue) {
-    commit_ += queue;
+    context()->output.Fix(queue);
     queue.clear();
 
-    ++ modified_;
-}
-
-void SKKPrimaryEditor::Flush() {
-    Clear();
-
-    commit_.clear();
-    modified_ = 0;
-}
-
-bool SKKPrimaryEditor::IsModified() const {
-    return 0 < modified_;
+    context()->entry = SKKEntry();
 }

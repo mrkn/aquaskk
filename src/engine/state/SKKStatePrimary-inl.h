@@ -42,11 +42,11 @@ State SKKState::Primary(const Event& event) {
 
     case SKK_UNDO:
         // Undo 可能なら見出し語入力に遷移する
-        switch(editor_->Undo()) {
-        case SKKInputEngine::UndoKanaEntry:
+        switch(context_->undo.Undo()) {
+        case SKKUndoContext::UndoKanaEntry:
             return State::Transition(&SKKState::KanaEntry);
 
-        case SKKInputEngine::UndoAsciiEntry:
+        case SKKUndoContext::UndoAsciiEntry:
             return State::Transition(&SKKState::AsciiEntry);
         }
 
@@ -103,6 +103,12 @@ State SKKState::Primary(const Event& event) {
 
     case SKK_JISX0208LATIN_MODE:
         return State::Transition(&SKKState::Jisx0208Latin);
+
+    default:
+        if(event.IsUser()) {
+            editor_->Cancel();
+            return 0;
+        }
     }
     
     return &SKKState::TopState;

@@ -1,4 +1,5 @@
 #include "calculator.h"
+#include <cassert>
 
 int main() {
     calculator::engine calc;

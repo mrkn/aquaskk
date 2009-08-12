@@ -24,10 +24,8 @@
 #define SKKInputEngine_h
 
 #include "SKKInputEnvironment.h"
-#include "SKKContextBuffer.h"
 #include "SKKInputMode.h"
 #include "SKKInputQueue.h"
-#include "SKKOutputQueue.h"
 #include "SKKComposingEditor.h"
 #include "SKKOkuriEditor.h"
 #include "SKKCandidateEditor.h"
@@ -40,25 +38,16 @@ class SKKInputEngine : public SKKInputQueueObserver,
                        public SKKCompleterBuddy,
                        public SKKSelectorBuddy,
                        public SKKOkuriListener {
-    typedef std::vector<SKKBaseEditor*> EditorStack;
+    class Synchronizer;
+    friend class Synchronizer;
 
     SKKInputEnvironment* env_;
-
-    EditorStack mainStack_;
-    EditorStack subStack_;
-    EditorStack* active_;
-
-    bool handled_;
-    bool needsInitializeOkuri_;
+    std::vector<SKKBaseEditor*> stack_;
 
     SKKInputQueue inputQueue_;
-    SKKOutputQueue outputQueue_;
-    SKKContextBuffer contextBuffer_;
     SKKInputQueueObserver::State inputState_;
 
     std::string word_;
-    std::string undo_;
-    std::string restore_;
 
     SKKComposingEditor composingEditor_;
     SKKOkuriEditor okuriEditor_;
@@ -71,12 +60,10 @@ class SKKInputEngine : public SKKInputQueueObserver,
 
     SKKBaseEditor* top() const;
     SKKInputMode inputMode() const;
-    void fire(SKKBaseEditor::Event event);
+    void initialize();
+    void push(SKKBaseEditor* editor);
+    void invoke(SKKBaseEditor::Event event);
     void terminate();
-    void cancel();
-    void enableMainEditor();
-    void enableSubEditor(SKKBaseEditor* editor);
-    void updateContextBuffer();
     void study(const SKKEntry& entry, const SKKCandidate& candidate);
     void insert(const std::string& str);
 
@@ -123,26 +110,21 @@ public:
     void HandlePaste();
     void HandlePing();
 
+    // 確定
     void Commit();
-    void Reset();
+
+    // 取消
+    void Cancel();
+
+    // 登録
     void Register(const std::string& word);
 
     // トグル変換
     void ToggleKana();
     void ToggleJisx0201Kana();
 
-    // 再変換
-    enum UndoResult { UndoFailed, UndoKanaEntry, UndoAsciiEntry };
-    UndoResult Undo();
-
-    // 出力
-    void Output();
-
-    // 前回の Output 以降に変更されているかどうか？
-    bool IsModified() const;
-
-    // 未確定文字列があるかどうか？
-    bool IsComposing() const;
+    // 同期
+    void SyncInputContext();
 
     // ローマ字かな変換が発生するか？
     bool CanConvert(char code) const;
@@ -154,8 +136,6 @@ public:
     void BeginRegistration();
     void FinishRegistration();
     void AbortRegistration();
-
-    const SKKEntry Entry() const;
 };
 
 #endif

@@ -34,24 +34,22 @@ public:
 
 class SKKOkuriEditor : public SKKBaseEditor {
     SKKOkuriListener* listener_;
-    bool modified_; 
     bool first_;
     std::string prefix_;
     std::string okuri_;
 
+    void update();
+
 public:
-    SKKOkuriEditor(SKKOkuriListener* listener);
+    SKKOkuriEditor(SKKInputContext* context, SKKOkuriListener* listener);
 
-    void Initialize(char prefix);
-    bool IsOkuriComplete() const;
-
+    virtual void ReadContext();
+    virtual void WriteContext();
     virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(SKKBaseEditor::Event event);
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
-    virtual void Flush();
-    virtual bool IsModified() const;
+
+    void Initialize(char prefix);
 };
 
 #endif

@@ -34,12 +34,12 @@ class SKKEntryRemoveEditor : public SKKBaseEditor {
     SKKCandidate candidate_;
 
 public:
-    void Initialize(const SKKEntry& entry, const SKKCandidate& candidate);
+    SKKEntryRemoveEditor(SKKInputContext* context);
 
+    virtual void ReadContext();
+    virtual void WriteContext();
     virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(Event event);
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
 };
 

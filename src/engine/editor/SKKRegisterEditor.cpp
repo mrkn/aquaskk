@@ -21,10 +21,19 @@
 */
 
 #include "SKKRegisterEditor.h"
-#include "SKKContextBuffer.h"
+#include "SKKInputContext.h"
 
-SKKRegisterEditor::SKKRegisterEditor(const SKKEntry& entry) {
-    prompt_ = "[登録：" + entry.PromptString() + "]";
+SKKRegisterEditor::SKKRegisterEditor(SKKInputContext* context)
+    : SKKBaseEditor(context), entry_(context->entry) {
+    prompt_ = "[登録：" + entry_.PromptString() + "]";
+}
+
+void SKKRegisterEditor::ReadContext() {
+    context()->entry = SKKEntry();
+}
+
+void SKKRegisterEditor::WriteContext() {
+    context()->output.Compose(prompt_ + word_.String(), word_.CursorPosition());
 }
 
 void SKKRegisterEditor::Input(const std::string& ascii) {
@@ -66,15 +75,9 @@ void SKKRegisterEditor::Input(SKKBaseEditor::Event event) {
     }
 }
 
-void SKKRegisterEditor::Clear() {
-    // 何もしない
-}
-
-void SKKRegisterEditor::Output(SKKContextBuffer& buffer) const {
-    buffer.Compose(prompt_ + word_.String(), word_.CursorPosition());
-}
-
 void SKKRegisterEditor::Commit(std::string& queue) {
     word_.Insert(queue);
     queue = word_.String();
+
+    context()->entry = entry_;
 }

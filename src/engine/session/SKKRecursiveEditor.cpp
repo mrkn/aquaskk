@@ -44,27 +44,15 @@ void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {
     state_.Dispatch(SKKStateMachine::Event(event.id, event));
 }
 
-bool SKKRecursiveEditor::Output() {
-    bool result = editor_.IsModified();
-
-    editor_.Output();
-
-    return result;
-}
-
-void SKKRecursiveEditor::Clear() {
-    editor_.Reset();
-}
-
-bool SKKRecursiveEditor::IsComposing() const {
-    return editor_.IsComposing();
+void SKKRecursiveEditor::SyncInputContext() {
+    editor_.SyncInputContext();
 }
 
 void SKKRecursiveEditor::Commit(const std::string& word) {
     if(!word.empty()) {
-        editor_.Register(word);
-
         Dispatch(SKKEvent(SKK_ENTER, 0));
+
+        editor_.Register(word);
     } else {
         Dispatch(SKKEvent(SKK_CANCEL, 0));
     }

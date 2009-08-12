@@ -23,10 +23,12 @@
 #include "SKKInputEnvironment.h"
 
 SKKInputEnvironment::SKKInputEnvironment(SKKRegistrationObserver* observer,
+                                         SKKInputContext* context,
                                          SKKInputSessionParameter* param,
                                          SKKInputModeListenerCollection* listeners,
                                          SKKBaseEditor* bottom)
     : observer_(observer)
+    , context_(context)
     , param_(param)
     , selector_(listeners)
     , bottom_(bottom)
@@ -34,6 +36,10 @@ SKKInputEnvironment::SKKInputEnvironment(SKKRegistrationObserver* observer,
 
 SKKRegistrationObserver* SKKInputEnvironment::RegistrationObserver() {
     return observer_;
+}
+
+SKKInputContext* SKKInputEnvironment::InputContext() {
+    return context_;
 }
 
 SKKInputSessionParameter* SKKInputEnvironment::InputSessionParameter() {

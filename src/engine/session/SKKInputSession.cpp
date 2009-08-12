@@ -22,7 +22,11 @@
 
 #include "SKKInputSession.h"
 #include "SKKRecursiveEditor.h"
+#include "SKKFrontEnd.h"
+#include "SKKDynamicCompletor.h"
+#include "SKKAnnotator.h"
 #include "SKKPrimaryEditor.h"
+#include "SKKBackEnd.h"
 
 namespace {
     class scoped_flag {
@@ -40,8 +44,8 @@ namespace {
 }
 
 SKKInputSession::SKKInputSession(SKKInputSessionParameter* param)
-    : param_(param), inEvent_(false) {
-    stack_.push_back(createEditor(new SKKPrimaryEditor()));
+    : param_(param), context_(param->FrontEnd()), inEvent_(false) {
+    stack_.push_back(createEditor(new SKKPrimaryEditor(&context_)));
 }
 
 SKKInputSession::~SKKInputSession() {
@@ -70,21 +74,9 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
 
     endEvent();
 
-    bool handled = top()->Output();
+    output();
 
-    // 単語登録中ではなく、未確定状態でもない
-    if(stack_.size() == 1 && !top()->IsComposing()) {
-        // 処理オプションを調べる
-        switch(event.option) {
-        case AlwaysHandled:     // 常に処理済み
-            return true;
-
-        case PseudoHandled:     // 未処理
-            return false;
-        }
-    }
-
-    return handled;
+    return result(event);
 }
 
 void SKKInputSession::Clear() {
@@ -92,11 +84,13 @@ void SKKInputSession::Clear() {
 
     scoped_flag on(inEvent_);
 
-    while(stack_.size() != 1) {
+    while(stack_.size()) {
         popEditor();
     }
 
-    top()->Clear();
+    stack_.push_back(createEditor(new SKKPrimaryEditor(&context_)));
+
+    output();
 }
 
 void SKKInputSession::Activate() {
@@ -115,7 +109,7 @@ SKKRecursiveEditor* SKKInputSession::top() {
 
 SKKRecursiveEditor* SKKInputSession::createEditor(SKKBaseEditor* bottom) {
     return new SKKRecursiveEditor(
-        new SKKInputEnvironment(this, param_.get(), &listeners_, bottom));
+        new SKKInputEnvironment(this, &context_, param_.get(), &listeners_, bottom));
 }
 
 void SKKInputSession::popEditor() {
@@ -125,6 +119,10 @@ void SKKInputSession::popEditor() {
 
 void SKKInputSession::beginEvent() {
     temp_ = stack_;
+
+    context_.output.Clear();
+    context_.event_handled = true;
+    context_.needs_go_back = false;
 }
 
 void SKKInputSession::endEvent() {
@@ -137,6 +135,84 @@ void SKKInputSession::endEvent() {
     }
 }
 
+void SKKInputSession::output() {
+    context_.output.Clear();
+
+    top()->SyncInputContext();
+
+    context_.output.Output();
+
+    SKKInputEngineOption* option = param_->InputEngineOption();
+    SKKDynamicCompletor* completer = param_->DynamicCompletor();
+    SKKAnnotator* annotator = param_->Annotator();
+
+    if(context_.dynamic_completion && option->EnableDynamicCompletion()) {
+        unsigned range = option->DynamicCompletionRange();
+        std::string completion = complete(range);
+
+        completer->Update(completion, context_.output.EntryCursor());
+        completion.empty() ? completer->Hide() : completer->Show();
+    } else {
+        completer->Hide();
+    }
+
+    if(context_.annotator && option->EnableAnnotation()) {
+        SKKCandidate candidate = context_.candidate;
+
+        if(candidate.IsEmpty()) {
+            annotator->Hide();
+        } else {
+            annotator->Update(candidate, context_.output.LeftString());
+            annotator->Show();
+        }
+    } else {
+        annotator->Hide();
+    }
+}
+
+bool SKKInputSession::result(const SKKEvent& event) {
+    if(1 < stack_.size()) {
+        context_.event_handled = true;
+    } else {
+        // 単語登録中ではなく、未確定状態でもない
+        if(!context_.output.IsComposing()) {
+            switch(event.option) {
+            case AlwaysHandled:     // 常に処理済み
+                return true;
+
+            case PseudoHandled:     // 未処理
+                return false;
+            }
+        }
+    }
+
+    return context_.event_handled;
+}
+
+std::string SKKInputSession::complete(unsigned range) {
+    SKKEntry entry = context_.entry;
+    std::string completion;
+
+    if(entry.IsEmpty() || entry.IsOkuriAri()) {
+        return completion;
+    }
+
+    std::vector<std::string> result;
+    std::string key = entry.EntryString();
+
+    // 候補を補完する
+    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, range)) {
+        unsigned limit = std::min((unsigned)result.size(), range);
+        for(unsigned i = 0; i < limit; ++ i) { 
+            completion += result[i];
+            completion += "\n";
+        }
+        completion.erase(completion.size() - 1);
+    }
+
+    return completion;
+}
+
 // ----------------------------------------------------------------------
 // SKKRegistrationObserver インタフェース
 // ----------------------------------------------------------------------
@@ -147,7 +223,7 @@ void SKKInputSession::SKKRegistrationBegin(SKKBaseEditor* bottom) {
 
 void SKKInputSession::SKKRegistrationFinish(const std::string& word) {
     if(temp_.size() == 1) {
-        top()->Output();
+        context_.event_handled = false;
     } else {
         temp_.pop_back();
         temp_.back()->Commit(word);

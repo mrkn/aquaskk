@@ -39,6 +39,7 @@ class SKKInputEngine;
 
 // 状態コンテナ
 class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
+    SKKInputContext* context_;
     SKKMessenger* messenger_;
     SKKCandidateWindow* window_;
     SKKStateConfiguration* configuration_;

@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2008-2009 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,20 +25,30 @@
 
 #include <string>
 
-class SKKContextBuffer;
+class SKKInputContext;
 
+// 基底エディタクラス
 class SKKBaseEditor {
+    SKKInputContext* context_;
+
+protected:
+    SKKBaseEditor(SKKInputContext* context) : context_(context) {}
+
+    SKKInputContext* context() const { return context_; }
+
 public:
     virtual ~SKKBaseEditor() {}
 
-    enum Event {
-        BackSpace,
-        Delete,
-        CursorLeft,
-        CursorRight,
-        CursorUp,
-        CursorDown
-    };
+    // SKKInputContext の情報で初期化
+    //
+    // 具象エディタは SKKInputContext の情報で初期化されることを期待される
+    // SKKInputContext への書き込みも許可
+    virtual void ReadContext() {}
+
+    // SKKInputContext に書き出し
+    //
+    // 出力文字列や、状態設定等を行う
+    virtual void WriteContext() {}
 
     // 入力処理(ASCII もしくはペースト用)
     virtual void Input(const std::string& ascii) {}
@@ -46,23 +56,17 @@ public:
     // 入力処理(fixed=確定文字列, input=入力文字列, code=入力文字)
     virtual void Input(const std::string& fixed, const std::string& input, char code) {}
 
+    enum Event {
+        BackSpace, Delete, CursorLeft, CursorRight, CursorUp, CursorDown
+    };
+
     // 入力処理(event=イベント)
     virtual void Input(Event event) {}
 
-    // クリアー
-    virtual void Clear() = 0;
-
-    // 出力処理
-    virtual void Output(SKKContextBuffer& buffer) const = 0;
-
     // 確定処理
+    //
+    // queue に確定した文字列をセットする
     virtual void Commit(std::string& queue) = 0;
-
-    // 出力完了処理
-    virtual void Flush() {}
-
-    // 前回の Flush 以降に変更されているかどうか？
-    virtual bool IsModified() const { return true; }
 };
 
 #endif

@@ -32,7 +32,8 @@ namespace {
 }
 
 SKKState::SKKState(SKKInputEnvironment* env, SKKInputEngine* editor)
-    : messenger_(env->InputSessionParameter()->Messenger())
+    : context_(env->InputContext())
+    , messenger_(env->InputSessionParameter()->Messenger())
     , window_(env->InputSessionParameter()->CandidateWindow())
     , configuration_(env->InputSessionParameter()->StateConfiguration())
     , editor_(editor)
@@ -41,7 +42,8 @@ SKKState::SKKState(SKKInputEnvironment* env, SKKInputEngine* editor)
 {}
 
 SKKState::SKKState(const SKKState& src)
-    : messenger_(src.messenger_)
+    : context_(src.context_)
+    , messenger_(src.messenger_)
     , window_(src.window_)
     , configuration_(src.configuration_)
     , editor_(src.editor_)

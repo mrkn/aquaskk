@@ -31,11 +31,13 @@ class SKKCandidateEditor : public SKKBaseEditor {
     SKKEntry entry_;
     SKKCandidate candidate_;
 
-public:
-    void Initialize(const SKKEntry& entry);
+    void update();
 
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
+public:
+    SKKCandidateEditor(SKKInputContext* context);
+
+    virtual void ReadContext();
+    virtual void WriteContext();
     virtual void Commit(std::string& queue);
 
     void SetCandidate(const SKKCandidate& candidate);

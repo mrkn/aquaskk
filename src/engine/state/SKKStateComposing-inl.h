@@ -63,7 +63,7 @@ State SKKState::Edit(const Event& event) {
     case SKK_BACKSPACE:
         editor_->HandleBackSpace();
 
-        if(!editor_->IsModified()) {
+        if(context_->needs_go_back) {
             return State::Transition(&SKKState::KanaInput);
         }
 
@@ -95,7 +95,7 @@ State SKKState::Edit(const Event& event) {
         }
 
         if(param.IsNextCandidate() || param.IsCompConversion()) {
-            if(editor_->Entry().IsEmpty()) {
+            if(context_->entry.IsEmpty()) {
                 return State::Transition(&SKKState::KanaInput);
             }
 
@@ -163,11 +163,9 @@ State SKKState::KanaEntry(const Event& event) {
             return State::Transition(&SKKState::KanaInput);
         }
 
-        if(!editor_->Entry().IsEmpty()) {
-            // 送りあり
-            if(param.IsUpperCases()) {
-                return State::Forward(&SKKState::OkuriInput);
-            }
+        // 送りあり
+        if(param.IsUpperCases() && !context_->entry.IsEmpty()) {
+            return State::Forward(&SKKState::OkuriInput);
         }
 
         if(!editor_->CanConvert(param.code)) {
@@ -212,11 +210,9 @@ State SKKState::AsciiEntry(const Event& event) {
     case SKK_CHAR:
         if(param.IsNextCandidate()) break;
 
-        if(!editor_->Entry().IsEmpty()) {
-            if(param.IsToggleJisx0201Kana()) {
-                editor_->ToggleJisx0201Kana();
-                return State::Transition(&SKKState::KanaInput);
-            }
+        if(param.IsToggleJisx0201Kana() && !context_->entry.IsEmpty()) {
+            editor_->ToggleJisx0201Kana();
+            return State::Transition(&SKKState::KanaInput);
         }
 
         if(param.IsInputChars()) {
@@ -396,7 +392,7 @@ State SKKState::OkuriInput(const Event& event) {
     case SKK_BACKSPACE:
         editor_->HandleBackSpace();
 
-        if(!editor_->IsModified()) {
+        if(context_->needs_go_back) {
             return State::Transition(&SKKState::KanaEntry);
         }
 

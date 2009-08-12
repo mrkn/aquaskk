@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,20 +20,26 @@
 
 */
 
-#ifndef SKKPrimaryEditor_h
-#define SKKPrimaryEditor_h
+#ifndef SKKUndoContext_h
+#define SKKUndoContext_h
 
-#include "SKKBaseEditor.h"
+#include <string>
+ 
+class SKKFrontEnd;
 
-class SKKPrimaryEditor : public SKKBaseEditor {
+class SKKUndoContext {
+    SKKFrontEnd* frontend_;
+    std::string entry_;
+    std::string candidate_;
+
 public:
-    SKKPrimaryEditor(SKKInputContext* context);
+    SKKUndoContext(SKKFrontEnd* frontend);
 
-    virtual void ReadContext();
-    virtual void Input(const std::string& ascii);
-    virtual void Input(const std::string& fixed, const std::string& input, char code);
-    virtual void Input(SKKBaseEditor::Event event);
-    virtual void Commit(std::string& queue);
+    enum UndoResult { UndoFailed, UndoKanaEntry, UndoAsciiEntry };
+    UndoResult Undo();
+    void Clear();
+    const std::string& Entry() const;
+    const std::string& Candidate() const;
 };
 
 #endif

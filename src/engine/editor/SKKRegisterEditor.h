@@ -24,12 +24,12 @@
 #define SKKRegisterFilter_h
 
 #include "SKKBaseEditor.h"
+#include "SKKEntry.h"
 #include "SKKTextBuffer.h"
-
-class SKKEntry;
 
 class SKKRegisterEditor : public SKKBaseEditor {
     std::string prompt_;
+    SKKEntry entry_;
     SKKTextBuffer word_;
 
     SKKRegisterEditor();
@@ -37,13 +37,13 @@ class SKKRegisterEditor : public SKKBaseEditor {
     SKKRegisterEditor& operator=(const SKKRegisterEditor&);
 
 public:
-    SKKRegisterEditor(const SKKEntry& entry);
-
+    SKKRegisterEditor(SKKInputContext* context);
+    
+    virtual void ReadContext();
+    virtual void WriteContext();
     virtual void Input(const std::string& ascii);
     virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(Event event);
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
 };
 

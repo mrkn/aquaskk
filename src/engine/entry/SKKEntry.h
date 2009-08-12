@@ -23,6 +23,7 @@
 #ifndef	SKKEntry_h
 #define SKKEntry_h
 
+#include "SKKInputMode.h"
 #include <string>
 
 // 見出し語
@@ -40,11 +41,18 @@ public:
     SKKEntry(const std::string& entry, const std::string& okuri = "");
 
     void SetEntry(const std::string& entry);
+    void AppendEntry(const std::string& str);
     void SetOkuri(const std::string& prefix, const std::string& kana);
 
     const std::string& EntryString() const;
     const std::string& OkuriString() const;
     const std::string& PromptString() const;
+
+    std::string ToggleKana(SKKInputMode mode) const;
+    std::string ToggleJisx0201Kana(SKKInputMode mode) const;
+
+    // 正規化
+    SKKEntry Normalize(SKKInputMode mode) const;
 
     bool IsEmpty() const;
     bool IsOkuriAri() const;

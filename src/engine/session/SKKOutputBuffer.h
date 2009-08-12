@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,20 +20,32 @@
 
 */
 
-#ifndef SKKPrimaryEditor_h
-#define SKKPrimaryEditor_h
+#ifndef SKKOutputBuffer_h
+#define SKKOutputBuffer_h
 
-#include "SKKBaseEditor.h"
+#include <string>
 
-class SKKPrimaryEditor : public SKKBaseEditor {
+class SKKFrontEnd;
+
+// 出力バッファ
+class SKKOutputBuffer {
+    SKKFrontEnd* frontend_;
+    std::string composing_;
+    std::string prev_;
+    int cursor_;
+    int entry_cursor_;
+
 public:
-    SKKPrimaryEditor(SKKInputContext* context);
+    SKKOutputBuffer(SKKFrontEnd* frontend);
 
-    virtual void ReadContext();
-    virtual void Input(const std::string& ascii);
-    virtual void Input(const std::string& fixed, const std::string& input, char code);
-    virtual void Input(SKKBaseEditor::Event event);
-    virtual void Commit(std::string& queue);
+    void Fix(const std::string& str);
+    void Compose(const std::string& str, int cursor = 0);
+    void SaveEntryCursor();
+    int EntryCursor() const;
+    void Clear();
+    void Output();
+    bool IsComposing() const;
+    std::string LeftString() const;
 };
 
 #endif

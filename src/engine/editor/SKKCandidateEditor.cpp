@@ -21,28 +21,28 @@
 */
 
 #include "SKKCandidateEditor.h"
-#include "SKKContextBuffer.h"
+#include "SKKInputContext.h"
 #include "SKKBackEnd.h"
 
-void SKKCandidateEditor::Initialize(const SKKEntry& entry) {
-    entry_ = entry;
+SKKCandidateEditor::SKKCandidateEditor(SKKInputContext* context)
+    : SKKBaseEditor(context) {}
+
+void SKKCandidateEditor::ReadContext() {
+    entry_ = context()->entry;
+
+    context()->annotator = true;
 }
 
-void SKKCandidateEditor::Clear() {
-    // 何もしない
-}
-
-void SKKCandidateEditor::Output(SKKContextBuffer& buffer) const {
+void SKKCandidateEditor::WriteContext() {
     std::string str(candidate_.Variant());
 
     if(entry_.IsOkuriAri()) {
         str += entry_.OkuriString();
     }
 
-    buffer.Compose("▼" + str);
+    context()->output.Compose("▼" + str);
 
-    buffer.SetEntry(entry_);
-    buffer.SetCandidate(candidate_);
+    update();
 }
 
 void SKKCandidateEditor::Commit(std::string& queue) {
@@ -58,4 +58,13 @@ void SKKCandidateEditor::Commit(std::string& queue) {
 
 void SKKCandidateEditor::SetCandidate(const SKKCandidate& candidate) {
     candidate_ = candidate;
+
+    update();
+}
+
+// ----------------------------------------------------------------------
+
+void SKKCandidateEditor::update() {
+    context()->entry = entry_;
+    context()->candidate = candidate_;
 }

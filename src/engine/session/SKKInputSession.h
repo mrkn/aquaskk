@@ -25,6 +25,7 @@
 
 #include "SKKRegistrationObserver.h"
 #include "SKKInputModeListener.h"
+#include "SKKInputContext.h"
 #include <vector>
 
 class SKKInputSessionParameter;
@@ -36,6 +37,7 @@ class SKKInputSession : public SKKRegistrationObserver {
     std::vector<SKKRecursiveEditor*> stack_;
     std::vector<SKKRecursiveEditor*> temp_;
     SKKInputModeListenerCollection listeners_;
+    SKKInputContext context_;
     bool inEvent_;
 
     SKKRecursiveEditor* top();
@@ -43,6 +45,9 @@ class SKKInputSession : public SKKRegistrationObserver {
     void popEditor();
     void beginEvent();
     void endEvent();
+    bool result(const SKKEvent& event);
+    void output();
+    std::string complete(unsigned range);
 
     virtual void SKKRegistrationBegin(SKKBaseEditor* bottom);
     virtual void SKKRegistrationFinish(const std::string& word);

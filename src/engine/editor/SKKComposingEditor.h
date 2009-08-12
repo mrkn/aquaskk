@@ -28,30 +28,20 @@
 
 class SKKComposingEditor : public SKKBaseEditor {
     SKKTextBuffer composing_;
-    std::string completion_;
-    bool enableDynamicCompletion_;
-    int completionRange_;
-    bool modified_;
 
-    void setModified();
-    void updateCompletion();
+    void update();
 
 public:
-    SKKComposingEditor();
+    SKKComposingEditor(SKKInputContext* context);
 
+    virtual void ReadContext();
+    virtual void WriteContext();
     virtual void Input(const std::string& ascii);
     virtual void Input(const std::string& fixed, const std::string& input, char code);
     virtual void Input(Event event);
-    virtual void Clear();
-    virtual void Output(SKKContextBuffer& buffer) const;
     virtual void Commit(std::string& queue);
-    virtual void Flush();
-    virtual bool IsModified() const;
 
-    const std::string QueryString() const;
     void SetEntry(const std::string& entry);
-    void EnableDynamicCompletion(bool flag);
-    void SetDynamicCompletionRange(int range);
 };
 
 #endif

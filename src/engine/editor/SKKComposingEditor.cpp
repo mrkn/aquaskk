@@ -21,20 +21,37 @@
 */
 
 #include "SKKComposingEditor.h"
-#include "SKKContextBuffer.h"
-#include "SKKBackEnd.h"
-#include "jconv.h"
-#include <iostream>
+#include "SKKInputContext.h"
 
-SKKComposingEditor::SKKComposingEditor() : enableDynamicCompletion_(false), completionRange_(1) {
-    setModified();
+SKKComposingEditor::SKKComposingEditor(SKKInputContext* context)
+    : SKKBaseEditor(context) {}
+
+void SKKComposingEditor::ReadContext() {
+    SKKEntry& entry = context()->entry;
+
+    composing_.Clear();
+
+    if(entry.IsEmpty()) {
+        composing_.Insert(context()->undo.Entry());
+    } else {
+        entry.SetOkuri("", "");
+        composing_.Insert(entry.EntryString());
+    }
+
+    context()->dynamic_completion = true;
+}
+
+void SKKComposingEditor::WriteContext() {
+    context()->output.SaveEntryCursor();
+    context()->output.Compose("▽" + composing_.String(), composing_.CursorPosition());
+
+    update();
 }
 
 void SKKComposingEditor::Input(const std::string& ascii) {
-    setModified();
-
     composing_.Insert(ascii);
-    updateCompletion();
+
+    update();
 }
 
 void SKKComposingEditor::Input(const std::string& fixed, const std::string&, char) {
@@ -42,20 +59,16 @@ void SKKComposingEditor::Input(const std::string& fixed, const std::string&, cha
 }
 
 void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
-    setModified();
-
     switch(event) {
     case BackSpace:
         if(composing_.IsEmpty()) {
-            modified_ = false;
+            context()->needs_go_back = true;
         }
         composing_.BackSpace();
-        updateCompletion();
         break;
 
     case Delete:
         composing_.Delete();
-        updateCompletion();
         break;
 
     case CursorLeft:
@@ -73,87 +86,26 @@ void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
     case CursorDown:
         composing_.CursorDown();
         break;
-
-    default:
-        return;
-    }
-}
-
-void SKKComposingEditor::Clear() {
-    setModified();
-
-    composing_.Clear();
-    completion_.clear();
-}
-
-void SKKComposingEditor::Output(SKKContextBuffer& buffer) const {
-    if(completion_.empty()) {
-        buffer.Compose("▽" + composing_.String(), composing_.CursorPosition());
-    } else {
-        buffer.Compose("▽" + composing_.String(), completion_, composing_.CursorPosition());
     }
 
-    buffer.SetEntry(SKKEntry(composing_.LeftString()));
+    update();
 }
 
 void SKKComposingEditor::Commit(std::string& queue) {
     queue = composing_.String();
-
-    Clear();
 }
 
-void SKKComposingEditor::Flush() {
-    setModified();
-}
-
-bool SKKComposingEditor::IsModified() const {
-    return modified_;
-}
-
-const std::string SKKComposingEditor::QueryString() const {
-    return composing_.LeftString();
-}
+// ----------------------------------------------------------------------
 
 void SKKComposingEditor::SetEntry(const std::string& entry) {
-    Clear();
-
+    composing_.Clear();
     composing_.Insert(entry);
+
+    update();
 }
 
-void SKKComposingEditor::EnableDynamicCompletion(bool flag) {
-    enableDynamicCompletion_ = flag;
+// ----------------------------------------------------------------------
 
-    if(!enableDynamicCompletion_) {
-        completion_.clear();
-    }
-}
-
-void SKKComposingEditor::SetDynamicCompletionRange(int range) {
-    completionRange_ = range;
-}
-
-// ------------------------------------------------------------
-
-void SKKComposingEditor::setModified() {
-    modified_ = true;
-}
-
-void SKKComposingEditor::updateCompletion() {
-    if(!enableDynamicCompletion_) return;
-
-    std::vector<std::string> result;
-    std::string key = composing_.String();
-
-    // 候補を補完する
-    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, completionRange_)) {
-        completion_.clear();
-        unsigned limit = std::min((unsigned)result.size(), (unsigned)completionRange_);
-        for(unsigned i = 0; i < limit; ++ i) { 
-            completion_ += result[i];
-            completion_ += "\n";
-        }
-        completion_.erase(completion_.size() - 1);
-    } else {
-        completion_.clear();
-    }
+void SKKComposingEditor::update() {
+    context()->entry.SetEntry(composing_.LeftString());
 }

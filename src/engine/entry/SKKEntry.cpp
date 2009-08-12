@@ -21,6 +21,7 @@
 */
 
 #include "SKKEntry.h"
+#include "jconv.h"
 
 SKKEntry::SKKEntry() {}
 
@@ -32,14 +33,20 @@ SKKEntry::SKKEntry(const std::string& entry, const std::string& okuri)
 void SKKEntry::SetEntry(const std::string& entry) {
     normal_entry_ = entry;
 
-    unsigned last_index = normal_entry_.size() - 1;
+    if(!normal_entry_.empty()) {
+        unsigned last_index = normal_entry_.size() - 1;
 
-    // 見出し語末尾の prefix を取り除く(ex. "かk" → "か")
-    if(normal_entry_.find_last_of(prefix_) == last_index) {
-        normal_entry_.erase(last_index);
+        // 見出し語末尾の prefix を取り除く(ex. "かk" → "か")
+        if(normal_entry_.find_last_of(prefix_) == last_index) {
+            normal_entry_.erase(last_index);
+        }
     }
 
     updateEntry();
+}
+
+void SKKEntry::AppendEntry(const std::string& str) {
+    normal_entry_ += str;
 }
 
 void SKKEntry::SetOkuri(const std::string& prefix, const std::string& kana) {
@@ -59,6 +66,70 @@ const std::string& SKKEntry::OkuriString() const {
 
 const std::string& SKKEntry::PromptString() const {
     return prompt_;
+}
+
+std::string SKKEntry::ToggleKana(SKKInputMode mode) const {
+    std::string result;
+
+    switch(mode) {
+    case HirakanaInputMode:
+	jconv::hirakana_to_katakana(normal_entry_, result);
+	break;
+
+    case KatakanaInputMode:
+	jconv::katakana_to_hirakana(normal_entry_, result);
+	break;
+
+    case Jisx0201KanaInputMode:
+	jconv::jisx0201_kana_to_katakana(normal_entry_, result);
+	break;
+    }
+
+    return result;
+}
+
+std::string SKKEntry::ToggleJisx0201Kana(SKKInputMode mode) const {
+    std::string result;
+
+    switch(mode) {
+    case HirakanaInputMode:
+	jconv::hirakana_to_jisx0201_kana(normal_entry_, result);
+	break;
+	
+    case KatakanaInputMode:
+	jconv::katakana_to_jisx0201_kana(normal_entry_, result);
+	break;
+
+    case Jisx0201KanaInputMode:
+	jconv::jisx0201_kana_to_hirakana(normal_entry_, result);
+	break;
+
+    case AsciiInputMode:
+	jconv::ascii_to_jisx0208_latin(normal_entry_, result);
+	break;
+    }
+
+    return result;
+}
+
+SKKEntry SKKEntry::Normalize(SKKInputMode mode) const {
+    SKKEntry entry(*this);
+    std::string result = normal_entry_;
+
+    // 入力モードがカタカナ/半角カナなら、見出し語をひらかなに正規化する
+    switch(mode) {
+    case KatakanaInputMode:
+        jconv::katakana_to_hirakana(normal_entry_, result);
+        break;
+
+    case Jisx0201KanaInputMode:
+        jconv::jisx0201_kana_to_hirakana(normal_entry_, result);
+        break;
+    }
+
+    entry.SetEntry(result);
+
+    return entry;
 }
 
 bool SKKEntry::IsEmpty() const {

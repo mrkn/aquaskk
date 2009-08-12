@@ -20,26 +20,28 @@
 
 */
 
-#ifndef SKKOutputQueue_h
-#define SKKOutputQueue_h
+#ifndef SKKInputContext_h
+#define SKKInputContext_h
 
-#include <vector>
-#include "SKKContextBuffer.h"
+#include "SKKOutputBuffer.h"
+#include "SKKEntry.h"
+#include "SKKCandidate.h"
+#include "SKKUndoContext.h"
 
-class SKKOutputQueue {
-    typedef std::vector<SKKContextBuffer> OutputQueue;
-    typedef OutputQueue::iterator OutputQueueIterator;
+// 入力コンテキスト
+struct SKKInputContext {
+    SKKEntry entry;
+    SKKCandidate candidate;
+    SKKOutputBuffer output;
+    SKKUndoContext undo;
 
-    SKKContextBuffer empty_;
-    SKKContextBuffer prev_;
-    OutputQueue queue_;
+    bool event_handled;
+    bool needs_go_back;
+    bool dynamic_completion;
+    bool annotator;
 
-public:
-    void Add(const SKKContextBuffer& context);
-    void Output(SKKFrontEnd* frontend,
-                SKKDynamicCompletor* completor,
-                SKKAnnotator* annotator);
+    SKKInputContext(SKKFrontEnd* frontend)
+        : output(frontend), undo(frontend), dynamic_completion(false) {}
 };
 
 #endif
-

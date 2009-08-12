@@ -19,15 +19,14 @@ BACKEND_OBJS = SKKBackEnd.o SKKDictionaryCache.o SKKDictionaryFactory.o \
 
 EDITOR_OBJS = SKKPrimaryEditor.o  SKKComposingEditor.o SKKOkuriEditor.o \
 	SKKCandidateEditor.o SKKEntryRemoveEditor.o SKKRegisterEditor.o \
-	SKKInputEngine.o SKKContextBuffer.o SKKTextBuffer.o SKKInputQueue.o \
-	SKKOutputQueue.o SKKInputEngine.o
+	SKKInputEngine.o SKKTextBuffer.o SKKInputQueue.o SKKInputEngine.o
 
 KEYMAP_OBJS = SKKKeymapEntry.o SKKKeymap.o
 
 SELECTOR_OBJS = SKKSelector.o SKKInlineSelector.o SKKWindowSelector.o
 
 SESSION_OBJS = SKKInputSession.o SKKRecursiveEditor.o SKKInputModeSelector.o \
-	SKKInputEnvironment.o
+	SKKInputEnvironment.o SKKOutputBuffer.o SKKUndoContext.o
 
 TRIE_OBJS = SKKRomanKanaConverter.o SKKTrie.o
 

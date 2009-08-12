@@ -23,6 +23,7 @@
 #include "SKKInputQueue.h"
 #include "SKKRomanKanaConverter.h"
 #include "jconv.h"
+#include <cassert>
 
 SKKInputQueue::SKKInputQueue(SKKInputQueueObserver* observer)
     : observer_(observer), mode_(HirakanaInputMode) {}

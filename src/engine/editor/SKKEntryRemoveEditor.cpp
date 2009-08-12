@@ -21,16 +21,28 @@
 */
 
 #include "SKKEntryRemoveEditor.h"
-#include "SKKContextBuffer.h"
+#include "SKKInputContext.h"
 #include "SKKBackEnd.h"
 
-void SKKEntryRemoveEditor::Initialize(const SKKEntry& entry, const SKKCandidate& candidate) {
-    prompt_ = entry.EntryString() + " /" + candidate.ToString() + "/ を削除しますか？(yes/no) ";
+SKKEntryRemoveEditor::SKKEntryRemoveEditor(SKKInputContext* context)
+    : SKKBaseEditor(context) {}
 
-    entry_ = entry;
-    candidate_ = candidate;
 
-    Clear();
+void SKKEntryRemoveEditor::ReadContext() {
+    entry_ = context()->entry;
+    candidate_ = context()->candidate;
+
+    input_.clear();
+
+    prompt_ = entry_.EntryString() + " /"
+        + candidate_.ToString() + "/ を削除しますか？(yes/no) ";
+}
+
+void SKKEntryRemoveEditor::WriteContext() {
+    context()->output.Clear();
+    context()->output.Compose(prompt_ + input_);
+
+    context()->entry = entry_;
 }
 
 void SKKEntryRemoveEditor::Input(const std::string& fixed, const std::string&, char) {
@@ -43,23 +55,12 @@ void SKKEntryRemoveEditor::Input(Event event) {
     }
 }
 
-void SKKEntryRemoveEditor::Clear() {
-    input_.clear();
-}
-
-void SKKEntryRemoveEditor::Output(SKKContextBuffer& buffer) const {
-    SKKContextBuffer tmp;
-    
-    tmp.Compose(prompt_ + input_);
-    tmp.SetEntry(SKKEntry(input_));
-
-    buffer = tmp;
-}
-
 void SKKEntryRemoveEditor::Commit(std::string& queue) {
-    SKKBackEnd::theInstance().Remove(entry_, candidate_);
+    if(input_ != "yes") {
+        context()->needs_go_back = true;
+    } else {
+        SKKBackEnd::theInstance().Remove(entry_, candidate_);
+    }
 
     queue.clear();
-
-    Clear();
 }

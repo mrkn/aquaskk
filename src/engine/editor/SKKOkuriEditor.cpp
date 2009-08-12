@@ -21,36 +21,37 @@
 */
 
 #include "SKKOkuriEditor.h"
-#include "SKKContextBuffer.h"
+#include "SKKInputContext.h"
 #include "utf8util.h"
 #include <iostream>
 #include <cctype>
 #include <exception>
 
-SKKOkuriEditor::SKKOkuriEditor(SKKOkuriListener* listener)
-    : listener_(listener), modified_(true) {}
+SKKOkuriEditor::SKKOkuriEditor(SKKInputContext* context, SKKOkuriListener* listener)
+    : SKKBaseEditor(context), listener_(listener) {}
 
-void SKKOkuriEditor::Initialize(char prefix) {
-    modified_ = true;
+void SKKOkuriEditor::ReadContext() {
     first_ = true;
 
     prefix_.clear();
     okuri_.clear();
-
-    prefix_ += std::tolower(prefix);
 }
 
-bool SKKOkuriEditor::IsOkuriComplete() const {
-    return !okuri_.empty();
+void SKKOkuriEditor::WriteContext() {
+    context()->output.Compose("*" + okuri_);
+
+    update();
 }
 
 void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, char code) {
     if(first_) {
         first_ = false;
+        prefix_ += std::tolower(code);
 
         // KesSi 対応
         if(!fixed.empty() && !input.empty()) {
             listener_->SKKOkuriListenerAppendEntry(fixed);
+            update();
             return;
         }
     }
@@ -72,30 +73,20 @@ void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, c
             prefix_ += std::tolower(code);
         }
     }
+
+    update();
 }
 
 void SKKOkuriEditor::Input(SKKBaseEditor::Event event) {
     if(event == BackSpace) {
-        if(!okuri_.empty()) {
-            utf8::pop(okuri_);
+        if(okuri_.empty()) {
+            context()->needs_go_back = true;
         } else {
-            modified_ = false;
+            utf8::pop(okuri_);
         }
     }
-}
 
-void SKKOkuriEditor::Clear() {
-    prefix_.clear();
-    okuri_.clear();
-}
-
-void SKKOkuriEditor::Output(SKKContextBuffer& buffer) const {
-    buffer.Compose("*" + okuri_);
-
-    SKKEntry entry = buffer.Entry();
-    entry.SetOkuri(prefix_, okuri_);
-
-    buffer.SetEntry(entry);
+    update();
 }
 
 void SKKOkuriEditor::Commit(std::string&) {
@@ -103,10 +94,8 @@ void SKKOkuriEditor::Commit(std::string&) {
     okuri_.clear();
 }
 
-void SKKOkuriEditor::Flush() {
-    modified_ = true;
-}
+// ----------------------------------------------------------------------
 
-bool SKKOkuriEditor::IsModified() const {
-    return modified_;
+void SKKOkuriEditor::update() {
+    context()->entry.SetOkuri(prefix_, okuri_);
 }
