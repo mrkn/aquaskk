@@ -33,11 +33,11 @@ State SKKState::Primary(const Event& event) {
         return 0;
 
     case SKK_ENTER:
-	editor_->FinishRegistration();
+	editor_->HandleEnter();
 	return 0;
 
     case SKK_CANCEL:
-	editor_->AbortRegistration();
+	editor_->HandleCancel();
 	return 0;
 
     case SKK_UNDO:
@@ -106,7 +106,7 @@ State SKKState::Primary(const Event& event) {
 
     default:
         if(event.IsUser()) {
-            editor_->Cancel();
+            editor_->Reset();
             return 0;
         }
     }

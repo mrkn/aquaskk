@@ -38,16 +38,16 @@ SKKRegistrationObserver* SKKInputEnvironment::RegistrationObserver() {
     return observer_;
 }
 
+SKKConfig* SKKInputEnvironment::Config() {
+    return param_->Config();
+}
+
 SKKInputContext* SKKInputEnvironment::InputContext() {
     return context_;
 }
 
 SKKInputSessionParameter* SKKInputEnvironment::InputSessionParameter() {
     return param_;
-}
-
-SKKInputEngineOption* SKKInputEnvironment::InputEngineOption() {
-    return param_->InputEngineOption();
 }
 
 SKKInputModeSelector* SKKInputEnvironment::InputModeSelector() {

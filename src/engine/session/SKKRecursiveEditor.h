@@ -48,7 +48,7 @@ public:
     ~SKKRecursiveEditor();
 
     void Dispatch(const SKKEvent& event);
-    void SyncInputContext();
+    void UpdateInputContext();
     void Commit(const std::string& word);
 
     void Activate();

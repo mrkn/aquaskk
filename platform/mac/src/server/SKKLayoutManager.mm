@@ -68,8 +68,8 @@ NSPoint SKKLayoutManager::CandidateWindowOrigin() const {
 }
 
 // アノテーションウィンドウ原点
-NSPoint SKKLayoutManager::AnnotationWindowOrigin() const {
-    NSRect input = inputFrame(0);
+NSPoint SKKLayoutManager::AnnotationWindowOrigin(int mark) const {
+    NSRect input = inputFrame(mark);
     NSRect annotation = [[[AnnotationWindow sharedWindow] window] frame];
     NSRect screen = screenFrame();
     NSPoint pt = annotation.origin = input.origin;

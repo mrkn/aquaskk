@@ -30,6 +30,7 @@
 
 class SKKInputSessionParameter;
 class SKKRecursiveEditor;
+class SKKConfig;
 class SKKEvent;
 
 class SKKInputSession : public SKKRegistrationObserver {
@@ -38,6 +39,7 @@ class SKKInputSession : public SKKRegistrationObserver {
     std::vector<SKKRecursiveEditor*> temp_;
     SKKInputModeListenerCollection listeners_;
     SKKInputContext context_;
+    SKKConfig* config_;
     bool inEvent_;
 
     SKKRecursiveEditor* top();

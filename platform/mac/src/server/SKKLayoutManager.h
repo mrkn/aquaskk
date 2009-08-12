@@ -42,7 +42,7 @@ public:
 
     // 各ウィンドウ向け原点
     NSPoint CandidateWindowOrigin() const;
-    NSPoint AnnotationWindowOrigin() const;
+    NSPoint AnnotationWindowOrigin(int mark) const;
 
     int WindowLevel() const;
 };

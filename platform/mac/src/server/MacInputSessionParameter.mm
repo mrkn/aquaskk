@@ -21,32 +21,30 @@
 */
 
 #include "MacInputSessionParameter.h"
-#include "MacStateConfiguration.h"
+#include "MacConfig.h"
 #include "MacFrontEnd.h"
 #include "MacMessenger.h"
 #include "MacClipboard.h"
 #include "MacCandidateWindow.h"
 #include "MacAnnotator.h"
 #include "MacDynamicCompletor.h"
-#include "MacInputEngineOption.h"
 
 MacInputSessionParameter::MacInputSessionParameter(id client, SKKLayoutManager* layout)
-    : frontend_(new MacFrontEnd(client))
-    , configuration_(new MacStateConfiguration())
+    : config_(new MacConfig())
+    , frontend_(new MacFrontEnd(client))
     , messenger_(new MacMessenger(layout))
     , clipboard_(new MacClipboard())
     , candidateWindow_(new MacCandidateWindow(layout))
     , annotator_(new MacAnnotator(layout))
     , completor_(new MacDynamicCompletor(layout))
-    , inputEngineOption_(new MacInputEngineOption())
 {}
+
+SKKConfig* MacInputSessionParameter::Config() {
+    return config_.get();
+}
 
 SKKFrontEnd* MacInputSessionParameter::FrontEnd() {
     return frontend_.get();
-}
-
-SKKStateConfiguration* MacInputSessionParameter::StateConfiguration() {
-    return configuration_.get();
 }
 
 SKKMessenger* MacInputSessionParameter::Messenger() {
@@ -67,8 +65,4 @@ SKKAnnotator* MacInputSessionParameter::Annotator() {
 
 SKKDynamicCompletor* MacInputSessionParameter::DynamicCompletor() {
     return completor_.get();
-}
-
-SKKInputEngineOption* MacInputSessionParameter::InputEngineOption() {
-    return inputEngineOption_.get();
 }

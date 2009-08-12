@@ -26,7 +26,6 @@
 #include "SKKRegistrationObserver.h"
 #include "SKKInputContext.h"
 #include "SKKInputSessionParameter.h"
-#include "SKKInputEngineOption.h"
 #include "SKKInputModeSelector.h"
 #include "SKKBaseEditor.h"
 #include <memory>
@@ -46,9 +45,9 @@ public:
                         SKKBaseEditor* bottom);
 
     SKKRegistrationObserver* RegistrationObserver();
+    SKKConfig* Config();
     SKKInputContext* InputContext();
     SKKInputSessionParameter* InputSessionParameter();
-    SKKInputEngineOption* InputEngineOption();
     SKKInputModeSelector* InputModeSelector();
     SKKBaseEditor* BaseEditor();
 };

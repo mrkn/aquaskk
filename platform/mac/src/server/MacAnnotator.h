@@ -34,7 +34,7 @@ class MacAnnotator : public SKKAnnotator {
     NSString* optional_;
     AnnotationWindow* window_;
     SKKCandidate candidate_;
-    std::string buffer_;
+    int cursor_;
 
     void release(NSString*& str);
 
@@ -44,7 +44,7 @@ class MacAnnotator : public SKKAnnotator {
 public:
     MacAnnotator(SKKLayoutManager* layout);
 
-    virtual void Update(const SKKCandidate& candidate, const std::string& buffer);
+    virtual void Update(const SKKCandidate& candidate, int cursorOffset);
 };
 
 #endif

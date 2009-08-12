@@ -30,8 +30,8 @@ class SKKAnnotator : public SKKWidget {
 public:
     virtual ~SKKAnnotator() {}
 
-    // 註釈の更新(candidate=候補, buffer=カーソル位置までの部分文字列)
-    virtual void Update(const SKKCandidate& candidate, const std::string& buffer) = 0;
+    // 註釈の更新(candidate=候補, cursor=カーソル位置)
+    virtual void Update(const SKKCandidate& candidate, int cursorOffset) = 0;
 };
 
 #endif

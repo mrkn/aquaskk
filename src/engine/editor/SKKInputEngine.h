@@ -42,6 +42,10 @@ class SKKInputEngine : public SKKInputQueueObserver,
     friend class Synchronizer;
 
     SKKInputEnvironment* env_;
+    SKKInputSessionParameter* param_;
+    SKKRegistrationObserver* observer_;
+    SKKInputContext* context_;
+    SKKConfig* config_;
     std::vector<SKKBaseEditor*> stack_;
 
     SKKInputQueue inputQueue_;
@@ -109,12 +113,14 @@ public:
     void HandleCursorDown();
     void HandlePaste();
     void HandlePing();
+    void HandleEnter();
+    void HandleCancel();
 
     // 確定
     void Commit();
 
-    // 取消
-    void Cancel();
+    // リセット
+    void Reset();
 
     // 登録
     void Register(const std::string& word);
@@ -124,7 +130,7 @@ public:
     void ToggleJisx0201Kana();
 
     // 同期
-    void SyncInputContext();
+    void UpdateInputContext();
 
     // ローマ字かな変換が発生するか？
     bool CanConvert(char code) const;
@@ -134,8 +140,6 @@ public:
 
     // 再帰的辞書登録
     void BeginRegistration();
-    void FinishRegistration();
-    void AbortRegistration();
 };
 
 #endif

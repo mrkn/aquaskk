@@ -22,7 +22,7 @@
 
 #include "SKKState.h"
 #include "SKKMessenger.h"
-#include "SKKStateConfiguration.h"
+#include "SKKConfig.h"
 #include "SKKInputEngine.h"
 #include <cctype>
 
@@ -35,7 +35,7 @@ SKKState::SKKState(SKKInputEnvironment* env, SKKInputEngine* editor)
     : context_(env->InputContext())
     , messenger_(env->InputSessionParameter()->Messenger())
     , window_(env->InputSessionParameter()->CandidateWindow())
-    , configuration_(env->InputSessionParameter()->StateConfiguration())
+    , configuration_(env->InputSessionParameter()->Config())
     , editor_(editor)
     , completer_(editor_)
     , selector_(editor_, window_)

@@ -23,27 +23,25 @@
 #ifndef SKKInputSessionParameter_h
 #define SKKInputSessionParameter_h
 
+class SKKConfig;
 class SKKFrontEnd;
-class SKKStateConfiguration;
 class SKKMessenger;
 class SKKClipboard;
 class SKKCandidateWindow;
 class SKKAnnotator;
 class SKKDynamicCompletor;
-class SKKInputEngineOption;
 
 class SKKInputSessionParameter {
 public:
     virtual ~SKKInputSessionParameter() {}
 
+    virtual SKKConfig* Config() = 0;
     virtual SKKFrontEnd* FrontEnd() = 0;
-    virtual SKKStateConfiguration* StateConfiguration() = 0;
     virtual SKKMessenger* Messenger() = 0;
     virtual SKKClipboard* Clipboard() = 0;
     virtual SKKCandidateWindow* CandidateWindow() = 0;
     virtual SKKAnnotator* Annotator() = 0;
     virtual SKKDynamicCompletor* DynamicCompletor() = 0;
-    virtual SKKInputEngineOption* InputEngineOption() = 0;
 };
 
 #endif

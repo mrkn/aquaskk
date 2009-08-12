@@ -35,9 +35,9 @@ MacAnnotator::MacAnnotator(SKKLayoutManager* layout)
     window_ = [AnnotationWindow sharedWindow];
 }
 
-void MacAnnotator::Update(const SKKCandidate& candidate, const std::string& buffer) {
+void MacAnnotator::Update(const SKKCandidate& candidate, int cursorOffset) {
     candidate_ = candidate;
-    buffer_ = buffer;
+    cursor_ = cursorOffset;
 
     release(definition_);
     release(optional_);
@@ -69,7 +69,7 @@ void MacAnnotator::SKKWidgetShow() {
         SKKWidgetHide();
     }
 
-    [window_ showAt:layout_->AnnotationWindowOrigin()
+    [window_ showAt:layout_->AnnotationWindowOrigin(cursor_)
              level:layout_->WindowLevel()];
 }
 

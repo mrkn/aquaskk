@@ -34,7 +34,7 @@ using namespace statemachinecxx_sourceforge_jp;
 
 class SKKMessenger;
 class SKKCandidateWindow;
-class SKKStateConfiguration;
+class SKKConfig;
 class SKKInputEngine;
 
 // 状態コンテナ
@@ -42,7 +42,7 @@ class SKKState : public BaseStateContainer<SKKState, SKKEvent> {
     SKKInputContext* context_;
     SKKMessenger* messenger_;
     SKKCandidateWindow* window_;
-    SKKStateConfiguration* configuration_;
+    SKKConfig* configuration_;
     SKKInputEngine* editor_;
     SKKCompleter completer_;
     SKKSelector selector_;

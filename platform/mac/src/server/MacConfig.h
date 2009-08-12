@@ -1,8 +1,8 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,27 +20,24 @@
 
 */
 
-#ifndef SKKInputEngineOption_h
-#define SKKInputEngineOption_h
+#ifndef MacConfig_h
+#define MacConfig_h
 
-class SKKInputEngineOption {
+#include "SKKConfig.h"
+
+class MacConfig : public SKKConfig {
+    NSUserDefaults* defaults_;
+
 public:
-    virtual ~SKKInputEngineOption() {}
+    MacConfig();
 
-    // 中間的な変換を訂正するか(n → ん)
-    virtual bool FixIntermediateConversion() = 0;
-
-    // 自動ダイナミック補完を有効にするか
-    virtual bool EnableDynamicCompletion() = 0;
-
-    // 自動ダイナミック補完の幅(表示数)
-    virtual int DynamicCompletionRange() = 0;
-
-    // アノテーションを有効にするか
-    virtual bool EnableAnnotation() = 0;
-
-    // 最小マッチしたかな変換を表示するか(n → ん)
-    virtual bool DisplayShortestMatchOfKanaConversions() = 0;
+    virtual bool FixIntermediateConversion();
+    virtual bool EnableDynamicCompletion();
+    virtual int DynamicCompletionRange();
+    virtual bool EnableAnnotation();
+    virtual bool DisplayShortestMatchOfKanaConversions();
+    virtual bool SuppressNewlineOnCommit();
+    virtual int MaxCountOfInlineCandidates();
 };
 
 #endif

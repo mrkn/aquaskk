@@ -40,6 +40,7 @@ void SKKCandidateEditor::WriteContext() {
         str += entry_.OkuriString();
     }
 
+    context()->output.SetMark();
     context()->output.Compose("▼" + str);
 
     update();

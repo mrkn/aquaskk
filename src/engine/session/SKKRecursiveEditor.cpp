@@ -44,8 +44,8 @@ void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {
     state_.Dispatch(SKKStateMachine::Event(event.id, event));
 }
 
-void SKKRecursiveEditor::SyncInputContext() {
-    editor_.SyncInputContext();
+void SKKRecursiveEditor::UpdateInputContext() {
+    editor_.UpdateInputContext();
 }
 
 void SKKRecursiveEditor::Commit(const std::string& word) {

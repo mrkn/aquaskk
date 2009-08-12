@@ -36,18 +36,18 @@ void SKKOutputBuffer::Compose(const std::string& str, int cursor) {
     cursor_ += cursor;
 }
 
-void SKKOutputBuffer::SaveEntryCursor() {
-    entry_cursor_ = utf8::length(composing_) + cursor_;
+void SKKOutputBuffer::SetMark() {
+    mark_ = utf8::length(composing_) + cursor_;
 }
 
-int SKKOutputBuffer::EntryCursor() const {
-    return entry_cursor_;
+int SKKOutputBuffer::GetMark() const {
+    return mark_;
 }
 
 void SKKOutputBuffer::Clear() {
     composing_.clear();
     cursor_ = 0;
-    entry_cursor_ = 0;
+    mark_ = 0;
 }
 
 void SKKOutputBuffer::Output() {
@@ -61,8 +61,4 @@ void SKKOutputBuffer::Output() {
 
 bool SKKOutputBuffer::IsComposing() const {
     return !composing_.empty();
-}
-
-std::string SKKOutputBuffer::LeftString() const {
-    return utf8::left(composing_, cursor_);
 }

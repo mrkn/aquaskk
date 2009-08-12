@@ -22,6 +22,7 @@
 
 #include "SKKInputSession.h"
 #include "SKKRecursiveEditor.h"
+#include "SKKConfig.h"
 #include "SKKFrontEnd.h"
 #include "SKKDynamicCompletor.h"
 #include "SKKAnnotator.h"
@@ -44,7 +45,10 @@ namespace {
 }
 
 SKKInputSession::SKKInputSession(SKKInputSessionParameter* param)
-    : param_(param), context_(param->FrontEnd()), inEvent_(false) {
+    : param_(param)
+    , context_(param->FrontEnd())
+    , config_(param->Config())
+    , inEvent_(false) {
     stack_.push_back(createEditor(new SKKPrimaryEditor(&context_)));
 }
 
@@ -138,31 +142,30 @@ void SKKInputSession::endEvent() {
 void SKKInputSession::output() {
     context_.output.Clear();
 
-    top()->SyncInputContext();
+    top()->UpdateInputContext();
 
     context_.output.Output();
 
-    SKKInputEngineOption* option = param_->InputEngineOption();
     SKKDynamicCompletor* completer = param_->DynamicCompletor();
     SKKAnnotator* annotator = param_->Annotator();
 
-    if(context_.dynamic_completion && option->EnableDynamicCompletion()) {
-        unsigned range = option->DynamicCompletionRange();
+    if(context_.dynamic_completion && config_->EnableDynamicCompletion()) {
+        unsigned range = config_->DynamicCompletionRange();
         std::string completion = complete(range);
 
-        completer->Update(completion, context_.output.EntryCursor());
+        completer->Update(completion, context_.output.GetMark());
         completion.empty() ? completer->Hide() : completer->Show();
     } else {
         completer->Hide();
     }
 
-    if(context_.annotator && option->EnableAnnotation()) {
+    if(context_.annotator && config_->EnableAnnotation()) {
         SKKCandidate candidate = context_.candidate;
 
         if(candidate.IsEmpty()) {
             annotator->Hide();
         } else {
-            annotator->Update(candidate, context_.output.LeftString());
+            annotator->Update(candidate, context_.output.GetMark());
             annotator->Show();
         }
     } else {
