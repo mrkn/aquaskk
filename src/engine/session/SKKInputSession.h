@@ -23,37 +23,32 @@
 #ifndef SKKInputSession_h
 #define SKKInputSession_h
 
-#include "SKKRegistrationObserver.h"
 #include "SKKInputModeListener.h"
 #include "SKKInputContext.h"
 #include <vector>
 
 class SKKInputSessionParameter;
 class SKKRecursiveEditor;
+class SKKBaseEditor;
 class SKKConfig;
 class SKKEvent;
 
-class SKKInputSession : public SKKRegistrationObserver {
+class SKKInputSession {
     std::auto_ptr<SKKInputSessionParameter> param_;
     std::vector<SKKRecursiveEditor*> stack_;
     std::vector<SKKRecursiveEditor*> temp_;
     SKKInputModeListenerCollection listeners_;
     SKKInputContext context_;
-    SKKConfig* config_;
     bool inEvent_;
+    int eventId_;
+
+    void beginEvent();
+    void endEvent();
+    bool result(const SKKEvent& event);
 
     SKKRecursiveEditor* top();
     SKKRecursiveEditor* createEditor(SKKBaseEditor* bottom);
     void popEditor();
-    void beginEvent();
-    void endEvent();
-    bool result(const SKKEvent& event);
-    void output();
-    std::string complete(unsigned range);
-
-    virtual void SKKRegistrationBegin(SKKBaseEditor* bottom);
-    virtual void SKKRegistrationFinish(const std::string& word);
-    virtual void SKKRegistrationCancel();
 
     SKKInputSession();
     SKKInputSession(const SKKInputSession&);

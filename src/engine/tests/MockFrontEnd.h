@@ -19,6 +19,11 @@ class MockFrontEnd : public SKKFrontEnd, public SKKInputModeListener {
         result_.pos = cursorOffset;
     }
 
+    virtual void ComposeString(const std::string& str, int convertFrom, int convertTo) {
+        result_.marked = str;
+        result_.pos = 0;
+    }
+
     virtual std::string SelectedString() {
         return selected_string_;
     }

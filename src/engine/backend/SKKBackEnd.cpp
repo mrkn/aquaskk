@@ -93,7 +93,7 @@ void SKKBackEnd::Initialize(const std::string& userdict_path, const SKKDictionar
     actives_ = keys;
 }
 
-bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& result, int limit) {
+bool SKKBackEnd::Complete(const std::string& key, std::vector<std::string>& result, unsigned limit) {
     // ユーザー辞書を優先
     result.clear();
     userdict_->FindCompletions(key, result, minimumCompletionLength_);

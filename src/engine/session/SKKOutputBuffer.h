@@ -31,19 +31,25 @@ class SKKFrontEnd;
 class SKKOutputBuffer {
     SKKFrontEnd* frontend_;
     std::string composing_;
-    std::string prev_;
+    std::string last_;
     int cursor_;
     int mark_;
+    int start_;
+    int length_;
 
 public:
     SKKOutputBuffer(SKKFrontEnd* frontend);
 
     void Fix(const std::string& str);
     void Compose(const std::string& str, int cursor = 0);
+    void Convert(const std::string& str);
+    void Clear();
+
     void SetMark();
     int GetMark() const;
-    void Clear();
+
     void Output();
+
     bool IsComposing() const;
 };
 

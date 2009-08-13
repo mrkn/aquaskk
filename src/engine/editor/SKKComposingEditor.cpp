@@ -62,7 +62,7 @@ void SKKComposingEditor::Input(SKKBaseEditor::Event event) {
     switch(event) {
     case BackSpace:
         if(composing_.IsEmpty()) {
-            context()->needs_go_back = true;
+            context()->needs_setback = true;
         }
         composing_.BackSpace();
         break;

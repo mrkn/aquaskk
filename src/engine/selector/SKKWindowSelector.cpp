@@ -104,7 +104,7 @@ void SKKWindowSelector::CursorDown() {
 bool SKKWindowSelector::Select(char label) {
     int index = window_->LabelIndex(label);
 
-    if(-1 < index && index < view_.size()) {
+    if(-1 < index && (unsigned)index < view_.size()) {
 	cursor_pos_ = index;
 	Show();
 	return true;

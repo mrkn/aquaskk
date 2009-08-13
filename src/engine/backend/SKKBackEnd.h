@@ -53,7 +53,7 @@ public:
     void Initialize(const std::string& userdict_path, const SKKDictionaryKeyContainer& keys);
 
     // 補完
-    bool Complete(const std::string& key, std::vector<std::string>& result, int limit = 0);
+    bool Complete(const std::string& key, std::vector<std::string>& result, unsigned limit = 0);
 
     // 検索
     bool Find(const SKKEntry& entry, SKKCandidateSuite& result);

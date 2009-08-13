@@ -25,10 +25,8 @@
 #include "SKKConfig.h"
 #include "SKKClipboard.h"
 #include "SKKBackEnd.h"
-#include "SKKRegisterEditor.h"
 #include <iostream>
 #include <cctype>
-#include <cstdarg>
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +56,6 @@ public:
 SKKInputEngine::SKKInputEngine(SKKInputEnvironment* env)
     : env_(env)
     , param_(env->InputSessionParameter())
-    , observer_(env->RegistrationObserver())
     , context_(env->InputContext())
     , config_(env->Config())
     , inputQueue_(this)
@@ -74,10 +71,6 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
     inputQueue_.SelectInputMode(mode);
 
     context_->event_handled = true;
-}
-
-void SKKInputEngine::RefreshInputMode() {
-    env_->InputModeSelector()->Refresh();
 }
 
 void SKKInputEngine::SetStatePrimary() {
@@ -113,6 +106,12 @@ void SKKInputEngine::SetStateEntryRemove() {
 
     initialize();
     push(&entryRemoveEditor_);
+}
+
+void SKKInputEngine::SetStateRegistration() {
+    UpdateInputContext();
+
+    context_->registration.Start();
 }
 
 void SKKInputEngine::HandleChar(char code, bool direct) {
@@ -164,7 +163,15 @@ void SKKInputEngine::HandleEnter() {
         study(entry, SKKCandidate(word_, false));
     }
 
-    observer_->SKKRegistrationFinish(word_ + entry.OkuriString());
+    std::string result = word_ + entry.OkuriString();
+
+    if(result.empty()) {
+        context_->registration.Abort();
+    } else {
+        context_->registration.Finish(result);
+    }
+
+    context_->event_handled = false;
 }
 
 void SKKInputEngine::HandleCancel() {
@@ -173,7 +180,7 @@ void SKKInputEngine::HandleCancel() {
         return;
     }
 
-    observer_->SKKRegistrationCancel();
+    context_->registration.Abort();
 }
 
 void SKKInputEngine::Commit() {
@@ -192,10 +199,6 @@ void SKKInputEngine::Reset() {
     terminate();
 
     context_->event_handled = false;
-}
-
-void SKKInputEngine::Register(const std::string& word) {
-    insert(word);
 }
 
 void SKKInputEngine::ToggleKana() {
@@ -219,6 +222,8 @@ void SKKInputEngine::ToggleJisx0201Kana() {
 }
 
 void SKKInputEngine::UpdateInputContext() {
+    context_->output.Clear();
+
     std::for_each(stack_.begin(), stack_.end(), std::mem_fun(&SKKBaseEditor::WriteContext));
 
     // 非確定文字があれば挿入(ex. "ky" など)
@@ -242,10 +247,6 @@ bool SKKInputEngine::IsOkuriComplete() const {
     return context_->entry.IsOkuriAri() && inputQueue_.IsEmpty();
 }
 
-void SKKInputEngine::BeginRegistration() {
-    observer_->SKKRegistrationBegin(new SKKRegisterEditor(context_));
-}
-
 // ----------------------------------------------------------------------
 
 SKKBaseEditor* SKKInputEngine::top() const {
@@ -262,6 +263,11 @@ void SKKInputEngine::initialize() {
 
     context_->dynamic_completion = false;
     context_->annotator = false;
+
+    if(context_->registration == SKKRegistration::Aborted) {
+        env_->InputModeSelector()->Refresh();
+        context_->registration.Clear();
+    }
 }
 
 void SKKInputEngine::push(SKKBaseEditor* editor) {

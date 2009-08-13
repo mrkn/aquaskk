@@ -46,10 +46,6 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
     int keycode = [event keyCode];
     int mods = 0;
 
-#ifdef SKK_DEBUG
-    NSLog(@"%@", [event description]);
-#endif
-
     // シフト属性が有効なのはデッドキーのみ
     if([event modifierFlags] & NSShiftKeyMask) {
 	if(std::isgraph(dispchar)) { // 空白類を除いた英数字記号
@@ -81,6 +77,11 @@ SKKEvent SKKPreProcessor::Execute(const NSEvent* event) {
     if([event modifierFlags] & NSAlphaShiftKeyMask) {
         result.option |= CapsLock;
     }
+
+#ifdef SKK_DEBUG
+    NSLog(@"%@", [event description]);
+    NSLog(@"%s", result.dump().c_str());
+#endif
 
     return result;
 }

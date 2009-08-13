@@ -78,9 +78,7 @@ SKKEvent SKKKeymap::Fetch(int charcode, int keycode, int mods) {
     iter = find(charcode, keycode, mods, events_);
     if(iter != events_.end()) {
 	event.id = iter->second;
-    }
-
-    if(event.id == 0 && mods == 0) {
+    } else {
         event.id = SKK_CHAR;
     }
 

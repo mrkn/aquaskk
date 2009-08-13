@@ -22,11 +22,9 @@
 
 #include "SKKInputSession.h"
 #include "SKKRecursiveEditor.h"
-#include "SKKConfig.h"
 #include "SKKFrontEnd.h"
-#include "SKKDynamicCompletor.h"
-#include "SKKAnnotator.h"
 #include "SKKPrimaryEditor.h"
+#include "SKKRegisterEditor.h"
 #include "SKKBackEnd.h"
 
 namespace {
@@ -47,7 +45,6 @@ namespace {
 SKKInputSession::SKKInputSession(SKKInputSessionParameter* param)
     : param_(param)
     , context_(param->FrontEnd())
-    , config_(param->Config())
     , inEvent_(false) {
     stack_.push_back(createEditor(new SKKPrimaryEditor(&context_)));
 }
@@ -74,11 +71,11 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
 
     beginEvent();
 
-    top()->Dispatch(event);
+    top()->Input(event);
 
     endEvent();
 
-    output();
+    top()->Output();
 
     return result(event);
 }
@@ -94,7 +91,7 @@ void SKKInputSession::Clear() {
 
     stack_.push_back(createEditor(new SKKPrimaryEditor(&context_)));
 
-    output();
+    top()->Output();
 }
 
 void SKKInputSession::Activate() {
@@ -107,132 +104,64 @@ void SKKInputSession::Deactivate() {
 
 // ----------------------------------------------------------------------
 
+void SKKInputSession::beginEvent() {
+    temp_ = stack_;
+
+    context_.output.Clear();
+    context_.event_handled = true;
+    context_.needs_setback = false;
+}
+
+void SKKInputSession::endEvent() {
+    switch(context_.registration) {
+    case SKKRegistration::Started:
+        context_.registration.Clear();
+        stack_.push_back(createEditor(new SKKRegisterEditor(&context_)));
+        break;
+
+    case SKKRegistration::Finished:
+    case SKKRegistration::Aborted:
+        if(stack_.size() != 1) {
+            popEditor();
+
+            top()->Input(SKKEvent(context_.registration == SKKRegistration::Finished
+                                  ? SKK_ENTER : SKK_CANCEL, 0));
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+
+bool SKKInputSession::result(const SKKEvent& event) {
+    // 単語登録中か、未確定状態なら常に処理済み
+    if(stack_.size() != 1 || context_.output.IsComposing()) {
+        return true;
+    }
+
+    switch(event.option) {
+    case AlwaysHandled:     // 常に処理済み
+        return true;
+
+    case PseudoHandled:     // 未処理
+        return false;
+
+    default:
+        return context_.event_handled;
+    }
+}
+
 SKKRecursiveEditor* SKKInputSession::top() {
     return stack_.back();
 }
 
 SKKRecursiveEditor* SKKInputSession::createEditor(SKKBaseEditor* bottom) {
     return new SKKRecursiveEditor(
-        new SKKInputEnvironment(this, &context_, param_.get(), &listeners_, bottom));
+        new SKKInputEnvironment(&context_, param_.get(), &listeners_, bottom));
 }
 
 void SKKInputSession::popEditor() {
     delete top();
     stack_.pop_back();
-}
-
-void SKKInputSession::beginEvent() {
-    temp_ = stack_;
-
-    context_.output.Clear();
-    context_.event_handled = true;
-    context_.needs_go_back = false;
-}
-
-void SKKInputSession::endEvent() {
-    if(stack_.size() == temp_.size()) return;
-
-    if(stack_.size() < temp_.size()) {
-        stack_.push_back(temp_.back());
-    } else {
-        popEditor();
-    }
-}
-
-void SKKInputSession::output() {
-    context_.output.Clear();
-
-    top()->UpdateInputContext();
-
-    context_.output.Output();
-
-    SKKDynamicCompletor* completer = param_->DynamicCompletor();
-    SKKAnnotator* annotator = param_->Annotator();
-
-    if(context_.dynamic_completion && config_->EnableDynamicCompletion()) {
-        unsigned range = config_->DynamicCompletionRange();
-        std::string completion = complete(range);
-
-        completer->Update(completion, context_.output.GetMark());
-        completion.empty() ? completer->Hide() : completer->Show();
-    } else {
-        completer->Hide();
-    }
-
-    if(context_.annotator && config_->EnableAnnotation()) {
-        SKKCandidate candidate = context_.candidate;
-
-        if(candidate.IsEmpty()) {
-            annotator->Hide();
-        } else {
-            annotator->Update(candidate, context_.output.GetMark());
-            annotator->Show();
-        }
-    } else {
-        annotator->Hide();
-    }
-}
-
-bool SKKInputSession::result(const SKKEvent& event) {
-    if(1 < stack_.size()) {
-        context_.event_handled = true;
-    } else {
-        // 単語登録中ではなく、未確定状態でもない
-        if(!context_.output.IsComposing()) {
-            switch(event.option) {
-            case AlwaysHandled:     // 常に処理済み
-                return true;
-
-            case PseudoHandled:     // 未処理
-                return false;
-            }
-        }
-    }
-
-    return context_.event_handled;
-}
-
-std::string SKKInputSession::complete(unsigned range) {
-    SKKEntry entry = context_.entry;
-    std::string completion;
-
-    if(entry.IsEmpty() || entry.IsOkuriAri()) {
-        return completion;
-    }
-
-    std::vector<std::string> result;
-    std::string key = entry.EntryString();
-
-    // 候補を補完する
-    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, range)) {
-        unsigned limit = std::min((unsigned)result.size(), range);
-        for(unsigned i = 0; i < limit; ++ i) { 
-            completion += result[i];
-            completion += "\n";
-        }
-        completion.erase(completion.size() - 1);
-    }
-
-    return completion;
-}
-
-// ----------------------------------------------------------------------
-// SKKRegistrationObserver インタフェース
-// ----------------------------------------------------------------------
-
-void SKKInputSession::SKKRegistrationBegin(SKKBaseEditor* bottom) {
-    temp_.push_back(createEditor(bottom));
-}
-
-void SKKInputSession::SKKRegistrationFinish(const std::string& word) {
-    if(temp_.size() == 1) {
-        context_.event_handled = false;
-    } else {
-        temp_.pop_back();
-        temp_.back()->Commit(word);
-    }
-}
-
-void SKKInputSession::SKKRegistrationCancel() {
-    SKKRegistrationFinish("");
 }

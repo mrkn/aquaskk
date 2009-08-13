@@ -111,6 +111,7 @@ ctrl::p                 mode=J,ret=0
 ctrl::a                 mode=J,ret=0
 ctrl::e                 mode=J,ret=0
 ctrl::i                 mode=J,ret=0
+shift::0x1c             mode=J,ret=0
 
 # ペースト
 # ----------------------------------------------------------------------

@@ -37,6 +37,7 @@ public:
 
     enum UndoResult { UndoFailed, UndoKanaEntry, UndoAsciiEntry };
     UndoResult Undo();
+    bool IsActive() const;
     void Clear();
     const std::string& Entry() const;
     const std::string& Candidate() const;

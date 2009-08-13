@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2009 Tomotaka SUWA <t.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,20 +20,47 @@
 
 */
 
-#ifndef SKKRegistrationObserver_h
-#define SKKRegistrationObserver_h
+#ifndef SKKRegistration_h
+#define SKKRegistration_h
 
 #include <string>
 
-class SKKBaseEditor;
-
-class SKKRegistrationObserver {
+class SKKRegistration {
 public:
-    virtual ~SKKRegistrationObserver() {}
+    enum State { None, Started, Finished, Aborted };
 
-    virtual void SKKRegistrationBegin(SKKBaseEditor* bottom) = 0;
-    virtual void SKKRegistrationFinish(const std::string& word) = 0;
-    virtual void SKKRegistrationCancel() = 0;
+    SKKRegistration() : state_(None) {}
+
+    void Start() {
+        state_ = Started;
+    }
+
+    void Finish(const std::string& str) {
+        state_ = Finished;
+        word_ = str;
+    }
+
+    void Abort() {
+        state_ = Aborted;
+        word_.clear();
+    }
+
+    void Clear() {
+        state_ = None;
+        word_.clear();
+    }
+
+    operator State() const {
+        return state_;
+    }
+
+    const std::string& Word() const {
+        return word_;
+    }
+
+private:
+    State state_;
+    std::string word_;
 };
 
 #endif

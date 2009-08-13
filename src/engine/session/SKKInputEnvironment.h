@@ -23,7 +23,6 @@
 #ifndef SKKInputEnvironment_h
 #define SKKInputEnvironment_h
 
-#include "SKKRegistrationObserver.h"
 #include "SKKInputContext.h"
 #include "SKKInputSessionParameter.h"
 #include "SKKInputModeSelector.h"
@@ -31,20 +30,17 @@
 #include <memory>
 
 class SKKInputEnvironment {
-    SKKRegistrationObserver* observer_;
     SKKInputContext* context_;
     SKKInputSessionParameter* param_;
     SKKInputModeSelector selector_;
     std::auto_ptr<SKKBaseEditor> bottom_;
 
 public:
-    SKKInputEnvironment(SKKRegistrationObserver* observer,
-                        SKKInputContext* context,
+    SKKInputEnvironment(SKKInputContext* context,
                         SKKInputSessionParameter* param,
                         SKKInputModeListenerCollection* listeners,
                         SKKBaseEditor* bottom);
 
-    SKKRegistrationObserver* RegistrationObserver();
     SKKConfig* Config();
     SKKInputContext* InputContext();
     SKKInputSessionParameter* InputSessionParameter();

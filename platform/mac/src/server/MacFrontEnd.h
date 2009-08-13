@@ -28,7 +28,6 @@
 
 class MacFrontEnd : public SKKFrontEnd {
     id client_;
-    std::string composing_;
 
     NSRange notFound() const;
     NSMutableAttributedString* createMarkedText(const std::string& str, int cursorOffset);
@@ -38,6 +37,7 @@ public:
 
     virtual void InsertString(const std::string& str);
     virtual void ComposeString(const std::string& str, int cursorOffset = 0);
+    virtual void ComposeString(const std::string& str, int candidateStart, int candidateLength);
     virtual std::string SelectedString();
 };
 

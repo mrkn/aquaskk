@@ -22,17 +22,25 @@
 
 #include "SKKRecursiveEditor.h"
 #include "SKKInputSessionParameter.h"
+#include "SKKInputContext.h"
+#include "SKKConfig.h"
 #include "SKKAnnotator.h"
 #include "SKKCandidateWindow.h"
 #include "SKKDynamicCompletor.h"
 #include "SKKBackEnd.h"
 
 SKKRecursiveEditor::SKKRecursiveEditor(SKKInputEnvironment* env)
-    : env_(env), editor_(env), state_(SKKState(env, &editor_)) {
+    : env_(env)
+    , context_(env->InputContext())
+    , config_(env->Config())
+    , annotator_(env->InputSessionParameter()->Annotator())
+    , completor_(env->InputSessionParameter()->DynamicCompletor())
+    , editor_(env)
+    , state_(SKKState(env, &editor_)) {
     // initialize widgets
-    widgets_.push_back(env->InputSessionParameter()->Annotator());
+    widgets_.push_back(annotator_);
+    widgets_.push_back(completor_);
     widgets_.push_back(env->InputSessionParameter()->CandidateWindow());
-    widgets_.push_back(env->InputSessionParameter()->DynamicCompletor());
     widgets_.push_back(env->InputModeSelector());
 }
 
@@ -40,21 +48,35 @@ SKKRecursiveEditor::~SKKRecursiveEditor() {
     forEachWidget(&SKKWidget::Hide);
 }
 
-void SKKRecursiveEditor::Dispatch(const SKKEvent& event) {
+void SKKRecursiveEditor::Input(const SKKEvent& event) {
     state_.Dispatch(SKKStateMachine::Event(event.id, event));
 }
 
-void SKKRecursiveEditor::UpdateInputContext() {
+void SKKRecursiveEditor::Output() {
     editor_.UpdateInputContext();
-}
 
-void SKKRecursiveEditor::Commit(const std::string& word) {
-    if(!word.empty()) {
-        Dispatch(SKKEvent(SKK_ENTER, 0));
+    context_->output.Output();
 
-        editor_.Register(word);
+    if(context_->dynamic_completion && config_->EnableDynamicCompletion()) {
+        std::string completion = complete(config_->DynamicCompletionRange());
+
+        completor_->Update(completion, context_->output.GetMark());
+        completion.empty() ? completor_->Hide() : completor_->Show();
     } else {
-        Dispatch(SKKEvent(SKK_CANCEL, 0));
+        completor_->Hide();
+    }
+
+    if(context_->annotator && config_->EnableAnnotation()) {
+        SKKCandidate candidate = context_->candidate;
+
+        if(candidate.IsEmpty()) {
+            annotator_->Hide();
+        } else {
+            annotator_->Update(candidate, context_->output.GetMark());
+            annotator_->Show();
+        }
+    } else {
+        annotator_->Hide();
     }
 }
 
@@ -70,4 +92,28 @@ void SKKRecursiveEditor::Deactivate() {
 
 void SKKRecursiveEditor::forEachWidget(WidgetMethod method) {
     std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(method));
+}
+
+std::string SKKRecursiveEditor::complete(unsigned range) {
+    SKKEntry entry = context_->entry;
+    std::string completion;
+
+    if(entry.IsEmpty() || entry.IsOkuriAri()) {
+        return completion;
+    }
+
+    std::vector<std::string> result;
+    std::string key = entry.EntryString();
+
+    // 候補を補完する
+    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, range)) {
+        unsigned limit = std::min((unsigned)result.size(), range);
+        for(unsigned i = 0; i < limit; ++ i) { 
+            completion += result[i];
+            completion += "\n";
+        }
+        completion.erase(completion.size() - 1);
+    }
+
+    return completion;
 }

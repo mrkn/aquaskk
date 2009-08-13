@@ -27,6 +27,7 @@
 #include "SKKEntry.h"
 #include "SKKCandidate.h"
 #include "SKKUndoContext.h"
+#include "SKKRegistration.h"
 
 // 入力コンテキスト
 struct SKKInputContext {
@@ -34,9 +35,10 @@ struct SKKInputContext {
     SKKCandidate candidate;
     SKKOutputBuffer output;
     SKKUndoContext undo;
+    SKKRegistration registration;
 
     bool event_handled;
-    bool needs_go_back;
+    bool needs_setback;
     bool dynamic_completion;
     bool annotator;
 

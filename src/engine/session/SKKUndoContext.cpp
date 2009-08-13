@@ -47,6 +47,10 @@ SKKUndoContext::UndoResult SKKUndoContext::Undo() {
     return UndoAsciiEntry;
 }
 
+bool SKKUndoContext::IsActive() const {
+    return !entry_.empty();
+}
+
 void SKKUndoContext::Clear() {
     entry_.clear();
     candidate_.clear();

@@ -299,6 +299,7 @@
 		D3790F421031B2F1007798E0 /* SKKUndoContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKUndoContext.h; sourceTree = "<group>"; };
 		D38D61BC0EA792CB0095AAC8 /* MessengerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerView.h; sourceTree = "<group>"; };
 		D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerView.mm; sourceTree = "<group>"; };
+		D38D7B6D1034473A0047E2C9 /* SKKRegistration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKRegistration.h; sourceTree = "<group>"; };
 		D38FA9D00EA78A0800C07575 /* CompletionWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompletionWindow.h; sourceTree = "<group>"; };
 		D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CompletionWindow.mm; sourceTree = "<group>"; };
 		D38FB8291032F31200048A30 /* SKKConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKConfig.h; sourceTree = "<group>"; };
@@ -323,7 +324,6 @@
 		D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "azik-kana-rule.conf"; sourceTree = "<group>"; };
 		D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKInputModeSelector.cpp; sourceTree = "<group>"; };
 		D3D549BE1024904000622CB2 /* SKKInputModeSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputModeSelector.h; sourceTree = "<group>"; };
-		D3D549C01024912400622CB2 /* SKKRegistrationObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKRegistrationObserver.h; sourceTree = "<group>"; };
 		D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		D3E61C4D0EAB544F000C1536 /* CandidateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CandidateWindow.h; sourceTree = "<group>"; };
 		D3E61C4E0EAB544F000C1536 /* CandidateWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidateWindow.mm; sourceTree = "<group>"; };
@@ -462,7 +462,6 @@
 		D353BC010E175500004C68A6 /* editor */ = {
 			isa = PBXGroup;
 			children = (
-				D3D549C01024912400622CB2 /* SKKRegistrationObserver.h */,
 				D309967A0E4C83B800B2F24E /* SKKInputEngine.h */,
 				D30996790E4C83B800B2F24E /* SKKInputEngine.cpp */,
 				D398F2CB0E45FA940007F4B9 /* SKKInputQueue.h */,
@@ -543,6 +542,7 @@
 				D3790F3F1031B2F1007798E0 /* SKKOutputBuffer.cpp */,
 				D3790F421031B2F1007798E0 /* SKKUndoContext.h */,
 				D3790F411031B2F1007798E0 /* SKKUndoContext.cpp */,
+				D38D7B6D1034473A0047E2C9 /* SKKRegistration.h */,
 			);
 			path = session;
 			sourceTree = "<group>";

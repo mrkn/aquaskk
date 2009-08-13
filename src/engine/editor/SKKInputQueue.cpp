@@ -122,8 +122,8 @@ SKKInputQueueObserver::State SKKInputQueue::convert(char code, bool direct) {
             queue_.clear();
             break;
 
-        case InvalidInputMode:
-            assert(false);
+        default:
+            break;
         }
     }
 

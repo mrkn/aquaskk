@@ -137,7 +137,7 @@ std::string SKKUserDictionary::FindEntry(const std::string& candidate) {
 
 bool SKKUserDictionary::FindCompletions(const std::string& query,
                                         std::vector<std::string>& result,
-                                        int minimumCompletionLength) {
+                                        unsigned minimumCompletionLength) {
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
 
     bool lengthCheckNeeded = utf8::length(query) < minimumCompletionLength;

@@ -80,7 +80,7 @@ void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, c
 void SKKOkuriEditor::Input(SKKBaseEditor::Event event) {
     if(event == BackSpace) {
         if(okuri_.empty()) {
-            context()->needs_go_back = true;
+            context()->needs_setback = true;
         } else {
             utf8::pop(okuri_);
         }

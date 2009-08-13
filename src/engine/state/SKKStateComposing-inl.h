@@ -63,7 +63,7 @@ State SKKState::Edit(const Event& event) {
     case SKK_BACKSPACE:
         editor_->HandleBackSpace();
 
-        if(context_->needs_go_back) {
+        if(context_->needs_setback) {
             return State::Transition(&SKKState::KanaInput);
         }
 
@@ -392,7 +392,7 @@ State SKKState::OkuriInput(const Event& event) {
     case SKK_BACKSPACE:
         editor_->HandleBackSpace();
 
-        if(context_->needs_go_back) {
+        if(context_->needs_setback) {
             return State::Transition(&SKKState::KanaEntry);
         }
 

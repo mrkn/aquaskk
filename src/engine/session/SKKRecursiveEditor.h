@@ -29,15 +29,24 @@
 #include <memory>
 
 class SKKWidget;
+class SKKInputContext;
+class SKKConfig;
+class SKKAnnotator;
+class SKKDynamicCompletor;
 
 class SKKRecursiveEditor {
     std::auto_ptr<SKKInputEnvironment> env_;
+    SKKInputContext* context_;
+    SKKConfig* config_;
+    SKKAnnotator* annotator_;
+    SKKDynamicCompletor* completor_;
     SKKInputEngine editor_;
     SKKStateMachine state_;
     std::vector<SKKWidget*> widgets_;
 
     typedef void (SKKWidget::*WidgetMethod)();
     void forEachWidget(WidgetMethod method);
+    std::string complete(unsigned range);
 
     SKKRecursiveEditor();
     SKKRecursiveEditor(const SKKRecursiveEditor&);
@@ -47,9 +56,8 @@ public:
     SKKRecursiveEditor(SKKInputEnvironment* env);
     ~SKKRecursiveEditor();
 
-    void Dispatch(const SKKEvent& event);
-    void UpdateInputContext();
-    void Commit(const std::string& word);
+    void Input(const SKKEvent& event);
+    void Output();
 
     void Activate();
     void Deactivate();

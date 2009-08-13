@@ -37,8 +37,6 @@ void MacFrontEnd::InsertString(const std::string& str) {
 }
 
 void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
-    composing_ = str;
-
     NSMutableAttributedString* marked = createMarkedText(str, cursorOffset);
     NSRange cursorPos = NSMakeRange([marked length] + cursorOffset, 0);
 
@@ -48,6 +46,22 @@ void MacFrontEnd::ComposeString(const std::string& str, int cursorOffset) {
     if(utf8::length(str) == 2 && str.find("▽") == 0) {
         [client_ setMarkedText:@"▽" selectionRange:notFound() replacementRange:notFound()];
     }
+
+    [client_ setMarkedText:marked selectionRange:cursorPos replacementRange:notFound()];
+
+    [marked release];
+}
+
+void MacFrontEnd::ComposeString(const std::string& str, int candidateStart, int candidateLength) {
+    NSMutableAttributedString* marked = createMarkedText(str, 0);
+    NSRange cursorPos = NSMakeRange([marked length] + 0, 0);
+    NSRange segment = NSMakeRange(candidateStart, candidateLength);
+    
+    [marked addAttribute:NSMarkedClauseSegmentAttributeName
+                   value:[NSNumber numberWithInt:1] range:segment];
+
+    [marked addAttribute:NSUnderlineStyleAttributeName
+                   value:[NSNumber numberWithInt:NSUnderlineStyleThick] range:segment];
 
     [client_ setMarkedText:marked selectionRange:cursorPos replacementRange:notFound()];
 

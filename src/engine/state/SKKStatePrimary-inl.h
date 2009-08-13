@@ -32,6 +32,10 @@ State SKKState::Primary(const Event& event) {
         editor_->SetStatePrimary();
         return 0;
 
+    case SKK_JMODE:
+        editor_->Commit();
+        return 0;
+
     case SKK_ENTER:
 	editor_->HandleEnter();
 	return 0;
@@ -48,13 +52,12 @@ State SKKState::Primary(const Event& event) {
 
         case SKKUndoContext::UndoAsciiEntry:
             return State::Transition(&SKKState::AsciiEntry);
+
+        default:
+            messenger_->SendMessage("Undo できませんでした");
+            break;
         }
 
-        messenger_->SendMessage("Undo できませんでした");
-        return 0;
-
-    case SKK_JMODE:
-        editor_->Commit();
         return 0;
 
     case SKK_PASTE:
@@ -105,6 +108,8 @@ State SKKState::Primary(const Event& event) {
         return State::Transition(&SKKState::Jisx0208Latin);
 
     default:
+        // editor で処理されなかったイベントは全て「未処理」にする
+        // SKK_TAB もここに来るため、SKK_CHAR でテストはできない
         if(event.IsUser()) {
             editor_->Reset();
             return 0;

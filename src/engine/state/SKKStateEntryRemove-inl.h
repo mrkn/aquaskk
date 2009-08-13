@@ -34,7 +34,7 @@ State SKKState::EntryRemove(const Event& event) {
     case SKK_ENTER:
         editor_->Commit();
 
-        if(!context_->needs_go_back) {
+        if(!context_->needs_setback) {
             messenger_->SendMessage("単語を削除しました");
             return State::Transition(&SKKState::KanaInput);
         }

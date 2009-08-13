@@ -57,7 +57,7 @@ void SKKEntryRemoveEditor::Input(Event event) {
 
 void SKKEntryRemoveEditor::Commit(std::string& queue) {
     if(input_ != "yes") {
-        context()->needs_go_back = true;
+        context()->needs_setback = true;
     } else {
         SKKBackEnd::theInstance().Remove(entry_, candidate_);
     }

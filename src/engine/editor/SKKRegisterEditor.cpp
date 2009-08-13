@@ -30,6 +30,9 @@ SKKRegisterEditor::SKKRegisterEditor(SKKInputContext* context)
 
 void SKKRegisterEditor::ReadContext() {
     context()->entry = SKKEntry();
+
+    Input(context()->registration.Word());
+    context()->registration.Clear();
 }
 
 void SKKRegisterEditor::WriteContext() {

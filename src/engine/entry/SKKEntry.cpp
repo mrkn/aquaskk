@@ -83,6 +83,9 @@ std::string SKKEntry::ToggleKana(SKKInputMode mode) const {
     case Jisx0201KanaInputMode:
 	jconv::jisx0201_kana_to_katakana(normal_entry_, result);
 	break;
+
+    default:
+        break;
     }
 
     return result;
@@ -107,6 +110,9 @@ std::string SKKEntry::ToggleJisx0201Kana(SKKInputMode mode) const {
     case AsciiInputMode:
 	jconv::ascii_to_jisx0208_latin(normal_entry_, result);
 	break;
+
+    default:
+        break;
     }
 
     return result;
@@ -124,6 +130,9 @@ SKKEntry SKKEntry::Normalize(SKKInputMode mode) const {
 
     case Jisx0201KanaInputMode:
         jconv::jisx0201_kana_to_hirakana(normal_entry_, result);
+        break;
+
+    default:
         break;
     }
 

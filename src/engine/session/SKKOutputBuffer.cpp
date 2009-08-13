@@ -36,6 +36,13 @@ void SKKOutputBuffer::Compose(const std::string& str, int cursor) {
     cursor_ += cursor;
 }
 
+void SKKOutputBuffer::Convert(const std::string& str) {
+    start_ = utf8::length(utf8::left(composing_, cursor_));
+    length_ = utf8::length(str);
+
+    Compose(str);
+}
+
 void SKKOutputBuffer::SetMark() {
     mark_ = utf8::length(composing_) + cursor_;
 }
@@ -46,17 +53,21 @@ int SKKOutputBuffer::GetMark() const {
 
 void SKKOutputBuffer::Clear() {
     composing_.clear();
-    cursor_ = 0;
-    mark_ = 0;
+    cursor_ = mark_ = start_ = length_ = 0;
 }
 
 void SKKOutputBuffer::Output() {
-    if(composing_ == prev_ && composing_.empty()) {
+    if(composing_ == last_ && composing_.empty()) {
         return;
     }
 
-    frontend_->ComposeString(composing_, cursor_);
-    prev_ = composing_;
+    if(length_) {
+        frontend_->ComposeString(composing_, start_, length_);
+    } else {
+        frontend_->ComposeString(composing_, cursor_);
+    }
+    
+    last_ = composing_;
 }
 
 bool SKKOutputBuffer::IsComposing() const {

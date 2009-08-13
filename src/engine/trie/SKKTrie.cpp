@@ -32,10 +32,6 @@ SKKTrie::SKKTrie(const std::string& hirakana,
     : leaf_(true), hirakana_(hirakana), katakana_(katakana), jisx0201kana_(jisx0201kana), next_(next) {}
 
 void SKKTrie::Clear() {
-    for(int i = 0; i < children_.size(); ++ i) {
-        children_[i].Clear();
-    }
-
     children_.clear();
 }
 

@@ -31,9 +31,14 @@ void SKKPrimaryEditor::ReadContext() {
 
     SKKUndoContext& undo = context()->undo;
 
-    if(!undo.Candidate().empty()) {
+    if(undo.IsActive()) {
         Input(undo.Candidate(), "", 0);
         undo.Clear();
+    }
+
+    if(context()->registration == SKKRegistration::Finished) {
+        context()->output.Fix(context()->registration.Word());
+        context()->registration.Clear();
     }
 }
 

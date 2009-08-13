@@ -43,7 +43,6 @@ class SKKInputEngine : public SKKInputQueueObserver,
 
     SKKInputEnvironment* env_;
     SKKInputSessionParameter* param_;
-    SKKRegistrationObserver* observer_;
     SKKInputContext* context_;
     SKKConfig* config_;
     std::vector<SKKBaseEditor*> stack_;
@@ -94,7 +93,6 @@ public:
 
     // 入力モード
     void SelectInputMode(SKKInputMode mode);
-    void RefreshInputMode();
 
     // 状態変更
     void SetStatePrimary();
@@ -102,6 +100,7 @@ public:
     void SetStateOkuri();
     void SetStateSelectCandidate();
     void SetStateEntryRemove();
+    void SetStateRegistration();
 
     // 入力
     void HandleChar(char code, bool direct);
@@ -122,9 +121,6 @@ public:
     // リセット
     void Reset();
 
-    // 登録
-    void Register(const std::string& word);
-
     // トグル変換
     void ToggleKana();
     void ToggleJisx0201Kana();
@@ -137,9 +133,6 @@ public:
 
     // 送りが完成したか？
     bool IsOkuriComplete() const;
-
-    // 再帰的辞書登録
-    void BeginRegistration();
 };
 
 #endif
