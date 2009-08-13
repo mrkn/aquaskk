@@ -36,9 +36,11 @@ void SKKPrimaryEditor::ReadContext() {
         undo.Clear();
     }
 
-    if(context()->registration == SKKRegistration::Finished) {
-        context()->output.Fix(context()->registration.Word());
-        context()->registration.Clear();
+    SKKRegistration& registration = context()->registration;
+
+    if(registration == SKKRegistration::Finished) {
+        context()->output.Fix(registration.Word());
+        registration.Clear();
     }
 }
 

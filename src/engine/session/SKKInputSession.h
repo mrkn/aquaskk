@@ -36,7 +36,6 @@ class SKKEvent;
 class SKKInputSession {
     std::auto_ptr<SKKInputSessionParameter> param_;
     std::vector<SKKRecursiveEditor*> stack_;
-    std::vector<SKKRecursiveEditor*> temp_;
     SKKInputModeListenerCollection listeners_;
     SKKInputContext context_;
     bool inEvent_;

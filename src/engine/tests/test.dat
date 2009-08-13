@@ -384,6 +384,22 @@ u                       mode=J,marked=▽こう
 ctrl::y,yank=高         mode=J,marked=[登録：こう]高
 ctrl::m                 mode=J,fixed=高
 
+# 送りあり(登録)
+# ----------------------------------------------------------------------
+A                       mode=J,marked=▽あ
+R                       mode=J,marked=▽あ*r
+i                       mode=J,marked=[登録：あ*り]
+ctrl::y,yank=有         mode=J,marked=[登録：あ*り]有
+ctrl::m                 mode=J,fixed=有り
+
+# 送りあり(変換)
+# ----------------------------------------------------------------------
+A                       mode=J,marked=▽あ
+R                       mode=J,marked=▽あ*r
+i                       mode=J,marked=▼有り
+ctrl::g                 mode=J,marked=▽あ
+ctrl::g                 mode=J
+
 # 送りなし2
 # ----------------------------------------------------------------------
 K                       mode=J,marked=▽k

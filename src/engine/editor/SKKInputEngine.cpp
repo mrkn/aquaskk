@@ -40,6 +40,9 @@ public:
     Synchronizer(SKKInputEngine* engine) : engine_(engine) {
         // 直近の状態を SKKInputContext に反映する
         engine_->UpdateInputContext();
+
+        // 初期化
+        engine_->initialize();
     }
 
     ~Synchronizer() {
@@ -75,21 +78,17 @@ void SKKInputEngine::SelectInputMode(SKKInputMode mode) {
 
 void SKKInputEngine::SetStatePrimary() {
     Synchronizer sync(this);
-
-    initialize();
 }
 
 void SKKInputEngine::SetStateComposing() {
     Synchronizer sync(this);
 
-    initialize();
     push(&composingEditor_);
 }
 
 void SKKInputEngine::SetStateOkuri() {
     Synchronizer sync(this);
 
-    initialize();
     push(&composingEditor_);
     push(&okuriEditor_);
 }
@@ -97,14 +96,12 @@ void SKKInputEngine::SetStateOkuri() {
 void SKKInputEngine::SetStateSelectCandidate() {
     Synchronizer sync(this);
 
-    initialize();
     push(&candidateEditor_);
 }
 
 void SKKInputEngine::SetStateEntryRemove() {
     Synchronizer sync(this);
 
-    initialize();
     push(&entryRemoveEditor_);
 }
 
@@ -224,17 +221,16 @@ void SKKInputEngine::ToggleJisx0201Kana() {
 void SKKInputEngine::UpdateInputContext() {
     context_->output.Clear();
 
-    std::for_each(stack_.begin(), stack_.end(), std::mem_fun(&SKKBaseEditor::WriteContext));
+    std::for_each(stack_.begin(), stack_.end(),
+                  std::mem_fun(&SKKBaseEditor::WriteContext));
 
     // 非確定文字があれば挿入(ex. "ky" など)
-    if(config_->DisplayShortestMatchOfKanaConversions()) {
-        if(!inputState_.intermediate.empty()) {
-            context_->output.Compose(inputState_.intermediate);
-            return;
-        }
+    if(config_->DisplayShortestMatchOfKanaConversions()
+       && !inputState_.intermediate.empty()) {
+        context_->output.Compose(inputState_.intermediate);
+    } else {
+        context_->output.Compose(inputState_.queue);
     }
-
-    context_->output.Compose(inputState_.queue);
 
     env_->InputModeSelector()->Notify();
 }
@@ -265,8 +261,8 @@ void SKKInputEngine::initialize() {
     context_->annotator = false;
 
     if(context_->registration == SKKRegistration::Aborted) {
-        env_->InputModeSelector()->Refresh();
         context_->registration.Clear();
+        env_->InputModeSelector()->Refresh();
     }
 }
 

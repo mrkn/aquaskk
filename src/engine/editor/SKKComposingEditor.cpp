@@ -27,15 +27,15 @@ SKKComposingEditor::SKKComposingEditor(SKKInputContext* context)
     : SKKBaseEditor(context) {}
 
 void SKKComposingEditor::ReadContext() {
-    SKKEntry& entry = context()->entry;
-
     composing_.Clear();
 
-    if(entry.IsEmpty()) {
+    if(context()->entry.IsEmpty()) {
+        // 直接入力モードからの遷移
         composing_.Insert(context()->undo.Entry());
     } else {
-        entry.SetOkuri("", "");
-        composing_.Insert(entry.EntryString());
+        // 変換モードからの遷移なので、見出し語を復元する
+        context()->entry.SetOkuri("", "");
+        composing_.Insert(context()->entry.EntryString());
     }
 
     context()->dynamic_completion = true;
@@ -107,5 +107,5 @@ void SKKComposingEditor::SetEntry(const std::string& entry) {
 // ----------------------------------------------------------------------
 
 void SKKComposingEditor::update() {
-    context()->entry.SetEntry(composing_.LeftString());
+    context()->entry = SKKEntry(composing_.LeftString());
 }

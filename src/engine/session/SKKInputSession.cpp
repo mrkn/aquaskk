@@ -105,9 +105,6 @@ void SKKInputSession::Deactivate() {
 // ----------------------------------------------------------------------
 
 void SKKInputSession::beginEvent() {
-    temp_ = stack_;
-
-    context_.output.Clear();
     context_.event_handled = true;
     context_.needs_setback = false;
 }
