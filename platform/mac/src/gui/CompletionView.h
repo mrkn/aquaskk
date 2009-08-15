@@ -24,15 +24,14 @@
 #define CompletionView_h
 
 @interface CompletionView : NSView {
-    NSDictionary* attributes_;
-    NSString* completion_;
+    NSAttributedString* completion_;
     NSColor* strokeColor_;
     NSColor* backgroundColor_;
     NSAttributedString* guide_;
     NSSize guideSize_;
 }
 
-- (void)setCompletion:(NSString*)completion;
+- (void)setCompletion:(NSAttributedString*)completion;
 
 @end
 

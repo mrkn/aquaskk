@@ -36,6 +36,7 @@
 #define utf8util_h
 
 #include <string>
+#include <algorithm>
 #include <cstdlib>
 
 // UTF8 イテレータ
@@ -222,6 +223,24 @@ struct utf8 {
 	std::copy(pos.iterator(), str.end(), std::back_inserter(result));
 
 	return result;
+    }
+
+    // 共通プレフィクス取得
+    //
+    // 例：
+    //      if(common_prefix("1漢字2", "1漢字3") == "1漢字") { ...
+    //
+    static std::string common_prefix(const std::string&s1, const std::string& s2) {
+        int max = std::min(s1.size(), s2.size());
+        utf8::const_iterator iter1(s1.begin());
+        utf8::const_iterator iter2(s2.begin());
+
+        while(iter1.iterator() - s1.begin() < max && *iter1 == *iter2) {
+            ++ iter1;
+            ++ iter2;
+        }
+
+        return s1.substr(0, iter1.iterator() - s1.begin());
     }
 };
 

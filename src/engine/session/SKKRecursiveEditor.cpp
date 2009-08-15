@@ -28,6 +28,7 @@
 #include "SKKCandidateWindow.h"
 #include "SKKDynamicCompletor.h"
 #include "SKKBackEnd.h"
+#include "utf8util.h"
 
 SKKRecursiveEditor::SKKRecursiveEditor(SKKInputEnvironment* env)
     : env_(env)
@@ -57,27 +58,8 @@ void SKKRecursiveEditor::Output() {
 
     context_->output.Output();
 
-    if(context_->dynamic_completion && config_->EnableDynamicCompletion()) {
-        std::string completion = complete(config_->DynamicCompletionRange());
-
-        completor_->Update(completion, context_->output.GetMark());
-        completion.empty() ? completor_->Hide() : completor_->Show();
-    } else {
-        completor_->Hide();
-    }
-
-    if(context_->annotator && config_->EnableAnnotation()) {
-        SKKCandidate candidate = context_->candidate;
-
-        if(candidate.IsEmpty()) {
-            annotator_->Hide();
-        } else {
-            annotator_->Update(candidate, context_->output.GetMark());
-            annotator_->Show();
-        }
-    } else {
-        annotator_->Hide();
-    }
+    complete();
+    annotate();
 }
 
 void SKKRecursiveEditor::Activate() {
@@ -94,26 +76,46 @@ void SKKRecursiveEditor::forEachWidget(WidgetMethod method) {
     std::for_each(widgets_.begin(), widgets_.end(), std::mem_fun(method));
 }
 
-std::string SKKRecursiveEditor::complete(unsigned range) {
-    SKKEntry entry = context_->entry;
-    std::string completion;
+void SKKRecursiveEditor::complete() {
+    if(context_->dynamic_completion && config_->EnableDynamicCompletion()) {
+        SKKEntry entry = context_->entry;
+        std::string joined;
+        std::string common_prefix;
 
-    if(entry.IsEmpty() || entry.IsOkuriAri()) {
-        return completion;
-    }
+        if(!entry.IsEmpty() && !entry.IsOkuriAri()) {
+            std::vector<std::string> result;
+            unsigned range = config_->DynamicCompletionRange();
+            std::string key = entry.EntryString();
 
-    std::vector<std::string> result;
-    std::string key = entry.EntryString();
+            if(SKKBackEnd::theInstance().Complete(key, result, range)) {
+                int limit = std::min((unsigned)result.size(), range);
+                common_prefix = result[0];
 
-    // 候補を補完する
-    if(!key.empty() && SKKBackEnd::theInstance().Complete(key, result, range)) {
-        unsigned limit = std::min((unsigned)result.size(), range);
-        for(unsigned i = 0; i < limit; ++ i) { 
-            completion += result[i];
-            completion += "\n";
+                for(int i = 0; i < limit; ++ i) {
+                    common_prefix = utf8::common_prefix(common_prefix, result[i]);
+            
+                    joined += result[i];
+                    joined += "\n";
+                }
+
+                joined.erase(joined.size() - 1);
+            }
         }
-        completion.erase(completion.size() - 1);
-    }
 
-    return completion;
+        completor_->Update(joined, utf8::length(common_prefix), context_->output.GetMark());
+        completor_->Show();
+    } else {
+        completor_->Hide();
+    }
+}
+
+void SKKRecursiveEditor::annotate() {
+    if(context_->annotation && config_->EnableAnnotation()) {
+        SKKCandidate candidate = context_->candidate;
+
+        annotator_->Update(candidate, context_->output.GetMark());
+        annotator_->Show();
+    } else {
+        annotator_->Hide();
+    }
 }

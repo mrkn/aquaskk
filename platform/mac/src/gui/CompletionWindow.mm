@@ -53,7 +53,7 @@
     [super dealloc];
 }
 
-- (void)showCompletion:(NSString*)comp at:(NSPoint)topleft level:(int)level {
+- (void)showCompletion:(NSAttributedString*)comp at:(NSPoint)topleft level:(int)level {
     [view_ setCompletion:comp];
 
     NSRect frame = [view_ frame];

@@ -40,7 +40,7 @@ struct SKKInputContext {
     bool event_handled;
     bool needs_setback;
     bool dynamic_completion;
-    bool annotator;
+    bool annotation;
 
     SKKInputContext(SKKFrontEnd* frontend)
         : output(frontend), undo(frontend), dynamic_completion(false) {}

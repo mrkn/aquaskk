@@ -46,7 +46,8 @@ class SKKRecursiveEditor {
 
     typedef void (SKKWidget::*WidgetMethod)();
     void forEachWidget(WidgetMethod method);
-    std::string complete(unsigned range);
+    void complete();
+    void annotate();
 
     SKKRecursiveEditor();
     SKKRecursiveEditor(const SKKRecursiveEditor&);

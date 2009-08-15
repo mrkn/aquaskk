@@ -32,7 +32,10 @@ class MacDynamicCompletor : public SKKDynamicCompletor {
     SKKLayoutManager* layout_;
     CompletionWindow* window_;
     std::string completion_;
+    int commonPrefixLength_;
     int cursorOffset_;
+
+    NSAttributedString* makeAttributedString(); 
 
     virtual void SKKWidgetShow();
     virtual void SKKWidgetHide();
@@ -40,7 +43,8 @@ class MacDynamicCompletor : public SKKDynamicCompletor {
 public:
     MacDynamicCompletor(SKKLayoutManager* layout);
 
-    virtual void Update(const std::string& completion, int cursorOffset);
+    virtual void Update(const std::string& completion,
+                        int commonPrefixLength, int cursorOffset);
 };
 
 #endif

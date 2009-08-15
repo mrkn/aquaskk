@@ -36,10 +36,6 @@
     if(self) {
         completion_ = nil;
 
-        NSMutableDictionary* dictionary = [NSMutableDictionary dictionaryWithCapacity:0];
-        [dictionary setObject:[NSFont systemFontOfSize:0.0] forKey:NSFontAttributeName];
-        attributes_ = [dictionary retain];
-
         strokeColor_ = [[NSColor controlShadowColor] retain];
         backgroundColor_ = [[NSColor colorWithDeviceRed:1.0 green:1.0 blue:0.94 alpha:1.0] retain];
 
@@ -55,7 +51,6 @@
         [completion_ release];
     }
 
-    [attributes_ release];
     [strokeColor_ release];
     [backgroundColor_ release];
     [guide_ release];
@@ -63,7 +58,7 @@
     [super dealloc];
 }
 
-- (void)setCompletion:(NSString*)completion {
+- (void)setCompletion:(NSAttributedString*)completion {
     if(completion_) {
         [completion_ release];
     }
@@ -98,7 +93,7 @@
     NSPoint pt = NSMakePoint((NSWidth(frame) - guideSize_.width) / 2, 1);
 
     [guide_ drawAtPoint:pt];
-    [completion_ drawAtPoint:NSMakePoint(3, guideSize_.height + 4) withAttributes:attributes_];
+    [completion_ drawAtPoint:NSMakePoint(3, guideSize_.height + 4)];
 }
 
 @end
@@ -109,7 +104,7 @@
     NSRect rect;
 
     rect.origin = NSMakePoint(0, 0);
-    rect.size = [completion_ sizeWithAttributes:attributes_];
+    rect.size = [completion_ size];
     rect.size.width = MAX(rect.size.width, guideSize_.width);
     rect.size.width += 8;
     rect.size.height += guideSize_.height + 8;

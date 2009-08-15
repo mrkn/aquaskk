@@ -58,7 +58,7 @@ void MacFrontEnd::ComposeString(const std::string& str, int candidateStart, int 
     NSRange segment = NSMakeRange(candidateStart, candidateLength);
     
     [marked addAttribute:NSMarkedClauseSegmentAttributeName
-                   value:[NSNumber numberWithInt:1] range:segment];
+                   value:[NSNumber numberWithInt:0] range:segment];
 
     [marked addAttribute:NSUnderlineStyleAttributeName
                    value:[NSNumber numberWithInt:NSUnderlineStyleThick] range:segment];

@@ -31,7 +31,7 @@
 }
 
 + (CompletionWindow*)sharedWindow;
-- (void)showCompletion:(NSString*)completion at:(NSPoint)topleft level:(int)level;
+- (void)showCompletion:(NSAttributedString*)completion at:(NSPoint)topleft level:(int)level;
 - (void)hide;
 
 @end

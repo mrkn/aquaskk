@@ -8,7 +8,7 @@
 class MockDynamicCompletor : public SKKDynamicCompletor {
     virtual void SKKWidgetShow() {}
     virtual void SKKWidgetHide() {}
-    virtual void Update(const std::string& completion, int cursorOffset) {}
+    virtual void Update(const std::string& completion, int commonPrefixSize, int cursorOffset) {}
 };
 
 #endif

@@ -258,7 +258,7 @@ void SKKInputEngine::initialize() {
     stack_.push_back(env_->BaseEditor());
 
     context_->dynamic_completion = false;
-    context_->annotator = false;
+    context_->annotation = false;
 
     if(context_->registration == SKKRegistration::Aborted) {
         context_->registration.Clear();

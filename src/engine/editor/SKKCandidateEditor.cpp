@@ -30,7 +30,7 @@ SKKCandidateEditor::SKKCandidateEditor(SKKInputContext* context)
 void SKKCandidateEditor::ReadContext() {
     entry_ = context()->entry;
 
-    context()->annotator = true;
+    context()->annotation = true;
 }
 
 void SKKCandidateEditor::WriteContext() {
