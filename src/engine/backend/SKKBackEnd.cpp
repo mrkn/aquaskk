@@ -164,6 +164,8 @@ bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
 }
 
 std::string SKKBackEnd::ReverseLookup(const std::string& candidate) {
+    if(candidate.empty()) return "";
+
     for(unsigned i = 0; i < dicts_.size(); ++ i) {
         std::string entry(dicts_[i]->FindEntry(candidate));
 
