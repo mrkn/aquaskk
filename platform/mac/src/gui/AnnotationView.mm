@@ -146,16 +146,16 @@
     NSRange range = NSMakeRange(0, [string length]);
 
     [header addAttribute:NSFontAttributeName
-            value:[NSFont boldSystemFontOfSize:[NSFont labelFontSize]] range:range];
+                   value:[NSFont boldSystemFontOfSize:[NSFont labelFontSize]] range:range];
 
     [header addAttribute:NSForegroundColorAttributeName
-            value:strokeColor_ range:range];
+                   value:[NSColor grayColor] range:range];
 
     NSMutableParagraphStyle* style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     [style setLineSpacing:4.0];
 
     [header addAttribute:NSParagraphStyleAttributeName
-            value:style range:range];
+                   value:style range:range];
 
     [style release];
 
