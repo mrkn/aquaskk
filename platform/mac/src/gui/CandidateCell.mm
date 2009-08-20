@@ -97,12 +97,17 @@
 
     focus.origin = pt;
     focus.size = size;
+    focus.size.height -= 1;
+
+    [[NSGraphicsContext currentContext] setShouldAntialias:NO];
 
     [[[NSColor blackColor] colorWithAlphaComponent:0.1] setFill];
     NSRectFillUsingOperation(focus, NSCompositeSourceOver);
 
-    [[[NSColor blackColor] colorWithAlphaComponent:0.2] setFill];
-    NSFrameRectWithWidthUsingOperation(focus, 1.0, NSCompositeSourceOver);
+    [[NSColor windowFrameColor] setStroke];
+    [NSBezierPath strokeRect:focus];
+
+    [[NSGraphicsContext currentContext] setShouldAntialias:YES];
 }
 
 - (void)drawAtPoint:(NSPoint)pt withFocus:(BOOL)focus {

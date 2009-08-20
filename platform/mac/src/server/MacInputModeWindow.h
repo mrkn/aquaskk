@@ -24,14 +24,15 @@
 #define MacInputModeWindow_h
 
 #include "SKKInputModeListener.h"
-#include "SKKLayoutManager.h"
+
+class SKKLayoutManager;
 
 @class InputModeWindow;
+@class SKKModeTips;
 
 class MacInputModeWindow : public SKKInputModeListener {
-    SKKLayoutManager* layout_;
     SKKInputMode mode_;
-    InputModeWindow* window_;
+    SKKModeTips* tips_;
 
     bool enabled() const;
 
@@ -40,6 +41,7 @@ class MacInputModeWindow : public SKKInputModeListener {
 
 public:
     MacInputModeWindow(SKKLayoutManager* layout);
+    ~MacInputModeWindow();
 
     virtual void SelectInputMode(SKKInputMode mode);
 };

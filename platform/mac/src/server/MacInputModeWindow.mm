@@ -23,6 +23,7 @@
 #include "MacInputModeWindow.h"
 #include "SKKFrontEnd.h"
 #include "SKKConstVars.h"
+#include "SKKLayoutManager.h"
 #include "InputModeWindow.h"
 #include <iostream>
 #include <vector>
@@ -74,32 +75,24 @@ namespace {
     }
 }
 
-// ============================================================
+// ----------------------------------------------------------------------
+// SKKModeTips -- 遅延表示用の緩衝クラス
+// ----------------------------------------------------------------------
 
-MacInputModeWindow::MacInputModeWindow(SKKLayoutManager* layout)
-  : layout_(layout)
-  , mode_(HirakanaInputMode) {
-    window_ = [InputModeWindow sharedWindow];
-    [window_ changeMode:mode_];
+@interface SKKModeTips : NSObject {
+    InputModeWindow* window_;
+    SKKLayoutManager* layout_;
+    SKKInputMode mode_;
 }
 
-void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
-    mode_ = mode;
-}
+- (id)initWithLayoutManager:(SKKLayoutManager*)layout;
+- (void)show:(SKKInputMode)mode;
+- (void)hide;
+@end
 
-// ------------------------------------------------------------
+@implementation SKKModeTips
 
-bool MacInputModeWindow::enabled() const {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
-    [defaults synchronize];
-    
-    return [defaults boolForKey:SKKUserDefaultKeys::show_input_mode_icon] == YES;
-}
-
-void MacInputModeWindow::SKKWidgetShow() {
-    if(!enabled()) return;
-
+- (void)activate:(id)sender {
     NSPoint pt = layout_->InputOrigin();
 
     CGPoint cursor = FlipPoint(pt.x, pt.y);
@@ -114,6 +107,66 @@ void MacInputModeWindow::SKKWidgetShow() {
     [window_ showAt:pt level:layout_->WindowLevel()];
 }
 
-void MacInputModeWindow::SKKWidgetHide() {
+- (void)cancel {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+}
+
+- (id)initWithLayoutManager:(SKKLayoutManager*)layout {
+    self = [super init];
+    if(self) {
+        window_ = [InputModeWindow sharedWindow];
+        layout_ = layout;
+    }
+
+    return self;
+}
+
+- (void)show:(SKKInputMode)mode {
+    [self cancel];
+    mode_ = mode;
+    [self performSelector:@selector(activate:) withObject:self afterDelay:0.1];
+}
+
+- (void)hide {
+    [self cancel];
     [window_ hide];
+}
+
+@end
+
+// ----------------------------------------------------------------------
+// MacInputModeWindow
+// ----------------------------------------------------------------------
+
+MacInputModeWindow::MacInputModeWindow(SKKLayoutManager* layout)
+    : mode_(HirakanaInputMode) {
+    tips_ = [[SKKModeTips alloc] initWithLayoutManager:layout];
+}
+
+MacInputModeWindow::~MacInputModeWindow() {
+    [tips_ release];
+}
+
+void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
+    mode_ = mode;
+}
+
+// ----------------------------------------------------------------------
+
+bool MacInputModeWindow::enabled() const {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    [defaults synchronize];
+    
+    return [defaults boolForKey:SKKUserDefaultKeys::show_input_mode_icon] == YES;
+}
+
+void MacInputModeWindow::SKKWidgetShow() {
+    if(!enabled()) return;
+
+    [tips_ show:mode_];
+}
+
+void MacInputModeWindow::SKKWidgetHide() {
+    [tips_ hide];
 }
