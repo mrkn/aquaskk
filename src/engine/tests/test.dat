@@ -91,6 +91,13 @@ L                       mode=L
 a                       mode=L,fixed=ａ
 ctrl::j                 mode=J
 
+# 促音
+# ----------------------------------------------------------------------
+t                       mode=J,marked=t
+t                       mode=J,fixed=っ,marked=t
+t                       mode=J,fixed=っ,marked=t
+ctrl::j                 mode=J
+
 # キャンセル
 # ----------------------------------------------------------------------
 k                       mode=J,marked=k
@@ -181,6 +188,13 @@ a                       mode=J,marked=[登録：お*さ]
 ctrl::g                 mode=J,marked=▽お
 ctrl::g                 mode=J
 
+# 送りあり(単語登録)
+# ----------------------------------------------------------------------
+A                       mode=J,marked=▽あ
+I                       mode=J,marked=[登録：あ*い]
+ctrl::m                 mode=J,marked=▽あ
+ctrl::g                 mode=J
+
 # トグル変換 => カタカナ
 # ----------------------------------------------------------------------
 K                       mode=J,marked=▽k
@@ -202,6 +216,12 @@ ctrl::q                 mode=J,fixed=ﾝ
 /                       mode=A,marked=▽
 a                       mode=A,marked=▽a
 ctrl::q                 mode=J,fixed=ａ
+
+# 見出し語再入
+# ----------------------------------------------------------------------
+A                       mode=J,marked=▽あ
+Q                       mode=J,fixed=あ,marked=▽
+ctrl::g                 mode=J
 
 # ======================================================================
 # 単語登録モード

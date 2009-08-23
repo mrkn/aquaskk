@@ -158,7 +158,6 @@
 #ifdef SKK_DEBUG
         { Normal,	"デバッグ情報",			@selector(showDebugInfo:) },
 #endif
-        { Normal,	"AquaSKK ヘルプ",		@selector(showHelp:) },
         { Selector,	"__selector__",			0 },
         { Normal,	"Web::プロジェクトホーム",	@selector(webHome:) },
         { Normal,	"Web::便利な機能、Tips",	@selector(webTips:) },
@@ -247,12 +246,6 @@
     [pb setString:info forType:NSStringPboardType];
 
     [info release];
-}
-
-- (void)showHelp:(id)sender {
-    NSHelpManager* manager = [NSHelpManager sharedHelpManager];
-
-    [manager openHelpAnchor:@"mail" inBook:nil];
 }
 
 - (void)openURL:(NSString*)url {

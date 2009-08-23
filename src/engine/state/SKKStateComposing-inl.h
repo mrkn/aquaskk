@@ -181,7 +181,7 @@ State SKKState::KanaEntry(const Event& event) {
 
             if(param.IsEnterJapanese()) {
                 editor_->Commit();
-                return State::Transition(&SKKState::KanaEntry);
+                return State::Forward(&SKKState::KanaInput);
             }
         }
 

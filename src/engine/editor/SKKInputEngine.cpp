@@ -162,7 +162,7 @@ void SKKInputEngine::HandleEnter() {
 
     std::string result = word_ + entry.OkuriString();
 
-    if(result.empty()) {
+    if(word_.empty()) {
         context_->registration.Abort();
     } else {
         context_->registration.Finish(result);
