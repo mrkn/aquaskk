@@ -29,7 +29,7 @@ static std::string translate(const std::string& str, const std::string* from, co
     std::string result(str);
 
     for(int index = 0; !from[index].empty(); ++ index) {
-	for(unsigned pos = 0;
+	for(std::string::size_type pos = 0;
 	    (pos = result.find(from[index], pos)) != std::string::npos;
 	    pos += to[index].size()) {
 	    result.replace(pos, from[index].size(), to[index]);

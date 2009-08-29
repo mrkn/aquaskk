@@ -31,7 +31,7 @@
 - (void)reloadUserDefaults;
 - (void)reloadDictionarySet;
 - (void)reloadComponents;
-- (void)createDictionaryTypes:(NSMenu*)menu;
+- (NSArray*)createDictionaryTypes;
 @end
 
 #endif

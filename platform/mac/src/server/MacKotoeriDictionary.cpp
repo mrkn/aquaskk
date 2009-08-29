@@ -30,6 +30,7 @@
 #include "SKKCandidate.h"
 #include "MacKotoeriDictionary.h"
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6
 // ======================================================================
 // ことえり辞書実装クラス
 // ======================================================================
@@ -199,6 +200,14 @@ public:
 	DCMDisposeRecordIterator(iterator);
     }
 };
+#else
+// Snow Leopard 以降では Dictionary Manager は非サポート
+class KotoeriImpl {
+public:
+    void Initialize(const std::string&) {}
+    void Find(const std::string&, SKKCandidateSuite&) {}
+};
+#endif
 
 // ======================================================================
 // ことえり辞書インタフェース

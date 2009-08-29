@@ -92,7 +92,7 @@ int fetchKeymapIndex(const std::string& key) {
 
 // 文字列一括置換ユーティリティ
 void translate(std::string& src, const std::string& from, const std::string& to) {
-    unsigned pos = 0;
+    std::string::size_type pos = 0;
 
     while((pos = src.find(from, pos)) != std::string::npos) {
 	src.replace(pos, from.size(), to);
@@ -192,7 +192,7 @@ void SKKKeymapEntry::parseGroup(const std::string& str) {
     // 各エントリを解析
     std::istringstream buf(tmp);
     while(buf >> tmp) {
-	unsigned pos = tmp.find_first_of('-');
+	std::string::size_type pos = tmp.find_first_of('-');
 
 	// 範囲コードか？
 	if(pos != std::string::npos) {

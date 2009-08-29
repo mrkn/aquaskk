@@ -184,12 +184,16 @@ static void terminate(int) {
     NSLog(@"Components has been reloaded");
 }
 
-- (void)createDictionaryTypes:(NSMenu*)menu {
-    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Common] action:0 keyEquivalent:@""];
-    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::AutoUpdate] action:0 keyEquivalent:@""];
-    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Proxy] action:0 keyEquivalent:@""];
-    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Kotoeri] action:0 keyEquivalent:@""];
-    [menu addItemWithTitle:DictionaryNames[DictionaryTypes::Gadget] action:0 keyEquivalent:@""];
+- (NSArray*)createDictionaryTypes {
+    NSMutableArray* types = [[NSMutableArray alloc] init];
+
+    [types addObject:DictionaryNames[DictionaryTypes::Common]];
+    [types addObject:DictionaryNames[DictionaryTypes::AutoUpdate]];
+    [types addObject:DictionaryNames[DictionaryTypes::Proxy]];
+    [types addObject:DictionaryNames[DictionaryTypes::Kotoeri]];
+    [types addObject:DictionaryNames[DictionaryTypes::Gadget]];
+
+    return [types autorelease];
 }
 
 @end

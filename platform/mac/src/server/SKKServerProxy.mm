@@ -52,8 +52,8 @@
     [proxy_ reloadComponents];
 }
 
-- (void)createDictionaryTypes:(NSMenu*)menu {
-    [proxy_ createDictionaryTypes:menu];
+- (NSArray*)createDictionaryTypes {
+    return [proxy_ createDictionaryTypes];
 }
 
 @end

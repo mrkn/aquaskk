@@ -44,7 +44,8 @@ namespace {
 
         for(int i = 0; escape[i].to != 0x00; ++ i) {
             std::string& target = escape[i].from;
-            for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
+            std::string::size_type pos;
+            for(pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
                 str.replace(pos, target.length(), escape[i].to);
             }
         }
@@ -52,8 +53,9 @@ namespace {
 
     void escape_string(std::string& str) {
         const std::string target(" ");
+        std::string::size_type pos;
 
-        for(unsigned pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
+        for(pos = str.find(target); pos != std::string::npos; pos = str.find(target, pos)) {
             str.replace(pos, target.length(), "&space;");
         }
     }

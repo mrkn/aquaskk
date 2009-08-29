@@ -35,7 +35,7 @@
     IBOutlet NSArrayController* arrayController_;
     IBOutlet NSTextField* version_;
     IBOutlet NSTextField* copyright_;
-    IBOutlet NSMenu* menu_;
+    IBOutlet NSArrayController* dictionaryTypes_;
 
     NSMutableDictionary* preferences_;
     NSMutableArray* dictionarySet_;

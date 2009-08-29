@@ -70,7 +70,7 @@
 
     [objController_ setContent:preferences_];
     [arrayController_ setContent:dictionarySet_];
-    [proxy_ createDictionaryTypes:menu_];
+    [dictionaryTypes_ setContent:[proxy_ createDictionaryTypes]];
 
     [self initializeVersion];
     [self setupKeyboardLayout];
@@ -139,7 +139,7 @@
 
 @implementation PreferenceController (Local)
 
-static int compareInputSource(id obj1, id obj2, void *context) {
+static NSInteger compareInputSource(id obj1, id obj2, void *context) {
     NSString* lhs = (NSString*)TISGetInputSourceProperty((TISInputSourceRef)obj1, kTISPropertyLocalizedName);
     NSString* rhs = (NSString*)TISGetInputSourceProperty((TISInputSourceRef)obj2, kTISPropertyLocalizedName);
 
@@ -215,7 +215,7 @@ static int compareInputSource(id obj1, id obj2, void *context) {
 
 - (void)updatePopUpButton {
     NSString* selectedLayout = [preferences_ objectForKey:SKKUserDefaultKeys::keyboard_layout];
-    int index = [layoutNames_ indexOfObject:selectedLayout];
+    NSUInteger index = [layoutNames_ indexOfObject:selectedLayout];
 
     if(index == NSNotFound) {
         index = 0;

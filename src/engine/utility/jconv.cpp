@@ -111,7 +111,7 @@ namespace jconv {
 	unsigned operator()(std::string& str, unsigned remain, unsigned offset = 0) {
 	    if(!remain) return 0;
 
-	    unsigned pos = str.find(from_, offset);
+	    std::string::size_type pos = str.find(from_, offset);
 	    if(pos == std::string::npos) return remain;
 
 	    str.replace(pos, from_.size(), to_);

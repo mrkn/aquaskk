@@ -29,6 +29,18 @@
 #include "SKKBackEnd.h"
 #include "jconv.h"
 
+namespace {
+    // スレッド引数
+    class thread_param {
+        int fd_;
+
+    public:
+        thread_param(int arg) : fd_(arg) {}
+
+        int fd() const { return fd_; }
+    };
+}
+
 skkserv::skkserv(unsigned short port, bool localonly) : thread_(0), localonly_(localonly) {
     server_.open(port);
 
@@ -72,13 +84,16 @@ void skkserv::accept() {
 	}
 
 	pthread_t tmp;
-	pthread_create(&tmp, 0, skkserv::worker, (void*)fd);
+	thread_param* param = new thread_param(fd);
+	pthread_create(&tmp, 0, skkserv::worker, param);
     }
 }
 
-void* skkserv::worker(void* param) {
-    net::socket::tcpstream session(reinterpret_cast<int>(param));
+void* skkserv::worker(void* arg) {
+    thread_param* param = reinterpret_cast<thread_param*>(arg);
+    net::socket::tcpstream session(param->fd());
     net::socket::namepair remote = net::socket::nameinfo::remote(session.socket());
+    delete param;
 
     std::cout << "AquaSKK(skkserv): session start[" << remote.first << "]" << std::endl;
 

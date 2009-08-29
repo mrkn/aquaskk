@@ -29,7 +29,7 @@ static NSString* DictionaryRowsType = @"DictionaryRowsType";
 
 - (void)moveObjectsInArrangedObjectsFromIndexes:(NSIndexSet*)indexSet toIndex:(unsigned int)insertIndex {
     NSArray* objects = [self arrangedObjects];
-    unsigned int idx = [indexSet lastIndex];
+    NSUInteger idx = [indexSet lastIndex];
     int aboveInsertIndexCount = 0;
     int removeIndex;
 
@@ -52,7 +52,7 @@ static NSString* DictionaryRowsType = @"DictionaryRowsType";
 }
 
 - (int)rowsAboveRow:(int)row inIndexSet:(NSIndexSet*)indexSet {
-    int currentIndex = [indexSet firstIndex];
+    NSUInteger currentIndex = [indexSet firstIndex];
     int i = 0;
 
     while(currentIndex != NSNotFound) {
@@ -155,11 +155,11 @@ static NSString* DictionaryRowsType = @"DictionaryRowsType";
     return YES;
 }
 
-- (int)numberOfRowsInTableView:(NSTableView*)tv {
+- (NSInteger)numberOfRowsInTableView:(NSTableView*)tv {
     return [[self arrangedObjects] count];
 }
 
-- (id)tableView:(NSTableView*)tv objectValueForTableColumn:(NSTableColumn*)column row:(int)row {
+- (id)tableView:(NSTableView*)tv objectValueForTableColumn:(NSTableColumn*)column row:(NSInteger)row {
     id obj = [[self arrangedObjects] objectAtIndex:row];
     return [obj valueForKey:[column identifier]];
 }
