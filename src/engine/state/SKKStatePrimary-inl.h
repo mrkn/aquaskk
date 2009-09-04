@@ -55,6 +55,7 @@ State SKKState::Primary(const Event& event) {
 
         default:
             messenger_->SendMessage("Undo できませんでした");
+            context_->event_handled = false;
             break;
         }
 

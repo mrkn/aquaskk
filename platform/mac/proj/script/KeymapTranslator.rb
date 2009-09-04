@@ -30,7 +30,7 @@ class KeymapTranslator
 
     @handle_option = {
       'AlwaysHandled'  => [ 'group::keycode::0x66,0x68' ],
-      'PseudoHandled'  => [ 'ctrl::l' ],
+      'PseudoHandled'  => [ 'ctrl::l||hex::0x1b' ],
     }
   end
 

@@ -178,6 +178,7 @@ void SKKInputEngine::HandleCancel() {
     }
 
     context_->registration.Abort();
+    context_->event_handled = false;
 }
 
 void SKKInputEngine::Commit() {

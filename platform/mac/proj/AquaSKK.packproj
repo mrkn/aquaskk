@@ -11,26 +11,35 @@
 				<key>Background Image</key>
 				<dict>
 					<key>IFPkgFlagBackgroundAlignment</key>
-					<integer>4</integer>
+					<integer>6</integer>
 					<key>IFPkgFlagBackgroundScaling</key>
-					<integer>1</integer>
+					<integer>2</integer>
 					<key>Mode</key>
 					<integer>0</integer>
 					<key>Path</key>
 					<string></string>
 					<key>Path Type</key>
-					<integer>1</integer>
+					<integer>2</integer>
 				</dict>
 				<key>License</key>
 				<dict>
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>0</integer>
-						<key>Path</key>
-						<string></string>
-						<key>Path Type</key>
 						<integer>1</integer>
+						<key>Path</key>
+						<string>contents/License.rtf</string>
+						<key>Path Type</key>
+						<integer>2</integer>
+					</dict>
+					<key>Japanese</key>
+					<dict>
+						<key>Mode</key>
+						<integer>1</integer>
+						<key>Path</key>
+						<string>contents/License.rtf</string>
+						<key>Path Type</key>
+						<integer>2</integer>
 					</dict>
 				</dict>
 				<key>ReadMe</key>
@@ -42,7 +51,7 @@
 						<key>Path</key>
 						<string></string>
 						<key>Path Type</key>
-						<integer>1</integer>
+						<integer>2</integer>
 					</dict>
 				</dict>
 				<key>Welcome</key>
@@ -50,11 +59,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>0</integer>
-						<key>Path</key>
-						<string></string>
-						<key>Path Type</key>
 						<integer>1</integer>
+						<key>Path</key>
+						<string>contents/Welcome.rtf</string>
+						<key>Path Type</key>
+						<integer>2</integer>
 					</dict>
 				</dict>
 			</dict>
@@ -515,6 +524,8 @@
 					<dict>
 						<key>Path</key>
 						<string></string>
+						<key>Path Type</key>
+						<integer>2</integer>
 						<key>Status</key>
 						<false/>
 					</dict>
@@ -584,7 +595,7 @@
 				<key>Display Information</key>
 				<dict>
 					<key>CFBundleGetInfoString</key>
-					<string>AquaSKK 4.0 Copyrights © 2005-2008 AquaSKK Project</string>
+					<string>AquaSKK 4.0 Copyrights © 2005-2009 AquaSKK Project</string>
 					<key>CFBundleIconFile</key>
 					<string></string>
 					<key>CFBundleIconFile Path Type</key>

@@ -159,9 +159,9 @@
         { Normal,	"デバッグ情報",			@selector(showDebugInfo:) },
 #endif
         { Selector,	"__selector__",			0 },
-        { Normal,	"Web::プロジェクトホーム",	@selector(webHome:) },
-        { Normal,	"Web::便利な機能、Tips",	@selector(webTips:) },
-        { Normal,	"Web::FAQ",			@selector(webFAQ:) },
+        { Normal,	"Web::日本語を快適に",		@selector(webHome:) },
+        { Normal,	"Web::SourceForge.JP",		@selector(webSourceForge:) },
+        { Normal,	"Web::Wiki",			@selector(webWiki:) },
         { Normal,	0,				0 }
     };
 
@@ -256,12 +256,12 @@
     [self openURL:@"http://aquaskk.sourceforge.jp/"];
 }
 
-- (void)webTips:(id)sender {
-    [self openURL:@"http://aquaskk.sourceforge.jp/inside_aquaskk/"];
+- (void)webSourceForge:(id)sender {
+    [self openURL:@"http://sourceforge.jp/projects/aquaskk/"];
 }
 
-- (void)webFAQ:(id)sender {
-    [self openURL:@"http://sourceforge.jp/projects/aquaskk/wiki/FAQ"];
+- (void)webWiki:(id)sender {
+    [self openURL:@"http://sourceforge.jp/projects/aquaskk/wiki/FrontPage"];
 }
 
 @end
