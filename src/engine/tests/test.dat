@@ -563,6 +563,24 @@ e                       mode=J,marked=こう%20/幸/%20を削除しますか？(
 s                       mode=J,marked=こう%20/幸/%20を削除しますか？(yes/no)%20yes
 ctrl::m                 mode=J
 
+# 削除(abbrev)
+# ----------------------------------------------------------------------
+/                       mode=A,marked=▽
+a                       mode=A,marked=▽a
+shift::0x20             mode=A,marked=▼自動
+X                       mode=A,marked=auto%20/自動/%20を削除しますか？(yes/no)%20
+y                       mode=A,marked=auto%20/自動/%20を削除しますか？(yes/no)%20y
+e                       mode=A,marked=auto%20/自動/%20を削除しますか？(yes/no)%20ye
+s                       mode=A,marked=auto%20/自動/%20を削除しますか？(yes/no)%20yes
+ctrl::m                 mode=J
+/                       mode=A,marked=▽
+a                       mode=A,marked=▽a
+shift::0x20             mode=J,marked=[登録：a]
+ctrl::g                 mode=A,marked=▽a
+ctrl::g                 mode=J
+
+# 削除(単語登録中)
+# ----------------------------------------------------------------------
 A                       mode=J,marked=▽あ
 0x20                    mode=J,marked=[登録：あ]
 K                       mode=J,marked=[登録：あ]▽k

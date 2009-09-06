@@ -60,6 +60,7 @@ public:
     void AddInputModeListener(SKKInputModeListener* listener);
 
     bool HandleEvent(const SKKEvent& event);
+    void Commit();
     void Clear();
 
     void Activate();

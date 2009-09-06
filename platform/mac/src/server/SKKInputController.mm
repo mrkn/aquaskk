@@ -81,7 +81,7 @@
 - (void)commitComposition:(id)sender {
     [self debug:@"commitComposition"];
 
-    session_->Clear();
+    session_->Commit();
 }
 
 // IMKStateSetting

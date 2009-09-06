@@ -80,6 +80,14 @@ bool SKKInputSession::HandleEvent(const SKKEvent& event) {
     return result(event);
 }
 
+void SKKInputSession::Commit() {
+    HandleEvent(SKKEvent(SKK_ENTER, 0));
+    
+    if(context_.output.IsComposing()) {
+        Clear();
+    }
+}
+
 void SKKInputSession::Clear() {
     if(inEvent_) return;
 

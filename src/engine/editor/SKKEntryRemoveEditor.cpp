@@ -45,8 +45,12 @@ void SKKEntryRemoveEditor::WriteContext() {
     context()->entry = entry_;
 }
 
+void SKKEntryRemoveEditor::Input(const std::string& ascii) {
+    input_ += ascii;
+}
+
 void SKKEntryRemoveEditor::Input(const std::string& fixed, const std::string&, char) {
-    input_ += fixed;
+    Input(fixed);
 }
 
 void SKKEntryRemoveEditor::Input(Event event) {
