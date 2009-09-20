@@ -15,9 +15,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
         <key>CFBundleShortVersionString</key>
-        <string>4.0RC8</string>
+        <string>4.0</string>
 	<key>CFBundleVersion</key>
-	<string>2009-9-11</string>
+	<string>2009-9-21</string>
 	<key>CFBundleGetInfoString</key>
 	<string>Copyright © 2005-2009, AquaSKK Project</string>
 	<key>LSUIElement</key>
