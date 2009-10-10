@@ -155,28 +155,37 @@ bool SKKUserDictionary::FindCompletions(const std::string& query,
     return !result.empty();
 }
 
-void SKKUserDictionary::RegisterOkuriAri(const std::string& index, const std::string& okuri, const std::string& kanji) {
+void SKKUserDictionary::RegisterOkuriAri(const std::string& index, const std::string& okuri,
+                                         const SKKCandidate& candidate) {
     SKKOkuriHint hint;
 
     hint.first = okuri;
-    hint.second.push_back(kanji);
+    hint.second.push_back(candidate.ToString());
 
     update(index, hint, file_.OkuriAri());
     save();
 }
 
-void SKKUserDictionary::RegisterOkuriNasi(const std::string& index, const std::string& kanji) {
-    update(index, SKKCandidate(kanji), file_.OkuriNasi());
+void SKKUserDictionary::RegisterOkuriNasi(const std::string& index, const SKKCandidate& candidate) {
+    SKKCandidate tmp(candidate);
+
+    tmp.Encode();
+
+    update(index, tmp, file_.OkuriNasi());
     save();
 }
 
-void SKKUserDictionary::RemoveOkuriAri(const std::string& index, const std::string& kanji) {
-    remove(index, kanji, file_.OkuriAri());
+void SKKUserDictionary::RemoveOkuriAri(const std::string& index, const SKKCandidate& candidate) {
+    remove(index, candidate.ToString(), file_.OkuriAri());
     save();
 }
 
-void SKKUserDictionary::RemoveOkuriNasi(const std::string& index, const std::string& kanji) {
-    remove(index, kanji, file_.OkuriNasi());
+void SKKUserDictionary::RemoveOkuriNasi(const std::string& index, const SKKCandidate& candidate) {
+    SKKCandidate tmp(candidate);
+
+    tmp.Encode();
+    
+    remove(index, tmp.ToString(), file_.OkuriNasi());
     save();
 }
 

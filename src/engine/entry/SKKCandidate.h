@@ -83,7 +83,7 @@ public:
     }
 
     std::string ToString() const {
-	return Encode(Word()) + (annotation_.empty() ? "" : (";" + annotation_));
+	return word_ + (annotation_.empty() ? "" : (";" + annotation_));
     }
 
     bool operator==(const SKKCandidate& rhs) const {

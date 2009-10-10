@@ -55,11 +55,11 @@ public:
                                  std::vector<std::string>& result,
                                  unsigned minimumCompletionLength = 0);
 
-    void RegisterOkuriAri(const std::string& query, const std::string& kana, const std::string& candidate);
-    void RegisterOkuriNasi(const std::string& query, const std::string& candidate);
+    void RegisterOkuriAri(const std::string& query, const std::string& kana, const SKKCandidate& candidate);
+    void RegisterOkuriNasi(const std::string& query, const SKKCandidate& candidate);
 
-    void RemoveOkuriAri(const std::string& query, const std::string& candidate);
-    void RemoveOkuriNasi(const std::string& query, const std::string& candidate);
+    void RemoveOkuriAri(const std::string& query, const SKKCandidate& candidate);
+    void RemoveOkuriNasi(const std::string& query, const SKKCandidate& candidate);
 
     void SetPrivateMode(bool flag);
 };

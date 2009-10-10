@@ -189,7 +189,7 @@ void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) 
     }
     
     if(entry.IsOkuriAri()) {
-	userdict_->RegisterOkuriAri(entry.EntryString(), entry.OkuriString(), candidate.ToString());
+	userdict_->RegisterOkuriAri(entry.EntryString(), entry.OkuriString(), candidate);
     } else {
         SKKNumericConverter converter;
         std::string key(entry.EntryString());
@@ -198,7 +198,7 @@ void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) 
             key = converter.NormalizedKey();
         }
 
-        userdict_->RegisterOkuriNasi(key, candidate.ToString());
+        userdict_->RegisterOkuriNasi(key, candidate);
     }
 }
 
@@ -209,7 +209,7 @@ void SKKBackEnd::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
     }
 
     if(entry.IsOkuriAri()) {
-	userdict_->RemoveOkuriAri(entry.EntryString(), candidate.ToString());
+	userdict_->RemoveOkuriAri(entry.EntryString(), candidate);
     } else {
         SKKNumericConverter converter;
         std::string key(entry.EntryString());
@@ -218,7 +218,7 @@ void SKKBackEnd::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
             key = converter.NormalizedKey();
         }
 
-	userdict_->RemoveOkuriNasi(key, candidate.ToString());
+	userdict_->RemoveOkuriNasi(key, candidate);
     }
 }
 
