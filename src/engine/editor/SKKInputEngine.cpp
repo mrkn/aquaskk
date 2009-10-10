@@ -241,7 +241,7 @@ bool SKKInputEngine::CanConvert(char code) const {
 }
 
 bool SKKInputEngine::IsOkuriComplete() const {
-    return context_->entry.IsOkuriAri() && inputQueue_.IsEmpty();
+    return okuriEditor_.IsOkuriComplete();
 }
 
 // ----------------------------------------------------------------------

@@ -83,6 +83,7 @@ namespace {
     InputModeWindow* window_;
     SKKLayoutManager* layout_;
     SKKInputMode mode_;
+    BOOL active_;
 }
 
 - (id)initWithLayoutManager:(SKKLayoutManager*)layout;
@@ -105,6 +106,7 @@ namespace {
 
     [window_ changeMode:mode_];
     [window_ showAt:pt level:layout_->WindowLevel()];
+    active_ = NO;
 }
 
 - (void)cancel {
@@ -116,12 +118,16 @@ namespace {
     if(self) {
         window_ = [InputModeWindow sharedWindow];
         layout_ = layout;
+        active_ = NO;
     }
 
     return self;
 }
 
 - (void)show:(SKKInputMode)mode {
+    if(active_) return;
+
+    active_ = YES;
     [self cancel];
     mode_ = mode;
     [self performSelector:@selector(activate:) withObject:self afterDelay:0.1];

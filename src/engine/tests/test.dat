@@ -169,6 +169,10 @@ ctrl::g                 mode=J
 A                       mode=J,marked=▽あ
 S                       mode=J,marked=▽あ*s
 ctrl::m                 mode=J,fixed=あ
+A                       mode=J,marked=▽あ
+K                       mode=J,marked=▽あ*k
+ctrl::g                 mode=J,marked=▽あ
+ctrl::g                 mode=J
 
 # 送りあり(KesSi 対応)
 # ----------------------------------------------------------------------
@@ -186,6 +190,14 @@ O                       mode=J,marked=▽お
 W                       mode=J,marked=▽お*w
 s                       mode=J,marked=▽お*s
 a                       mode=J,marked=[登録：お*さ]
+ctrl::g                 mode=J,marked=▽お
+ctrl::g                 mode=J
+
+# 送りあり(送りトリガー)
+# ----------------------------------------------------------------------
+O                       mode=J,marked=▽お
+l                       mode=J,marked=▽お*
+k                       mode=J,marked=▽お*k
 ctrl::g                 mode=J,marked=▽お
 ctrl::g                 mode=J
 

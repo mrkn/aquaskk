@@ -49,7 +49,7 @@ public:
     virtual void Input(SKKBaseEditor::Event event);
     virtual void Commit(std::string& queue);
 
-    void Initialize(char prefix);
+    bool IsOkuriComplete() const;
 };
 
 #endif

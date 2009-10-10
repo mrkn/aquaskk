@@ -32,6 +32,8 @@ class MacFrontEnd : public SKKFrontEnd {
     NSRange notFound() const;
     NSMutableAttributedString* createMarkedText(const std::string& str, int cursorOffset);
 
+    void workaroundForMicrosoftPowerPoint(NSString* string);
+
 public:
     MacFrontEnd(id client);
 

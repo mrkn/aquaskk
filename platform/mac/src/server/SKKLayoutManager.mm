@@ -40,7 +40,7 @@ NSPoint SKKLayoutManager::InputOrigin(int index) const {
 NSPoint SKKLayoutManager::CandidateWindowOrigin() const {
     NSRect input = inputFrame(0);
     NSRect candidate = [[[CandidateWindow sharedWindow] window] frame];
-    NSRect screen = screenFrame();
+    NSRect screen = screenFrame(input);
     NSPoint pt = candidate.origin = input.origin;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     bool candidateIsUpward = [defaults boolForKey:SKKUserDefaultKeys::put_candidate_window_upward] == YES;
@@ -71,7 +71,7 @@ NSPoint SKKLayoutManager::CandidateWindowOrigin() const {
 NSPoint SKKLayoutManager::AnnotationWindowOrigin(int mark) const {
     NSRect input = inputFrame(mark);
     NSRect annotation = [[[AnnotationWindow sharedWindow] window] frame];
-    NSRect screen = screenFrame();
+    NSRect screen = screenFrame(input);
     NSPoint pt = annotation.origin = input.origin;
     NSWindow* candwindow = [[CandidateWindow sharedWindow] window];
     NSRect candidate = [candwindow frame];
@@ -99,7 +99,7 @@ NSPoint SKKLayoutManager::AnnotationWindowOrigin(int mark) const {
 }
 
 int SKKLayoutManager::WindowLevel() const {
-    return [client_ windowLevel];
+    return [client_ windowLevel] + 1;
 }
 
 // ----------------------------------------------------------------------
@@ -120,15 +120,23 @@ NSRect SKKLayoutManager::inputFrame(int index) const {
 }
 
 // メニューバーを除いたスクリーン矩形
-NSRect SKKLayoutManager::screenFrame() const {
-    NSScreen* screen = [NSScreen mainScreen];
-    NSRect whole = [screen frame];
-    NSRect without_menubar = [screen visibleFrame];
+NSRect SKKLayoutManager::screenFrame(const NSRect& input) const {
+    // カーソルを含むスクリーンを探す
+    NSEnumerator* enumerator = [[NSScreen screens] objectEnumerator];
+    while(NSScreen* screen = [enumerator nextObject]) {
+        NSRect whole = [screen frame];
+        NSRect frame = [screen visibleFrame];
 
-    without_menubar.origin = whole.origin;
-    without_menubar.size.width = NSWidth(whole);
+        frame.origin = whole.origin;
+        frame.size.width = NSWidth(whole);
 
-    return without_menubar;
+        if(NSContainsRect(frame, input)) {
+            return frame;
+        }
+    }
+
+    // 念の為
+    return [[NSScreen mainScreen] frame];
 }
 
 // 右端調整
@@ -136,7 +144,7 @@ NSPoint SKKLayoutManager::fit(const NSRect& screen, const NSRect& window) const 
     NSPoint pt = window.origin;
 
     if(NSMaxX(screen) < NSMaxX(window)) {
-        pt.x = NSWidth(screen) - NSWidth(window);
+        pt.x = NSMaxX(screen) - NSWidth(window);
     }
 
     return pt;

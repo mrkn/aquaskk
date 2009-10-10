@@ -56,7 +56,11 @@ void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, c
         }
     }
 
-    okuri_ += fixed;
+    // fixed が ascii の場合には送りとはみなさない
+    // 文字種で判断したいところだが、とりあえず長さで判断
+    if(utf8::length(fixed) != fixed.size()) {
+        okuri_ += fixed;
+    }
 
     // OWsa 対応
     if(okuri_.empty()) {
@@ -92,6 +96,10 @@ void SKKOkuriEditor::Input(SKKBaseEditor::Event event) {
 void SKKOkuriEditor::Commit(std::string&) {
     prefix_.clear();
     okuri_.clear();
+}
+
+bool SKKOkuriEditor::IsOkuriComplete() const {
+    return !okuri_.empty();
 }
 
 // ----------------------------------------------------------------------

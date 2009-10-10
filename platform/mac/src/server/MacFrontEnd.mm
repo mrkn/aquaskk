@@ -31,6 +31,8 @@ void MacFrontEnd::InsertString(const std::string& str) {
 
     if(!str.empty()) {
         string = [NSString stringWithUTF8String:str.c_str()];
+
+        workaroundForMicrosoftPowerPoint(string);
     }
 
     [client_ insertText:string replacementRange:notFound()];
@@ -96,4 +98,15 @@ NSMutableAttributedString* MacFrontEnd::createMarkedText(const std::string& str,
             value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:NSMakeRange(0, [marked length])];
 
     return marked;
+}
+
+void MacFrontEnd::workaroundForMicrosoftPowerPoint(NSString* string) {
+    NSString* powerPoint = @"com.microsoft.powerpoint";
+    NSRange range = notFound();
+
+    // 確定前に、非確定文字列に確定予定文字列をセットするとうまくいく
+    if([[client_ bundleIdentifier] caseInsensitiveCompare:powerPoint] == NSOrderedSame) {
+        [client_ setMarkedText:string selectionRange:range replacementRange:range];
+    }
+    // 正しいかどうかは不明
 }

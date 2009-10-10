@@ -379,6 +379,7 @@ State SKKState::OkuriInput(const Event& event) {
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
+        editor_->Reset();
         return State::Transition(&SKKState::KanaEntry);
 
     case SKK_TAB:

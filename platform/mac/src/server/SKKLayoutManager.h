@@ -30,7 +30,7 @@ class SKKLayoutManager {
 
     BOOL putUpward() const;
     NSRect inputFrame(int index) const;
-    NSRect screenFrame() const;
+    NSRect screenFrame(const NSRect& input) const;
     NSPoint fit(const NSRect& screen, const NSRect& window) const;
     int margin() const; 
 
