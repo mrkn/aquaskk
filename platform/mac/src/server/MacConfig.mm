@@ -54,3 +54,7 @@ bool MacConfig::SuppressNewlineOnCommit() {
 int MacConfig::MaxCountOfInlineCandidates() {
     return [defaults_ integerForKey:SKKUserDefaultKeys::max_count_of_inline_candidates];
 }
+
+bool MacConfig::HandleRecursiveEntryAsOkuri() {
+    return [defaults_ boolForKey:SKKUserDefaultKeys::handle_recursive_entry_as_okuri];
+}

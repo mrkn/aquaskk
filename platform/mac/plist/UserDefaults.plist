@@ -53,6 +53,9 @@
         <true/>
         <key>display_shortest_match_of_kana_conversions</key>
         <false/>
+        <key>handle_recursive_entry_as_okuri</key>
+        <false/>
+
         <key>openlab_host</key>
         <string>openlab.ring.gr.jp</string>
         <key>openlab_path</key>

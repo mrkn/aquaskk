@@ -47,6 +47,9 @@ public:
 
     // インライン表示する変換候補の最大数
     virtual int MaxCountOfInlineCandidates() = 0;
+
+    // 見出し語再入を送りの開始とみなすか
+    virtual bool HandleRecursiveEntryAsOkuri() = 0;
 };
 
 #endif

@@ -38,6 +38,7 @@ public:
     virtual bool DisplayShortestMatchOfKanaConversions();
     virtual bool SuppressNewlineOnCommit();
     virtual int MaxCountOfInlineCandidates();
+    virtual bool HandleRecursiveEntryAsOkuri();
 };
 
 #endif
