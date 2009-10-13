@@ -13,6 +13,7 @@ class MockConfig : public SKKConfig {
     virtual bool DisplayShortestMatchOfKanaConversions() { return false; }
     virtual bool SuppressNewlineOnCommit() { return true; }
     virtual int MaxCountOfInlineCandidates() { return 5; }
+    virtual bool HandleRecursiveEntryAsOkuri() { return false; }
 };
 
 #endif
