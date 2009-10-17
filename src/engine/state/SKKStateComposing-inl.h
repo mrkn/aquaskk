@@ -180,12 +180,12 @@ State SKKState::KanaEntry(const Event& event) {
             }
 
             if(param.IsEnterJapanese()) {
-                if(configuration_->HandleRecursiveEntryAsOkuri()) {
+                if(configuration_->HandleRecursiveEntryAsOkuri() && !context_->entry.IsEmpty()) {
                     return State::Transition(&SKKState::OkuriInput);
-                } else {
-                    editor_->Commit();
-                    return State::Forward(&SKKState::KanaInput);
                 }
+
+                editor_->Commit();
+                return State::Forward(&SKKState::KanaInput);
             }
         }
 
