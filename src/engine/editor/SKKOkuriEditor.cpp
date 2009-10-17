@@ -44,6 +44,8 @@ void SKKOkuriEditor::WriteContext() {
 }
 
 void SKKOkuriEditor::Input(const std::string& fixed, const std::string& input, char code) {
+    input_ = input;
+
     if(first_) {
         first_ = false;
         prefix_ += std::tolower(code);
@@ -99,7 +101,7 @@ void SKKOkuriEditor::Commit(std::string&) {
 }
 
 bool SKKOkuriEditor::IsOkuriComplete() const {
-    return !okuri_.empty();
+    return !okuri_.empty() && input_.empty();
 }
 
 // ----------------------------------------------------------------------

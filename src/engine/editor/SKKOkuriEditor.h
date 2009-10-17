@@ -37,6 +37,7 @@ class SKKOkuriEditor : public SKKBaseEditor {
     bool first_;
     std::string prefix_;
     std::string okuri_;
+    std::string input_;
 
     void update();
 
