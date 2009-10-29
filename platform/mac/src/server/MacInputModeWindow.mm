@@ -82,12 +82,12 @@ namespace {
 @interface SKKModeTips : NSObject {
     InputModeWindow* window_;
     SKKLayoutManager* layout_;
-    SKKInputMode mode_;
     BOOL active_;
 }
 
 - (id)initWithLayoutManager:(SKKLayoutManager*)layout;
-- (void)show:(SKKInputMode)mode;
+- (void)changeMode:(SKKInputMode)mode;
+- (void)show;
 - (void)hide;
 @end
 
@@ -104,7 +104,6 @@ namespace {
                               std::bind2nd(std::ptr_fun(CGRectContainsPoint), cursor));
     if(!count) return;
 
-    [window_ changeMode:mode_];
     [window_ showAt:pt level:layout_->WindowLevel()];
     active_ = NO;
 }
@@ -119,17 +118,21 @@ namespace {
         window_ = [InputModeWindow sharedWindow];
         layout_ = layout;
         active_ = NO;
+        [self changeMode:HirakanaInputMode];
     }
 
     return self;
 }
 
-- (void)show:(SKKInputMode)mode {
+- (void)changeMode:(SKKInputMode)mode {
+    [window_ changeMode:mode];
+}
+
+- (void)show {
     if(active_) return;
 
     active_ = YES;
     [self cancel];
-    mode_ = mode;
     [self performSelector:@selector(activate:) withObject:self afterDelay:0.1];
 }
 
@@ -144,8 +147,7 @@ namespace {
 // MacInputModeWindow
 // ----------------------------------------------------------------------
 
-MacInputModeWindow::MacInputModeWindow(SKKLayoutManager* layout)
-    : mode_(HirakanaInputMode) {
+MacInputModeWindow::MacInputModeWindow(SKKLayoutManager* layout) {
     tips_ = [[SKKModeTips alloc] initWithLayoutManager:layout];
 }
 
@@ -154,7 +156,7 @@ MacInputModeWindow::~MacInputModeWindow() {
 }
 
 void MacInputModeWindow::SelectInputMode(SKKInputMode mode) {
-    mode_ = mode;
+    [tips_ changeMode:mode];
 }
 
 // ----------------------------------------------------------------------
@@ -170,7 +172,7 @@ bool MacInputModeWindow::enabled() const {
 void MacInputModeWindow::SKKWidgetShow() {
     if(!enabled()) return;
 
-    [tips_ show:mode_];
+    [tips_ show];
 }
 
 void MacInputModeWindow::SKKWidgetHide() {

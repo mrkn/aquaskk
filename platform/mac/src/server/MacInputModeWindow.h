@@ -31,7 +31,6 @@ class SKKLayoutManager;
 @class SKKModeTips;
 
 class MacInputModeWindow : public SKKInputModeListener {
-    SKKInputMode mode_;
     SKKModeTips* tips_;
 
     bool enabled() const;
