@@ -124,6 +124,11 @@ namespace {
     return self;
 }
 
+- (void)dealloc {
+    [self cancel];
+    [super dealloc];
+}
+
 - (void)changeMode:(SKKInputMode)mode {
     [window_ changeMode:mode];
 }

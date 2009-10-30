@@ -54,9 +54,10 @@
 
         layout_ = new SKKLayoutManager(client_);
         session_ = new SKKInputSession(new MacInputSessionParameter(client_, layout_));
+        modeIcon_ = new MacInputModeWindow(layout_);
 
         session_->AddInputModeListener(new MacInputModeMenu(menu_));
-        session_->AddInputModeListener(new MacInputModeWindow(layout_));
+        session_->AddInputModeListener(modeIcon_);
     }
 
     return self;
@@ -122,7 +123,7 @@
             param.id = [menu_ eventId:identifier];
             session_->HandleEvent(param);
 
-            [menu_ updateMenu:[menu_ currentInputMode]];
+            modeIcon_->SelectInputMode([menu_ currentInputMode]);
         } else {
             NSString* identifier = [menu_ modeIdentifier:[menu_ unifiedInputMode]];
             SKKEvent param;

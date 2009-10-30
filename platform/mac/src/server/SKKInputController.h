@@ -30,18 +30,18 @@
 
 class SKKLayoutManager;
 class SKKInputSession;
+class MacInputModeWindow;
 
 @interface SKKInputController : IMKInputController {
     id client_;
     BOOL activated_;
-    SKKInputMode unifiedInputMode_;
 
     NSUserDefaults* defaults_;
     SKKServerProxy* proxy_;
     SKKInputMenu* menu_;
     SKKLayoutManager* layout_;
-
     SKKInputSession* session_;
+    MacInputModeWindow* modeIcon_;
 }
 @end
 
