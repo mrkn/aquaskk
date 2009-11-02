@@ -98,7 +98,9 @@ void SKKRecursiveEditor::complete() {
                     joined += "\n";
                 }
 
-                joined.erase(joined.size() - 1);
+                if(!joined.empty()) {
+                    joined.erase(joined.size() - 1);
+                }
             }
         }
 
