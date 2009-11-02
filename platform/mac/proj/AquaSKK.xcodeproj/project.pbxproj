@@ -1037,6 +1037,7 @@
 		D3FC32240DD1B09C006A3F5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1056,6 +1057,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../src/engine/tests\"",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-framework",
 					Foundation,
