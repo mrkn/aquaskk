@@ -87,7 +87,7 @@ void SKKRecursiveEditor::complete() {
             unsigned range = config_->DynamicCompletionRange();
             std::string key = entry.EntryString();
 
-            if(SKKBackEnd::theInstance().Complete(key, result, range)) {
+            if(range && SKKBackEnd::theInstance().Complete(key, result, range)) {
                 int limit = std::min((unsigned)result.size(), range);
                 common_prefix = result[0];
 
@@ -98,9 +98,7 @@ void SKKRecursiveEditor::complete() {
                     joined += "\n";
                 }
 
-                if(!joined.empty()) {
-                    joined.erase(joined.size() - 1);
-                }
+                joined.erase(joined.size() - 1);
             }
         }
 

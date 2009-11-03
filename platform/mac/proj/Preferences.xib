@@ -4,15 +4,15 @@
 		<int key="IBDocument.SystemTarget">1050</int>
 		<string key="IBDocument.SystemVersion">10B504</string>
 		<string key="IBDocument.InterfaceBuilderVersion">732</string>
-		<string key="IBDocument.AppKitVersion">1038.2</string>
-		<string key="IBDocument.HIToolboxVersion">437.00</string>
+		<string key="IBDocument.AppKitVersion">1038.22</string>
+		<string key="IBDocument.HIToolboxVersion">457.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">732</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="7"/>
+			<integer value="212"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -93,7 +93,7 @@
 					<characters key="NS.bytes">NSWindow</characters>
 				</object>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{213, 107}</string>
 				<object class="NSView" key="NSWindowView" id="27449304">
 					<reference key="NSNextResponder"/>
@@ -215,7 +215,7 @@
 														<string key="NSColorName">controlColor</string>
 														<object class="NSColor" key="NSColor" id="900186991">
 															<int key="NSColorSpace">3</int>
-															<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
+															<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 														</object>
 													</object>
 													<object class="NSColor" key="NSTextColor" id="964197062">
@@ -394,7 +394,7 @@
 								<object class="NSTabViewItem" id="713249967">
 									<string key="NSIdentifier">Entries</string>
 									<object class="NSView" key="NSView" id="22272065">
-										<nil key="NSNextResponder"/>
+										<reference key="NSNextResponder" ref="423547033"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -689,6 +689,8 @@
 													<int key="NSCellFlags">917024</int>
 													<int key="NSCellFlags2">0</int>
 													<reference key="NSControlView" ref="317160370"/>
+													<double key="NSValue">1</double>
+													<double key="NSMinValue">1</double>
 													<double key="NSMaxValue">100</double>
 													<double key="NSIncrement">1</double>
 													<bool key="NSAutorepeat">YES</bool>
@@ -712,6 +714,7 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {434, 219}}</string>
+										<reference key="NSSuperview" ref="423547033"/>
 									</object>
 									<string key="NSLabel">見出し語</string>
 									<reference key="NSColor" ref="10089358"/>
@@ -1449,7 +1452,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 								<object class="NSTabViewItem" id="897190579">
 									<string key="NSIdentifier">Other</string>
 									<object class="NSView" key="NSView" id="486120397">
-										<reference key="NSNextResponder" ref="423547033"/>
+										<nil key="NSNextResponder"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1700,7 +1703,6 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {434, 219}}</string>
-										<reference key="NSSuperview" ref="423547033"/>
 									</object>
 									<string key="NSLabel">その他</string>
 									<reference key="NSColor" ref="10089358"/>
@@ -1799,13 +1801,13 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 									<reference key="NSTabView" ref="423547033"/>
 								</object>
 							</object>
-							<reference key="NSSelectedTabViewItem" ref="897190579"/>
+							<reference key="NSSelectedTabViewItem" ref="713249967"/>
 							<reference key="NSFont" ref="26"/>
 							<int key="NSTvFlags">134217728</int>
 							<bool key="NSDrawsBackground">YES</bool>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
-								<reference ref="486120397"/>
+								<reference ref="22272065"/>
 							</object>
 						</object>
 					</object>
@@ -1814,7 +1816,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 1002}}</string>
 				<string key="NSMinSize">{213, 129}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSCustomObject" id="780128603">
 				<string key="NSClassName">PathFormatter</string>
