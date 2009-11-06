@@ -31,6 +31,7 @@ namespace SKKUserDefaultKeys {
     extern NSString* use_numeric_conversion;
     extern NSString* show_input_mode_icon;
     extern NSString* use_individual_input_mode;
+    extern NSString* beep_on_registration;
 
     extern NSString* keyboard_layout;
 

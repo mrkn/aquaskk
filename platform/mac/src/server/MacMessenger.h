@@ -33,6 +33,7 @@ public:
     MacMessenger(SKKLayoutManager* layout);
 
     virtual void SendMessage(const std::string& msg);
+    virtual void Beep();
 };
 
 #endif

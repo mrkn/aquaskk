@@ -30,6 +30,7 @@ namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(use_numeric_conversion);
     DECLARE_NSStringKey(show_input_mode_icon);
     DECLARE_NSStringKey(use_individual_input_mode);
+    DECLARE_NSStringKey(beep_on_registration);
 
     DECLARE_NSStringKey(keyboard_layout);
 

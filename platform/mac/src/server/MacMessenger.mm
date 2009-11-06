@@ -22,6 +22,7 @@
 
 #include "MacMessenger.h"
 #include "MessengerWindow.h"
+#include "SKKConstVars.h"
 #include "SKKFrontEnd.h"
 #include "ObjCUtil.h"
 
@@ -38,4 +39,12 @@ void MacMessenger::SendMessage(const std::string& msg) {
     topleft.y -= 2;
 
     [window showMessage:str at:topleft level:layout_->WindowLevel()];
+}
+
+void MacMessenger::Beep() {
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+
+    if([defaults boolForKey:SKKUserDefaultKeys::beep_on_registration] == YES) {
+        NSBeep();
+    }
 }

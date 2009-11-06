@@ -41,7 +41,7 @@
 namespace string {
     // 置換ユーティリティ
     static void translate(std::string& str, const std::string& from, const std::string& to) {
-        unsigned pos = 0;
+        std::string::size_type pos = 0;
 
         if(from == to) return;
 

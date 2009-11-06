@@ -27,6 +27,7 @@ State SKKState::RecursiveRegister(const Event& event) {
     switch(event) {
     case ENTRY_EVENT:
         editor_->SetStateRegistration();
+        messenger_->Beep();
 	return 0;
 
     case SKK_ENTER:

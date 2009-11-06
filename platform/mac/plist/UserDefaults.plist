@@ -10,6 +10,8 @@
         <true/>
         <key>use_individual_input_mode</key>
         <false/>
+        <key>beep_on_registration</key>
+        <false/>
 
 	<key>keyboard_layout</key>
 	<string>com.apple.keylayout.US</string>
