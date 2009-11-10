@@ -267,7 +267,7 @@ bool SKKNumericConverter::Setup(const std::string& query) {
 	params_.push_back(src.substr(from, to - from));
 	src.replace(from, to - from, "#");
 
-	from = src.find_first_of(numbers, to);
+	from = src.find_first_of(numbers, from);
     }
 
     normalized_ = src;
@@ -295,38 +295,45 @@ void SKKNumericConverter::Apply(SKKCandidate& candidate) const {
     std::string result;
     std::string src(candidate.Word());
     std::string::size_type pos = 0;
-    int index = 0;
 
-    do {
+    for(int index = 0; index < params_.size(); ++ index) {
 	pos = src.find_first_of(numbers, pos + 1);
+        if(pos == std::string::npos) break;
+
 	if(src[pos - 1] == '#') {
 	    switch(src[pos]) {
 	    case '0':		// 無変換
 		src.replace(pos - 1, 2, params_[index]);
 		break;
+
 	    case '1':		// 半角→全角変換
 		src.replace(pos - 1, 2, ConvertType1(params_[index]));
 		break;
+
 	    case '2':		// 漢数字位取りなし
 		src.replace(pos - 1, 2, ConvertType2(params_[index]));
 		break;
+
 	    case '3':		// 漢数字位取りあり
 		src.replace(pos - 1, 2, ConvertType3(params_[index]));
 		break;
+
 	    case '4':		// 数値再変換(AquaSKK では無変換)
 		src.replace(pos - 1, 2, ConvertType4(params_[index]));
 		break;
+
 	    case '5':		// 小切手・手形
 		src.replace(pos - 1, 2, ConvertType5(params_[index]));
 		break;
+
 	    case '9':		// 棋譜入力用
 		src.replace(pos - 1, 2, ConvertType9(params_[index]));
 		break;
 	    }
+
 	    pos = pos - 1 + params_[index].size();
-	    ++ index;
 	}
-    } while(pos != std::string::npos);
+    }
 
     candidate.SetVariant(src);
 }

@@ -191,14 +191,7 @@ void SKKBackEnd::Register(const SKKEntry& entry, const SKKCandidate& candidate) 
     if(entry.IsOkuriAri()) {
 	userdict_->RegisterOkuriAri(entry.EntryString(), entry.OkuriString(), candidate);
     } else {
-        SKKNumericConverter converter;
-        std::string key(entry.EntryString());
-
-        if(useNumericConversion_ && converter.Setup(key)) {
-            key = converter.NormalizedKey();
-        }
-
-        userdict_->RegisterOkuriNasi(key, candidate);
+        userdict_->RegisterOkuriNasi(normalizedKey(entry), candidate);
     }
 }
 
@@ -211,14 +204,7 @@ void SKKBackEnd::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
     if(entry.IsOkuriAri()) {
 	userdict_->RemoveOkuriAri(entry.EntryString(), candidate);
     } else {
-        SKKNumericConverter converter;
-        std::string key(entry.EntryString());
-
-        if(useNumericConversion_ && converter.Setup(key)) {
-            key = converter.NormalizedKey();
-        }
-
-	userdict_->RemoveOkuriNasi(key, candidate);
+	userdict_->RemoveOkuriNasi(normalizedKey(entry), candidate);
     }
 }
 
@@ -236,4 +222,20 @@ void SKKBackEnd::EnablePrivateMode(bool flag) {
 
 void SKKBackEnd::SetMinimumCompletionLength(int length) {
     minimumCompletionLength_ = length;
+}
+
+// ----------------------------------------------------------------------
+
+std::string SKKBackEnd::normalizedKey(const SKKEntry& entry) {
+    std::string key(entry.EntryString());
+    SKKNumericConverter converter;
+
+    if(useNumericConversion_ && converter.Setup(key)) {
+        // 単語登録と削除時には、数値だけの見出し語を正規化しない
+        if(converter.NormalizedKey() != "#") {
+            return converter.NormalizedKey();
+        }
+    }
+
+    return key;
 }

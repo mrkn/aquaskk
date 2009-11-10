@@ -47,6 +47,8 @@ class SKKBackEnd {
     SKKBackEnd(const SKKBackEnd&);
     SKKBackEnd& operator=(const SKKBackEnd&);
 
+    std::string normalizedKey(const SKKEntry& entry);
+
 public:
     static SKKBackEnd& theInstance();
 
