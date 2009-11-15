@@ -8,6 +8,9 @@ int main() {
 
     dict.Initialize("skk-jisyo.utf8");
 
+    dict.FindOkuriNasi("#", suite);
+    assert(suite.IsEmpty());
+
     dict.FindOkuriAri("おくりあr", suite);
     assert(suite.ToString() == "/送り有/");
 
@@ -101,4 +104,6 @@ int main() {
     dict.RemoveOkuriNasi("encode", SKKCandidate("abc;def"));
     dict.FindOkuriNasi("encode", suite);
     assert(suite.IsEmpty());
+
+    dict.RegisterOkuriNasi("#", SKKCandidate("456"));
 }

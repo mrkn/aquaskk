@@ -57,11 +57,15 @@ namespace {
         }
     };
 
+    SKKDictionaryEntryIterator find(SKKDictionaryEntryContainer& container, const std::string& query) {
+        return std::find_if(container.begin(), container.end(),
+                            CompareUserDictionaryEntry(query));
+    }
+
     template <typename T>
     void update(const std::string& index, const T& obj, SKKDictionaryEntryContainer& container) {
         SKKCandidateSuite suite;
-        SKKDictionaryEntryIterator iter = std::find_if(container.begin(), container.end(),
-                                                       CompareUserDictionaryEntry(index));
+        SKKDictionaryEntryIterator iter = find(container, index);
 
         if(iter != container.end()) {
             suite.Parse(iter->second);
@@ -97,6 +101,8 @@ void SKKUserDictionary::Initialize(const std::string& path) {
     if(!file_.Load(path)) {
 	std::cerr << "SKKUserDictionary: can't load file: " << path << std::endl;
     }
+
+    fix();
 }
 
 void SKKUserDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
@@ -206,8 +212,7 @@ void SKKUserDictionary::SetPrivateMode(bool flag) {
 // ======================================================================
 
 std::string SKKUserDictionary::fetch(const std::string& query, SKKDictionaryEntryContainer& container) {
-    SKKDictionaryEntryIterator iter = std::find_if(container.begin(), container.end(),
-						   CompareUserDictionaryEntry(query));
+    SKKDictionaryEntryIterator iter = find(container, query);
 
     if(iter == container.end()) {
 	return std::string();
@@ -218,8 +223,8 @@ std::string SKKUserDictionary::fetch(const std::string& query, SKKDictionaryEntr
 
 void SKKUserDictionary::remove(const std::string& index, const std::string& kanji,
 			       SKKDictionaryEntryContainer& container) {
-    SKKDictionaryEntryIterator iter = std::find_if(container.begin(), container.end(),
-						   CompareUserDictionaryEntry(index));
+    SKKDictionaryEntryIterator iter = find(container, index);
+
     if(iter == container.end()) return;
 
     SKKCandidateSuite suite;
@@ -254,5 +259,15 @@ void SKKUserDictionary::save(bool force) {
 	std::cout << "SKKUserDictionary: rename() failed[" << std::strerror(errno) << "]" << std::endl;
     } else {
 	std::cout << "SKKUserDictionary: saved" << std::endl;
+    }
+}
+
+void SKKUserDictionary::fix() {
+    SKKDictionaryEntryContainer& container = file_.OkuriNasi();
+    SKKDictionaryEntryIterator iter = find(container, "#");
+
+    // ユーザー辞書の "#" は無意味なのでまるごと削除する 
+    if(iter != container.end()) {
+        container.erase(iter);
     }
 }

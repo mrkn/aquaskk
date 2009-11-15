@@ -39,6 +39,7 @@ class SKKUserDictionary: public SKKBaseDictionary {
     std::string fetch(const std::string& query, SKKDictionaryEntryContainer& container);
     void remove(const std::string& index, const std::string& kanji, SKKDictionaryEntryContainer& container);
     void save(bool force = false);
+    void fix();
 
 public:
     SKKUserDictionary();
