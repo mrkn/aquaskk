@@ -26,6 +26,7 @@
 #include "SKKUserDictionary.h"
 #include "SKKCandidateSuite.h"
 #include "SKKNumericConverter.h"
+#include "SKKCandidateFilter.h"
 
 namespace {
     typedef void (SKKBaseDictionary::*FindMethod)(const std::string&, SKKCandidateSuite&);
@@ -159,6 +160,8 @@ bool SKKBackEnd::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
 
         result.Remove(SKKCandidate(converter.OriginalKey()));
     }
+
+    result.RemoveIf(SKKIgnoreDicWord());
 
     return !result.IsEmpty();
 }

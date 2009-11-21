@@ -52,4 +52,8 @@ int main() {
     // 検索
     assert(!backend.Find(SKKEntry("あr", "り"), suite));
     assert(!backend.Find(SKKEntry("かなめ"), suite));
+
+    // skk-ignore-dic-word 対応
+    assert(backend.Find(SKKEntry("おおk", "き"), suite) && suite.ToString() == "/大/");
+    assert(backend.Find(SKKEntry("むし"), suite) && suite.ToString() == "/蒸し/虫/");
 }
