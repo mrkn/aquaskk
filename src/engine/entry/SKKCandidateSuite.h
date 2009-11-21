@@ -72,7 +72,23 @@ class SKKCandidateSuite {
 	container.erase(std::remove(container.begin(), container.end(), candidate), container.end());
     }
 
-    void flatten(const SKKCandidateContainer& container, std::string& result, bool exclude_avoid_study) const {
+    void remove_hint(const SKKCandidate& candidate) {
+        SKKOkuriHintContainer result;
+
+        for(SKKOkuriHintIterator iter = hints_.begin(); iter != hints_.end(); ++ iter) {
+	    remove(iter->second, candidate);
+
+            if(!iter->second.empty()) {
+                result.push_back(*iter);
+            }
+        }
+
+        hints_.swap(result);
+    }
+
+    const std::string flatten(const SKKCandidateContainer& container, bool exclude_avoid_study) const {
+        std::string result;
+
 	for(unsigned i = 0; i < container.size(); ++ i) {
             if(exclude_avoid_study && container[i].AvoidStudy()) {
                 continue;
@@ -80,6 +96,8 @@ class SKKCandidateSuite {
 	    result += "/";
 	    result += container[i].ToString();
 	}
+
+        return result;
     }
 
 public:
@@ -155,18 +173,24 @@ public:
     }
 
     void Remove(const SKKCandidate& candidate) {
-	remove(candidates_, candidate);
+        RemoveIf(std::bind1st(std::equal_to<SKKCandidate>(), candidate));
+    }
 
-	SKKOkuriHintIterator iter = hints_.begin();
-	while(iter != hints_.end()) {
-	    remove(iter->second, candidate);
+    template <typename Predicate>
+    void RemoveIf(const Predicate& pred) {
+        if(!hints_.empty()) {
+            SKKCandidateContainer removed;
 
-	    if(iter->second.empty()) {
-		iter = hints_.erase(iter);
-	    } else {
-		++ iter;
-	    }
-	}
+            // pred が true の要素を remove して copy するので、not1 で反転させる
+            std::remove_copy_if(candidates_.begin(), candidates_.end(),
+                                std::back_inserter(removed), std::not1(pred));
+
+            for(unsigned index = 0; !hints_.empty() && index < removed.size(); ++ index) {
+                remove_hint(removed[index]);
+            }
+        }
+
+        candidates_.erase(std::remove_if(candidates_.begin(), candidates_.end(), pred), candidates_.end());
     }
 
     SKKCandidateContainer& Candidates() {
@@ -178,20 +202,14 @@ public:
     }
 
     const std::string ToString(bool exclude_avoid_study = false) const {
-	std::string str;
+	std::string str = flatten(candidates_, exclude_avoid_study);
 
-	flatten(candidates_, str, exclude_avoid_study);
-
-	if(!hints_.empty()) {
-	    for(unsigned i = 0; i < hints_.size(); ++ i) {
-		str += "/[";
-		str += hints_[i].first;
-
-		flatten(hints_[i].second, str, false);
-
-		str += "/]";
-	    }
-	}
+        for(unsigned i = 0; i < hints_.size(); ++ i) {
+            str += "/[";
+            str += hints_[i].first;
+            str += flatten(hints_[i].second, exclude_avoid_study);
+            str += "/]";
+        }
 
 	if(!str.empty()) {
 	    str += "/";

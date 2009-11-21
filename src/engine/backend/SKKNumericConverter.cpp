@@ -296,7 +296,7 @@ void SKKNumericConverter::Apply(SKKCandidate& candidate) const {
     std::string src(candidate.Word());
     std::string::size_type pos = 0;
 
-    for(int index = 0; index < params_.size(); ++ index) {
+    for(unsigned index = 0; index < params_.size(); ++ index) {
 	pos = src.find_first_of(numbers, pos + 1);
         if(pos == std::string::npos) break;
 

@@ -154,18 +154,14 @@ void SKKInputEngine::HandlePing() {
 void SKKInputEngine::HandleEnter() {
     Commit();
 
-    SKKEntry entry = context_->entry;
-
-    if(!entry.IsEmpty()) {
-        study(entry, SKKCandidate(word_, false));
-    }
-
-    std::string result = word_ + entry.OkuriString();
+    study(context_->entry, SKKCandidate(word_, false));
 
     if(word_.empty()) {
         context_->registration.Abort();
     } else {
-        context_->registration.Finish(result);
+        std::string output = word_ + context_->entry.OkuriString();
+
+        context_->registration.Finish(output);
     }
 
     context_->event_handled = false;
@@ -290,6 +286,10 @@ void SKKInputEngine::invoke(SKKBaseEditor::Event event) {
 }
 
 void SKKInputEngine::study(const SKKEntry& entry, const SKKCandidate& candidate) {
+    if(entry.IsEmpty()) return;
+    if(entry.IsOkuriAri() && entry.OkuriString().empty()) return;
+    if(entry.IsOkuriAri() && candidate.IsEmpty()) return;
+
     SKKBackEnd::theInstance().Register(entry, candidate);
 }
 
