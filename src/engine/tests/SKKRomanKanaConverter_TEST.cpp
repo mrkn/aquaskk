@@ -84,4 +84,12 @@ int main() {
 
     result = conv.Convert(HirakanaInputMode, "z ", state);
     assert(state.next == "" && state.output == "　");
+
+    result = conv.Convert(HirakanaInputMode, ".", state);
+    assert(state.output == "。");
+
+    conv.Patch("period.rule");
+
+    result = conv.Convert(HirakanaInputMode, ".", state);
+    assert(state.output == "．");
 }

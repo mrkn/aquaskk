@@ -98,6 +98,8 @@ static void terminate(int) {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     bool flag;
 
+    NSLog(@"loading UserDefaults ...");
+
     [defaults synchronize];
 
     delete skkserv_;
@@ -118,16 +120,16 @@ static void terminate(int) {
 
     int length = [defaults integerForKey:SKKUserDefaultKeys::minimum_completion_length];
     SKKBackEnd::theInstance().SetMinimumCompletionLength(length);
-
-    NSLog(@"UserDefaults has been reloaded");
 }
 
 - (void)reloadDictionarySet {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
 
+    NSLog(@"loading DictionarySet ...");
+
     NSArray* array = [NSArray arrayWithContentsOfFile:SKKFilePaths::DictionarySet];
     if(array == nil) {
-        NSLog(@"DictionarySet.plist can't read.");
+        NSLog(@"can't read DictionarySet.plist");
     }
 
     SKKDictionaryKeyContainer keys;
@@ -166,12 +168,12 @@ static void terminate(int) {
     userDictionary = [userDictionary stringByExpandingTildeInPath];
 
     SKKBackEnd::theInstance().Initialize([userDictionary UTF8String], keys);
-
-    NSLog(@"DictionarySet has been reloaded");
 }
 
 - (void)reloadComponents {
     NSString* tmp;
+
+    NSLog(@"loading Components ...");
 
     tmp = [self pathForResource:@"keymap.conf"];
     SKKPreProcessor::theInstance().Initialize([tmp UTF8String]);
@@ -179,9 +181,14 @@ static void terminate(int) {
     tmp = [self pathForResource:@"kana-rule.conf"];
     SKKRomanKanaConverter::theInstance().Initialize([tmp UTF8String]);
 
-    [self initializeInputModeIcons];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSArray* subRules = [defaults arrayForKey:SKKUserDefaultKeys::sub_rules];
+    for(NSString* path in subRules) {
+        tmp = [self pathForResource:path];
+        SKKRomanKanaConverter::theInstance().Patch([tmp UTF8String]);
+    }
 
-    NSLog(@"Components has been reloaded");
+    [self initializeInputModeIcons];
 }
 
 - (NSArray*)createDictionaryTypes {
@@ -305,7 +312,7 @@ static void terminate(int) {
 }
 
 - (NSString*)pathForSystemResource:(NSString*)path {
-    return [NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], path];
+    return [NSString stringWithFormat:@"%@/%@", SKKFilePaths::SystemResourceFolder, path];
 }
 
 - (NSString*)pathForUserResource:(NSString*)path {

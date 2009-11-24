@@ -36,6 +36,7 @@
     IBOutlet NSTextField* version_;
     IBOutlet NSTextField* copyright_;
     IBOutlet NSArrayController* dictionaryTypes_;
+    IBOutlet NSArrayController* subRuleController_;
 
     NSMutableDictionary* preferences_;
     NSMutableArray* dictionarySet_;

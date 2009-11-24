@@ -34,6 +34,8 @@ namespace SKKUserDefaultKeys {
 
     DECLARE_NSStringKey(keyboard_layout);
 
+    DECLARE_NSStringKey(sub_rules);
+
     DECLARE_NSStringKey(enable_extended_completion);
     DECLARE_NSStringKey(enable_dynamic_completion);
     DECLARE_NSStringKey(dynamic_completion_range);
@@ -71,6 +73,13 @@ namespace SKKDictionarySetKeys {
 #undef DECLARE_NSStringKey
 
 namespace SKKFilePaths {
+    static NSString* pathForSystemResource() {
+        ObjC::RAIIPool pool;
+        static NSString* path = @"/Library/Input Methods/AquaSKK.app/Contents/Resources";
+
+        return path;
+    }
+    
     static NSString* pathForApplicationSupport() {
         ObjC::RAIIPool pool;
         static NSString* path = [[NSString stringWithFormat:@"%@/Library/Application Support/AquaSKK",
@@ -96,6 +105,7 @@ namespace SKKFilePaths {
         return path;
     }
 
+    NSString* SystemResourceFolder = pathForSystemResource();
     NSString* ApplicationSupportFolder = pathForApplicationSupport();
     NSString* DictionarySet = pathForDictionarySet();
     NSString* UserDefaults = pathForUserDefaults();

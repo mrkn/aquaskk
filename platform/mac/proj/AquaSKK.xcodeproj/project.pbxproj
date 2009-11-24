@@ -98,6 +98,10 @@
 		D3D549BF1024904000622CB2 /* SKKInputModeSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */; };
 		D3D5E8B70E68D67400EBC462 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */; };
 		D3E61C4F0EAB544F000C1536 /* CandidateWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3E61C4E0EAB544F000C1536 /* CandidateWindow.mm */; };
+		D3F0575710BAD0C500F3233E /* SubRuleDescriptions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3F0575510BAD0C500F3233E /* SubRuleDescriptions.cpp */; };
+		D3F0576210BAD10F00F3233E /* sub-rule.desc in Resources */ = {isa = PBXBuildFile; fileRef = D3F0576110BAD10F00F3233E /* sub-rule.desc */; };
+		D3F0576510BAD12600F3233E /* comma.rule in Resources */ = {isa = PBXBuildFile; fileRef = D3F0576310BAD12600F3233E /* comma.rule */; };
+		D3F0576610BAD12600F3233E /* period.rule in Resources */ = {isa = PBXBuildFile; fileRef = D3F0576410BAD12600F3233E /* period.rule */; };
 		D3F467B90E9E5FAC000A8C6A /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC339A0DD1B550006A3F5A /* Carbon.framework */; };
 		D3FC32430DD1B297006A3F5A /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3FC32420DD1B297006A3F5A /* Preferences.xib */; };
 		D3FC33930DD1B52D006A3F5A /* InputMethodKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3FC33920DD1B52D006A3F5A /* InputMethodKit.framework */; };
@@ -327,6 +331,13 @@
 		D3D5E8B60E68D67400EBC462 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		D3E61C4D0EAB544F000C1536 /* CandidateWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CandidateWindow.h; sourceTree = "<group>"; };
 		D3E61C4E0EAB544F000C1536 /* CandidateWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CandidateWindow.mm; sourceTree = "<group>"; };
+		D3F0575510BAD0C500F3233E /* SubRuleDescriptions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SubRuleDescriptions.cpp; path = ../src/preferences/SubRuleDescriptions.cpp; sourceTree = SOURCE_ROOT; };
+		D3F0575610BAD0C500F3233E /* SubRuleDescriptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubRuleDescriptions.h; path = ../src/preferences/SubRuleDescriptions.h; sourceTree = SOURCE_ROOT; };
+		D3F0576110BAD10F00F3233E /* sub-rule.desc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "sub-rule.desc"; sourceTree = "<group>"; };
+		D3F0576310BAD12600F3233E /* comma.rule */ = {isa = PBXFileReference; fileEncoding = 3; lastKnownFileType = text; path = comma.rule; sourceTree = "<group>"; };
+		D3F0576410BAD12600F3233E /* period.rule */ = {isa = PBXFileReference; fileEncoding = 3; lastKnownFileType = text; path = period.rule; sourceTree = "<group>"; };
+		D3F0576710BAD18600F3233E /* SKKCandidateFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKCandidateFilter.h; sourceTree = "<group>"; };
+		D3F0576E10BAD1D700F3233E /* stringutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringutil.h; sourceTree = "<group>"; };
 		D3FC32210DD1B09C006A3F5A /* AquaSKK.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKK.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3FC32230DD1B09C006A3F5A /* AquaSKK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AquaSKK-Info.plist"; sourceTree = "<group>"; };
 		D3FC32300DD1B102006A3F5A /* AquaSKKPreferences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AquaSKKPreferences.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -424,6 +435,7 @@
 				D353BBE90E175500004C68A6 /* SKKDictionaryFactory.cpp */,
 				D353BBED0E175500004C68A6 /* SKKNumericConverter.h */,
 				D353BBEC0E175500004C68A6 /* SKKNumericConverter.cpp */,
+				D3F0576710BAD18600F3233E /* SKKCandidateFilter.h */,
 			);
 			path = backend;
 			sourceTree = "<group>";
@@ -596,6 +608,7 @@
 				D353BCF80E175501004C68A6 /* socketutil.h */,
 				D353BCF90E175501004C68A6 /* subrange.h */,
 				D353BCFA0E175501004C68A6 /* utf8util.h */,
+				D3F0576E10BAD1D700F3233E /* stringutil.h */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -690,9 +703,12 @@
 		D353BE0F0E175540004C68A6 /* config */ = {
 			isa = PBXGroup;
 			children = (
-				D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */,
-				D353BE100E175540004C68A6 /* kana-rule.conf */,
 				D353BE110E175540004C68A6 /* keymap.conf */,
+				D353BE100E175540004C68A6 /* kana-rule.conf */,
+				D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */,
+				D3F0576110BAD10F00F3233E /* sub-rule.desc */,
+				D3F0576410BAD12600F3233E /* period.rule */,
+				D3F0576310BAD12600F3233E /* comma.rule */,
 			);
 			name = config;
 			path = ../../../data/config;
@@ -806,6 +822,8 @@
 				D353BE240E175578004C68A6 /* DictionarySet.mm */,
 				D39ACE790E8E4B2F00A33FF4 /* PathFormatter.h */,
 				D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */,
+				D3F0575610BAD0C500F3233E /* SubRuleDescriptions.h */,
+				D3F0575510BAD0C500F3233E /* SubRuleDescriptions.cpp */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -894,6 +912,9 @@
 				D31C99D30E9E4A3D00CBE4D1 /* Mini-Jisx0208Latin.tiff in Resources */,
 				D31C99D40E9E4A3D00CBE4D1 /* Mini-Katakana.tiff in Resources */,
 				D3CD2F581018BA16001884C0 /* azik-kana-rule.conf in Resources */,
+				D3F0576210BAD10F00F3233E /* sub-rule.desc in Resources */,
+				D3F0576510BAD12600F3233E /* comma.rule in Resources */,
+				D3F0576610BAD12600F3233E /* period.rule in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -994,6 +1015,7 @@
 				D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */,
 				D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */,
 				D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */,
+				D3F0575710BAD0C500F3233E /* SubRuleDescriptions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

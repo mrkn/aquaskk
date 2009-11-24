@@ -139,15 +139,55 @@ SKKRomanKanaConverter& SKKRomanKanaConverter::theInstance() {
 }
 
 void SKKRomanKanaConverter::Initialize(const std::string& path) {
+    load(path, true);
+}
+
+void SKKRomanKanaConverter::Patch(const std::string& path) {
+    load(path, false);
+}
+
+bool SKKRomanKanaConverter::Convert(SKKInputMode mode, const std::string& str, SKKRomanKanaConversionResult& result) {
+    bool converted = false;
+    std::string queue(str);
+
+    result = SKKRomanKanaConversionResult();
+
+    while(!queue.empty()) {
+        ConversionHelper helper(mode, queue);
+
+        root_.Traverse(helper);
+
+        result.output += helper.Output();
+        result.next = helper.Next();
+        result.intermediate = helper.Intermediate();
+
+        converted = helper.IsConverted();
+
+        if(helper.IsShort()) {
+            result.next = helper.Queue();
+            break;
+        }
+
+        queue = helper.Queue();
+    }
+
+    return converted;
+}
+
+// ----------------------------------------------------------------------
+
+void SKKRomanKanaConverter::load(const std::string& path, bool initialize) {
     std::ifstream ifs(path.c_str());
     std::string str;
 
     if(!ifs) {
-	std::cerr << "SKKRomanKanaConverter::Initialize(): can't open file [" << path << "]" << std::endl;
+	std::cerr << "SKKRomanKanaConverter::load(): can't open file [" << path << "]" << std::endl;
 	return;
     }
 
-    root_.Clear();
+    if(initialize) {
+        root_.Clear();
+    }
 
     while(std::getline(ifs, str)) {
 	if(str.empty() || str[0] == '#') continue;
@@ -177,35 +217,7 @@ void SKKRomanKanaConverter::Initialize(const std::string& path) {
 	    root_.Add(roman, SKKTrie(hirakana, katakana, jisx0201kana, next));
 	} else {
 	    // 不正な形式
-	    std::cerr << "SKKRomanKanaConverter::Initialize(): invalid rule [" << utf8 << "]" << std::endl;
+	    std::cerr << "SKKRomanKanaConverter::load(): invalid rule [" << utf8 << "]" << std::endl;
 	}
     }
-}
-
-bool SKKRomanKanaConverter::Convert(SKKInputMode mode, const std::string& str, SKKRomanKanaConversionResult& result) {
-    bool converted = false;
-    std::string queue(str);
-
-    result = SKKRomanKanaConversionResult();
-
-    while(!queue.empty()) {
-        ConversionHelper helper(mode, queue);
-
-        root_.Traverse(helper);
-
-        result.output += helper.Output();
-        result.next = helper.Next();
-        result.intermediate = helper.Intermediate();
-
-        converted = helper.IsConverted();
-
-        if(helper.IsShort()) {
-            result.next = helper.Queue();
-            break;
-        }
-
-        queue = helper.Queue();
-    }
-
-    return converted;
 }

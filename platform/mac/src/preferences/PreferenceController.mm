@@ -21,14 +21,21 @@
 */
 
 #include "PreferenceController.h"
+#include "SubRuleDescriptions.h"
 #include "SKKServerProxy.h"
 #include "SKKConstVars.h"
 #include <Carbon/Carbon.h>
+
+const NSString* SUB_RULE_PATH = @"path";
+const NSString* SUB_RULE_SWITCH = @"active";
+const NSString* SUB_RULE_DESCRIPTION = @"description";
+const NSString* SUB_RULE_TYPE = @"type";
 
 @interface PreferenceController (Local)
 - (NSArray*)collectKeyboardLayout;
 - (NSMenuItem*)menuItemWithInputSource:(TISInputSourceRef)inputSource imageSize:(NSSize)size;
 - (void)initializeVersion;
+- (void)initializeSubRulesAtPath:(NSString*)path withType:(NSString*)type;
 - (void)setupKeyboardLayout;
 - (void)updatePopUpButton;
 - (void)updateFontButton;
@@ -73,6 +80,10 @@
     [dictionaryTypes_ setContent:[proxy_ createDictionaryTypes]];
 
     [self initializeVersion];
+    [self initializeSubRulesAtPath:SKKFilePaths::SystemResourceFolder
+                          withType:@"システム"];
+    [self initializeSubRulesAtPath:SKKFilePaths::ApplicationSupportFolder
+                          withType:@"ユーザー"];
     [self setupKeyboardLayout];
     [self updatePopUpButton];
     [self updateFontButton];
@@ -189,6 +200,38 @@ static NSInteger compareInputSource(id obj1, id obj2, void *context) {
     [copyright_ setStringValue:[info objectForKey:@"CFBundleGetInfoString"]];
 }
 
+- (void)initializeSubRulesAtPath:(NSString*)folder withType:(NSString*)type {
+    SubRuleDescriptions* table = new SubRuleDescriptions([folder UTF8String]);
+    NSArray* active_rules = (NSArray*)[preferences_ objectForKey:SKKUserDefaultKeys::sub_rules];
+    NSDirectoryEnumerator* files = [[NSFileManager defaultManager] enumeratorAtPath:folder];
+
+    while(NSString* file = [files nextObject]) {
+        if([[file pathExtension] isEqualToString:@"rule"]) {
+            NSMutableDictionary* rule = [[NSMutableDictionary alloc] init];
+
+            [rule setObject:file forKey:SUB_RULE_PATH];
+
+            [rule setObject:[NSString stringWithUTF8String:table->Description([file UTF8String])]
+                     forKey:SUB_RULE_DESCRIPTION];
+
+            [rule setObject:[NSNumber numberWithBool:(active_rules != nil
+                                                      ? [active_rules containsObject:file]
+                                                      : NO)]
+                     forKey:SUB_RULE_SWITCH];
+
+            [rule setObject:type forKey:SUB_RULE_TYPE];
+
+            [subRuleController_ addObject:rule];
+
+            [rule release];
+        }
+    }
+
+    delete table;
+
+    [subRuleController_ setSelectionIndex:0];
+}
+
 - (void)setupKeyboardLayout {
     NSArray* array = [self collectKeyboardLayout];
     if(!array) return;
@@ -231,13 +274,27 @@ static NSInteger compareInputSource(id obj1, id obj2, void *context) {
 }
 
 - (void)saveChanges {
+    NSMutableArray* active_rules = [[NSMutableArray alloc] init];
+
+    for(NSDictionary* rule in [subRuleController_ arrangedObjects]) {
+        NSNumber* active = [rule objectForKey:SUB_RULE_SWITCH];
+        if([active boolValue]) {
+            [active_rules addObject:[rule objectForKey:SUB_RULE_PATH]];
+        }
+    }
+
+    [preferences_ setObject:active_rules forKey:SKKUserDefaultKeys::sub_rules];
+    
     [preferences_ writeToFile:SKKFilePaths::UserDefaults atomically:YES];
     [dictionarySet_ writeToFile:SKKFilePaths::DictionarySet atomically:YES];
+
+    [active_rules release];
 }
 
 - (void)reloadServer {
     [proxy_ reloadUserDefaults];
     [proxy_ reloadDictionarySet];
+    [proxy_ reloadComponents];
 }
 
 @end

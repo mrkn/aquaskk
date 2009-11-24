@@ -40,10 +40,14 @@ class SKKRomanKanaConverter {
     SKKRomanKanaConverter();
     SKKRomanKanaConverter(const SKKRomanKanaConverter&);
 
+    void load(const std::string& path, bool initialize);
+
 public:
     static SKKRomanKanaConverter& theInstance();
 
     void Initialize(const std::string& path);
+
+    void Patch(const std::string& path);
 
     // ローマ字かな変換
     //
