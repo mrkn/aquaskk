@@ -80,6 +80,7 @@
 		D353BE2A0E175578004C68A6 /* PreferenceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BE270E175578004C68A6 /* PreferenceController.mm */; };
 		D353BE2B0E1756D8004C68A6 /* SKKConstVars.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDDD0E175513004C68A6 /* SKKConstVars.mm */; };
 		D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = D353BDE50E175513004C68A6 /* SKKServerProxy.mm */; };
+		D357591A10BD72E00066692B /* azik.rule in Resources */ = {isa = PBXBuildFile; fileRef = D357591910BD72E00066692B /* azik.rule */; };
 		D3665A2B0EA8BDA90065CFD2 /* MessengerWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */; };
 		D376C0FD0EC728D8001B2CE9 /* MacDynamicCompletor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */; };
 		D3790F431031B2F1007798E0 /* SKKOutputBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3790F3F1031B2F1007798E0 /* SKKOutputBuffer.cpp */; };
@@ -291,6 +292,7 @@
 		D353BE760E177BAB004C68A6 /* SKKStateEntryRemove-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateEntryRemove-inl.h"; sourceTree = "<group>"; };
 		D353BE770E177BAB004C68A6 /* SKKStatePrimary-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStatePrimary-inl.h"; sourceTree = "<group>"; };
 		D353BE780E177BAB004C68A6 /* SKKStateRecursiveRegister-inl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKKStateRecursiveRegister-inl.h"; sourceTree = "<group>"; };
+		D357591910BD72E00066692B /* azik.rule */ = {isa = PBXFileReference; fileEncoding = 3; lastKnownFileType = text; path = azik.rule; sourceTree = "<group>"; };
 		D3665A290EA8BDA90065CFD2 /* MessengerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerWindow.h; sourceTree = "<group>"; };
 		D3665A2A0EA8BDA90065CFD2 /* MessengerWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerWindow.mm; sourceTree = "<group>"; };
 		D368A06B0EC68CC100145C40 /* SKKWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKWidget.h; sourceTree = "<group>"; };
@@ -707,6 +709,7 @@
 				D353BE100E175540004C68A6 /* kana-rule.conf */,
 				D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */,
 				D3F0576110BAD10F00F3233E /* sub-rule.desc */,
+				D357591910BD72E00066692B /* azik.rule */,
 				D3F0576410BAD12600F3233E /* period.rule */,
 				D3F0576310BAD12600F3233E /* comma.rule */,
 			);
@@ -915,6 +918,7 @@
 				D3F0576210BAD10F00F3233E /* sub-rule.desc in Resources */,
 				D3F0576510BAD12600F3233E /* comma.rule in Resources */,
 				D3F0576610BAD12600F3233E /* period.rule in Resources */,
+				D357591A10BD72E00066692B /* azik.rule in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
