@@ -55,6 +55,18 @@ namespace {
         @"ことえり辞書",
         @"プログラム辞書"
     };
+
+    const struct {
+        int mode;
+        NSString* name;
+    } InputModeIcons[] = {
+        { HirakanaInputMode,		@"AquaSKK-Hirakana.png" },
+        { KatakanaInputMode,		@"AquaSKK-Katakana.png" },
+        { Jisx0201KanaInputMode,	@"AquaSKK-Jisx0201Kana.png" },
+        { AsciiInputMode,		@"AquaSKK-Ascii.png" },
+        { Jisx0208LatinInputMode,	@"AquaSKK-Jisx0208Latin.png" },
+        { 0,				0 }
+    };
 }
 
 static void terminate(int) {
@@ -183,9 +195,9 @@ static void terminate(int) {
 
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     NSArray* subRules = [defaults arrayForKey:SKKUserDefaultKeys::sub_rules];
+
     for(NSString* path in subRules) {
-        tmp = [self pathForResource:path];
-        SKKRomanKanaConverter::theInstance().Patch([tmp UTF8String]);
+        SKKRomanKanaConverter::theInstance().Patch([path UTF8String]);
     }
 
     [self initializeInputModeIcons];
@@ -268,24 +280,12 @@ static void terminate(int) {
 }
 
 - (void)initializeInputModeIcons {
-    const struct {
-        int mode;
-        NSString* name;
-    } icon[] = {
-        { HirakanaInputMode,		@"AquaSKK-Hirakana.png" },
-        { KatakanaInputMode,		@"AquaSKK-Katakana.png" },
-        { Jisx0201KanaInputMode,	@"AquaSKK-Jisx0201Kana.png" },
-        { AsciiInputMode,		@"AquaSKK-Ascii.png" },
-        { Jisx0208LatinInputMode,	@"AquaSKK-Jisx0208Latin.png" },
-        { 0,				0 }
-    };
-
     NSMutableDictionary* icons = [[NSMutableDictionary alloc] initWithCapacity:0];
 
-    for(int i = 0; icon[i].name != 0; ++ i) {
-        NSString* path = [self pathForResource:icon[i].name];
+    for(int i = 0; InputModeIcons[i].name != 0; ++ i) {
+        NSString* path = [self pathForResource:InputModeIcons[i].name];
         NSImage* image = [[NSImage alloc] initWithContentsOfFile:path];
-        [icons setObject:image forKey:[NSNumber numberWithInt:icon[i].mode]];
+        [icons setObject:image forKey:[NSNumber numberWithInt:InputModeIcons[i].mode]];
         [image release];
     }
 

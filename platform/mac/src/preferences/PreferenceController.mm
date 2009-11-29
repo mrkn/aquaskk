@@ -26,10 +26,13 @@
 #include "SKKConstVars.h"
 #include <Carbon/Carbon.h>
 
-const NSString* SUB_RULE_PATH = @"path";
-const NSString* SUB_RULE_SWITCH = @"active";
-const NSString* SUB_RULE_DESCRIPTION = @"description";
-const NSString* SUB_RULE_TYPE = @"type";
+namespace {
+    const NSString* SUB_RULE_FOLDER = @"folder";
+    const NSString* SUB_RULE_PATH = @"path";
+    const NSString* SUB_RULE_SWITCH = @"active";
+    const NSString* SUB_RULE_DESCRIPTION = @"description";
+    const NSString* SUB_RULE_TYPE = @"type";
+}
 
 @interface PreferenceController (Local)
 - (NSArray*)collectKeyboardLayout;
@@ -209,15 +212,18 @@ static NSInteger compareInputSource(id obj1, id obj2, void *context) {
         if([[file pathExtension] isEqualToString:@"rule"]) {
             NSMutableDictionary* rule = [[NSMutableDictionary alloc] init];
 
+            [rule setObject:folder forKey:SUB_RULE_FOLDER];
+
             [rule setObject:file forKey:SUB_RULE_PATH];
 
             [rule setObject:[NSString stringWithUTF8String:table->Description([file UTF8String])]
                      forKey:SUB_RULE_DESCRIPTION];
 
-            [rule setObject:[NSNumber numberWithBool:(active_rules != nil
-                                                      ? [active_rules containsObject:file]
-                                                      : NO)]
-                     forKey:SUB_RULE_SWITCH];
+            BOOL flag = active_rules != nil
+                ? [active_rules containsObject:[folder stringByAppendingPathComponent:file]]
+                : NO;
+
+            [rule setObject:[NSNumber numberWithBool:flag] forKey:SUB_RULE_SWITCH];
 
             [rule setObject:type forKey:SUB_RULE_TYPE];
 
@@ -278,8 +284,12 @@ static NSInteger compareInputSource(id obj1, id obj2, void *context) {
 
     for(NSDictionary* rule in [subRuleController_ arrangedObjects]) {
         NSNumber* active = [rule objectForKey:SUB_RULE_SWITCH];
+
         if([active boolValue]) {
-            [active_rules addObject:[rule objectForKey:SUB_RULE_PATH]];
+            NSString* folder = [rule objectForKey:SUB_RULE_FOLDER];
+            NSString* path = [rule objectForKey:SUB_RULE_PATH];
+
+            [active_rules addObject:[folder stringByAppendingPathComponent:path]];
         }
     }
 

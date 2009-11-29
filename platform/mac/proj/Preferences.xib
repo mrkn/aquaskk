@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="525"/>
+			<integer value="522"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -466,7 +466,7 @@
 																<object class="NSMutableArray" key="NSTableColumns">
 																	<bool key="EncodedWithXMLCoder">YES</bool>
 																	<object class="NSTableColumn" id="82014130">
-																		<double key="NSWidth">40</double>
+																		<double key="NSWidth">53</double>
 																		<double key="NSMinWidth">40</double>
 																		<double key="NSMaxWidth">1000</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -500,13 +500,13 @@
 																			<int key="NSPeriodicDelay">200</int>
 																			<int key="NSPeriodicInterval">25</int>
 																		</object>
-																		<int key="NSResizingMask">1</int>
+																		<int key="NSResizingMask">3</int>
 																		<bool key="NSIsResizeable">YES</bool>
 																		<bool key="NSIsEditable">YES</bool>
 																		<reference key="NSTableView" ref="774619613"/>
 																	</object>
 																	<object class="NSTableColumn" id="646272096">
-																		<double key="NSWidth">280</double>
+																		<double key="NSWidth">269</double>
 																		<double key="NSMinWidth">40</double>
 																		<double key="NSMaxWidth">1000</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -536,7 +536,7 @@
 																		<reference key="NSTableView" ref="774619613"/>
 																	</object>
 																	<object class="NSTableColumn" id="519869205">
-																		<double key="NSWidth">69</double>
+																		<double key="NSWidth">66</double>
 																		<double key="NSMinWidth">10</double>
 																		<double key="NSMaxWidth">3.4028234663852886e+38</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -583,7 +583,7 @@
 																<reference key="NSDelegate"/>
 																<reference key="NSDataSource"/>
 																<int key="NSGridStyleMask">1</int>
-																<int key="NSColumnAutoresizingStyle">4</int>
+																<int key="NSColumnAutoresizingStyle">2</int>
 																<int key="NSDraggingSourceMaskForLocal">15</int>
 																<int key="NSDraggingSourceMaskForNonLocal">0</int>
 																<bool key="NSAllowsTypeSelect">YES</bool>
@@ -615,7 +615,7 @@
 														<int key="NSsFlags">1</int>
 														<reference key="NSTarget" ref="48248580"/>
 														<string key="NSAction">_doScroller:</string>
-														<double key="NSPercent">0.96135265700483097</double>
+														<double key="NSPercent">0.99749373433583954</double>
 													</object>
 													<object class="NSClipView" id="670691523">
 														<reference key="NSNextResponder" ref="48248580"/>
@@ -4720,7 +4720,9 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string>538.IBNumberFormatterBehaviorMetadataKey</string>
 					<string>538.IBNumberFormatterLocalizesFormatMetadataKey</string>
 					<string>538.IBPluginDependency</string>
+					<string>539.IBPluginDependency</string>
 					<string>54.IBPluginDependency</string>
+					<string>540.IBPluginDependency</string>
 					<string>55.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
@@ -4965,6 +4967,8 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1041"/>
 					<boolean value="YES"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
