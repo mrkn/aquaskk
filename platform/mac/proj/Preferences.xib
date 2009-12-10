@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="522"/>
+			<integer value="67"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -430,7 +430,7 @@
 								<object class="NSTabViewItem" id="183430332">
 									<string key="NSIdentifier">rule</string>
 									<object class="NSView" key="NSView" id="23405757">
-										<reference key="NSNextResponder" ref="423547033"/>
+										<nil key="NSNextResponder"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -536,7 +536,7 @@
 																		<reference key="NSTableView" ref="774619613"/>
 																	</object>
 																	<object class="NSTableColumn" id="519869205">
-																		<double key="NSWidth">66</double>
+																		<double key="NSWidth">67</double>
 																		<double key="NSMinWidth">10</double>
 																		<double key="NSMaxWidth">3.4028234663852886e+38</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -611,7 +611,6 @@
 														<int key="NSvFlags">-2147483392</int>
 														<string key="NSFrame">{{1, 192}, {398, 15}}</string>
 														<reference key="NSSuperview" ref="48248580"/>
-														<bool key="NSEnabled">YES</bool>
 														<int key="NSsFlags">1</int>
 														<reference key="NSTarget" ref="48248580"/>
 														<string key="NSAction">_doScroller:</string>
@@ -636,7 +635,7 @@
 												<string key="NSFrame">{{17, 5}, {400, 208}}</string>
 												<reference key="NSSuperview" ref="23405757"/>
 												<reference key="NSNextKeyView" ref="392000656"/>
-												<int key="NSsFlags">690</int>
+												<int key="NSsFlags">562</int>
 												<reference key="NSVScroller" ref="694814439"/>
 												<reference key="NSHScroller" ref="342611919"/>
 												<reference key="NSContentView" ref="392000656"/>
@@ -646,7 +645,6 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {434, 219}}</string>
-										<reference key="NSSuperview" ref="423547033"/>
 									</object>
 									<string key="NSLabel">かな規則</string>
 									<reference key="NSColor" ref="10089358"/>
@@ -1388,7 +1386,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 								<object class="NSTabViewItem" id="502535596">
 									<string key="NSIdentifier">Dictionaries</string>
 									<object class="NSView" key="NSView" id="924742837">
-										<nil key="NSNextResponder"/>
+										<reference key="NSNextResponder" ref="423547033"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1461,7 +1459,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 																	</object>
 																	<object class="NSTableColumn" id="236903615">
 																		<string key="NSIdentifier">type</string>
-																		<double key="NSWidth">106</double>
+																		<double key="NSWidth">119</double>
 																		<double key="NSMinWidth">40</double>
 																		<double key="NSMaxWidth">1000</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -1516,7 +1514,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 																	</object>
 																	<object class="NSTableColumn" id="1008455269">
 																		<string key="NSIdentifier">location</string>
-																		<double key="NSWidth">228</double>
+																		<double key="NSWidth">215</double>
 																		<double key="NSMinWidth">10</double>
 																		<double key="NSMaxWidth">3.4028230607370965e+38</double>
 																		<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -1583,7 +1581,8 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 														<int key="NSsFlags">1</int>
 														<reference key="NSTarget" ref="819505329"/>
 														<string key="NSAction">_doScroller:</string>
-														<double key="NSPercent">0.50909090042114258</double>
+														<double key="NSCurValue">1</double>
+														<double key="NSPercent">0.99739583333333337</double>
 													</object>
 													<object class="NSClipView" id="214948058">
 														<reference key="NSNextResponder" ref="819505329"/>
@@ -1735,6 +1734,7 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 25}, {434, 219}}</string>
+										<reference key="NSSuperview" ref="423547033"/>
 									</object>
 									<string key="NSLabel">辞書</string>
 									<reference key="NSColor" ref="10089358"/>
@@ -2088,14 +2088,14 @@ ARcABAAAAAEAAAACARwAAwAAAAEAAQAAAVIAAwAAAAEAAQAAAVMAAwAAAAIAAQABAAAAAA</bytes>
 									<reference key="NSTabView" ref="423547033"/>
 								</object>
 							</object>
-							<reference key="NSSelectedTabViewItem" ref="183430332"/>
+							<reference key="NSSelectedTabViewItem" ref="502535596"/>
 							<reference key="NSFont" ref="26"/>
 							<int key="NSTvFlags">134217728</int>
 							<bool key="NSAllowTruncatedLabels">YES</bool>
 							<bool key="NSDrawsBackground">YES</bool>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
-								<reference ref="23405757"/>
+								<reference ref="924742837"/>
 							</object>
 						</object>
 					</object>

@@ -24,38 +24,10 @@
 #define SKKDictionaryKeeper_h
 
 #include "SKKDictionaryFile.h"
+#include "SKKDictionaryLoader.h"
 #include "pthreadutil.h"
 #include <vector>
 #include <memory>
-
-class SKKDictionaryLoaderObserver {
-public:
-    virtual ~SKKDictionaryLoaderObserver() {}
-
-    virtual void SKKDictionaryLoaderUpdate(const SKKDictionaryFile& file) = 0;
-};
-
-class SKKDictionaryLoader : public pthread::task {
-    SKKDictionaryLoaderObserver* observer_;
-
-protected:
-    // SKKDictionaryFile が空でも通知は行うこと
-    void NotifyObserver(const SKKDictionaryFile& file) {
-	observer_->SKKDictionaryLoaderUpdate(file);
-    }
-
-    // 通知
-    virtual void Initialize() {}
-
-public:
-    SKKDictionaryLoader() : observer_(0) {}
-
-    void Connect(SKKDictionaryLoaderObserver* observer) {
-	observer_ = observer;
-
-        Initialize();
-    }
-};
 
 class SKKDictionaryKeeper : public SKKDictionaryLoaderObserver {
     std::auto_ptr<pthread::timer> timer_;

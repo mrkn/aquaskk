@@ -33,30 +33,19 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
     std::string url_;
     std::string path_;
     std::string tmp_path_;
-    SKKDictionaryFile file_;
 
-    virtual void Initialize() {
-        notify();
-    }
-
-    virtual bool run() {
+    virtual bool NeedsUpdate() {
 	net::socket::tcpstream http(remote_);
 
 	if(request(http)) {
-	    int length = content_length(http);
-
-	    if(download(http, length)) {
-		notify();
-	    }
-        } else {
-            // 一度もダウンロードしていない状態で接続障害が発生した場合
-            // には空の辞書をロードする(不要な pthread_cond_wait を回避)
-            if(file_.IsEmpty()) {
-                NotifyObserver(file_);
-            }
+	    return download(http, content_length(http));
         }
 
-	return true;
+        return false;
+    }
+
+    virtual const std::string& FilePath() const {
+        return path_;
     }
 
     bool request(net::socket::tcpstream& http) {
@@ -154,13 +143,6 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 	}
 
 	return true;
-    }
-
-    void notify() {
-	if(file_.Load(path_)) {
-	    file_.Sort();
-	    NotifyObserver(file_);
-        }
     }
 
 public:

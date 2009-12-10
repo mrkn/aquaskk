@@ -156,6 +156,7 @@
 		D322B8D00DDC8174002C33F9 /* AquaSKK.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AquaSKK.xib; sourceTree = "<group>"; };
 		D32F15C50EA0817700CADBD7 /* MacInputModeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacInputModeMenu.h; sourceTree = "<group>"; };
 		D32F15C60EA0817700CADBD7 /* MacInputModeMenu.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacInputModeMenu.mm; sourceTree = "<group>"; };
+		D34531A510D14AF500D4EF49 /* SKKDictionaryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKDictionaryLoader.h; sourceTree = "<group>"; };
 		D34903D5102E9CA7009CF165 /* SKKInputContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKInputContext.h; sourceTree = "<group>"; };
 		D35343B2100F6645007C7B13 /* MacKotoeriDictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MacKotoeriDictionary.cpp; sourceTree = "<group>"; };
 		D35343B3100F6645007C7B13 /* MacKotoeriDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacKotoeriDictionary.h; sourceTree = "<group>"; };
@@ -461,6 +462,7 @@
 				D353BBF50E175500004C68A6 /* SKKCommonDictionary.cpp */,
 				D353BBF80E175500004C68A6 /* SKKDictionaryFile.h */,
 				D353BBF70E175500004C68A6 /* SKKDictionaryFile.cpp */,
+				D34531A510D14AF500D4EF49 /* SKKDictionaryLoader.h */,
 				D353BBFA0E175500004C68A6 /* SKKDictionaryKeeper.h */,
 				D353BBF90E175500004C68A6 /* SKKDictionaryKeeper.cpp */,
 				D353BBFE0E175500004C68A6 /* SKKProxyDictionary.h */,

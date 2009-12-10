@@ -29,26 +29,8 @@ namespace {
     class SKKCommonDictionaryLoader : public SKKDictionaryLoader {
         std::string path_;
         std::time_t lastupdate_;
-        bool first_;
 
-        virtual bool run() {
-            SKKDictionaryFile tmp;
-
-            if(updated() && tmp.Load(path_)) {
-                tmp.Sort();
-                NotifyObserver(tmp);
-            } else {
-                if(first_) {
-                    NotifyObserver(tmp);
-                }
-            }
-
-            first_ = false;
-
-            return true;
-        }
-
-        bool updated() {
+        virtual bool NeedsUpdate() {
             struct stat st;
 
             if(stat(path_.c_str(), &st) == 0 && lastupdate_ < st.st_mtime) {
@@ -59,9 +41,13 @@ namespace {
             return false;
         }
 
+        virtual const std::string& FilePath() const {
+            return path_;
+        }
+
     public:
         SKKCommonDictionaryLoader(const std::string& location)
-            : path_(location), lastupdate_(0), first_(true) {}
+            : path_(location), lastupdate_(0) {}
     };
 }
 

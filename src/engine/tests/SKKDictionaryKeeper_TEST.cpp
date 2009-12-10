@@ -4,15 +4,12 @@
 class DebugLoader : public SKKDictionaryLoader {
     std::string path_;
 
-    virtual bool run() {
-        SKKDictionaryFile file;
-
-        if(file.Load(path_)) {
-            file.Sort();
-            NotifyObserver(file);
-        }
-
+    virtual bool NeedsUpdate() {
         return true;
+    }
+
+    virtual const std::string& FilePath() const {
+        return path_;
     }
 
 public:
