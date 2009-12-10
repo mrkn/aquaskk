@@ -29,20 +29,18 @@
 
 // 辞書ダウンロードクラス
 class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
-    bool first_;
-    short port_;
-    std::string host_;
+    net::socket::endpoint remote_;
     std::string url_;
     std::string path_;
     std::string tmp_path_;
+    SKKDictionaryFile file_;
+
+    virtual void Initialize() {
+        notify();
+    }
 
     virtual bool run() {
-	if(first_) {
-            first_ = false;
-	    notify();
-	}
-
-	net::socket::tcpstream http(host_, port_);
+	net::socket::tcpstream http(remote_);
 
 	if(request(http)) {
 	    int length = content_length(http);
@@ -50,7 +48,13 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 	    if(download(http, length)) {
 		notify();
 	    }
-	}
+        } else {
+            // 一度もダウンロードしていない状態で接続障害が発生した場合
+            // には空の辞書をロードする(不要な pthread_cond_wait を回避)
+            if(file_.IsEmpty()) {
+                NotifyObserver(file_);
+            }
+        }
 
 	return true;
     }
@@ -70,7 +74,7 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 		 "%a, %d %b %Y %T GMT", gmtime(&st.st_mtime));
 
 	http << "GET " << url_ << " HTTP/1.1\r\n";
-	http << "Host: " << host_ << "\r\n";
+	http << "Host: " << remote_.node() << "\r\n";
 	http << "If-Modified-Since: " << timestamp << "\r\n";
 	http << "Connection: close\r\n";
 	http << "\r\n" << std::flush;
@@ -123,7 +127,6 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
 	    ofs << line << std::endl;
 	}
 
-
         // ダウンロードに失敗したか？
         int new_size = file_size(tmp_path_);
         if(new_size != length) {
@@ -131,7 +134,6 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
                       << length << ", actual=" << new_size << std::endl;
             return false;
         }
-
 
         // 既存の辞書と比較して小さすぎないか？
         int old_size = file_size(path_);
@@ -155,28 +157,23 @@ class SKKAutoUpdateDictionaryLoader : public SKKDictionaryLoader {
     }
 
     void notify() {
-	SKKDictionaryFile tmp;
-
-	if(tmp.Load(path_)) {
-	    tmp.Sort();
-	    NotifyObserver(tmp);
+	if(file_.Load(path_)) {
+	    file_.Sort();
+	    NotifyObserver(file_);
         }
     }
 
 public:
-    SKKAutoUpdateDictionaryLoader(const std::string& location) : first_(true), port_(80) {
-	std::istringstream buf(location);
+    SKKAutoUpdateDictionaryLoader(const std::string& location) {
+        std::istringstream buf(location);
+        std::string addr;
 
-	buf >> host_ >> url_;
+        buf >> addr >> url_;
 
-	buf.ignore(1);
-	std::getline(buf, path_);
+        buf.ignore(1);
+        std::getline(buf, path_);
 
-	buf.clear();
-	std::replace(host_.begin(), host_.end(), ':', ' ');
-	buf.str(host_);
-
-	buf >> host_ >> port_;
+        remote_.parse(addr, "80");
 
 	tmp_path_ = path_ + ".download";
     }

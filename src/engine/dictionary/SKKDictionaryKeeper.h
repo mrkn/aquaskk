@@ -44,11 +44,16 @@ protected:
 	observer_->SKKDictionaryLoaderUpdate(file);
     }
 
+    // 通知
+    virtual void Initialize() {}
+
 public:
     SKKDictionaryLoader() : observer_(0) {}
 
     void Connect(SKKDictionaryLoaderObserver* observer) {
 	observer_ = observer;
+
+        Initialize();
     }
 };
 

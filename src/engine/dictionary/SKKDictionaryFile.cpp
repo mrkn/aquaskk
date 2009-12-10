@@ -63,6 +63,10 @@ bool SKKDictionaryFile::Save(const std::string& path) {
     return true;
 }
 
+bool SKKDictionaryFile::IsEmpty() const {
+    return okuriAri_.empty() && okuriNasi_.empty();
+}
+
 void SKKDictionaryFile::Sort() {
     sort(okuriAri_);
     sort(okuriNasi_);

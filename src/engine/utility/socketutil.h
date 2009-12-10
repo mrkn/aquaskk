@@ -191,6 +191,21 @@ namespace socket {
             service_ = buf.str();
         }
 
+        void parse(const std::string& addr, const std::string& default_port) {
+            std::string tmp(addr);
+            std::replace(tmp.begin(), tmp.end(), ':', ' ');
+
+            std::istringstream buf(tmp);
+
+            service_ = default_port;
+
+            buf >> node_ >> service_;
+        }
+
+        const std::string& node() const { return node_; }
+
+        const std::string& service() const { return service_; }
+
         int connect(int family = AF_INET, int type = SOCK_STREAM, int protocol = 0, int flags = 0) const {
             return connect(family, type, protocol, flags, DEFAULT_option());
         }
