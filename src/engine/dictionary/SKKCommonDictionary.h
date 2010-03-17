@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -24,25 +24,15 @@
 #ifndef SKKCommonDictionary_h
 #define SKKCommonDictionary_h
 
-#include "SKKBaseDictionary.h"
-#include "SKKDictionaryKeeper.h"
+#include "SKKDictionaryTemplate.h"
+#include "SKKLocalDictionaryLoader.h"
 
-class SKKCommonDictionary : public SKKBaseDictionary {
-    std::auto_ptr<SKKDictionaryLoader> loader_;
-    SKKDictionaryKeeper keeper_;
+// SKK 共有辞書
 
-public:
-    SKKCommonDictionary();
+// EUC-JP 版
+typedef SKKDictionaryTemplate<SKKLocalDictionaryLoader> SKKCommonDictionary;
 
-    virtual void Initialize(const std::string& location);
-
-    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
-    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
-    virtual std::string FindEntry(const std::string& query);
-
-    virtual bool FindCompletions(const std::string& entry,
-                                 std::vector<std::string>& result,
-                                 int minimumCompletionLength = 0);
-};
+// UTF-8 版
+typedef SKKDictionaryTemplate<SKKLocalDictionaryLoader, SKKDictionaryKeeper::UTF_8> SKKCommonDictionaryUTF8;
 
 #endif

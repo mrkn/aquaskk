@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2009 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -223,10 +223,8 @@ void MacKotoeriDictionary::Initialize(const std::string& location) {
     impl_->Initialize(location);
 }
 
-void MacKotoeriDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
-    // ことえり辞書には「送りあり」は存在しない
-}
-
-void MacKotoeriDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
-    impl_->Find(entry, result);
+void MacKotoeriDictionary::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
+    if(!entry.IsOkuriAri()) {
+        impl_->Find(entry.EntryString(), result);
+    }
 }

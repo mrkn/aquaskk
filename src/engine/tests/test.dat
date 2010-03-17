@@ -619,3 +619,5 @@ ctrl::g                 mode=J
 # ----------------------------------------------------------------------
 ctrl::/,sel=蝙蝠        mode=J,marked=▽こうもり
 ctrl::g                 mode=J,fixed=蝙蝠
+ctrl::/,sel=蝙蝠        mode=J,marked=▽こうもり
+ctrl::m                 mode=J,fixed=こうもり

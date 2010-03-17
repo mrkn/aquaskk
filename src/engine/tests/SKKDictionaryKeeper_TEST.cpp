@@ -1,5 +1,6 @@
 #include <cassert>
 #include "SKKDictionaryKeeper.h"
+#include "MockCompletionHelper.h"
 
 class DebugLoader : public SKKDictionaryLoader {
     std::string path_;
@@ -13,20 +14,27 @@ class DebugLoader : public SKKDictionaryLoader {
     }
 
 public:
-    DebugLoader(const std::string& path) : path_(path) {}
+    virtual void Initialize(const std::string& path) {
+        path_ = path;
+    }
+
+    virtual int Interval() const { return 5; }
+
+    virtual int Timeout() const { return 5; }
 };
 
 int main() {
-    DebugLoader loader("SKK-JISYO.TEST");
+    DebugLoader loader;
     SKKDictionaryKeeper keeper;
+    MockCompletionHelper helper;
 
-    keeper.Initialize(&loader, 5, 5);
+    loader.Initialize("SKK-JISYO.TEST");
+    keeper.Initialize(&loader);
 
-    assert(keeper.FindEntry("官寺") == "かんじ");
+    assert(keeper.ReverseLookup("官寺") == "かんじ");
 
-    std::vector<std::string> result;
-    assert(keeper.FindCompletions("か", result, 0));
+    helper.Initialize("か");
+    keeper.Complete(helper);
 
-    result.clear();
-    assert(!keeper.FindCompletions("か", result, 3));
+    assert(helper.Result()[0] == "かんじ");
 }

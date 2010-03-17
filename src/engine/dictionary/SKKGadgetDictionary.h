@@ -36,7 +36,7 @@ class SKKGadgetDictionary : public SKKBaseDictionary {
 
     struct Match;
     struct Search;
-    struct Complete;
+    struct Comp;
     struct Store;
 
     DispatchTable table_;
@@ -60,12 +60,9 @@ public:
 
     virtual void Initialize(const std::string& location);
 
-    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
-    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
+    virtual void Find(const SKKEntry& entry, SKKCandidateSuite& result);
 
-    virtual bool FindCompletions(const std::string& entry,
-                                 std::vector<std::string>& result,
-                                 int minimumCompletionLength = 0);
+    virtual void Complete(SKKCompletionHelper& helper);
 };
 
 #endif

@@ -44,6 +44,8 @@ State SKKState::Edit(const Event& event) {
 
     switch(event) {
     case EXIT_EVENT:
+        context_->undo.Clear();
+
         return State::SaveHistory();
 
     case SKK_ENTER:
@@ -58,6 +60,10 @@ State SKKState::Edit(const Event& event) {
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_CANCEL:
+        if(context_->undo.IsActive()) {
+            context_->output.Fix(context_->undo.Candidate());
+        }
+
         return State::Transition(&SKKState::KanaInput);
 
     case SKK_BACKSPACE:

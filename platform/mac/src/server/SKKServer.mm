@@ -38,6 +38,7 @@
 #include <signal.h>
 
 namespace {
+    // 順番の入れ替えは禁止(追加のみ)
     struct DictionaryTypes {
         enum {
             Common,
@@ -45,6 +46,7 @@ namespace {
             Proxy,
             Kotoeri,
             Gadget,
+            CommonUTF8,
         };
     };
 
@@ -53,7 +55,8 @@ namespace {
         @"SKK 辞書(自動更新)",
         @"skkserv 辞書",
         @"ことえり辞書",
-        @"プログラム辞書"
+        @"プログラム辞書",
+        @"SKK 辞書(UTF-8)"
     };
 
     const struct {
@@ -204,13 +207,26 @@ static void terminate(int) {
 }
 
 - (NSArray*)createDictionaryTypes {
+    int order[] = {
+        DictionaryTypes::Common,
+        DictionaryTypes::CommonUTF8,
+        DictionaryTypes::AutoUpdate,
+        DictionaryTypes::Proxy,
+        DictionaryTypes::Kotoeri,
+        DictionaryTypes::Gadget,
+        0xff
+    };
     NSMutableArray* types = [[NSMutableArray alloc] init];
 
-    [types addObject:DictionaryNames[DictionaryTypes::Common]];
-    [types addObject:DictionaryNames[DictionaryTypes::AutoUpdate]];
-    [types addObject:DictionaryNames[DictionaryTypes::Proxy]];
-    [types addObject:DictionaryNames[DictionaryTypes::Kotoeri]];
-    [types addObject:DictionaryNames[DictionaryTypes::Gadget]];
+    for(int index = 0; order[index] != 0xff; ++ index) {
+        NSNumber* type = [NSNumber numberWithInt:order[index]];
+        NSString* name = DictionaryNames[order[index]];
+        NSDictionary* entity = [NSDictionary dictionaryWithObjectsAndKeys:
+                                             type, SKKDictionaryTypeKeys::type,
+                                             name, SKKDictionaryTypeKeys::name,
+                                             nil];
+        [types addObject:entity];
+    }
 
     return [types autorelease];
 }
@@ -265,6 +281,7 @@ static void terminate(int) {
     }
 
     SKKRegisterFactoryMethod<SKKCommonDictionary>(DictionaryTypes::Common);
+    SKKRegisterFactoryMethod<SKKCommonDictionaryUTF8>(DictionaryTypes::CommonUTF8);
     SKKRegisterFactoryMethod<SKKAutoUpdateDictionary>(DictionaryTypes::AutoUpdate);
     SKKRegisterFactoryMethod<SKKProxyDictionary>(DictionaryTypes::Proxy);
     SKKRegisterFactoryMethod<MacKotoeriDictionary>(DictionaryTypes::Kotoeri);

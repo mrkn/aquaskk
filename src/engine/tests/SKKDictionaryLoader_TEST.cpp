@@ -18,6 +18,13 @@ public:
         state_ = flag;
         path_ = path;
     }
+
+    virtual void Initialize(const std::string& location) {
+        path_ = location;
+    }
+
+    virtual int Interval() const { return 1; }
+    virtual int Timeout() const { return 1; }
 };
 
 class DebugObserver : public SKKDictionaryLoaderObserver {

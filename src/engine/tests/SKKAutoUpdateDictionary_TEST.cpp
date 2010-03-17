@@ -14,8 +14,8 @@ int main() {
     dict1.Initialize("openlab.ring.gr.jp /skk/skk/dic/SKK-JISYO.S SKK-JISYO.S1");
     dict2.Initialize("openlab.ring.gr.jp:80 /skk/skk/dic/SKK-JISYO.S SKK-JISYO.S2");
 
-    dict1.FindOkuriAri("dummy", suite);
-    dict2.FindOkuriAri("dummy", suite);
+    dict1.Find(SKKEntry("dummy", "d"), suite);
+    dict2.Find(SKKEntry("dummy", "d"), suite);
 
     struct stat st1, st2;
 
@@ -24,6 +24,6 @@ int main() {
 
     assert(st1.st_size == st2.st_size);
 
-    assert(dict1.FindEntry("逆") == "ぎゃく");
-    assert(dict2.FindEntry("逆") == "ぎゃく");
+    assert(dict1.ReverseLookup("逆") == "ぎゃく");
+    assert(dict2.ReverseLookup("逆") == "ぎゃく");
 }

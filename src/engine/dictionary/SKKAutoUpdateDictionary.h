@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2007,2010 Tomotaka SUWA <tomotaka.suwa@mac.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,33 +23,11 @@
 #ifndef SKKAutoUpdateDictionary_h
 #define SKKAutoUpdateDictionary_h
 
-#include "SKKBaseDictionary.h"
-#include "SKKDictionaryKeeper.h"
-#include <memory>
+#include "SKKDictionaryTemplate.h"
+#include "SKKHttpDictionaryLoader.h"
 
-class SKKAutoUpdateDictionary : public SKKBaseDictionary {
-    std::auto_ptr<SKKDictionaryLoader> loader_;
-    SKKDictionaryKeeper keeper_;
+// SKK 自動更新辞書
 
-public:
-    SKKAutoUpdateDictionary();
-
-    //
-    // 引数の形式は "host:port url path" とする。":port" は省略化。
-    //
-    // 例)
-    //
-    // Initialize("openlab.ring.gr.jp /skk/skk/dic/SKK-JISYO.L /path/to/the/SKK-JISYO.L");
-    //
-    virtual void Initialize(const std::string& location);
-
-    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
-    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
-    virtual std::string FindEntry(const std::string& candidate);
-
-    virtual bool FindCompletions(const std::string& entry,
-                                 std::vector<std::string>& result,
-                                 int minimumCompletionLength = 0);
-};
+typedef SKKDictionaryTemplate<SKKHttpDictionaryLoader> SKKAutoUpdateDictionary;
 
 #endif

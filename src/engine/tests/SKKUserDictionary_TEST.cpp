@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 #include "SKKUserDictionary.h"
+#include "MockCompletionHelper.h"
 
 int main() {
     SKKUserDictionary dict;
@@ -8,102 +9,105 @@ int main() {
 
     dict.Initialize("skk-jisyo.utf8");
 
-    dict.FindOkuriNasi("#", suite);
+    dict.Find(SKKEntry("#"), suite);
     assert(suite.IsEmpty());
 
-    dict.FindOkuriAri("おくりあr", suite);
+    dict.Find(SKKEntry("おくりあr", "り"), suite);
     assert(suite.ToString() == "/送り有/");
 
     suite.Clear();
-    dict.FindOkuriNasi("かんじ", suite);
+    dict.Find(SKKEntry("かんじ"), suite);
     assert(suite.ToString() == "/漢字/");
 
-    dict.RegisterOkuriAri("おくりあr", "り", SKKCandidate("送りあ"));
-    dict.RegisterOkuriNasi("かんり", SKKCandidate("管理"));
+    dict.Register(SKKEntry("おくりあr", "り"), SKKCandidate("送りあ"));
+    dict.Register(SKKEntry("かんり"), SKKCandidate("管理"));
 
     suite.Clear();
 
-    dict.FindOkuriAri("おくりあr", suite);
-    assert(suite.ToString() == "/送りあ/送り有/[り/送りあ/]/");
+    dict.Find(SKKEntry("おくりあr", "り"), suite);
+    assert(suite.ToString() == "/送りあ/[り/送りあ/]/");
 
     suite.Clear();
-    dict.FindOkuriNasi("かんり", suite);
+    dict.Find(SKKEntry("かんり"), suite);
     assert(suite.ToString() == "/管理/");
 
-    std::vector<std::string> result;
-    assert(dict.FindCompletions("かん", result) && result[0] == "かんり" && result[1] == "かんじ");
+    MockCompletionHelper helper;
+    helper.Initialize("かん");
+    dict.Complete(helper);
+    assert(helper.Result()[0] == "かんり" && helper.Result()[1] == "かんじ");
 
-    dict.RemoveOkuriAri("おくりあr", SKKCandidate("送りあ"));
-    dict.RemoveOkuriNasi("かんり", SKKCandidate("管理"));
+    dict.Remove(SKKEntry("おくりあr", "り"), SKKCandidate("送りあ"));
+    dict.Remove(SKKEntry("かんり"), SKKCandidate("管理"));
 
     suite.Clear();
-    dict.FindOkuriAri("おくりあr", suite);
+    dict.Find(SKKEntry("おくりあr", "り"), suite);
     assert(suite.ToString() == "/送り有/");
 
     suite.Clear();
-    dict.FindOkuriNasi("かんり", suite);
+    dict.Find(SKKEntry("かんり"), suite);
     assert(suite.IsEmpty());
 
     dict.SetPrivateMode(true);
 
     suite.Clear();
-    dict.FindOkuriAri("おくりあr", suite);
+    dict.Find(SKKEntry("おくりあr", "り"), suite);
     assert(suite.ToString() == "/送り有/");
 
     suite.Clear();
-    dict.FindOkuriNasi("かんじ", suite);
+    dict.Find(SKKEntry("かんじ"), suite);
     assert(suite.ToString() == "/漢字/");
 
-    dict.RegisterOkuriAri("おくりあr", "り", SKKCandidate("送りあ"));
-    dict.RegisterOkuriNasi("かんり", SKKCandidate("管理"));
+    dict.Register(SKKEntry("おくりあr", "り"), SKKCandidate("送りあ"));
+    dict.Register(SKKEntry("かんり"), SKKCandidate("管理"));
 
     suite.Clear();
-    dict.FindOkuriAri("おくりあr", suite);
-    assert(suite.ToString() == "/送りあ/送り有/[り/送りあ/]/");
+    dict.Find(SKKEntry("おくりあr", "り"), suite);
+    assert(suite.ToString() == "/送りあ/[り/送りあ/]/");
 
     suite.Clear();
-    dict.FindOkuriNasi("かんり", suite);
+    dict.Find(SKKEntry("かんり"), suite);
     assert(suite.ToString() == "/管理/");
 
     dict.SetPrivateMode(false);
 
     suite.Clear();
-    dict.FindOkuriAri("おくりあr", suite);
+    dict.Find(SKKEntry("おくりあr", "り"), suite);
     assert(suite.ToString() == "/送り有/");
 
     suite.Clear();
-    dict.FindOkuriNasi("かんじ", suite);
+    dict.Find(SKKEntry("かんじ"), suite);
     assert(suite.ToString() == "/漢字/");
 
-    assert(dict.FindEntry("漢字") == "かんじ");
+    assert(dict.ReverseLookup("漢字") == "かんじ");
 
-    dict.RemoveOkuriNasi("ほかん1", SKKCandidate(""));
+    dict.Remove(SKKEntry("ほかん1"), SKKCandidate(""));
     suite.Clear();
-    dict.FindOkuriNasi("ほかん1", suite);
+    dict.Find(SKKEntry("ほかん1"), suite);
     assert(suite.ToString() == "/補完1/");
 
-    dict.RegisterOkuriNasi("とぐるほかん", SKKCandidate(""));
+    dict.Register(SKKEntry("とぐるほかん"), SKKCandidate(""));
     suite.Clear();
-    dict.FindOkuriNasi("とぐるほかん", suite);
+    dict.Find(SKKEntry("とぐるほかん"), suite);
     assert(suite.IsEmpty());
 
-    dict.RemoveOkuriNasi("とぐるほかん", SKKCandidate(""));
+    dict.Remove(SKKEntry("とぐるほかん"), SKKCandidate(""));
     suite.Clear();
-    dict.FindOkuriNasi("とぐるほかん", suite);
+    dict.Find(SKKEntry("とぐるほかん"), suite);
     assert(suite.IsEmpty());
 
-    result.clear();
-    assert(!dict.FindCompletions("かん", result, 3));
+    helper.Initialize("かんり");
+    dict.Complete(helper);
+    assert(helper.Result().empty());
 
     suite.Clear();
-    dict.RegisterOkuriNasi("encode", SKKCandidate("abc;def"));
-    dict.FindOkuriNasi("encode", suite);
+    dict.Register(SKKEntry("encode"), SKKCandidate("abc;def"));
+    dict.Find(SKKEntry("encode"), suite);
     assert(suite.ToString() == "/abc;def/");
 
     suite.Clear();
-    dict.RemoveOkuriNasi("encode", SKKCandidate("abc;def"));
-    dict.FindOkuriNasi("encode", suite);
+    dict.Remove(SKKEntry("encode"), SKKCandidate("abc;def"));
+    dict.Find(SKKEntry("encode"), suite);
     assert(suite.IsEmpty());
 
-    dict.RegisterOkuriNasi("#", SKKCandidate("456"));
+    dict.Register(SKKEntry("#"), SKKCandidate("456"));
 }

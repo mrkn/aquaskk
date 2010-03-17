@@ -25,8 +25,6 @@
 		D353BCFD0E175501004C68A6 /* SKKDictionaryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBE90E175500004C68A6 /* SKKDictionaryFactory.cpp */; };
 		D353BCFE0E175501004C68A6 /* SKKNumericConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBEC0E175500004C68A6 /* SKKNumericConverter.cpp */; };
 		D353BCFF0E175501004C68A6 /* SKKCompleter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBEF0E175500004C68A6 /* SKKCompleter.cpp */; };
-		D353BD000E175501004C68A6 /* SKKAutoUpdateDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBF20E175500004C68A6 /* SKKAutoUpdateDictionary.cpp */; };
-		D353BD010E175501004C68A6 /* SKKCommonDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBF50E175500004C68A6 /* SKKCommonDictionary.cpp */; };
 		D353BD020E175501004C68A6 /* SKKDictionaryFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBF70E175500004C68A6 /* SKKDictionaryFile.cpp */; };
 		D353BD030E175501004C68A6 /* SKKDictionaryKeeper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBF90E175500004C68A6 /* SKKDictionaryKeeper.cpp */; };
 		D353BD050E175501004C68A6 /* SKKProxyDictionary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D353BBFD0E175500004C68A6 /* SKKProxyDictionary.cpp */; };
@@ -85,6 +83,7 @@
 		D376C0FD0EC728D8001B2CE9 /* MacDynamicCompletor.mm in Sources */ = {isa = PBXBuildFile; fileRef = D376C0FC0EC728D8001B2CE9 /* MacDynamicCompletor.mm */; };
 		D3790F431031B2F1007798E0 /* SKKOutputBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3790F3F1031B2F1007798E0 /* SKKOutputBuffer.cpp */; };
 		D3790F441031B2F1007798E0 /* SKKUndoContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3790F411031B2F1007798E0 /* SKKUndoContext.cpp */; };
+		D37ADC76111F0EF3000B8988 /* DictionaryTypeTransformer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D37ADC61111F0B07000B8988 /* DictionaryTypeTransformer.mm */; };
 		D38D61BE0EA792CB0095AAC8 /* MessengerView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */; };
 		D38FA9D20EA78A0800C07575 /* CompletionWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38FA9D10EA78A0800C07575 /* CompletionWindow.mm */; };
 		D38FB82C1032F33100048A30 /* MacConfig.mm in Sources */ = {isa = PBXBuildFile; fileRef = D38FB82B1032F33100048A30 /* MacConfig.mm */; };
@@ -94,6 +93,7 @@
 		D398F2CC0E45FA940007F4B9 /* SKKInputQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D398F2CA0E45FA940007F4B9 /* SKKInputQueue.cpp */; };
 		D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */ = {isa = PBXBuildFile; fileRef = D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */; };
 		D39E444F0EAB4FB300FB584C /* InputModeWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = D39E444E0EAB4FB300FB584C /* InputModeWindow.mm */; };
+		D3AD8DA81119C6A800809EA2 /* SKKHttpDictionaryLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3AD8DA51119C6A800809EA2 /* SKKHttpDictionaryLoader.cpp */; };
 		D3CB86780EB47E970069107D /* MacAnnotator.mm in Sources */ = {isa = PBXBuildFile; fileRef = D3CB86770EB47E970069107D /* MacAnnotator.mm */; };
 		D3CD2F581018BA16001884C0 /* azik-kana-rule.conf in Resources */ = {isa = PBXBuildFile; fileRef = D3CD2F571018BA16001884C0 /* azik-kana-rule.conf */; };
 		D3D549BF1024904000622CB2 /* SKKInputModeSelector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D3D549BD1024904000622CB2 /* SKKInputModeSelector.cpp */; };
@@ -175,10 +175,8 @@
 		D353BBED0E175500004C68A6 /* SKKNumericConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKNumericConverter.h; sourceTree = "<group>"; };
 		D353BBEF0E175500004C68A6 /* SKKCompleter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKCompleter.cpp; sourceTree = "<group>"; };
 		D353BBF00E175500004C68A6 /* SKKCompleter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKCompleter.h; sourceTree = "<group>"; };
-		D353BBF20E175500004C68A6 /* SKKAutoUpdateDictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKAutoUpdateDictionary.cpp; sourceTree = "<group>"; };
 		D353BBF30E175500004C68A6 /* SKKAutoUpdateDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKAutoUpdateDictionary.h; sourceTree = "<group>"; };
 		D353BBF40E175500004C68A6 /* SKKBaseDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKBaseDictionary.h; sourceTree = "<group>"; };
-		D353BBF50E175500004C68A6 /* SKKCommonDictionary.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKCommonDictionary.cpp; sourceTree = "<group>"; };
 		D353BBF60E175500004C68A6 /* SKKCommonDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKCommonDictionary.h; sourceTree = "<group>"; };
 		D353BBF70E175500004C68A6 /* SKKDictionaryFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKDictionaryFile.cpp; sourceTree = "<group>"; };
 		D353BBF80E175500004C68A6 /* SKKDictionaryFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKDictionaryFile.h; sourceTree = "<group>"; };
@@ -304,6 +302,8 @@
 		D3790F401031B2F1007798E0 /* SKKOutputBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKOutputBuffer.h; sourceTree = "<group>"; };
 		D3790F411031B2F1007798E0 /* SKKUndoContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKUndoContext.cpp; sourceTree = "<group>"; };
 		D3790F421031B2F1007798E0 /* SKKUndoContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKUndoContext.h; sourceTree = "<group>"; };
+		D37ADC60111F0B07000B8988 /* DictionaryTypeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DictionaryTypeTransformer.h; path = ../src/preferences/DictionaryTypeTransformer.h; sourceTree = SOURCE_ROOT; };
+		D37ADC61111F0B07000B8988 /* DictionaryTypeTransformer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DictionaryTypeTransformer.mm; path = ../src/preferences/DictionaryTypeTransformer.mm; sourceTree = SOURCE_ROOT; };
 		D38D61BC0EA792CB0095AAC8 /* MessengerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessengerView.h; sourceTree = "<group>"; };
 		D38D61BD0EA792CB0095AAC8 /* MessengerView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MessengerView.mm; sourceTree = "<group>"; };
 		D38D7B6D1034473A0047E2C9 /* SKKRegistration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKRegistration.h; sourceTree = "<group>"; };
@@ -325,6 +325,11 @@
 		D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = PathFormatter.mm; path = ../src/preferences/PathFormatter.mm; sourceTree = SOURCE_ROOT; };
 		D39E444D0EAB4FB300FB584C /* InputModeWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputModeWindow.h; sourceTree = "<group>"; };
 		D39E444E0EAB4FB300FB584C /* InputModeWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = InputModeWindow.mm; sourceTree = "<group>"; };
+		D3AD8DA31119C6A800809EA2 /* SKKCompletionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKCompletionHelper.h; sourceTree = "<group>"; };
+		D3AD8DA41119C6A800809EA2 /* SKKDictionaryTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKDictionaryTemplate.h; sourceTree = "<group>"; };
+		D3AD8DA51119C6A800809EA2 /* SKKHttpDictionaryLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SKKHttpDictionaryLoader.cpp; sourceTree = "<group>"; };
+		D3AD8DA61119C6A800809EA2 /* SKKHttpDictionaryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKHttpDictionaryLoader.h; sourceTree = "<group>"; };
+		D3AD8DA71119C6A800809EA2 /* SKKLocalDictionaryLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKLocalDictionaryLoader.h; sourceTree = "<group>"; };
 		D3CB86750EB47E790069107D /* SKKAnnotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKKAnnotator.h; sourceTree = "<group>"; };
 		D3CB86760EB47E970069107D /* MacAnnotator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacAnnotator.h; sourceTree = "<group>"; };
 		D3CB86770EB47E970069107D /* MacAnnotator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacAnnotator.mm; sourceTree = "<group>"; };
@@ -457,20 +462,23 @@
 			children = (
 				D353BBF40E175500004C68A6 /* SKKBaseDictionary.h */,
 				D353BBF30E175500004C68A6 /* SKKAutoUpdateDictionary.h */,
-				D353BBF20E175500004C68A6 /* SKKAutoUpdateDictionary.cpp */,
 				D353BBF60E175500004C68A6 /* SKKCommonDictionary.h */,
-				D353BBF50E175500004C68A6 /* SKKCommonDictionary.cpp */,
-				D353BBF80E175500004C68A6 /* SKKDictionaryFile.h */,
-				D353BBF70E175500004C68A6 /* SKKDictionaryFile.cpp */,
-				D34531A510D14AF500D4EF49 /* SKKDictionaryLoader.h */,
-				D353BBFA0E175500004C68A6 /* SKKDictionaryKeeper.h */,
-				D353BBF90E175500004C68A6 /* SKKDictionaryKeeper.cpp */,
 				D353BBFE0E175500004C68A6 /* SKKProxyDictionary.h */,
 				D353BBFD0E175500004C68A6 /* SKKProxyDictionary.cpp */,
 				D353BC000E175500004C68A6 /* SKKUserDictionary.h */,
 				D353BBFF0E175500004C68A6 /* SKKUserDictionary.cpp */,
 				D3FF02C8100A2C9D0028EDE6 /* SKKGadgetDictionary.h */,
 				D3FF02C7100A2C9D0028EDE6 /* SKKGadgetDictionary.cpp */,
+				D3AD8DA31119C6A800809EA2 /* SKKCompletionHelper.h */,
+				D3AD8DA41119C6A800809EA2 /* SKKDictionaryTemplate.h */,
+				D353BBF80E175500004C68A6 /* SKKDictionaryFile.h */,
+				D353BBF70E175500004C68A6 /* SKKDictionaryFile.cpp */,
+				D34531A510D14AF500D4EF49 /* SKKDictionaryLoader.h */,
+				D353BBFA0E175500004C68A6 /* SKKDictionaryKeeper.h */,
+				D353BBF90E175500004C68A6 /* SKKDictionaryKeeper.cpp */,
+				D3AD8DA71119C6A800809EA2 /* SKKLocalDictionaryLoader.h */,
+				D3AD8DA51119C6A800809EA2 /* SKKHttpDictionaryLoader.cpp */,
+				D3AD8DA61119C6A800809EA2 /* SKKHttpDictionaryLoader.h */,
 			);
 			path = dictionary;
 			sourceTree = "<group>";
@@ -825,6 +833,8 @@
 				D353BE270E175578004C68A6 /* PreferenceController.mm */,
 				D353BE230E175578004C68A6 /* DictionarySet.h */,
 				D353BE240E175578004C68A6 /* DictionarySet.mm */,
+				D37ADC60111F0B07000B8988 /* DictionaryTypeTransformer.h */,
+				D37ADC61111F0B07000B8988 /* DictionaryTypeTransformer.mm */,
 				D39ACE790E8E4B2F00A33FF4 /* PathFormatter.h */,
 				D39ACE7A0E8E4B2F00A33FF4 /* PathFormatter.mm */,
 				D3F0575610BAD0C500F3233E /* SubRuleDescriptions.h */,
@@ -944,8 +954,6 @@
 				D353BCFD0E175501004C68A6 /* SKKDictionaryFactory.cpp in Sources */,
 				D353BCFE0E175501004C68A6 /* SKKNumericConverter.cpp in Sources */,
 				D353BCFF0E175501004C68A6 /* SKKCompleter.cpp in Sources */,
-				D353BD000E175501004C68A6 /* SKKAutoUpdateDictionary.cpp in Sources */,
-				D353BD010E175501004C68A6 /* SKKCommonDictionary.cpp in Sources */,
 				D353BD020E175501004C68A6 /* SKKDictionaryFile.cpp in Sources */,
 				D353BD030E175501004C68A6 /* SKKDictionaryKeeper.cpp in Sources */,
 				D353BD050E175501004C68A6 /* SKKProxyDictionary.cpp in Sources */,
@@ -1008,6 +1016,7 @@
 				D3790F431031B2F1007798E0 /* SKKOutputBuffer.cpp in Sources */,
 				D3790F441031B2F1007798E0 /* SKKUndoContext.cpp in Sources */,
 				D38FB82C1032F33100048A30 /* MacConfig.mm in Sources */,
+				D3AD8DA81119C6A800809EA2 /* SKKHttpDictionaryLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1022,6 +1031,7 @@
 				D353BE5C0E1756EE004C68A6 /* SKKServerProxy.mm in Sources */,
 				D39ACE7B0E8E4B2F00A33FF4 /* PathFormatter.mm in Sources */,
 				D3F0575710BAD0C500F3233E /* SubRuleDescriptions.cpp in Sources */,
+				D37ADC76111F0EF3000B8988 /* DictionaryTypeTransformer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1094,6 +1104,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = AquaSKK;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -1127,6 +1138,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = AquaSKK;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
@@ -1156,6 +1168,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = AquaSKKPreferences;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -1184,6 +1197,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = AquaSKKPreferences;
+				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};

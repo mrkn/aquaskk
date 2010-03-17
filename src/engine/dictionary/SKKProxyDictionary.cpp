@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2006-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2006-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -41,16 +41,7 @@ void SKKProxyDictionary::Initialize(const std::string& location) {
     server_ = net::socket::endpoint(host, port);
 }
 
-void SKKProxyDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
-    search(entry, result);
-}
-
-void SKKProxyDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
-    search(entry, result);
-}
-
-
-void SKKProxyDictionary::search(const std::string& query, SKKCandidateSuite& result) {
+void SKKProxyDictionary::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
     // 接続する
     if(!session_) {
 	session_.open(server_);
@@ -62,7 +53,7 @@ void SKKProxyDictionary::search(const std::string& query, SKKCandidateSuite& res
     active_ = true;
 
     // クエリ送信
-    session_ << '1' << jconv::eucj_from_utf8(query) << ' ' << std::flush;
+    session_ << '1' << jconv::eucj_from_utf8(entry.EntryString()) << ' ' << std::flush;
 
     // 結果受信
     std::string response;

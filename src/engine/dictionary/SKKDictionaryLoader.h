@@ -38,11 +38,6 @@ class SKKDictionaryLoader : public pthread::task {
     SKKDictionaryLoaderObserver* observer_;
     SKKDictionaryFile file_;
 
-    // 更新が必要かどうか
-    virtual bool NeedsUpdate() = 0;
-
-    virtual const std::string& FilePath() const = 0;
-
     virtual bool run() {
         if(first_) {
             first_ = false;
@@ -75,6 +70,21 @@ public:
     void Connect(SKKDictionaryLoaderObserver* observer) {
 	observer_ = observer;
     }
+
+    // 初期化
+    virtual void Initialize(const std::string& location) = 0;
+
+    // チェック間隔
+    virtual int Interval() const = 0;
+
+    // タイムアウト
+    virtual int Timeout() const = 0;
+
+    // 更新が必要かどうか
+    virtual bool NeedsUpdate() = 0;
+
+    // ファイルパス
+    virtual const std::string& FilePath() const = 0;
 };
 
 #endif

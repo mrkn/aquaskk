@@ -29,13 +29,6 @@ SKKPrimaryEditor::SKKPrimaryEditor(SKKInputContext* context)
 void SKKPrimaryEditor::ReadContext() {
     context()->entry = SKKEntry();
 
-    SKKUndoContext& undo = context()->undo;
-
-    if(undo.IsActive()) {
-        Input(undo.Candidate(), "", 0);
-        undo.Clear();
-    }
-
     SKKRegistration& registration = context()->registration;
 
     if(registration == SKKRegistration::Finished) {

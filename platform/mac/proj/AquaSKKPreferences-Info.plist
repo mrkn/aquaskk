@@ -15,11 +15,11 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
         <key>CFBundleShortVersionString</key>
-        <string>4.1</string>
+        <string>4.2 beta 1</string>
 	<key>CFBundleVersion</key>
-	<string>2009-12-12</string>
+	<string>2010-03-17</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Copyright © 2005-2009, AquaSKK Project</string>
+	<string>Copyright © 2005-2010, AquaSKK Project</string>
 	<key>LSUIElement</key>
 	<string>1</string>
 	<key>NSMainNibFile</key>

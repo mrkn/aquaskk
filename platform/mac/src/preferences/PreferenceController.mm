@@ -21,6 +21,7 @@
 */
 
 #include "PreferenceController.h"
+#include "DictionaryTypeTransformer.h" 
 #include "SubRuleDescriptions.h"
 #include "SKKServerProxy.h"
 #include "SKKConstVars.h"
@@ -60,6 +61,13 @@ namespace {
         NSNumber* fontSize =  [preferences_ objectForKey:SKKUserDefaultKeys::candidate_window_font_size];
         candidateWindowFont_ = [[NSFont fontWithName:fontName size:[fontSize floatValue]] retain];
         proxy_ = [[SKKServerProxy alloc] init];
+
+        NSValueTransformer* transformer
+            = [[DictionaryTypeTransformer alloc] initWithDictionaryTypes:[proxy_ createDictionaryTypes]];
+
+        [NSValueTransformer setValueTransformer:transformer forName:@"DictionaryTypeTransformer"];
+
+        [transformer release];
     }
 
     return self;

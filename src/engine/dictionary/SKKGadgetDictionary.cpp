@@ -120,10 +120,10 @@ struct SKKGadgetDictionary::Search {
 };
 
 // ハンドラー補完ファンクタ
-struct SKKGadgetDictionary::Complete {
+struct SKKGadgetDictionary::Comp {
     std::string entry_;
 
-    Complete(const std::string& entry) : entry_(entry) {}
+    Comp(const std::string& entry) : entry_(entry) {}
 
     bool operator()(const DispatchPair& pair) const {
         return entry_.compare(0, entry_.size(), pair.first,
@@ -133,12 +133,12 @@ struct SKKGadgetDictionary::Complete {
 
 // 保存ファンクタ
 struct SKKGadgetDictionary::Store {
-    std::vector<std::string>* result_;
+    SKKCompletionHelper* helper_;
 
-    Store(std::vector<std::string>& result) : result_(&result) {}
+    Store(SKKCompletionHelper& helper) : helper_(&helper) {}
 
     void operator()(const DispatchPair& pair) const {
-        result_->push_back(pair.first);
+        helper_->Add(pair.first);
     }
 };
 
@@ -149,14 +149,14 @@ void SKKGadgetDictionary::Initialize(const std::string& location) {
     table_.push_back(std::make_pair("=", calculate));
 }
 
-void SKKGadgetDictionary::FindOkuriAri(const std::string& query, SKKCandidateSuite& result) {
+void SKKGadgetDictionary::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
     // 今のところ「送りあり」のサポートはなし
-}
-
-void SKKGadgetDictionary::FindOkuriNasi(const std::string& query, SKKCandidateSuite& result) {
+    if(entry.IsOkuriAri()) return;
+    
     std::vector<std::string> tmp;
+    const std::string& key = entry.EntryString();
 
-    apply(Match(query), Search(query, tmp));
+    apply(Match(key), Search(key, tmp));
 
     if(tmp.empty()) return;
 
@@ -167,10 +167,6 @@ void SKKGadgetDictionary::FindOkuriNasi(const std::string& query, SKKCandidateSu
     }
 }
 
-bool SKKGadgetDictionary::FindCompletions(const std::string& entry,
-                                          std::vector<std::string>& result,
-                                          int minimumCompletionLength) {
-    apply(Complete(entry), Store(result));
-    
-    return !result.empty();
+void SKKGadgetDictionary::Complete(SKKCompletionHelper& helper) {
+    apply(Comp(helper.Entry()), Store(helper));
 }

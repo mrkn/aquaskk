@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2006 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ class SKKUserDictionary: public SKKBaseDictionary {
     SKKDictionaryFile file_;
     bool privateMode_;
 
-    std::string fetch(const std::string& query, SKKDictionaryEntryContainer& container);
-    void remove(const std::string& index, const std::string& kanji, SKKDictionaryEntryContainer& container);
+    std::string fetch(const SKKEntry& entry, SKKDictionaryEntryContainer& container);
+    void remove(const SKKEntry& entry, const std::string& kanji, SKKDictionaryEntryContainer& container);
     void save(bool force = false);
     void fix();
 
@@ -48,19 +48,12 @@ public:
 
     virtual void Initialize(const std::string& path);
 
-    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
-    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
-    virtual std::string FindEntry(const std::string& candidate);
+    virtual void Find(const SKKEntry& entry, SKKCandidateSuite& result);
+    virtual std::string ReverseLookup(const std::string& candidate);
+    virtual void Complete(SKKCompletionHelper& helper);
 
-    virtual bool FindCompletions(const std::string& entry,
-                                 std::vector<std::string>& result,
-                                 unsigned minimumCompletionLength = 0);
-
-    void RegisterOkuriAri(const std::string& query, const std::string& kana, const SKKCandidate& candidate);
-    void RegisterOkuriNasi(const std::string& query, const SKKCandidate& candidate);
-
-    void RemoveOkuriAri(const std::string& query, const SKKCandidate& candidate);
-    void RemoveOkuriNasi(const std::string& query, const SKKCandidate& candidate);
+    void Register(const SKKEntry& entry, const SKKCandidate& candidate);
+    void Remove(const SKKEntry& entry, const SKKCandidate& candidate);
 
     void SetPrivateMode(bool flag);
 };

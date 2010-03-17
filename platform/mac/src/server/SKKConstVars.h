@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2007-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -63,6 +63,8 @@ namespace SKKUserDefaultKeys {
 
     extern NSString* openlab_host;
     extern NSString* openlab_path;
+
+    extern NSString* direct_clients;
 };
 
 // DictionarySet 用のキー
@@ -70,6 +72,12 @@ namespace SKKDictionarySetKeys {
     extern NSString* active;
     extern NSString* type;
     extern NSString* location;
+};
+
+// DictionaryTypes 用のキー
+namespace SKKDictionaryTypeKeys {
+    extern NSString* type;
+    extern NSString* name;
 };
 
 // 重要なパス

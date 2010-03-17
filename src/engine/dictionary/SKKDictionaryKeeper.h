@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2008,2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #include "SKKDictionaryFile.h"
 #include "SKKDictionaryLoader.h"
+#include "SKKCompletionHelper.h"
 #include "pthreadutil.h"
 #include <vector>
 #include <memory>
@@ -34,6 +35,7 @@ class SKKDictionaryKeeper : public SKKDictionaryLoaderObserver {
     pthread::condition condition_;
     SKKDictionaryFile file_;
     bool loaded_;
+    bool needs_conversion_;
     int timeout_;
 
     virtual void SKKDictionaryLoaderUpdate(const SKKDictionaryFile& file);
@@ -41,22 +43,25 @@ class SKKDictionaryKeeper : public SKKDictionaryLoaderObserver {
     std::string fetch(const std::string& query, SKKDictionaryEntryContainer& container);
     bool ready();
 
-public:
-    SKKDictionaryKeeper();
+    std::string eucj_from_utf8(const std::string& src);
+    std::string utf8_from_eucj(const std::string& src);
 
-    void Initialize(SKKDictionaryLoader* loader, int interval, int timeout);
+public:
+    enum Encoding { EUC_JP, UTF_8 };
+
+    SKKDictionaryKeeper(Encoding encoding = EUC_JP);
+
+    void Initialize(SKKDictionaryLoader* loader);
 
     // 通常の検索
     std::string FindOkuriAri(const std::string& query);
     std::string FindOkuriNasi(const std::string& query);
 
     // 逆引き
-    std::string FindEntry(const std::string& candidate);
+    std::string ReverseLookup(const std::string& candidate);
 
     // 見出し語補完
-    bool FindCompletions(const std::string& entry,
-                         std::vector<std::string>& result,
-                         unsigned minimumCompletionLength = 0);
+    void Complete(SKKCompletionHelper& helper);
 };
 
 #endif

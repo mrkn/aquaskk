@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2009 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -40,8 +40,7 @@ public:
 
     virtual void Initialize(const std::string& location);
 
-    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result);
-    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result);
+    virtual void Find(const SKKEntry& entry, SKKCandidateSuite& result);
 };
 
 #endif

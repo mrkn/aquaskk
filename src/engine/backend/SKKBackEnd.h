@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2008-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ class SKKBackEnd {
     SKKBackEnd(const SKKBackEnd&);
     SKKBackEnd& operator=(const SKKBackEnd&);
 
-    std::string normalizedKey(const SKKEntry& entry);
+    SKKEntry normalize(const SKKEntry& entry);
 
 public:
     static SKKBackEnd& theInstance();

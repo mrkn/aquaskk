@@ -1,8 +1,8 @@
-/* -*- C++ -*-
+/* -*- ObjC -*-
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2006-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
+  Copyright (C) 2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -17,28 +17,19 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
 */
 
-#ifndef SKKProxyDictionary_h
-#define SKKProxyDictionary_h
+#import <Foundation/Foundation.h>
 
-#include "SKKBaseDictionary.h"
-#include "socketutil.h"
+#ifndef DictionaryTypeTransformer_h
+#define DictionaryTypeTransformer_h
 
-// 外部 skkserv 辞書
-class SKKProxyDictionary: public SKKBaseDictionary {
-    net::socket::tcpstream session_;
-    net::socket::endpoint server_;
-    bool active_;
+@interface DictionaryTypeTransformer : NSValueTransformer {
+    NSArray* dictionaryTypes_;
+}
 
-public:
-    SKKProxyDictionary();
-    virtual ~SKKProxyDictionary();
+- (id)initWithDictionaryTypes:(NSArray*)dictionaryTypes;
 
-    virtual void Initialize(const std::string& path);
-
-    virtual void Find(const SKKEntry& entry, SKKCandidateSuite& result);
-};
+@end
 
 #endif

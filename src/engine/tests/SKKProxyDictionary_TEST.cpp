@@ -16,20 +16,21 @@ void session(int fd, SKKCommonDictionary& dict) {
 
 	case '1': {		// 検索
 	    std::string word;
+	    std::string key;
             sock >> word;
             sock.get();
 
-	    std::string key;
-	    SKKCandidateSuite result;
-
 	    jconv::convert_eucj_to_utf8(word, key);
+
+	    SKKCandidateSuite result;
+            SKKEntry entry(key);
 
 	    // 検索文字列の最後が [a-z] なら『送りあり』
 	    if(1 < key.size() && 0x7f < (unsigned)key[0] && std::isalpha(key[key.size() - 1])) {
-		dict.FindOkuriAri(key, result);
-	    } else {
-		dict.FindOkuriNasi(key, result);
+                entry = SKKEntry(key, "dummy");
 	    }
+
+            dict.Find(entry, result);
 
 	    // 見つかった？
 	    if(!result.IsEmpty()) {
@@ -76,19 +77,19 @@ int main() {
 
     proxy.Initialize("127.0.0.1:23000");
 
-    proxy.FindOkuriAri("よi", suite);
+    proxy.Find(SKKEntry("よi", "い"), suite);
     assert(suite.ToString() == "/良/好/酔/善/");
 
     suite.Clear();
-    proxy.FindOkuriAri("NOT-EXIST", suite);
+    proxy.Find(SKKEntry("NOT-EXIST", "i"), suite);
     assert(suite.IsEmpty());
 
-    proxy.FindOkuriNasi("かんじ", suite);
+    proxy.Find(SKKEntry("かんじ"), suite);
     assert(suite.ToString() == "/漢字/寛治/官寺/");
 
     suite.Clear();
     
-    proxy.FindOkuriNasi("NOT-EXIST", suite);
+    proxy.Find(SKKEntry("NOT-EXIST"), suite);
     assert(suite.IsEmpty());
 }
 

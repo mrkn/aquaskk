@@ -29,8 +29,7 @@ class SKKNullDictionary : public SKKBaseDictionary {
 public:
     virtual void Initialize(const std::string&) {}
 
-    virtual void FindOkuriAri(const std::string&, SKKCandidateSuite&) {}
-    virtual void FindOkuriNasi(const std::string&, SKKCandidateSuite&) {}
+    virtual void Find(const SKKEntry&, SKKCandidateSuite&) {}
 };
 
 SKKDictionaryFactory::SKKDictionaryFactory() {}

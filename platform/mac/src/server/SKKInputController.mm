@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2007-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@
 - (void)initializeKeyboardLayout;
 - (BOOL)privateMode;
 - (void)setPrivateMode:(BOOL)flag;
+- (BOOL)directMode;
+- (void)setDirectMode:(BOOL)flag;
 - (void)debug:(NSString*)message;
 
 @end
@@ -74,12 +76,16 @@
 
 // IMKServerInput
 - (BOOL)handleEvent:(NSEvent*)event client:(id)sender {
+    if([self directMode]) return NO;
+
     SKKEvent param = SKKPreProcessor::theInstance().Execute(event);
 
     return session_->HandleEvent(param);
 }
 
 - (void)commitComposition:(id)sender {
+    if([self directMode]) return;
+
     [self debug:@"commitComposition"];
 
     session_->Commit();
@@ -87,6 +93,8 @@
 
 // IMKStateSetting
 - (void)activateServer:(id)sender {
+    if([self directMode]) return;
+
     [self debug:@"activateServer"];
 
     [self initializeKeyboardLayout];
@@ -97,12 +105,16 @@
 }
 
 - (void)deactivateServer:(id)sender {
+    if([self directMode]) return;
+
     [self debug:@"deactivateServer"];
 
     session_->Deactivate();
 }
 
 - (void)setValue:(id)value forTag:(long)tag client:(id)sender {
+    if([self directMode]) return;
+
     if(tag != kTextServiceInputModePropertyTag) return;
 
     [self debug:@"setValue"];
@@ -116,6 +128,8 @@
     }
 
     if(activated_) {
+        activated_ = NO;
+
         if(individual) {
             NSString* identifier = [menu_ modeIdentifier:[menu_ currentInputMode]];
             SKKEvent param;
@@ -132,7 +146,6 @@
             session_->HandleEvent(param);
         }
 
-        activated_ = NO;
         return;
     }
 
@@ -147,47 +160,43 @@
 
 // IMKInputController
 - (NSMenu*)menu {
-    enum MenuTypes { Normal, Selector, PrivateMode };
     struct {
-        MenuTypes type;
         const char* title;
-        SEL selector;
+        SEL handler;
+        SEL state;
     } items[] = {
-        { Normal,	"環境設定",			@selector(showPreferences:) },
-        { PrivateMode,	"プライベートモード",		@selector(togglePrivateMode:) },
-        { Normal,	"設定ファイルの再読み込み",	@selector(reloadComponents:) },
+        { "環境設定",                 @selector(showPreferences:),   0 },
+        { "直接入力モード",           @selector(toggleDirectMode:),  @selector(directMode) },
+        { "プライベートモード",       @selector(togglePrivateMode:), @selector(privateMode) },
+        { "設定ファイルの再読み込み", @selector(reloadComponents:),  0 },
 #ifdef SKK_DEBUG
-        { Normal,	"デバッグ情報",			@selector(showDebugInfo:) },
+        { "デバッグ情報",             @selector(showDebugInfo:),     0 },
 #endif
-        { Selector,	"__selector__",			0 },
-        { Normal,	"Web::日本語を快適に",		@selector(webHome:) },
-        { Normal,	"Web::SourceForge.JP",		@selector(webSourceForge:) },
-        { Normal,	"Web::Wiki",			@selector(webWiki:) },
-        { Normal,	0,				0 }
+        { "separator",                0,                             0 },
+        { "Web::日本語を快適に",      @selector(webHome:),           0 },
+        { "Web::SourceForge.JP",      @selector(webSourceForge:),    0 },
+        { "Web::Wiki",                @selector(webWiki:),           0 },
+        { 0,                          0,                             0 }
     };
 
     NSMenu* inputMenu = [[[NSMenu alloc] initWithTitle:@"AquaSKK"] autorelease];
 
     for(int i = 0; items[i].title != 0; ++ i) {
+        NSString* title = [NSString stringWithUTF8String:items[i].title];
+        SEL handler = items[i].handler;
         NSMenuItem* item;
-        const char* title = items[i].title;
-        SEL selector = items[i].selector;
 
-        switch(items[i].type) {
-        case Normal:
-        case PrivateMode:
-            item = [[NSMenuItem alloc] initWithTitle:[NSString stringWithUTF8String:title]
-                                       action:selector keyEquivalent:@""];
+        if(handler != 0) {
+            item = [[NSMenuItem alloc] initWithTitle:title
+                                              action:handler
+                                       keyEquivalent:@""];
             [item autorelease];
-
-            if(items[i].type == PrivateMode) {
-                [item setState:[self privateMode] ? NSOnState : NSOffState];
-            }
-            break;
-
-        case Selector:
+        } else {
             item = [NSMenuItem separatorItem];
-            break;
+        }
+        
+        if(items[i].state != 0) {
+            [item setState:(NSInteger)[self performSelector:items[i].state]];
         }
 
         [inputMenu addItem:item];
@@ -208,6 +217,10 @@
     [self setPrivateMode:![self privateMode]];
 
     SKKBackEnd::theInstance().EnablePrivateMode([self privateMode]);
+}
+
+- (void)toggleDirectMode:(id)sender {
+    [self setDirectMode:![self directMode]];
 }
 
 - (void)reloadComponents:(id)sender {
@@ -280,6 +293,26 @@
 
 - (void)setPrivateMode:(BOOL)flag {
     [defaults_ setBool:flag forKey:SKKUserDefaultKeys::enable_private_mode];
+}
+
+- (BOOL)directMode {
+    NSArray* clients = [defaults_ arrayForKey:SKKUserDefaultKeys::direct_clients];
+
+    return [clients containsObject:[client_ bundleIdentifier]] == YES;
+}
+
+- (void)setDirectMode:(BOOL)flag {
+    NSArray* current = [defaults_ arrayForKey:SKKUserDefaultKeys::direct_clients];
+    NSMutableArray* result = [NSMutableArray arrayWithArray:current];
+    NSString* client = [client_ bundleIdentifier];
+
+    if(flag) {
+        [result addObject:client];
+    } else {
+        [result removeObject:client];
+    }
+
+    [defaults_ setObject:result forKey:SKKUserDefaultKeys::direct_clients];
 }
 
 - (void)debug:(NSString*)str {

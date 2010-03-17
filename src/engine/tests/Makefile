@@ -11,8 +11,8 @@ DEPDIR	= .depend
 
 LIB	= libskk.a
 
-DICT_OBJS = SKKCommonDictionary.o SKKAutoUpdateDictionary.o \
-	SKKUserDictionary.o SKKProxyDictionary.o SKKGadgetDictionary.o
+DICT_OBJS = SKKUserDictionary.o SKKProxyDictionary.o SKKGadgetDictionary.o \
+	SKKHttpDictionaryLoader.o
 
 BACKEND_OBJS = SKKBackEnd.o SKKDictionaryCache.o SKKDictionaryFactory.o \
 	SKKNumericConverter.o

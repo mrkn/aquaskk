@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2006-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
+  Copyright (C) 2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -20,25 +20,25 @@
 
 */
 
-#ifndef SKKProxyDictionary_h
-#define SKKProxyDictionary_h
+#ifndef SKKCompletionHelper_h
+#define SKKCompletionHelper_h
 
-#include "SKKBaseDictionary.h"
-#include "socketutil.h"
+#include <string>
 
-// 外部 skkserv 辞書
-class SKKProxyDictionary: public SKKBaseDictionary {
-    net::socket::tcpstream session_;
-    net::socket::endpoint server_;
-    bool active_;
+// 見出し語補完ヘルパー
 
+class SKKCompletionHelper {
 public:
-    SKKProxyDictionary();
-    virtual ~SKKProxyDictionary();
+    virtual ~SKKCompletionHelper() {}
 
-    virtual void Initialize(const std::string& path);
+    // 見出し語
+    virtual const std::string& Entry() const = 0;
 
-    virtual void Find(const SKKEntry& entry, SKKCandidateSuite& result);
+    // 補完継続可否
+    virtual bool CanContinue() const = 0;
+
+    // 補完候補の追加
+    virtual void Add(const std::string& completion) = 0;
 };
 
 #endif

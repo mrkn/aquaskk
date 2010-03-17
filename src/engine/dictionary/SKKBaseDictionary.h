@@ -2,7 +2,7 @@
 
   MacOS X implementation of the SKK input method.
 
-  Copyright (C) 2007 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2007-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,9 +23,12 @@
 #ifndef SKKBaseDictionary_h
 #define SKKBaseDictionary_h
 
+#include <iostream>
 #include <string>
 #include <vector>
+#include "SKKEntry.h"
 #include "SKKCandidateSuite.h"
+#include "SKKCompletionHelper.h"
 
 // ======================================================================
 // 抽象辞書クラス(文字列は UTF-8)
@@ -40,26 +43,16 @@ public:
     //
     virtual void Initialize(const std::string& location) = 0;
 
-    // 「送りあり」検索
-    virtual void FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) = 0;
+    // 候補検索
+    virtual void Find(const SKKEntry& entry, SKKCandidateSuite& result) = 0;
 
-    // 「送りなし」検索
-    virtual void FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) = 0;
-
-    // 逆引き
-    //
-    // 例)
-    //
-    // if(dict->FindEntry("漢字") == "かんじ") ...
-    //
-    virtual std::string FindEntry(const std::string& candidate) { return ""; }
-
-    // 見出し語の補完
-    virtual bool FindCompletions(const std::string& entry,
-                                 std::vector<std::string>& result,
-                                 int minimumCompletionLength = 0) {
-        return false;
+    // 見出し語検索
+    virtual std::string ReverseLookup(const std::string& candidate) {
+        return "";
     }
+
+    // 見出し語補完
+    virtual void Complete(SKKCompletionHelper& helper) {}
 };
 
 #endif

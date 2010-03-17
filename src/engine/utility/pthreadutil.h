@@ -37,10 +37,30 @@
 
 #include <pthread.h>
 #include <ctime>
+#include <cstdio>
 #include <cerrno>
 #include <cassert>
+#include <deque>
+#include <iostream>
 
 namespace pthread {
+    class err {
+        const char* msg_;
+
+    public:
+        err(const char* msg) : msg_(msg) {}
+
+#ifdef DEBUG
+        void operator()() {
+            std::cerr << "ERR: " << msg_
+                      << ": " << std::strerror(errno)
+                      << ": errno=" << errno << std::endl;
+        }
+#else
+        void operator()() {}
+#endif
+    };
+    
     class mutex {
 	friend class lock;
 	friend class condition;
@@ -52,18 +72,24 @@ namespace pthread {
 
     public:
 	mutex() {
-	    pthread_mutex_init(&handle_, 0);
+	    if(pthread_mutex_init(&handle_, 0) != 0) {
+                err("pthread_mutex_init");
+            }
 	};
 
 	~mutex() {
-	    pthread_mutex_destroy(&handle_);
+            if(pthread_mutex_destroy(&handle_) != 0) {
+                err("pthread_mutex_destroy");
+            }
 	}
     };
 
     class suspend_cancel {
 	void set(int state) {
 	    int tmp;
-	    pthread_setcancelstate(state, &tmp);
+	    if(pthread_setcancelstate(state, &tmp) != 0) {
+                err("pthread_setcancelstate");
+            }
 	}
 
 	suspend_cancel(const suspend_cancel&);
@@ -89,11 +115,15 @@ namespace pthread {
 
     public:
 	lock(mutex& target) : target_(target) {
-	    pthread_mutex_lock(&target_.handle_);
+	    if(pthread_mutex_lock(&target_.handle_) != 0) {
+                err("pthread_mutex_lock");
+            }
 	}
 
 	~lock() {
-	    pthread_mutex_unlock(&target_.handle_);
+	    if(pthread_mutex_unlock(&target_.handle_) != 0) {
+                err("pthread_mutex_unlock");
+            }
 	}
     };
 
@@ -125,19 +155,28 @@ namespace pthread {
 	void signal() {
 	    trylock();
 
-	    pthread_cond_signal(&handle_);
+	    if(pthread_cond_signal(&handle_) != 0) {
+                err("pthread_cond_signal");
+            }
 	}
 
 	void broadcast() {
 	    trylock();
 
-	    pthread_cond_broadcast(&handle_);
+	    if(pthread_cond_broadcast(&handle_) != 0) {
+                err("pthread_cond_broadcast");
+            }
 	}
 
 	bool wait() {
 	    trylock();
 
-	    return 0 == pthread_cond_wait(&handle_, &mutex_.handle_);
+	    if(pthread_cond_wait(&handle_, &mutex_.handle_) != 0) {
+                err("pthread_cond_wait");
+                return false;
+            }
+
+            return true;
 	}
 
 	bool wait(long second, long nano_second = 0) {
@@ -147,7 +186,12 @@ namespace pthread {
 	    abstime.tv_sec = std::time(0) + second;
 	    abstime.tv_nsec = nano_second;
 
-	    return 0 == pthread_cond_timedwait(&handle_, &mutex_.handle_, &abstime);
+	    if(pthread_cond_timedwait(&handle_, &mutex_.handle_, &abstime) != 0) {
+                err("pthread_cond_timedwait");
+                return false;
+            }
+
+            return true;
 	}
     };
 
@@ -206,6 +250,122 @@ namespace pthread {
 		pthread_join(thread_, 0);
 	    }
 	}
+    };
+
+    class pool {
+        condition queue_;       // for tasks_ and should_terminate_
+        condition worker_;      // for idle_threads_
+        std::deque<pthread_t> pool_;
+        std::deque<task*> tasks_;
+        bool should_terminate_;
+        unsigned idle_threads_;
+
+        static void* handler(void* param) {
+            pool* self = reinterpret_cast<pool*>(param);
+
+            self->run();
+
+            return 0;
+        }
+
+        void run() {
+            while(task* task = dequeue()) {
+                acquire();
+
+                task->run();
+                delete task;
+
+                release();
+            }
+        }
+
+        task* dequeue() {
+            while(1) {
+                lock scope(queue_);
+
+                if(tasks_.empty() && should_terminate_) return 0;
+
+                if(!tasks_.empty() || queue_.wait()) {
+                    if(tasks_.empty()) {
+                        if(should_terminate_) return 0;
+                        continue;
+                    }
+
+                    task* next = tasks_.front();
+                    tasks_.pop_front();
+
+                    return next;
+                }
+            }
+        }
+
+        void acquire() {
+            lock scope(worker_);
+            -- idle_threads_;
+        }
+
+        void release() {
+            lock scope(worker_);
+            ++ idle_threads_;
+
+            if(idle_threads_ == pool_.size()) {
+                worker_.signal();
+            }
+        }
+
+        pool(const pool&);
+        pool& operator=(const pool&);
+
+    public:
+        pool(unsigned size = 4) : should_terminate_(false) {
+            lock scope(worker_);
+
+            for(unsigned i = 0; i < size; ++ i) {
+                pthread_t id;
+                if(pthread_create(&id, 0, pool::handler, this) == 0) {
+                    pool_.push_back(id);
+                } else {
+                    err("pthread_create");
+                }
+            }
+
+            idle_threads_ = pool_.size();
+        }
+
+        ~pool() {
+            /* set terminate flag */ {
+                lock scope(queue_);
+                should_terminate_ = true;
+            }
+
+            while(1) {
+                lock scope(worker_);
+
+                if(idle_threads_ == pool_.size() || worker_.wait()) {
+                    lock scope(queue_);
+
+                    if(tasks_.empty()) {
+                        queue_.broadcast();
+                        break;
+                    }
+                }
+            }
+
+            std::for_each(pool_.begin(), pool_.end(),
+                          std::bind2nd(std::ptr_fun(pthread_join), 0));
+        }
+
+        bool enqueue(task* newly_allocated_task) {
+            lock scope(queue_);
+
+            if(!should_terminate_) {
+                tasks_.push_back(newly_allocated_task);
+                queue_.signal();
+                return true;
+            }
+
+            return false;
+        }
     };
 };
 

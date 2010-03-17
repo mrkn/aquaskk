@@ -86,6 +86,10 @@ class SKKCandidateSuite {
         hints_.swap(result);
     }
 
+    SKKOkuriHintIterator find_okuri(const std::string& okuri) {
+        return std::find_if(hints_.begin(), hints_.end(), CompareOkuriHint(okuri));
+    }
+
     const std::string flatten(const SKKCandidateContainer& container, bool exclude_avoid_study) const {
         std::string result;
 
@@ -131,7 +135,7 @@ public:
     }
 
     void Add(const SKKOkuriHint& hint) {
-	SKKOkuriHintIterator iter = std::find_if(hints_.begin(), hints_.end(), CompareOkuriHint(hint));
+	SKKOkuriHintIterator iter = find_okuri(hint.first);
 
 	if(iter != hints_.end()) {
 	    add(iter->second, hint.second);
@@ -164,7 +168,7 @@ public:
 
 	update(candidates_, hint.second[0]);
 
-	SKKOkuriHintIterator iter = std::find_if(hints_.begin(), hints_.end(), CompareOkuriHint(hint));
+	SKKOkuriHintIterator iter = find_okuri(hint.first);
 	if(iter != hints_.end()) {
 	    update(iter->second, hint.second[0]);
 	} else {
@@ -191,6 +195,18 @@ public:
         }
 
         candidates_.erase(std::remove_if(candidates_.begin(), candidates_.end(), pred), candidates_.end());
+    }
+
+    bool FindOkuriStrictly(const std::string& okuri, SKKCandidateSuite& suite) {
+        SKKOkuriHintIterator iter = find_okuri(okuri);
+
+        suite.Clear();
+
+        if(iter != hints_.end()) {
+            suite.Add(iter->second);
+        }
+
+        return !suite.IsEmpty();
     }
 
     SKKCandidateContainer& Candidates() {

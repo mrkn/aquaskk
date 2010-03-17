@@ -62,12 +62,19 @@ namespace SKKUserDefaultKeys {
 
     DECLARE_NSStringKey(openlab_host);
     DECLARE_NSStringKey(openlab_path);
+
+    DECLARE_NSStringKey(direct_clients);
 }
 
 namespace SKKDictionarySetKeys {
     DECLARE_NSStringKey(active);
     DECLARE_NSStringKey(type);
     DECLARE_NSStringKey(location);
+}
+
+namespace SKKDictionaryTypeKeys {
+    DECLARE_NSStringKey(type);
+    DECLARE_NSStringKey(name);
 }
 
 #undef DECLARE_NSStringKey

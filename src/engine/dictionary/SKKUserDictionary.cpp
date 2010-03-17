@@ -3,7 +3,7 @@
   MacOS X implementation of the SKK input method.
 
   Copyright (C) 2002 phonohawk
-  Copyright (C) 2005-2008 Tomotaka SUWA <t.suwa@mac.com>
+  Copyright (C) 2005-2010 Tomotaka SUWA <tomotaka.suwa@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -63,8 +63,9 @@ namespace {
     }
 
     template <typename T>
-    void update(const std::string& index, const T& obj, SKKDictionaryEntryContainer& container) {
+    void update(const SKKEntry& entry, const T& obj, SKKDictionaryEntryContainer& container) {
         SKKCandidateSuite suite;
+        const std::string& index = entry.EntryString();
         SKKDictionaryEntryIterator iter = find(container, index);
 
         if(iter != container.end()) {
@@ -105,23 +106,31 @@ void SKKUserDictionary::Initialize(const std::string& path) {
     fix();
 }
 
-void SKKUserDictionary::FindOkuriAri(const std::string& entry, SKKCandidateSuite& result) {
-    SKKCandidateSuite suite(fetch(entry, file_.OkuriAri()));
+void SKKUserDictionary::Find(const SKKEntry& entry, SKKCandidateSuite& result) {
+    SKKCandidateSuite suite;
+
+    if(entry.IsOkuriAri()) {
+        suite.Parse(fetch(entry, file_.OkuriAri()));
+
+        SKKCandidateSuite strict;
+
+        if(suite.FindOkuriStrictly(entry.OkuriString(), strict)) {
+            strict.Add(suite.Hints());
+            suite = strict;
+        }
+    } else {
+        suite.Parse(fetch(entry, file_.OkuriNasi()));
+        
+        SKKCandidateContainer& candidates = suite.Candidates();
+
+        std::for_each(candidates.begin(), candidates.end(),
+                      std::mem_fun_ref(&SKKCandidate::Decode));
+    }
 
     result.Add(suite);
 }
 
-void SKKUserDictionary::FindOkuriNasi(const std::string& entry, SKKCandidateSuite& result) {
-    SKKCandidateSuite suite(fetch(entry, file_.OkuriNasi()));
-
-    SKKCandidateContainer& candidates = suite.Candidates();
-
-    std::for_each(candidates.begin(), candidates.end(), std::mem_fun_ref(&SKKCandidate::Decode));
-
-    result.Add(suite);
-}
-
-std::string SKKUserDictionary::FindEntry(const std::string& candidate) {
+std::string SKKUserDictionary::ReverseLookup(const std::string& candidate) {
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
     SKKDictionaryEntryContainer entries;
     SKKCandidateParser parser;
@@ -141,57 +150,49 @@ std::string SKKUserDictionary::FindEntry(const std::string& candidate) {
     return "";
 }
 
-bool SKKUserDictionary::FindCompletions(const std::string& query,
-                                        std::vector<std::string>& result,
-                                        unsigned minimumCompletionLength) {
+void SKKUserDictionary::Complete(SKKCompletionHelper& helper) {
+    const std::string& entry = helper.Entry();
     SKKDictionaryEntryContainer& container = file_.OkuriNasi();
 
-    bool lengthCheckNeeded = utf8::length(query) < minimumCompletionLength;
-
     for(SKKDictionaryEntryIterator iter = container.begin(); iter != container.end(); ++ iter) {
-        if(iter->first.compare(0, query.length(), query) != 0) continue;
+        if(iter->first.compare(0, entry.length(), entry) != 0) continue;
 
-        if(lengthCheckNeeded) {
-            if(utf8::length(iter->first) <= minimumCompletionLength) continue;
-        }
+        helper.Add(iter->first);
 
-        result.push_back(iter->first);
+        if(!helper.CanContinue()) break;
+    }
+}
+
+void SKKUserDictionary::Register(const SKKEntry& entry, const SKKCandidate& candidate) {
+    if(entry.IsOkuriAri()) {
+        SKKOkuriHint hint;
+
+        hint.first = entry.OkuriString();
+        hint.second.push_back(candidate.ToString());
+
+        update(entry.EntryString(), hint, file_.OkuriAri());
+    } else {
+        SKKCandidate tmp(candidate);
+
+        tmp.Encode();
+
+        update(entry.EntryString(), tmp, file_.OkuriNasi());
     }
 
-    return !result.empty();
-}
-
-void SKKUserDictionary::RegisterOkuriAri(const std::string& index, const std::string& okuri,
-                                         const SKKCandidate& candidate) {
-    SKKOkuriHint hint;
-
-    hint.first = okuri;
-    hint.second.push_back(candidate.ToString());
-
-    update(index, hint, file_.OkuriAri());
     save();
 }
 
-void SKKUserDictionary::RegisterOkuriNasi(const std::string& index, const SKKCandidate& candidate) {
-    SKKCandidate tmp(candidate);
+void SKKUserDictionary::Remove(const SKKEntry& entry, const SKKCandidate& candidate) {
+    if(entry.IsOkuriAri()) {
+        remove(entry, candidate.ToString(), file_.OkuriAri());
+    } else {
+        SKKCandidate tmp(candidate);
 
-    tmp.Encode();
-
-    update(index, tmp, file_.OkuriNasi());
-    save();
-}
-
-void SKKUserDictionary::RemoveOkuriAri(const std::string& index, const SKKCandidate& candidate) {
-    remove(index, candidate.ToString(), file_.OkuriAri());
-    save();
-}
-
-void SKKUserDictionary::RemoveOkuriNasi(const std::string& index, const SKKCandidate& candidate) {
-    SKKCandidate tmp(candidate);
-
-    tmp.Encode();
+        tmp.Encode();
     
-    remove(index, tmp.ToString(), file_.OkuriNasi());
+        remove(entry, tmp.ToString(), file_.OkuriNasi());
+    }
+        
     save();
 }
 
@@ -211,8 +212,8 @@ void SKKUserDictionary::SetPrivateMode(bool flag) {
 // private method
 // ======================================================================
 
-std::string SKKUserDictionary::fetch(const std::string& query, SKKDictionaryEntryContainer& container) {
-    SKKDictionaryEntryIterator iter = find(container, query);
+std::string SKKUserDictionary::fetch(const SKKEntry& entry, SKKDictionaryEntryContainer& container) {
+    SKKDictionaryEntryIterator iter = find(container, entry.EntryString());
 
     if(iter == container.end()) {
 	return std::string();
@@ -221,9 +222,9 @@ std::string SKKUserDictionary::fetch(const std::string& query, SKKDictionaryEntr
     return iter->second;
 }
 
-void SKKUserDictionary::remove(const std::string& index, const std::string& kanji,
+void SKKUserDictionary::remove(const SKKEntry& entry, const std::string& kanji,
 			       SKKDictionaryEntryContainer& container) {
-    SKKDictionaryEntryIterator iter = find(container, index);
+    SKKDictionaryEntryIterator iter = find(container, entry.EntryString());
 
     if(iter == container.end()) return;
 
