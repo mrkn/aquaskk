@@ -32,6 +32,8 @@ namespace SKKUserDefaultKeys {
     extern NSString* show_input_mode_icon;
     extern NSString* use_individual_input_mode;
     extern NSString* beep_on_registration;
+    extern NSString* inline_backspace_implies_commit;
+    extern NSString* delete_okuri_when_quit;
 
     extern NSString* keyboard_layout;
 

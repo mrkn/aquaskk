@@ -12,6 +12,10 @@
         <false/>
         <key>beep_on_registration</key>
         <false/>
+        <key>inline_backspace_implies_commit</key>
+        <false/>
+        <key>delete_okuri_when_quit</key>
+        <true/>
 
 	<key>keyboard_layout</key>
 	<string>com.apple.keylayout.US</string>

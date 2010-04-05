@@ -42,7 +42,7 @@ public:
     // 最小マッチしたかな変換を表示するか(n → ん)
     virtual bool DisplayShortestMatchOfKanaConversions() = 0;
 
-    // 確定時に改行を抑制
+    // 確定時に改行を抑制(skk-egg-like-newline)
     virtual bool SuppressNewlineOnCommit() = 0;
 
     // インライン表示する変換候補の最大数
@@ -50,6 +50,12 @@ public:
 
     // 見出し語再入を送りの開始とみなすか
     virtual bool HandleRecursiveEntryAsOkuri() = 0;
+
+    // 後退を確定とみなすか(skk-delete-implies-kakutei)
+    virtual bool InlineBackSpaceImpliesCommit() = 0;
+
+    // 送りキャンセル時に送り仮名を削除(skk-delete-okuri-when-quit)
+    virtual bool DeleteOkuriWhenQuit() = 0;
 };
 
 #endif

@@ -84,6 +84,12 @@ void SKKInputEngine::SetStateComposing() {
     Synchronizer sync(this);
 
     push(&composingEditor_);
+
+    SKKEntry& entry = context_->entry;
+
+    if(!config_->DeleteOkuriWhenQuit()) {
+        entry.AppendEntry(entry.OkuriString());
+    }
 }
 
 void SKKInputEngine::SetStateOkuri() {

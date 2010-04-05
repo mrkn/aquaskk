@@ -31,6 +31,8 @@ namespace SKKUserDefaultKeys {
     DECLARE_NSStringKey(show_input_mode_icon);
     DECLARE_NSStringKey(use_individual_input_mode);
     DECLARE_NSStringKey(beep_on_registration);
+    DECLARE_NSStringKey(inline_backspace_implies_commit);
+    DECLARE_NSStringKey(delete_okuri_when_quit);
 
     DECLARE_NSStringKey(keyboard_layout);
 

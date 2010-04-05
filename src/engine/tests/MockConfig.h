@@ -14,6 +14,8 @@ class MockConfig : public SKKConfig {
     virtual bool SuppressNewlineOnCommit() { return true; }
     virtual int MaxCountOfInlineCandidates() { return 5; }
     virtual bool HandleRecursiveEntryAsOkuri() { return false; }
+    virtual bool InlineBackSpaceImpliesCommit() { return false; }
+    virtual bool DeleteOkuriWhenQuit() { return true; }
 };
 
 #endif

@@ -39,6 +39,8 @@ public:
     virtual bool SuppressNewlineOnCommit();
     virtual int MaxCountOfInlineCandidates();
     virtual bool HandleRecursiveEntryAsOkuri();
+    virtual bool InlineBackSpaceImpliesCommit();
+    virtual bool DeleteOkuriWhenQuit();
 };
 
 #endif

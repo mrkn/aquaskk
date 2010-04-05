@@ -329,6 +329,13 @@ State SKKState::SelectCandidate(const Event& event) {
         return 0;
 
     case SKK_BACKSPACE:
+        if(selector_.IsInline() && configuration_->InlineBackSpaceImpliesCommit()) {
+            editor_->Commit();
+            return State::Forward(&SKKState::KanaInput);
+        }
+
+        // fall through
+
     case SKK_CHAR:
         if(event == SKK_BACKSPACE || param.IsPrevCandidate()) {
             if(!selector_.Prev()) {

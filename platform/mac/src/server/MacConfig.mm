@@ -58,3 +58,11 @@ int MacConfig::MaxCountOfInlineCandidates() {
 bool MacConfig::HandleRecursiveEntryAsOkuri() {
     return [defaults_ boolForKey:SKKUserDefaultKeys::handle_recursive_entry_as_okuri];
 }
+
+bool MacConfig::InlineBackSpaceImpliesCommit() {
+    return [defaults_ boolForKey:SKKUserDefaultKeys::inline_backspace_implies_commit];
+}
+
+bool MacConfig::DeleteOkuriWhenQuit() {
+    return [defaults_ boolForKey:SKKUserDefaultKeys::delete_okuri_when_quit];
+}
